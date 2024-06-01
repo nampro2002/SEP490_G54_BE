@@ -26,7 +26,7 @@ public class Lesson {
 
     private String Text;
 
-    @OneToMany(mappedBy = "LessonId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "LessonId")
     private List<UserLesson> UserLessons;
 
 }

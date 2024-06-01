@@ -21,6 +21,6 @@ public class MedicalHistory {
 
     private String Name;
 
-    @OneToMany(mappedBy = "ConditionId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ConditionId")
     private List<UserMedicalRecord> UserMedicalRecords;
 }

@@ -22,7 +22,7 @@ public class MentalRule {
     private String Title;
     private String Description;
 
-    @OneToMany(mappedBy = "RuleId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "RuleId")
     private List<RuleForPlan> RuleForPlans;
 
 }

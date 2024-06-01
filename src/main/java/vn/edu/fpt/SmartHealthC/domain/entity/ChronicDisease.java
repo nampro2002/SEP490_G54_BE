@@ -18,7 +18,7 @@ public class ChronicDisease {
 
     private String Name;
 
-    @OneToMany(mappedBy = "ConditionId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ConditionId")
     private List<UserChronicDisease> UserChronicDiseases;
 
 

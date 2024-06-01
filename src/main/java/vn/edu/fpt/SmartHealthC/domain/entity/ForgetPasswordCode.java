@@ -18,11 +18,11 @@ public class ForgetPasswordCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "account_id")
     private Account AccountId;
 
     private String Code;
 
-
+    private Boolean IsUsed;
 }

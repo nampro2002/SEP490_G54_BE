@@ -22,7 +22,7 @@ public class MedicineType {
     private String Title;
     private String Description;
 
-    @OneToMany(mappedBy = "MedicineTypeId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "MedicineTypeId")
     private List<MedicineTypePlan> MedicineTypeId;
 
 
