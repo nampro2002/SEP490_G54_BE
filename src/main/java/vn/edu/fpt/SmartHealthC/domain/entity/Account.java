@@ -30,7 +30,7 @@ public class Account {
 
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "AccountId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AccountId")
     private List<ForgetPasswordCode> ForgetPasswordCode;
 
 }

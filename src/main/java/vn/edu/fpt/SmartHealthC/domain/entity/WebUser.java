@@ -33,7 +33,7 @@ public class WebUser {
 
     private String PhoneNumber;
 
-    @OneToMany(mappedBy = "WebUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "WebUserId")
     private List<Question> Question;
 
 }

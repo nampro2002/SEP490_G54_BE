@@ -30,7 +30,7 @@ public class MentalRecord {
 
     private Date Date;
 
-    @OneToMany(mappedBy = "PlanId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "PlanId")
     private List<RuleForPlan> RuleForPlans;
 
 

@@ -37,7 +37,7 @@ public class MedicineRecord {
 
     private Boolean Status;
 
-    @OneToMany(mappedBy = "MedicinePlanId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "MedicinePlanId")
     private List<MedicineTypePlan> MedicineTypePlans;
 
 }

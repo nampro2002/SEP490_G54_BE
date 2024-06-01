@@ -40,56 +40,56 @@ public class AppUser {
 
     private String PhoneNumber;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<Question> Question;
 
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<ActivityRecord> ActivityRecords;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<BloodPressureRecord> BloodPressureRecords;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<DietRecord> DietRecords;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<MedicalAppointment> MedicalAppointments;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<MedicineRecord> MedicineRecords;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<MentalRecord> MentalRecords;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<MonthlyQuestion> MonthlyQuestions;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<SAT_SF_C_Record> SAT_SF_C_Records;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<SAT_SF_I_Record> SAT_SF_I_Records;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<SAT_SF_P_Record> SAT_SF_P_Records;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<SF_Record> SF_Records;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<StepRecord> StepRecords;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<WeightRecord> WeightRecords;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<UserChronicDisease> UserChronicDiseases;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<UserMedicalRecord> UserMedicalRecords;
 
-    @OneToMany(mappedBy = "AppUserId",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "AppUserId")
     private List<UserLesson> UserLessons;
 
 
