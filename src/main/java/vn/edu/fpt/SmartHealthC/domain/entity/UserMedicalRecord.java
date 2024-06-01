@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Entity
 @Data
 @NoArgsConstructor
@@ -25,7 +23,7 @@ public class UserMedicalRecord {
 
     @ManyToOne
     @JoinColumn(name = "condition_id")
-    private MedicalRecord ConditionId;
+    private MedicalHistory ConditionId;
 
 
 }
