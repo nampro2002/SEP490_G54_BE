@@ -1,13 +1,14 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 import vn.edu.fpt.SmartHealthC.repository.UserLessonRepository;
 import vn.edu.fpt.SmartHealthC.serivce.UserLessonService;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class UserLessonServiceImpl implements UserLessonService {
 
     @Autowired

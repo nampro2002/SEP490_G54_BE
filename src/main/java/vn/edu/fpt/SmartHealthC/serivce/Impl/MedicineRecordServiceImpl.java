@@ -1,13 +1,14 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.repository.MedicineRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineRecordService;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class MedicineRecordServiceImpl implements MedicineRecordService {
     @Autowired
     private MedicineRecordRepository medicineRecordRepository;

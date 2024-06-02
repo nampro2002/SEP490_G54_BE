@@ -1,13 +1,14 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.repository.MentalRuleRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRuleService;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class MentalRuleServiceImpl implements MentalRuleService {
 
     @Autowired
