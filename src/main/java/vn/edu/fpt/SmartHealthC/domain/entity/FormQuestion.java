@@ -15,8 +15,8 @@ public class FormQuestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
 
-    private String Question;
+    private String question;
     @Enumerated(EnumType.STRING)
-    private TypeQuestion Type;
-    private int QuestionNumber;
+    private TypeQuestion type;
+    private int questionNumber;
 }

@@ -21,19 +21,19 @@ public class SAT_SF_C_Record {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private Date MonthStart;
+    private Date monthStart;
 
-    private int OverallPoint;
+    private int overallPoint;
 
-    private int Independence;
+    private int independence;
 
-    private int Optimistic;
+    private int optimistic;
 
-    private int Relationship;
+    private int relationship;
 
-    private int SharedStory;
+    private int sharedStory;
 
 
 

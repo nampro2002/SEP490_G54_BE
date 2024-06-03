@@ -24,20 +24,20 @@ public class MedicineRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private Date WeekStart;
+    private Date weekStart;
 
     @Enumerated(EnumType.STRING)
-    private TypeMedicine Type;
+    private TypeMedicine type;
 
-    private Float Hour;
+    private Float hour;
 
-    private Date Date;
+    private Date date;
 
-    private Boolean Status;
+    private Boolean status;
 
-    @OneToMany(mappedBy = "MedicinePlanId")
-    private List<MedicineTypePlan> MedicineTypePlans;
+    @OneToMany(mappedBy = "medicinePlanId")
+    private List<MedicineTypePlan> medicineTypePlans;
 
 }

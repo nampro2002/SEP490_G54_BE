@@ -23,14 +23,14 @@ public class MedicalAppointment {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private Date Date;
+    private Date date;
 
-    private String Location;
+    private String location;
 
     @Enumerated(EnumType.STRING)
-    private TypeMedicalAppointment Type;
+    private TypeMedicalAppointment type;
 
 
 }

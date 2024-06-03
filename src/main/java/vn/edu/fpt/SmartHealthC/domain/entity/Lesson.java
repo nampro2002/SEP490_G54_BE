@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
 import java.util.List;
 
 @Entity
@@ -20,13 +21,13 @@ public class Lesson {
     private Integer Id;
 
 
-    private String Title;
+    private String title;
 
-    private String Video;
+    private String video;
 
-    private String Text;
+    private String text;
 
-    @OneToMany(mappedBy = "LessonId")
-    private List<UserLesson> UserLessons;
+    @OneToMany(mappedBy = "lessonId")
+    private List<UserLesson> userLessons;
 
 }

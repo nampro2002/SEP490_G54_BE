@@ -19,8 +19,8 @@ public class MedicalHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
 
-    private String Name;
+    private String name;
 
-    @OneToMany(mappedBy = "ConditionId")
-    private List<UserMedicalRecord> UserMedicalRecords;
+    @OneToMany(mappedBy = "conditionId")
+    private List<UserMedicalRecord> userMedicalRecords;
 }

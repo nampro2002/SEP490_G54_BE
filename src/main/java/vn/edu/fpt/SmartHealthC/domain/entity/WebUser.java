@@ -24,16 +24,16 @@ public class WebUser {
 
     @OneToOne
     @JoinColumn(name = "account_id")
-    private Account AccountId;
+    private Account accountId;
 
-    private String UserName;
+    private String userName;
 
     @Enumerated(EnumType.STRING)
-    private RoleWebUser Type;
+    private RoleWebUser type;
 
-    private String PhoneNumber;
+    private String phoneNumber;
 
-    @OneToMany(mappedBy = "WebUserId")
-    private List<Question> Question;
+    @OneToMany(mappedBy = "webUserId")
+    private List<Question> question;
 
 }

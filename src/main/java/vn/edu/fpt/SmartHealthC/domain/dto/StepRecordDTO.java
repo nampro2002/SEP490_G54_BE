@@ -1,28 +1,24 @@
-package vn.edu.fpt.SmartHealthC.domain.entity;
+package vn.edu.fpt.SmartHealthC.domain.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 
 import java.util.Date;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StepRecord {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+public class StepRecordDTO {
 
-    @ManyToOne
-    @JoinColumn(name = "appuser_id")
-    private AppUser appUserId;
+    private int id;
+
+    private int appUserId;
 
     private int  plannedStepPerDay;
 

@@ -19,11 +19,11 @@ public class MedicineTypePlan {
 
     @ManyToOne
     @JoinColumn(name = "medicine_plan_Id")
-    private MedicineRecord MedicinePlanId;
+    private MedicineRecord medicinePlanId;
 
     @ManyToOne
     @JoinColumn(name = "medicine_type_Id")
-    private MedicineType MedicineTypeId;
+    private MedicineType medicineTypeId;
 
 
 

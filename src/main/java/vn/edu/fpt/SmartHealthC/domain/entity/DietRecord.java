@@ -21,11 +21,11 @@ public class DietRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private int  DishPerDay;
+    private int  dishPerDay;
 
-    private Date WeekStart;
+    private Date weekStart;
 
     private Date Date;
 

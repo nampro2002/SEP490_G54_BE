@@ -21,16 +21,16 @@ public class Account {
     private Integer Id;
 
     @Column(unique=true)
-    private String Email;
+    private String email;
 
-    private String Password;
+    private String password;
 
     @Enumerated(EnumType.STRING)
-    private TypeAccount Type;
+    private TypeAccount type;
 
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "AccountId")
-    private List<ForgetPasswordCode> ForgetPasswordCode;
+    @OneToMany(mappedBy = "accountId")
+    private List<ForgetPasswordCode> forgetPasswordCode;
 
 }

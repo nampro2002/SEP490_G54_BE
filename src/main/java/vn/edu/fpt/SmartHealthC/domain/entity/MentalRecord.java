@@ -22,16 +22,16 @@ public class MentalRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private Float Point;
+    private Float point;
 
-    private Date WeekStart;
+    private Date weekStart;
 
-    private Date Date;
+    private Date date;
 
-    @OneToMany(mappedBy = "PlanId")
-    private List<RuleForPlan> RuleForPlans;
+    @OneToMany(mappedBy = "planId")
+    private List<RuleForPlan> ruleForPlans;
 
 
 }
