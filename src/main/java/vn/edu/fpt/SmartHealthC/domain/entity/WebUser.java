@@ -32,8 +32,9 @@ public class WebUser {
     private RoleWebUser type;
 
     private String phoneNumber;
-//
+
 //    @OneToMany(mappedBy = "webUserId")
 //    private List<Question> question;
+
 
 }

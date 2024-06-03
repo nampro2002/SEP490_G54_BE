@@ -33,4 +33,5 @@ public class Account {
 //    @OneToMany(mappedBy = "accountId")
 //    private List<ForgetPasswordCode> forgetPasswordCode;
 
+
 }
