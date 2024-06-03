@@ -21,31 +21,31 @@ public class SF_Record {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private Date MonthStart;
+    private Date monthStart;
 
-    private int Positivity;
+    private int positivity;
 
-    private int Activity;
+    private int activity;
 
-    private int Diet;
+    private int diet;
 
-    private int Medication;
+    private int medication;
 
-    private int ActivityPlanning;
+    private int activityPlanning;
 
-    private int ActivityHabit;
+    private int activityHabit;
 
-    private int HealthyDiet;
+    private int healthyDiet;
 
-    private int VegetablePrioritization;
+    private int vegetablePrioritization;
 
-    private int DietHabit;
+    private int dietHabit;
 
-    private int PlanCompliance;
+    private int planCompliance;
 
-    private int MedicationHabit;
+    private int medicationHabit;
 
 
 }

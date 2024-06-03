@@ -21,11 +21,11 @@ public class RuleForPlan {
 
     @ManyToOne
     @JoinColumn(name = "rule_id")
-    private MentalRule RuleId;
+    private MentalRule ruleId;
 
     @ManyToOne
     @JoinColumn(name = "plan_id")
-    private MentalRecord PlanId;
+    private MentalRecord planId;
 
 
 

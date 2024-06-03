@@ -22,13 +22,13 @@ public class WeightRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private Date WeekStart;
+    private Date weekStart;
 
-    private Date Day;
+    private Date date;
 
-    private Float Weight;
+    private Float weight;
 
 
 }

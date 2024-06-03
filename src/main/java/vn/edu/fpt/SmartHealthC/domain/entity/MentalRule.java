@@ -19,10 +19,10 @@ public class MentalRule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
 
-    private String Title;
-    private String Description;
+    private String title;
+    private String description;
 
-    @OneToMany(mappedBy = "RuleId")
-    private List<RuleForPlan> RuleForPlans;
+    @OneToMany(mappedBy = "ruleId")
+    private List<RuleForPlan> ruleForPlans;
 
 }

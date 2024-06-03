@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,13 +22,13 @@ public class StepRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private int  PlannedStepPerDay;
+    private int  plannedStepPerDay;
 
-    private Date WeekStart;
+    private Date weekStart;
 
-    private Date Date;
+    private Date date;
 
 
 }

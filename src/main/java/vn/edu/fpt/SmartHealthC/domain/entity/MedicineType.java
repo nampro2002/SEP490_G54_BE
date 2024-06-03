@@ -19,11 +19,11 @@ public class MedicineType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
 
-    private String Title;
-    private String Description;
+    private String title;
+    private String description;
 
-    @OneToMany(mappedBy = "MedicineTypeId")
-    private List<MedicineTypePlan> MedicineTypeId;
+    @OneToMany(mappedBy = "medicineTypeId")
+    private List<MedicineTypePlan> medicineTypeId;
 
 
 }

@@ -23,24 +23,24 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
     @ManyToOne
     @JoinColumn(name = "webuser_id")
-    private WebUser WebUserId;
+    private WebUser webUserId;
 
-    private String Title;
+    private String title;
 
-    private String Body;
+    private String body;
 
-    private String Answer;
+    private String answer;
 
-    private boolean Gender;
+    private boolean gender;
 
-    private Float Height;
+    private Float height;
 
-    private Float Weight;
+    private Float weight;
 
-    private String PhoneNumber;
+    private String phoneNumber;
 
 }
