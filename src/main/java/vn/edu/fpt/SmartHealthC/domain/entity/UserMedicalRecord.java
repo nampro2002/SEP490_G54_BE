@@ -19,11 +19,11 @@ public class UserMedicalRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
     @ManyToOne
     @JoinColumn(name = "condition_id")
-    private MedicalHistory ConditionId;
+    private MedicalHistory conditionId;
 
 
 }

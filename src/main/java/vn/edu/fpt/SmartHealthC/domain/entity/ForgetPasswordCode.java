@@ -20,9 +20,9 @@ public class ForgetPasswordCode {
 
     @ManyToOne
     @JoinColumn(name = "account_id")
-    private Account AccountId;
+    private Account accountId;
 
-    private String Code;
+    private String code;
 
-    private Boolean IsUsed;
+    private Boolean isUsed;
 }

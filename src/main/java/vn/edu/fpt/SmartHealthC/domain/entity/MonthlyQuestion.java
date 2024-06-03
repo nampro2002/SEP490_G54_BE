@@ -21,16 +21,16 @@ public class MonthlyQuestion {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private Date MonthStart;
+    private Date monthStart;
 
-    private Boolean IsSAT;
+    private Boolean isSAT;
 
-    private int QuestionNumber;
+    private int questionNumber;
 
-    private String Question;
+    private String question;
 
-    private String Answer;
+    private String answer;
 
 }

@@ -21,13 +21,13 @@ public class UserLesson {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
     @ManyToOne
     @JoinColumn(name = "lesson_id")
-    private Lesson LessonId;
+    private Lesson lessonId;
 
-    private Date LessonDate;
+    private Date lessonDate;
 
 
 }

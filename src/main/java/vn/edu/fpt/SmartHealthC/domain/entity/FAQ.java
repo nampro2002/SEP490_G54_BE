@@ -21,9 +21,9 @@ public class FAQ {
     private Integer Id;
 
 
-    private String Question;
+    private String question;
 
-    private String Answer;
+    private String answer;
 
 
 }

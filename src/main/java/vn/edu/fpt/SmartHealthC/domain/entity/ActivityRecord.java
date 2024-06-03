@@ -23,17 +23,17 @@ public class ActivityRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private Date WeekStart;
+    private Date weekStart;
 
     @Enumerated(EnumType.STRING)
-    private TypeActivity Type;
+    private TypeActivity type;
 
-    private Float Duration;
+    private Float duration;
 
-    private Date Date;
+    private Date date;
 
-    private Boolean Status;
+    private Boolean status;
 
 }
