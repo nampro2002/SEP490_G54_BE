@@ -28,13 +28,10 @@ public class WebUser {
 
     private String userName;
 
-    @Enumerated(EnumType.STRING)
-    private RoleWebUser type;
 
     private String phoneNumber;
-
+//
 //    @OneToMany(mappedBy = "webUserId")
 //    private List<Question> question;
-
 
 }
