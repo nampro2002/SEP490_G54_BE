@@ -26,8 +26,8 @@ public class WeightRecord {
 
     private Date weekStart;
 
-    private Date day;
-
+    private Date date;
+    
     private Float weight;
 
 

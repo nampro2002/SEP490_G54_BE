@@ -30,7 +30,8 @@ public class Account {
 
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "accountId")
-    private List<ForgetPasswordCode> forgetPasswordCode;
+//    @OneToMany(mappedBy = "accountId")
+//    private List<ForgetPasswordCode> forgetPasswordCode;
+
 
 }

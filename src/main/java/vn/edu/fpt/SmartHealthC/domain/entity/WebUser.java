@@ -33,7 +33,8 @@ public class WebUser {
 
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "webUserId")
-    private List<Question> question;
+//    @OneToMany(mappedBy = "webUserId")
+//    private List<Question> question;
+
 
 }

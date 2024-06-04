@@ -27,7 +27,7 @@ public class DietRecord {
 
     private Date weekStart;
 
-    private Date Date;
+    private Date date;
 
 
 }
