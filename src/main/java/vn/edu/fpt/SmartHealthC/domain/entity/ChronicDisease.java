@@ -16,10 +16,10 @@ public class ChronicDisease {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
 
-    private String Name;
+    private String name;
 
-    @OneToMany(mappedBy = "ConditionId")
-    private List<UserChronicDisease> UserChronicDiseases;
+    @OneToMany(mappedBy = "conditionId")
+    private List<UserChronicDisease> userChronicDiseases;
 
 
 }

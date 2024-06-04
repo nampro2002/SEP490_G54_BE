@@ -6,11 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.fpt.SmartHealthC.domain.Enum.RoleWebUser;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
-
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
@@ -24,16 +19,14 @@ public class WebUser {
 
     @OneToOne
     @JoinColumn(name = "account_id")
-    private Account AccountId;
+    private Account accountId;
 
-    private String UserName;
+    private String userName;
 
-    @Enumerated(EnumType.STRING)
-    private RoleWebUser Type;
 
-    private String PhoneNumber;
-
-    @OneToMany(mappedBy = "WebUserId")
-    private List<Question> Question;
+    private String phoneNumber;
+//
+//    @OneToMany(mappedBy = "webUserId")
+//    private List<Question> question;
 
 }

@@ -6,8 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -15,22 +19,51 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Account {
+public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
 
     @Column(unique=true)
-    private String Email;
+    private String email;
 
-    private String Password;
+    private String password;
 
     @Enumerated(EnumType.STRING)
-    private TypeAccount Type;
+    private TypeAccount type;
 
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "AccountId")
-    private List<ForgetPasswordCode> ForgetPasswordCode;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(type.name()));
+    }
 
+    @Override
+    public String getUsername() {
+        return getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !getType().name().equals("DELETED");
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+//    @OneToMany(mappedBy = "accountId")
+//    private List<ForgetPasswordCode> forgetPasswordCode;
 }

@@ -22,17 +22,17 @@ public class BloodPressureRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private Date WeekStart;
+    private Date weekStart;
 
-    private Date Date;
+    private Date date;
 
     //Tâm thu
-    private Float Systole;
+    private Float systole;
 
     //Tâm trương
-    private Float Diastole;
+    private Float diastole;
 
 
 

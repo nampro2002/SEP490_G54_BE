@@ -21,21 +21,21 @@ public class SAT_SF_P_Record {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    private AppUser AppUserId;
+    private AppUser appUserId;
 
-    private Date MonthStart;
+    private Date monthStart;
 
-    private int OverallPoint;
+    private int overallPoint;
 
-    private int LifePursuit;
+    private int lifePursuit;
 
-    private int Planning;
+    private int planning;
 
-    private int RightDecision;
+    private int rightDecision;
 
-    private int PriorityFocus;
+    private int priorityFocus;
 
-    private int HealthyEnvironment;
+    private int healthyEnvironment;
 
 
 }

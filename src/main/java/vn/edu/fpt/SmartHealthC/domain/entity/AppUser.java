@@ -20,78 +20,87 @@ public class AppUser {
 
     @OneToOne
     @JoinColumn(name = "account_id")
-    private Account AccountId;
+    private Account accountId;
 
     @OneToOne
     @JoinColumn(name = "webuser_id")
-    private WebUser WebUserId;
+    private WebUser webUserId;
 
-    private String Name;
+    private String name;
 
-    private String HospitalNumber;
+    private String hospitalNumber;
 
-    private Date Dob;
+    private Date dob;
 
-    private boolean Gender;
+    private boolean gender;
 
-    private Float Height;
+    private Float height;
 
-    private Float Weight;
+    private Float weight;
 
-    private String PhoneNumber;
+    private String  phoneNumber;
+    private String strength;
+    private String weakness;
 
-    @OneToMany(mappedBy = "AppUserId")
-    private List<Question> Question;
-
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<ActivityRecord> ActivityRecords;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<BloodPressureRecord> BloodPressureRecords;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<DietRecord> DietRecords;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<MedicalAppointment> MedicalAppointments;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<MedicineRecord> MedicineRecords;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<MentalRecord> MentalRecords;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<MonthlyQuestion> MonthlyQuestions;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<SAT_SF_C_Record> SAT_SF_C_Records;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<SAT_SF_I_Record> SAT_SF_I_Records;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<SAT_SF_P_Record> SAT_SF_P_Records;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<SF_Record> SF_Records;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<StepRecord> StepRecords;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<WeightRecord> WeightRecords;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<UserChronicDisease> UserChronicDiseases;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<UserMedicalRecord> UserMedicalRecords;
-
-    @OneToMany(mappedBy = "AppUserId")
-    private List<UserLesson> UserLessons;
-
-
-
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<Question> question;
+//
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<ActivityRecord> activityRecords;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<BloodPressureRecord> bloodPressureRecords;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<DietRecord> dietRecords;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<MedicalAppointment> medicalAppointments;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<MedicineRecord> medicineRecords;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<MentalRecord> mentalRecords;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<MonthlyQuestion> monthlyQuestions;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<SAT_SF_C_Record> sat_sf_c_Records;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<SAT_SF_I_Record> sat_sf_i_Records;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<SAT_SF_P_Record> sat_sf_p_Records;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<SF_Record> sf_Records;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<StepRecord> stepRecords;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<WeightRecord> weightRecords;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<UserChronicDisease> userChronicDiseases;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<UserMedicalRecord> userMedicalRecords;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<UserLesson> userLessons;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<Cholesterol> cholesterols;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<BloodSugar> bloodSugars;
+//
+//    @OneToMany(mappedBy = "appUserId")
+//    private List<HBA1CRecord> hba1cRecords;
 }
+

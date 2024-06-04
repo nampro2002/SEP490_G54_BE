@@ -1,4 +1,15 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import vn.edu.fpt.SmartHealthC.domain.entity.Account;
+
+import java.util.List;
+import java.util.Optional;
+
 public interface AccountService {
+    Account createAccount(Account account);
+    Optional<Account> getAccountById(Integer id);
+    Optional<Account> getAccountByEmail(String email);
+    List<Account> getAllAccounts();
+    Account updateAccount(Account account);
+    void deleteAccount(Integer id);
 }
