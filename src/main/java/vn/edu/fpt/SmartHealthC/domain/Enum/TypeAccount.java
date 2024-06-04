@@ -6,5 +6,4 @@ public enum TypeAccount {
         MEDICAL_SPECIALIST,
         USER,
         DELETED
-
 }

@@ -22,8 +22,8 @@ public class MedicineType {
     private String title;
     private String description;
 
-    @OneToMany(mappedBy = "medicineTypeId")
-    private List<MedicineTypePlan> medicineTypeId;
+//    @OneToMany(mappedBy = "medicineTypeId")
+//    private List<MedicineTypePlan> medicineTypeId;
 
 
 }

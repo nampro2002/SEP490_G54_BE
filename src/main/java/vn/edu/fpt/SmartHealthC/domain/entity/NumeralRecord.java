@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNumeral;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeTimeMeasure;
 
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HBA1CRecord {
+public class NumeralRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
@@ -29,5 +30,10 @@ public class HBA1CRecord {
     private Date date;
     @Enumerated(EnumType.STRING)
     private TypeTimeMeasure timeMeasure;
+
+    @Enumerated(EnumType.STRING)
+    private TypeNumeral typeNumeral;
+
+    private float value;
 
 }
