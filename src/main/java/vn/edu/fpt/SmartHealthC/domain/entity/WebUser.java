@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.fpt.SmartHealthC.domain.Enum.RoleWebUser;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
+
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
