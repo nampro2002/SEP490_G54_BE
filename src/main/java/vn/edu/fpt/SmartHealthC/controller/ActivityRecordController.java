@@ -1,14 +1,13 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.fpt.SmartHealthC.domain.dto.ActivityRecordDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.DietRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
 import vn.edu.fpt.SmartHealthC.serivce.ActivityRecordService;
-import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +20,15 @@ public class ActivityRecordController {
     private ActivityRecordService activityRecordService;
 
     @PostMapping
-    public ResponseEntity<ActivityRecord> createActivityRecord(@RequestBody ActivityRecordDTO activityRecordDTO) {
+    public ApiResponse<ActivityRecord> createActivityRecord(@RequestBody ActivityRecordDTO activityRecordDTO) {
 
         ActivityRecord createdActivityRecord= activityRecordService.createActivityRecord(activityRecordDTO);
-        return ResponseEntity.ok(createdActivityRecord);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ActivityRecord>builder()
+                        .isSuccess(true)
+                        .code(HttpStatus.OK)
+                        .result(createdActivityRecord)
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
@@ -40,10 +44,15 @@ public class ActivityRecordController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ActivityRecord> updateActivityRecord(@PathVariable Integer id, @RequestBody ActivityRecordDTO activityRecordDTO) {
+    public ApiResponse<ActivityRecord> updateActivityRecord(@PathVariable Integer id, @RequestBody ActivityRecordDTO activityRecordDTO) {
         activityRecordDTO.setId(id);
         ActivityRecord updatedActivityRecord = activityRecordService.updateActivityRecord(activityRecordDTO);
-        return ResponseEntity.ok(updatedActivityRecord);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ActivityRecord>builder()
+                        .isSuccess(true)
+                        .code(HttpStatus.OK)
+                        .result(updatedActivityRecord)
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")

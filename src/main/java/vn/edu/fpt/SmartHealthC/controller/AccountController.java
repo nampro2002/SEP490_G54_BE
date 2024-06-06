@@ -7,12 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.fpt.SmartHealthC.domain.dto.AuthenticationResponseDto;
-import vn.edu.fpt.SmartHealthC.domain.dto.LoginDto;
-import vn.edu.fpt.SmartHealthC.domain.dto.WebUserRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
-import vn.edu.fpt.SmartHealthC.exception.BadRequestException;
 import vn.edu.fpt.SmartHealthC.serivce.AccountService;
 
 import java.util.List;

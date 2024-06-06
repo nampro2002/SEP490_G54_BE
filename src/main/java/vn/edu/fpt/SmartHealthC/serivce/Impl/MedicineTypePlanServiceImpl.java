@@ -2,8 +2,7 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.SmartHealthC.domain.dto.MedicineTypePlanDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.RuleForPlanDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypePlanDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.repository.*;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineTypePlanService;

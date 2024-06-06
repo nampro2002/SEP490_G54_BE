@@ -1,6 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
-import vn.edu.fpt.SmartHealthC.domain.dto.RuleForPlanDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.RuleForPlanDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.RuleForPlan;
 import vn.edu.fpt.SmartHealthC.domain.entity. RuleForPlan;
 

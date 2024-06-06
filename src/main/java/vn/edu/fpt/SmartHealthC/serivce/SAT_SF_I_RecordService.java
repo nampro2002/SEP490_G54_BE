@@ -1,6 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
-import vn.edu.fpt.SmartHealthC.domain.dto.SAT_SF_I_RecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.SAT_SF_I_RecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.SAT_SF_I_Record;
 
 import java.util.List;

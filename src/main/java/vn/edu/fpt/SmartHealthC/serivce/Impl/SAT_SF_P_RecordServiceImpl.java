@@ -2,8 +2,7 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.SmartHealthC.domain.dto.SAT_SF_I_RecordDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.SAT_SF_P_RecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.SAT_SF_P_RecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.SAT_SF_I_Record;
 import vn.edu.fpt.SmartHealthC.domain.entity.SAT_SF_P_Record;

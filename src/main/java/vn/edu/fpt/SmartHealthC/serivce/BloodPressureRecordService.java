@@ -1,6 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
-import vn.edu.fpt.SmartHealthC.domain.dto.BloodPressureRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 
