@@ -22,7 +22,7 @@ public class MentalRule {
     private String title;
     private String description;
 
-    @OneToMany(mappedBy = "ruleId")
-    private List<RuleForPlan> ruleForPlans;
+//    @OneToMany(mappedBy = "ruleId")
+//    private List<RuleForPlan> ruleForPlans;
 
 }

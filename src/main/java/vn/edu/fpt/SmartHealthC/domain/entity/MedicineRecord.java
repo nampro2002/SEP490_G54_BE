@@ -37,7 +37,7 @@ public class MedicineRecord {
 
     private Boolean status;
 
-    @OneToMany(mappedBy = "medicinePlanId")
-    private List<MedicineTypePlan> medicineTypePlans;
+//    @OneToMany(mappedBy = "medicinePlanId")
+//    private List<MedicineTypePlan> medicineTypePlans;
 
 }

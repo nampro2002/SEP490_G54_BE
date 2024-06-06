@@ -19,7 +19,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Account implements UserDetails {
+public class Account implements UserDetails
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
@@ -64,6 +65,6 @@ public class Account implements UserDetails {
         return true;
     }
 
-//    @OneToMany(mappedBy = "accountId")
-//    private List<ForgetPasswordCode> forgetPasswordCode;
+    @OneToMany(mappedBy = "accountId")
+    private List<ForgetPasswordCode> forgetPasswordCode;
 }
