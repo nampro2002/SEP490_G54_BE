@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 
 import java.util.Date;
 
@@ -28,6 +29,9 @@ public class Question {
     @ManyToOne
     @JoinColumn(name = "webuser_id")
     private WebUser webUserId;
+
+    @Enumerated(EnumType.STRING)
+    private TypeUserQuestion typeUserQuestion;
 
     private String title;
 

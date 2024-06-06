@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatusCode;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
+    private boolean isSuccess;
     @Builder.Default
     private HttpStatusCode code = HttpStatus.OK;
 

@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,18 +32,24 @@ public class AuthController {
 
     @PostMapping("/register")
     public ApiResponse<?> register(
-            @RequestBody RegisterDto request) {
-        return ApiResponse.<AuthenticationResponseDto>builder()
-                .result(authService.register(request))
-                .build();
+            @RequestBody @Valid RegisterDto request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<AuthenticationResponseDto>builder()
+                        .isSuccess(true)
+                        .code(HttpStatus.CREATED)
+                        .result(authService.register(request))
+                        .build()).getBody();
     }
 
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponseDto> login(
-            @RequestBody LoginDto request) {
-        return ApiResponse.<AuthenticationResponseDto>builder()
-                .result(authService.login(request))
-                .build();
+            @RequestBody @Valid LoginDto request) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<AuthenticationResponseDto>builder()
+                        .isSuccess(true)
+                        .code(HttpStatus.OK)
+                        .result(authService.login(request))
+                        .build()).getBody();
     }
 
     @GetMapping("/accounts")

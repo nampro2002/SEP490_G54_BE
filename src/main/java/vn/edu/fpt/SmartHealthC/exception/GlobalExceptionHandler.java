@@ -5,14 +5,17 @@ import java.util.Objects;
 
 import jakarta.validation.ConstraintViolation;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 
 @ControllerAdvice
@@ -47,23 +50,34 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
         ErrorCode errorCode = exception.getErrorCode();
         ApiResponse apiResponse = new ApiResponse();
-
+        apiResponse.setSuccess(false);
         apiResponse.setCode(errorCode.getStatusCode());
         apiResponse.setMessage(errorCode.getMessage());
 
         return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
     }
 
-    @ExceptionHandler(value = AccessDeniedException.class)
-    ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException exception) {
-        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
-
-        return ResponseEntity.status(errorCode.getStatusCode())
-                .body(ApiResponse.builder()
-                        .code(errorCode.getStatusCode())
-                        .message(errorCode.getMessage())
-                        .build());
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)  // Nếu validate fail thì trả về 400
+    public ResponseEntity<ApiResponse>  handleBindException(BindException e) {
+        // Trả về message của lỗi đầu tiên
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setSuccess(false);
+        apiResponse.setCode(HttpStatus.BAD_REQUEST);
+        apiResponse.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
+
+//    @ExceptionHandler(value = AccessDeniedException.class)
+//    ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException exception) {
+//        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+//
+//        return ResponseEntity.status(errorCode.getStatusCode())
+//                .body(ApiResponse.builder()
+//                        .code(errorCode.getStatusCode())
+//                        .message(errorCode.getMessage())
+//                        .build());
+//    }
 
 //    @ExceptionHandler(value = MethodArgumentNotValidException.class)
 //    ResponseEntity<ApiResponse> handlingValidation(MethodArgumentNotValidException exception) {

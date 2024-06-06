@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface MedicalHistoryService {
     MedicalHistory createMedicalHistory(MedicalHistory medicalHistory);
     Optional<MedicalHistory> getMedicalHistoryById(Integer id);
-    List<MedicalHistory> getAllMedicalHistories();
+    List<MedicalHistory> getAllMedicalHistory();
     MedicalHistory updateMedicalHistory(MedicalHistory medicalHistory);
     void deleteMedicalHistory(Integer id);
 }

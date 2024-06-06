@@ -7,10 +7,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.repository.MentalRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.MentalRuleRepository;
 import vn.edu.fpt.SmartHealthC.repository.RuleForPlanRepository;
-import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
-import vn.edu.fpt.SmartHealthC.serivce.MentalRuleService;
 import vn.edu.fpt.SmartHealthC.serivce.RuleForPlanService;
-import vn.edu.fpt.SmartHealthC.serivce.UserMedicalRecordService;
 
 import java.util.List;
 import java.util.Optional;
