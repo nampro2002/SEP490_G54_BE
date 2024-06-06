@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.domain.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,25 +9,16 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterDto {
+@Builder
+public class WebUserRequestDTO {
     private String email;
 
-    private  String password;
+    private String password;
 
-    private String name;
-
-    private String hospitalNumber;
-
-    private Date dob;
-
-    private boolean gender;
-
-    private Float height;
-
-    private Float weight;
+    private String username;
 
     private String phoneNumber;
+
 }
