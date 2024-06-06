@@ -10,11 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/medical-histories")
+@RequestMapping("/api/chronic-diseases")
 public class MedicalHistoryController {
     @Autowired
     private MedicalHistoryService medicalHistoryService;
-
     @PostMapping
     public ResponseEntity<MedicalHistory> createMedicalHistory(@RequestBody MedicalHistory medicalHistory) {
         MedicalHistory createdMedicalHistory = medicalHistoryService.createMedicalHistory(medicalHistory);
@@ -23,13 +22,13 @@ public class MedicalHistoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MedicalHistory> getMedicalHistoryById(@PathVariable Integer id) {
-        Optional<MedicalHistory> medicalHistory = medicalHistoryService.getMedicalHistoryById(id);
-        return medicalHistory.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<MedicalHistory> chronicDisease = medicalHistoryService.getMedicalHistoryById(id);
+        return chronicDisease.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
-    public ResponseEntity<List<MedicalHistory>> getAllMedicalHistories() {
-        List<MedicalHistory> medicalHistories = medicalHistoryService.getAllMedicalHistories();
+    public ResponseEntity<List<MedicalHistory>> getAllMedicalHistory() {
+        List<MedicalHistory> medicalHistories = medicalHistoryService.getAllMedicalHistory();
         return ResponseEntity.ok(medicalHistories);
     }
 
@@ -41,7 +40,7 @@ public class MedicalHistoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMedicalHistory(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteChronicDisease(@PathVariable Integer id) {
         medicalHistoryService.deleteMedicalHistory(id);
         return ResponseEntity.noContent().build();
     }

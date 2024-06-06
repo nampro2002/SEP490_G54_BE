@@ -29,16 +29,22 @@ public class AccountController {
             @Valid @RequestBody LoginDto loginDto,
             HttpServletRequest request
     ) {
-        return ApiResponse.<AuthenticationResponseDto>builder()
-                .result(accountService.loginStaff(loginDto))
-                .build();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<AuthenticationResponseDto>builder()
+                        .isSuccess(true)
+                        .code(HttpStatus.OK)
+                        .result(accountService.loginStaff(loginDto))
+                        .build()).getBody();
     }
 
     @PostMapping
-    public ApiResponse<?> createStaff(@RequestBody WebUserRequestDTO account) {
-            return ApiResponse.<AuthenticationResponseDto>builder()
-                    .result(accountService.createStaff(account))
-                    .build();
+    public ApiResponse<?> createStaff(@RequestBody @Valid WebUserRequestDTO account) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<AuthenticationResponseDto>builder()
+                        .isSuccess(true)
+                        .code(HttpStatus.CREATED)
+                        .result(accountService.createStaff(account))
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")

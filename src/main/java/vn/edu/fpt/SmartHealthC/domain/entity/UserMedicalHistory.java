@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserMedicalRecord {
+public class UserMedicalHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
