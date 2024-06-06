@@ -14,6 +14,8 @@ public enum ErrorCode {
     CREDENTIAL_INVALID("Wrong email or password", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED("Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED("You do not have permission", HttpStatus.FORBIDDEN),
+    APP_USER_NOT_FOUND("AppUser not found", HttpStatus.NOT_FOUND),
+    ACTIVITY_RECORD_NOT_FOUND("Activity record not found", HttpStatus.NOT_FOUND)
 //    USER_NOT_EXISTED(1005, "User not existed", HttpStatus.NOT_FOUND),
 //    UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
 //    UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),

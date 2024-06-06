@@ -1,6 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
-import vn.edu.fpt.SmartHealthC.domain.dto.SF_RecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.SF_RecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.SF_Record;
 import vn.edu.fpt.SmartHealthC.domain.entity.SF_Record;
 

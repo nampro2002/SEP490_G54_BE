@@ -1,6 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
-import vn.edu.fpt.SmartHealthC.domain.dto.MonthlyQuestionDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyQuestion;
 
 import java.util.List;

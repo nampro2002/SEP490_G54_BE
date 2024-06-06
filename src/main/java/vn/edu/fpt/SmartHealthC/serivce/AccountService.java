@@ -1,9 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
-import vn.edu.fpt.SmartHealthC.domain.dto.AuthenticationResponseDto;
-import vn.edu.fpt.SmartHealthC.domain.dto.LoginDto;
-import vn.edu.fpt.SmartHealthC.domain.dto.WebUserRequestDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.AccountResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 
 import java.util.List;

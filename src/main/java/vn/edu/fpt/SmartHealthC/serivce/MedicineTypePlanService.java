@@ -1,6 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
-import vn.edu.fpt.SmartHealthC.domain.dto.MedicineTypePlanDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypePlanDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineTypePlan;
 
 import java.util.List;
