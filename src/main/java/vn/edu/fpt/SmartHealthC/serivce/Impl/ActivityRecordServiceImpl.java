@@ -45,7 +45,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     public Optional<ActivityRecord> getActivityRecordById(Integer id) {
         Optional<ActivityRecord> activityRecordId = activityRecordRepository.findById(id);
         if(activityRecordId.isEmpty()) {
-            throw new AppException(ErrorCode.ACTIVITY_RECORD_NOT_FOUND);
+            throw new AppException(ErrorCode.NOT_FOUND);
         }
 
         return activityRecordId;
@@ -70,7 +70,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         if(activityRecordId.isEmpty()) {
-            throw new AppException(ErrorCode.ACTIVITY_RECORD_NOT_FOUND);
+            throw new AppException(ErrorCode.NOT_FOUND);
         }
         activityRecord.setAppUserId(appUser.get());
         return  activityRecordRepository.save(activityRecord);

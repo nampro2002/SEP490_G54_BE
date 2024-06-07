@@ -24,16 +24,16 @@ public class GlobalExceptionHandler {
 
     private static final String MIN_ATTRIBUTE = "min";
 
-//    @ExceptionHandler(value = Exception.class)
-//    ResponseEntity<ApiResponse> handlingException(Exception exception) {
-//        log.error("Exception: ", exception);
-//        ApiResponse apiResponse = new ApiResponse();
-//
-//        apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
-//        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
-//
-//        return ResponseEntity.badRequest().body(apiResponse);
-//    }
+    @ExceptionHandler(value = Exception.class)
+    ResponseEntity<ApiResponse> handlingException(Exception exception) {
+        log.error("Exception: ", exception);
+        ApiResponse apiResponse = new ApiResponse();
+
+        apiResponse.setCode(HttpStatus.BAD_REQUEST.value());
+        apiResponse.setMessage(exception.getMessage());
+
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
 
 //    @ExceptionHandler(value = RuntimeException.class)
 //    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = exception.getErrorCode();
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setSuccess(false);
-        apiResponse.setCode(errorCode.getStatusCode());
+        apiResponse.setCode(errorCode.getStatusCode().value());
         apiResponse.setMessage(errorCode.getMessage());
 
         return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
         // Trả về message của lỗi đầu tiên
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setSuccess(false);
-        apiResponse.setCode(HttpStatus.BAD_REQUEST);
+        apiResponse.setCode(HttpStatus.BAD_REQUEST.value());
         apiResponse.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }

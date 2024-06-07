@@ -1,8 +1,12 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.entity.FAQ;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.serivce.FormQuestionService;
 import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
@@ -17,15 +21,18 @@ public class FormQuestionController {
     private FormQuestionService formQuestionService;
 
     @PostMapping
-    public ResponseEntity<FormQuestion> createFormQuestion(@RequestBody FormQuestion formQuestion) {
+    public ResponseEntity<FormQuestion> createFormQuestion(@RequestBody FormQuestionRequestDTO formQuestion) {
         FormQuestion createdFormQuestion = formQuestionService.createFormQuestion(formQuestion);
         return ResponseEntity.ok(createdFormQuestion);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FormQuestion> getFormQuestionById(@PathVariable Integer id) {
-        Optional<FormQuestion> formQuestion = formQuestionService.getFormQuestionById(id);
-        return formQuestion.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<?> getFormQuestionById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<FormQuestion>builder()
+                        .isSuccess(true)
+                        .result(formQuestionService.getFormQuestionById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
@@ -34,9 +41,8 @@ public class FormQuestionController {
         return ResponseEntity.ok(formQuestions);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<FormQuestion> updateFormQuestion(@PathVariable Integer id, @RequestBody FormQuestion formQuestion) {
-        formQuestion.setId(id);
+    @PutMapping()
+    public ResponseEntity<FormQuestion> updateFormQuestion(@RequestBody FormQuestionRequestDTO formQuestion) {
         FormQuestion updatedformQuestion= formQuestionService.updateFormQuestion(formQuestion);
         return ResponseEntity.ok(updatedformQuestion);
     }

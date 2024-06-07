@@ -10,10 +10,13 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.RegisterDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
+import vn.edu.fpt.SmartHealthC.exception.BadRequestException;
+import vn.edu.fpt.SmartHealthC.exception.DataNotFoundException;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -33,7 +36,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
                         .isSuccess(true)
-                        .code(HttpStatus.CREATED)
+                        .code(HttpStatus.CREATED.value())
                         .result(authService.register(request))
                         .build()).getBody();
     }
@@ -44,7 +47,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
                         .isSuccess(true)
-                        .code(HttpStatus.OK)
+                        .code(HttpStatus.OK.value())
                         .result(authService.login(request))
                         .build()).getBody();
     }

@@ -10,6 +10,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
+import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -37,7 +38,6 @@ public class AccountServiceImpl implements AccountService {
     private JwtProvider jwtProvider;
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Override
     public AuthenticationResponseDto loginStaff(LoginDto request){
         Optional<Account> optionalUser = accountRepository.findByEmail(request.getEmail());
@@ -60,6 +60,19 @@ public class AccountServiceImpl implements AccountService {
                 .token(jwt)
                 .build();
     }
+
+    @Override
+    public boolean activateAccount(Integer id) {
+        AppUser appUser = appUserRepository.findById(id).orElseThrow();
+        if(!(appUser.getWebUserId() == null)){
+            Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
+            account.setIsActive(true);
+            accountRepository.save(account);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public AuthenticationResponseDto createStaff(WebUserRequestDTO account){
         Optional<Account> existingAccount = getAccountByEmail(account.getEmail());

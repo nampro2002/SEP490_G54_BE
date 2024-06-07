@@ -3,9 +3,7 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserMedicalHistoryDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicalHistory;
-import vn.edu.fpt.SmartHealthC.domain.entity.UserMedicalHistory;
+import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
@@ -36,7 +34,7 @@ public class UserMedicalHistoryServiceImpl implements UserMedicalHistoryService 
         }
         Optional<MedicalHistory> medicalHistory = medicalHistoryRepository.findById(userMedicalHistoryDTO.getConditionId());
         if(medicalHistory.isEmpty()) {
-            throw new AppException(ErrorCode.MEDICAL_HISTORY_NOT_FOUND);
+            throw new AppException(ErrorCode.NOT_FOUND);
         }
         userMedicalHistory.setAppUserId(appUser.get());
         userMedicalHistory.setConditionId(medicalHistory.get());
@@ -64,7 +62,7 @@ public class UserMedicalHistoryServiceImpl implements UserMedicalHistoryService 
         }
         Optional<MedicalHistory> medicalHistory = medicalHistoryRepository.findById(userMedicalHistoryDTO.getConditionId());
         if(medicalHistory.isEmpty()) {
-            throw new AppException(ErrorCode.MEDICAL_HISTORY_NOT_FOUND);
+            throw new AppException(ErrorCode.NOT_FOUND);
         }
         userMedicalHistory.setAppUserId(appUser.get());
         userMedicalHistory.setConditionId(medicalHistory.get());

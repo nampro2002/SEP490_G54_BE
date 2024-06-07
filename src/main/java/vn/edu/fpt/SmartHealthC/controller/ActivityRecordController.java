@@ -26,7 +26,6 @@ public class ActivityRecordController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ActivityRecord>builder()
                         .isSuccess(true)
-                        .code(HttpStatus.OK)
                         .result(createdActivityRecord)
                         .build()).getBody();
     }
@@ -50,7 +49,6 @@ public class ActivityRecordController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ActivityRecord>builder()
                         .isSuccess(true)
-                        .code(HttpStatus.OK)
                         .result(updatedActivityRecord)
                         .build()).getBody();
     }

@@ -2,8 +2,11 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.FAQRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.FAQ;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.FAQRepository;
 import vn.edu.fpt.SmartHealthC.repository.LessonRepository;
 import vn.edu.fpt.SmartHealthC.serivce.FAQService;
@@ -20,13 +23,21 @@ public class FAQServiceImpl implements FAQService {
 
 
     @Override
-    public FAQ createFAQ(FAQ faq) {
+    public FAQ createFAQ(FAQRequestDTO faqRequestDTO) {
+        FAQ faq = FAQ.builder()
+                .question(faqRequestDTO.getQuestion())
+                .answer(faqRequestDTO.getAnswer())
+                .build();
         return faqRepository.save(faq);
     }
 
     @Override
-    public Optional<FAQ> getFAQById(Integer id) {
-        return  faqRepository.findById(id);
+    public FAQ getFAQById(Integer id) {
+        Optional<FAQ> faq = faqRepository.findById(id);
+        if (!faq.isPresent()) {
+            throw new AppException(ErrorCode.NOT_FOUND);
+        }
+        return faq.get();
     }
 
     @Override
@@ -35,12 +46,17 @@ public class FAQServiceImpl implements FAQService {
     }
 
     @Override
-    public FAQ updateFAQ(FAQ faq) {
-        return faqRepository.save(faq);
+    public FAQ updateFAQ(FAQRequestDTO faq) {
+        FAQ faqEntity = getFAQById(faq.getId());
+        faqEntity.setQuestion(faq.getQuestion());
+        faqEntity.setAnswer(faq.getAnswer());
+        return faqRepository.save(faqEntity);
     }
 
     @Override
-    public void deleteFAQ(Integer id) {
+    public FAQ deleteFAQ(Integer id) {
+        FAQ faqEntity = getFAQById(id);
         faqRepository.deleteById(id);
+        return faqEntity;
     }
 }
