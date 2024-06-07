@@ -2,15 +2,12 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.SmartHealthC.domain.dto.RuleForPlanDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.RuleForPlanDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.repository.MentalRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.MentalRuleRepository;
 import vn.edu.fpt.SmartHealthC.repository.RuleForPlanRepository;
-import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
-import vn.edu.fpt.SmartHealthC.serivce.MentalRuleService;
 import vn.edu.fpt.SmartHealthC.serivce.RuleForPlanService;
-import vn.edu.fpt.SmartHealthC.serivce.UserMedicalRecordService;
 
 import java.util.List;
 import java.util.Optional;

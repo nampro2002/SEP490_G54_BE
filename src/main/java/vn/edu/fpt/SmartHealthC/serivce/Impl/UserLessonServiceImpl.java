@@ -2,7 +2,15 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.UserLessonDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
+import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
+import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
+import vn.edu.fpt.SmartHealthC.repository.LessonRepository;
 import vn.edu.fpt.SmartHealthC.repository.UserLessonRepository;
 import vn.edu.fpt.SmartHealthC.serivce.UserLessonService;
 
@@ -13,9 +21,27 @@ public class UserLessonServiceImpl implements UserLessonService {
 
     @Autowired
     private UserLessonRepository userLessonRepository;
+    @Autowired
+    private AppUserRepository appUserRepository;
+    @Autowired
+    private LessonRepository lessonRepository;
 
     @Override
-    public UserLesson createUserLesson(UserLesson userLesson) {
+    public UserLesson createUserLesson(UserLessonDTO userLessonDTO) {
+
+        UserLesson userLesson =  UserLesson.builder()
+                .lessonDate(userLessonDTO.getLessonDate())
+                .build();
+        Optional<AppUser> appUser = appUserRepository.findById(userLessonDTO.getAppUserId());
+        if(appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Optional<Lesson> lesson = lessonRepository.findById(userLessonDTO.getLessonId());
+        if(lesson.isEmpty()) {
+            throw new AppException(ErrorCode.LESSON_NOT_FOUND);
+        }
+        userLesson.setAppUserId(appUser.get());
+        userLesson.setLessonId(lesson.get());
         return userLessonRepository.save(userLesson);
     }
 
@@ -30,7 +56,22 @@ public class UserLessonServiceImpl implements UserLessonService {
     }
 
     @Override
-    public UserLesson updateUserLesson(UserLesson userLesson) {
+    public UserLesson updateUserLesson(UserLessonDTO userLessonDTO) {
+
+        UserLesson userLesson =  UserLesson.builder()
+                .Id(userLessonDTO.getId())
+                .lessonDate(userLessonDTO.getLessonDate())
+                .build();
+        Optional<AppUser> appUser = appUserRepository.findById(userLessonDTO.getAppUserId());
+        if(appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Optional<Lesson> lesson = lessonRepository.findById(userLessonDTO.getLessonId());
+        if(lesson.isEmpty()) {
+            throw new AppException(ErrorCode.LESSON_NOT_FOUND);
+        }
+        userLesson.setAppUserId(appUser.get());
+        userLesson.setLessonId(lesson.get());
         return userLessonRepository.save(userLesson);
     }
 

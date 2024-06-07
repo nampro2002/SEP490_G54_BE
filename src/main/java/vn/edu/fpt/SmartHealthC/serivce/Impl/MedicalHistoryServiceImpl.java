@@ -26,7 +26,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     }
 
     @Override
-    public List<MedicalHistory> getAllMedicalHistories() {
+    public List<MedicalHistory> getAllMedicalHistory() {
         return medicalHistoryRepository.findAll();
     }
 

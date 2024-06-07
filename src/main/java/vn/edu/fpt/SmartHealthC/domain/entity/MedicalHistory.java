@@ -2,10 +2,8 @@ package vn.edu.fpt.SmartHealthC.domain.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalHistory;
 
 import java.util.List;
 
@@ -21,6 +19,11 @@ public class MedicalHistory {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private TypeMedicalHistory type;
+
     @OneToMany(mappedBy = "conditionId")
-    private List<UserMedicalRecord> userMedicalRecords;
+    private List<UserMedicalHistory> userMedicalHistories;
+
+
 }

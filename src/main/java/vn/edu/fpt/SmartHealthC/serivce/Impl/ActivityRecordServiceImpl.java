@@ -2,11 +2,13 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.SmartHealthC.domain.dto.ActivityRecordDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.StepRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.ActivityRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.serivce.ActivityRecordService;
@@ -31,16 +33,22 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
                 .date(activityRecordDTO.getDate())
                 .type(activityRecordDTO.getType())
                 .status(activityRecordDTO.isStatus()).build();
-        AppUser appUser = appUserRepository.findById(activityRecordDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
-
-        activityRecord.setAppUserId(appUser);
+        Optional<AppUser> appUser = appUserRepository.findById(activityRecordDTO.getAppUserId());
+        if(appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        activityRecord.setAppUserId(appUser.get());
         return  activityRecordRepository.save(activityRecord);
     }
 
     @Override
     public Optional<ActivityRecord> getActivityRecordById(Integer id) {
-        return activityRecordRepository.findById(id);
+        Optional<ActivityRecord> activityRecordId = activityRecordRepository.findById(id);
+        if(activityRecordId.isEmpty()) {
+            throw new AppException(ErrorCode.ACTIVITY_RECORD_NOT_FOUND);
+        }
+
+        return activityRecordId;
     }
 
     @Override
@@ -56,12 +64,16 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
                     .date(activityRecordDTO.getDate())
                     .type(activityRecordDTO.getType())
                     .status(activityRecordDTO.isStatus()).build();
-
-            AppUser appUser = appUserRepository.findById(activityRecordDTO.getAppUserId())
-                    .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
-
-            activityRecord.setAppUserId(appUser);
-            return  activityRecordRepository.save(activityRecord);
+        Optional<ActivityRecord> activityRecordId = activityRecordRepository.findById(activityRecordDTO.getId());
+        Optional<AppUser> appUser = appUserRepository.findById(activityRecordDTO.getAppUserId());
+        if(appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        if(activityRecordId.isEmpty()) {
+            throw new AppException(ErrorCode.ACTIVITY_RECORD_NOT_FOUND);
+        }
+        activityRecord.setAppUserId(appUser.get());
+        return  activityRecordRepository.save(activityRecord);
     }
 
     @Override

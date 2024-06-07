@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.UserLessonDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 import vn.edu.fpt.SmartHealthC.serivce.UserLessonService;
 
@@ -16,8 +17,8 @@ public class UserLessonController {
     private UserLessonService userLessonService;
 
     @PostMapping
-    public ResponseEntity<UserLesson> createUserLesson(@RequestBody UserLesson userLesson) {
-        UserLesson createdUserLesson = userLessonService.createUserLesson(userLesson);
+    public ResponseEntity<UserLesson> createUserLesson(@RequestBody UserLessonDTO userLessonDTO) {
+        UserLesson createdUserLesson = userLessonService.createUserLesson(userLessonDTO);
         return ResponseEntity.ok(createdUserLesson);
     }
 
@@ -34,9 +35,9 @@ public class UserLessonController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserLesson> updateUserLesson(@PathVariable Integer id, @RequestBody UserLesson userLesson) {
-        userLesson.setId(id);
-        UserLesson updatedUserLesson = userLessonService.updateUserLesson(userLesson);
+    public ResponseEntity<UserLesson> updateUserLesson(@PathVariable Integer id, @RequestBody UserLessonDTO userLessonDTO) {
+        userLessonDTO.setId(id);
+        UserLesson updatedUserLesson = userLessonService.updateUserLesson(userLessonDTO);
         return ResponseEntity.ok(updatedUserLesson);
     }
 
