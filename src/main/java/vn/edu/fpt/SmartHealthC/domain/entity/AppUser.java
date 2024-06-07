@@ -39,8 +39,7 @@ public class AppUser {
     private Float weight;
 
     private String  phoneNumber;
-    private String strength;
-    private String weakness;
+    private String doctorNote;
 
 //    @OneToMany(mappedBy = "appUserId")
 //    private List<Question> question;

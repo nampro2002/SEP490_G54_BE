@@ -31,17 +31,17 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
                         .isSuccess(true)
-                        .code(HttpStatus.OK)
+                        .code(HttpStatus.OK.value())
                         .result(accountService.loginStaff(loginDto))
                         .build()).getBody();
     }
 
-    @PostMapping
+    @PostMapping("/staff")
     public ApiResponse<?> createStaff(@RequestBody @Valid WebUserRequestDTO account) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
                         .isSuccess(true)
-                        .code(HttpStatus.CREATED)
+                        .code(HttpStatus.CREATED.value())
                         .result(accountService.createStaff(account))
                         .build()).getBody();
     }
@@ -50,6 +50,18 @@ public class AccountController {
     public ResponseEntity<?> getAccountById(@PathVariable Integer id) {
         Optional<Account> account = accountService.getAccountById(id);
         return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("activate/{id}")
+    public ResponseEntity<?> activateAccount(@PathVariable Integer appUserId) {
+        if (accountService.activateAccount(appUserId)) {
+            return ResponseEntity.ok().build();
+        }
+        ApiResponse apiResponse = new ApiResponse<>();
+        apiResponse.setSuccess(false);
+        apiResponse.setCode(HttpStatus.BAD_REQUEST.value());
+        apiResponse.setMessage("Activation failed");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
 
     @GetMapping("/email/{email}")

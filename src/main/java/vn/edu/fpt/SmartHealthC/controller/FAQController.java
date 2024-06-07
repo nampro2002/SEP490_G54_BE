@@ -1,8 +1,12 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.FAQRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.entity.FAQ;
 import vn.edu.fpt.SmartHealthC.serivce.FAQService;
 
@@ -16,33 +20,49 @@ public class FAQController {
     private FAQService faqService;
 
     @PostMapping
-    public ResponseEntity<FAQ> createFAQ(@RequestBody FAQ faq) {
-        FAQ createdFaq = faqService.createFAQ(faq);
-        return ResponseEntity.ok(createdFaq);
+    public ApiResponse<?> createFAQ(@RequestBody FAQRequestDTO faqRequestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<FAQ>builder()
+                        .isSuccess(true)
+                        .code(HttpStatus.CREATED.value())
+                        .result(faqService.createFAQ(faqRequestDTO))
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FAQ> getFAQById(@PathVariable Integer id) {
-        Optional<FAQ> faqById = faqService.getFAQById(id);
-        return faqById.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<?> getFAQById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<FAQ>builder()
+                        .isSuccess(true)
+                        .result(faqService.getFAQById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<FAQ>> getAllFAQs() {
-        List<FAQ> faqs = faqService.getAllFAQs();
-        return ResponseEntity.ok(faqs);
+    public ApiResponse<?> getAllFAQs() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<FAQ>>builder()
+                        .isSuccess(true)
+                        .result(faqService.getAllFAQs())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FAQ> updateFAQ(@PathVariable Integer id, @RequestBody FAQ faq) {
-        faq.setId(id);
-        FAQ updatedFAQ = faqService.updateFAQ(faq);
-        return ResponseEntity.ok(updatedFAQ);
+    public ApiResponse<?> updateFAQ(@PathVariable Integer id, @RequestBody FAQRequestDTO faq) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<FAQ>builder()
+                        .isSuccess(true)
+                        .code(HttpStatus.OK.value())
+                        .result(faqService.updateFAQ(faq))
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFAQ(@PathVariable Integer id) {
-        faqService.deleteFAQ(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<?> deleteFAQ(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<FAQ>builder()
+                        .isSuccess(true)
+                        .result(faqService.deleteFAQ(id))
+                        .build()).getBody();
     }
 }

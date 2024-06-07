@@ -38,7 +38,7 @@ public class UserLessonServiceImpl implements UserLessonService {
         }
         Optional<Lesson> lesson = lessonRepository.findById(userLessonDTO.getLessonId());
         if(lesson.isEmpty()) {
-            throw new AppException(ErrorCode.LESSON_NOT_FOUND);
+            throw new AppException(ErrorCode.NOT_FOUND);
         }
         userLesson.setAppUserId(appUser.get());
         userLesson.setLessonId(lesson.get());
@@ -68,7 +68,7 @@ public class UserLessonServiceImpl implements UserLessonService {
         }
         Optional<Lesson> lesson = lessonRepository.findById(userLessonDTO.getLessonId());
         if(lesson.isEmpty()) {
-            throw new AppException(ErrorCode.LESSON_NOT_FOUND);
+            throw new AppException(ErrorCode.NOT_FOUND);
         }
         userLesson.setAppUserId(appUser.get());
         userLesson.setLessonId(lesson.get());

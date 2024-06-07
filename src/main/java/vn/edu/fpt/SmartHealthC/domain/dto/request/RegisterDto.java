@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -23,7 +24,7 @@ public class RegisterDto {
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
             message = "Password must be minimum 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
     )
-    private  String password;
+    private String password;
 
     private String name;
 
@@ -42,4 +43,5 @@ public class RegisterDto {
             message = "Invalid Korean phone number"
     )
     private String phoneNumber;
+    private List<Integer> listMedicalHistory;
 }

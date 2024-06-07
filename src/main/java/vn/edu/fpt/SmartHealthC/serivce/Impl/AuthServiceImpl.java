@@ -12,14 +12,20 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.RegisterDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.MedicalHistory;
+import vn.edu.fpt.SmartHealthC.domain.entity.UserMedicalHistory;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
+import vn.edu.fpt.SmartHealthC.repository.MedicalHistoryRepository;
+import vn.edu.fpt.SmartHealthC.repository.UserMedicalHistoryRepository;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AccountService;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,11 +35,9 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final AuthenticationManager authenticationManager;
-
-    @Autowired
-    private AccountService accountService;
-    @Autowired
-    private AppUserRepository appUserRepository;
+    private final MedicalHistoryRepository medicalHistoryRepository;
+    private final UserMedicalHistoryRepository userMedicalHistoryRepository;
+    private final AppUserRepository appUserRepository;
 
 
     @Override
@@ -84,7 +88,17 @@ public class AuthServiceImpl implements AuthService {
                 .phoneNumber(request.getPhoneNumber())
                 .hospitalNumber(request.getHospitalNumber())
                 .build();
-        appUserRepository.save(newAppUserInfo);
+        newAppUserInfo = appUserRepository.save(newAppUserInfo);
+        for(Integer i : request.getListMedicalHistory()){
+            MedicalHistory medicalHistory = medicalHistoryRepository.findById(i)
+                    .orElseThrow();
+            UserMedicalHistory userMedicalHistory  = UserMedicalHistory
+                    .builder()
+                    .appUserId(newAppUserInfo)
+                    .conditionId(medicalHistory)
+                    .build();
+            userMedicalHistoryRepository.save(userMedicalHistory);
+        }
         var jwt = jwtProvider.generateToken(newAccount);
         return AuthenticationResponseDto.builder()
                 .token(jwt)

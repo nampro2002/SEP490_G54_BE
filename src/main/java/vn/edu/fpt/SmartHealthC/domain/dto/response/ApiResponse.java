@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatusCode;
 public class ApiResponse<T> {
     private boolean isSuccess;
     @Builder.Default
-    private HttpStatusCode code = HttpStatus.OK;
+    private int code = 200;
 
     private String message;
     private T result;

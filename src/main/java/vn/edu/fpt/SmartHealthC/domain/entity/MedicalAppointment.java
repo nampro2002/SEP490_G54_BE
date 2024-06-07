@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointment;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointmentStatus;
 
 import java.util.Date;
 
@@ -31,6 +32,6 @@ public class MedicalAppointment {
 
     @Enumerated(EnumType.STRING)
     private TypeMedicalAppointment type;
-
-
+    @Enumerated(EnumType.STRING)
+    private TypeMedicalAppointmentStatus status;
 }

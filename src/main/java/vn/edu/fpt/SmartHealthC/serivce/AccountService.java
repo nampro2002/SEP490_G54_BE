@@ -17,4 +17,6 @@ public interface AccountService {
     void deleteAccount(Integer id);
 
     AuthenticationResponseDto loginStaff(LoginDto loginDto);
+
+    boolean activateAccount(Integer id);
 }
