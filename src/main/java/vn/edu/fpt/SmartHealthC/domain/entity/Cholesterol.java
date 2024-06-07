@@ -6,13 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeTimeMeasure;
+
+import java.util.Date;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserChronicDisease {
+public class Cholesterol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
@@ -21,9 +24,10 @@ public class UserChronicDisease {
     @JoinColumn(name = "appuser_id")
     private AppUser appUserId;
 
-    @ManyToOne
-    @JoinColumn(name = "condition_id")
-    private ChronicDisease conditionId;
+    private Date weekStart;
 
+    private Date date;
+    @Enumerated(EnumType.STRING)
+    private TypeTimeMeasure timeMeasure;
 
 }
