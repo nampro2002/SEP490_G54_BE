@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.UserMedicalHistoryDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserMedicalHistory;
 import vn.edu.fpt.SmartHealthC.serivce.UserMedicalHistoryService;
 
@@ -16,8 +17,8 @@ public class UserMedicalHistoryController {
     private UserMedicalHistoryService userMedicalHistoryService;
 
     @PostMapping
-    public ResponseEntity<UserMedicalHistory> createUserMedicalHistory(@RequestBody UserMedicalHistory userMedicalHistory) {
-        UserMedicalHistory createdUserMedicalHistory = userMedicalHistoryService.createUserMedicalHistory(userMedicalHistory);
+    public ResponseEntity<UserMedicalHistory> createUserMedicalHistory(@RequestBody UserMedicalHistoryDTO userMedicalHistoryDTO) {
+        UserMedicalHistory createdUserMedicalHistory = userMedicalHistoryService.createUserMedicalHistory(userMedicalHistoryDTO);
         return ResponseEntity.ok(createdUserMedicalHistory);
     }
 
@@ -34,9 +35,9 @@ public class UserMedicalHistoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserMedicalHistory> updateUserMedicalHistory(@PathVariable Integer id, @RequestBody UserMedicalHistory userMedicalHistory) {
-        userMedicalHistory.setId(id);
-        UserMedicalHistory updatedUserMedicalHistory = userMedicalHistoryService.updateUserMedicalHistory(userMedicalHistory);
+    public ResponseEntity<UserMedicalHistory> updateUserMedicalHistory(@PathVariable Integer id, @RequestBody UserMedicalHistoryDTO userMedicalHistoryDTO) {
+        userMedicalHistoryDTO.setId(id);
+        UserMedicalHistory updatedUserMedicalHistory = userMedicalHistoryService.updateUserMedicalHistory(userMedicalHistoryDTO);
         return ResponseEntity.ok(updatedUserMedicalHistory);
     }
 

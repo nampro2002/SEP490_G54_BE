@@ -3,7 +3,9 @@ package vn.edu.fpt.SmartHealthC.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
+import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineRecordService;
 
 import java.util.List;
@@ -15,10 +17,13 @@ public class MedicineRecordController {
 
     @Autowired
     private MedicineRecordService medicineRecordService;
+    @Autowired
+    private AppUserRepository appUserRepository;
 
     @PostMapping
-    public ResponseEntity<MedicineRecord> createMedicineRecord(@RequestBody MedicineRecord medicineRecord) {
-        MedicineRecord createdMedicineRecord = medicineRecordService.createMedicineRecord(medicineRecord);
+    public ResponseEntity<MedicineRecord> createMedicineRecord(@RequestBody MedicineRecordDTO medicineRecordDTO) {
+
+        MedicineRecord createdMedicineRecord = medicineRecordService.createMedicineRecord(medicineRecordDTO);
         return ResponseEntity.ok(createdMedicineRecord);
     }
 
@@ -35,9 +40,9 @@ public class MedicineRecordController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MedicineRecord> updateMedicineRecord(@PathVariable Integer id, @RequestBody MedicineRecord medicineRecord) {
-        medicineRecord.setId(id);
-        MedicineRecord updatedMedicineRecord = medicineRecordService.updateMedicineRecord(medicineRecord);
+    public ResponseEntity<MedicineRecord> updateMedicineRecord(@PathVariable Integer id, @RequestBody MedicineRecordDTO medicineRecordDTO) {
+        medicineRecordDTO.setId(id);
+        MedicineRecord updatedMedicineRecord = medicineRecordService.updateMedicineRecord(medicineRecordDTO);
         return ResponseEntity.ok(updatedMedicineRecord);
     }
 

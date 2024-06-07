@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 
@@ -17,8 +18,8 @@ public class MentalRecordController {
     private MentalRecordService mentalRecordService;
 
     @PostMapping
-    public ResponseEntity<MentalRecord> createMentalRecord(@RequestBody MentalRecord mentalRecord) {
-        MentalRecord createdMentalRecord = mentalRecordService.createMentalRecord(mentalRecord);
+    public ResponseEntity<MentalRecord> createMentalRecord(@RequestBody MentalRecordDTO mentalRecordDTO) {
+        MentalRecord createdMentalRecord = mentalRecordService.createMentalRecord(mentalRecordDTO);
         return ResponseEntity.ok(createdMentalRecord);
     }
 
@@ -35,8 +36,9 @@ public class MentalRecordController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MentalRecord> updateMentalRecord(@PathVariable Integer id, @RequestBody MentalRecord mentalRecord) {
-        MentalRecord updatedMentalRecord = mentalRecordService.updateMentalRecord(mentalRecord);
+    public ResponseEntity<MentalRecord> updateMentalRecord(@PathVariable Integer id, @RequestBody MentalRecordDTO mentalRecordDTO) {
+        mentalRecordDTO.setId(id);
+        MentalRecord updatedMentalRecord = mentalRecordService.updateMentalRecord(mentalRecordDTO);
         return ResponseEntity.ok(updatedMentalRecord);
     }
 
