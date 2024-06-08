@@ -38,15 +38,16 @@ public class AccountServiceImpl implements AccountService {
     private JwtProvider jwtProvider;
     @Autowired
     private AuthenticationManager authenticationManager;
+
     @Override
-    public AuthenticationResponseDto loginStaff(LoginDto request){
+    public AuthenticationResponseDto loginStaff(LoginDto request) {
         Optional<Account> optionalUser = accountRepository.findByEmail(request.getEmail());
-        if(optionalUser.isEmpty()) {
+        if (optionalUser.isEmpty()) {
             throw new AppException(ErrorCode.CREDENTIAL_INVALID);
         }
         Account existingUser = optionalUser.get();
         //check password
-        if(!passwordEncoder.matches(request.getPassword(), existingUser.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), existingUser.getPassword())) {
             throw new AppException(ErrorCode.CREDENTIAL_INVALID);
         }
         authenticationManager.authenticate(
@@ -57,6 +58,7 @@ public class AccountServiceImpl implements AccountService {
         );
         var jwt = jwtProvider.generateToken(optionalUser.get());
         return AuthenticationResponseDto.builder()
+                .type(optionalUser.get().getType())
                 .token(jwt)
                 .build();
     }
@@ -64,7 +66,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean activateAccount(Integer id) {
         AppUser appUser = appUserRepository.findById(id).orElseThrow();
-        if(!(appUser.getWebUserId() == null)){
+        if (!(appUser.getWebUserId() == null)) {
             Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
             account.setIsActive(true);
             accountRepository.save(account);
@@ -74,10 +76,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AuthenticationResponseDto createStaff(WebUserRequestDTO account){
-        Optional<Account> existingAccount = getAccountByEmail(account.getEmail());
-
-        if(existingAccount.isPresent()) {
+    public AuthenticationResponseDto createStaff(WebUserRequestDTO account) {
+        Optional<Account> existingAccount = accountRepository.findByEmail(account.getEmail());
+        if (existingAccount.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
         String encodedPassword = passwordEncoder.encode(account.getPassword());
@@ -96,17 +97,27 @@ public class AccountServiceImpl implements AccountService {
         webUserRepository.save(newAppUserInfo);
         var jwt = jwtProvider.generateToken(newAccount);
         return AuthenticationResponseDto.builder()
+                .type(newAccount.getType())
                 .token(jwt)
                 .build();
     }
+
     @Override
     public Optional<Account> getAccountById(Integer id) {
-        return accountRepository.findById(id);
+        Optional<Account> account = accountRepository.findById(id);
+        if (account.isEmpty()) {
+            throw new AppException(ErrorCode.NOT_FOUND);
+        }
+        return account;
     }
 
     @Override
     public Optional<Account> getAccountByEmail(String email) {
-        return accountRepository.findByEmail(email);
+        Optional<Account> account = accountRepository.findByEmail(email);
+        if (account.isEmpty()) {
+            throw new AppException(ErrorCode.NOT_FOUND);
+        }
+        return account;
     }
 
     @Override
@@ -120,10 +131,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteAccount(Integer id) {
-        Account account = getAccountById(id).orElseThrow();
-//        account.setType();
-        accountRepository.save(account);
+    public Account deleteAccount(Integer id) {
+        Optional<Account> account = getAccountById(id);
+        if (account.isPresent()) {
+            accountRepository.delete(account.get());
+        }
+        return account.get();
     }
 
 

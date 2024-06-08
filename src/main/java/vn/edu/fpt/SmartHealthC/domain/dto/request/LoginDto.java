@@ -16,9 +16,9 @@ public class LoginDto {
     @Pattern(regexp = "^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$", message = "Email should be valid")
     private String email;
     @NotBlank(message = "Password is mandatory")
-    @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$",
-            message = "Password must be 8-20 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
-    )
+//    @Pattern(
+//            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$",
+//            message = "Password must be 8-20 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
+//    )
     private String password;
 }
