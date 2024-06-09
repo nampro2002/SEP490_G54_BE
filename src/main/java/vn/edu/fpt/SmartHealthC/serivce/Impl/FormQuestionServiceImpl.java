@@ -47,13 +47,10 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 
     @Override
     public FormQuestion updateFormQuestion(FormQuestionRequestDTO formQuestionRequestDTO) {
-
-        FormQuestion formQuestion = FormQuestion
-                .builder()
-                .question(formQuestionRequestDTO.getQuestion())
-                .questionNumber(formQuestionRequestDTO.getQuestionNumber())
-                .type(formQuestionRequestDTO.getType())
-                .build();
+        FormQuestion formQuestion = getFormQuestionById(formQuestionRequestDTO.getId());
+        formQuestion.setQuestion(formQuestionRequestDTO.getQuestion());
+        formQuestion.setQuestionNumber(formQuestionRequestDTO.getQuestionNumber());
+        formQuestion.setType(formQuestionRequestDTO.getType());
         return formQuestionRepository.save(formQuestion);
     }
 

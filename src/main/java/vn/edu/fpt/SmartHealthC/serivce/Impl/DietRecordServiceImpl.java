@@ -56,17 +56,10 @@ public class DietRecordServiceImpl implements DietRecordService {
 
     @Override
     public DietRecord updateDietRecord(DietRecordDTO dietRecordDTO) {
-
-        DietRecord dietRecord =  DietRecord.builder()
-                .id(dietRecordDTO.getId())
-                .dishPerDay(dietRecordDTO.getDishPerDay())
-                .weekStart(dietRecordDTO.getWeekStart())
-                .date(dietRecordDTO.getDate()).build();
-        Optional<AppUser> appUser = appUserRepository.findById(dietRecordDTO.getAppUserId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        dietRecord.setAppUserId(appUser.get());
+        DietRecord dietRecord = getDietRecordById(dietRecordDTO.getId());
+        dietRecord.setDishPerDay(dietRecordDTO.getDishPerDay());
+        dietRecord.setWeekStart(dietRecordDTO.getWeekStart());
+        dietRecord.setDate(dietRecordDTO.getDate());
         return  dietRecordRepository.save(dietRecord);
     }
 

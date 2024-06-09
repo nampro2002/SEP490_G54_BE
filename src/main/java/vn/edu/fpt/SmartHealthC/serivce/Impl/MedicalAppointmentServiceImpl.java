@@ -55,17 +55,10 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 
     @Override
     public MedicalAppointment updateMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO) {
-        MedicalAppointment medicalAppointment = MedicalAppointment.builder()
-                .id(medicalAppointmentDTO.getId())
-                .type(medicalAppointmentDTO.getType())
-                .hospital(medicalAppointmentDTO.getLocation())
-                .date(medicalAppointmentDTO.getDate()).build();
-        Optional<AppUser> appUser = appUserRepository.findById(medicalAppointmentDTO.getAppUserId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-
-        medicalAppointment.setAppUserId(appUser.get());
+        MedicalAppointment medicalAppointment = getMedicalAppointmentById(medicalAppointmentDTO.getId());
+        medicalAppointment.setType(medicalAppointmentDTO.getType());
+        medicalAppointment.setDate(medicalAppointmentDTO.getDate());
+        medicalAppointment.setHospital(medicalAppointmentDTO.getLocation());
         return medicalAppointmentRepository.save(medicalAppointment);
     }
 
