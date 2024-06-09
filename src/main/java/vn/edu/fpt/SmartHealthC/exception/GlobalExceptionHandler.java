@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.validation.ConstraintViolation;
 
 import org.springframework.http.HttpStatus;
@@ -37,12 +38,23 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = ExpiredJwtException.class)
-    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
+    ResponseEntity<ApiResponse> handlingExpiredJwtException(RuntimeException exception) {
         log.error("Exception: ", exception);
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(ErrorCode.CREDENTIAL_EXPIRED.getStatusCode().value());
         apiResponse.setMessage(ErrorCode.CREDENTIAL_EXPIRED.getMessage());
+
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
+
+    @ExceptionHandler(value = JwtException.class)
+    ResponseEntity<ApiResponse> handlingJwtException(RuntimeException exception) {
+        log.error("Exception: ", exception);
+        ApiResponse apiResponse = new ApiResponse();
+
+        apiResponse.setCode(ErrorCode.JWT_INVALID.getStatusCode().value());
+        apiResponse.setMessage(ErrorCode.JWT_INVALID.getMessage());
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
@@ -67,16 +79,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
 
-//    @ExceptionHandler(value = AccessDeniedException.class)
-//    ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException exception) {
-//        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
-//
-//        return ResponseEntity.status(errorCode.getStatusCode())
-//                .body(ApiResponse.builder()
-//                        .code(errorCode.getStatusCode())
-//                        .message(errorCode.getMessage())
-//                        .build());
-//    }
+    @ExceptionHandler(value = AccessDeniedException.class)
+    ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException exception) {
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
+                        .code(errorCode.getStatusCode().value())
+                        .message(errorCode.getMessage())
+                        .build());
+    }
 
 //    @ExceptionHandler(value = MethodArgumentNotValidException.class)
 //    ResponseEntity<ApiResponse> handlingValidation(MethodArgumentNotValidException exception) {
