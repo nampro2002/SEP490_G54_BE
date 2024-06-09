@@ -17,7 +17,7 @@ import java.util.List;
 public class MentalRule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     private String title;
     private String description;

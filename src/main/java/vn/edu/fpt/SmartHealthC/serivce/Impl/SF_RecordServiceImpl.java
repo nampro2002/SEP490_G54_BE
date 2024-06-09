@@ -59,7 +59,7 @@ public class SF_RecordServiceImpl implements SF_RecordService {
     @Override
     public SF_Record updateSF_Record(SF_RecordDTO sf_recordDTO) {
         SF_Record sf_record =  SF_Record.builder()
-                .Id(sf_recordDTO.getId())
+                .id(sf_recordDTO.getId())
                 .monthStart(sf_recordDTO.getMonthStart())
                 .positivity(sf_recordDTO.getPositivity())
                 .activity(sf_recordDTO.getActivity())

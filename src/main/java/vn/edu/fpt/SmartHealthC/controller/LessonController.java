@@ -1,8 +1,11 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.serivce.LessonService;
 
@@ -16,33 +19,47 @@ public class LessonController {
     private LessonService lessonService;
 
     @PostMapping
-    public ResponseEntity<Lesson> createLesson(@RequestBody Lesson lesson) {
-        Lesson createdLesson = lessonService.createLesson(lesson);
-        return ResponseEntity.ok(createdLesson);
+    public ApiResponse<Lesson> createLesson(@RequestBody Lesson lesson) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<Lesson>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(lessonService.createLesson(lesson))
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Lesson> getLessonById(@PathVariable Integer id) {
-        Optional<Lesson> lesson = lessonService.getLessonById(id);
-        return lesson.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<Lesson> getLessonById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Lesson>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(lessonService.getLessonById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<Lesson>> getAllLessons() {
-        List<Lesson> lessons = lessonService.getAllLessons();
-        return ResponseEntity.ok(lessons);
+    public ApiResponse<List<Lesson>> getAllLessons() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<Lesson>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(lessonService.getAllLessons())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Lesson> updateLesson(@PathVariable Integer id, @RequestBody Lesson lesson) {
-        lesson.setId(id);
-        Lesson updatedLesson = lessonService.updateLesson(lesson);
-        return ResponseEntity.ok(updatedLesson);
+    public ApiResponse<Lesson> updateLesson(@PathVariable Integer id, @RequestBody Lesson lesson) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Lesson>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(lessonService.updateLesson(lesson))
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLesson(@PathVariable Integer id) {
-        lessonService.deleteLesson(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<Lesson> deleteLesson(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Lesson>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(lessonService.deleteLesson(id))
+                        .build()).getBody();
     }
 }

@@ -17,7 +17,7 @@ import java.util.Date;
 public class RuleForPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "rule_id")

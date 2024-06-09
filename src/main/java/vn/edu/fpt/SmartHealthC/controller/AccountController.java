@@ -46,10 +46,10 @@ public class AccountController {
 
     @GetMapping("/{id}")
     public ApiResponse<?> getAccountById(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Account>builder()
-                        .code(HttpStatus.CREATED.value())
-                        .result(accountService.getAccountById(id).get())
+                        .code(HttpStatus.OK.value())
+                        .result(accountService.getAccountById(id))
                         .build()).getBody();
     }
 
@@ -71,18 +71,18 @@ public class AccountController {
 
     @GetMapping("/email/{email}")
     public ApiResponse<?> getAccountByEmail(@PathVariable String email) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Account>builder()
-                        .code(HttpStatus.CREATED.value())
-                        .result(accountService.getAccountByEmail(email).get())
+                        .code(HttpStatus.OK.value())
+                        .result(accountService.getAccountByEmail(email))
                         .build()).getBody();
     }
 
     @GetMapping
     public ApiResponse<List<Account>> getAllAccounts() {
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<Account>>builder()
-                        .code(HttpStatus.CREATED.value())
+                        .code(HttpStatus.OK.value())
                         .result(accountService.getAllAccounts())
                         .build()).getBody();
     }
@@ -90,18 +90,18 @@ public class AccountController {
  // active / changepass
     @PutMapping
     public ApiResponse<Account> updateAccount( @RequestBody Account account) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Account>builder()
-                        .code(HttpStatus.CREATED.value())
+                        .code(HttpStatus.OK.value())
                         .result(accountService.updateAccount(account))
                         .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Account> deleteAccount(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Account>builder()
-                        .code(HttpStatus.CREATED.value())
+                        .code(HttpStatus.OK.value())
                         .result(accountService.deleteAccount(id))
                         .build()).getBody();
     }

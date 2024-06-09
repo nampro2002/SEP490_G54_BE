@@ -51,7 +51,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     @Override
     public MentalRecord updateMentalRecord(MentalRecordDTO mentalRecordDTO) {
         MentalRecord mentalRecord =  MentalRecord.builder()
-                .Id(mentalRecordDTO.getId())
+                .id(mentalRecordDTO.getId())
                 .point(mentalRecordDTO.getPoint())
                 .weekStart(mentalRecordDTO.getWeekStart())
                 .date(mentalRecordDTO.getDate())

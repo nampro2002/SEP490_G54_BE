@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface FormQuestionService {
     FormQuestion createFormQuestion(FormQuestionRequestDTO formQuestion);
-    FormQuestion getFormQuestionById(Integer id);
+    FormQuestion  getFormQuestionById(Integer id);
     List<FormQuestion> getAllFormQuestions();
     FormQuestion updateFormQuestion(FormQuestionRequestDTO formQuestion);
-    void deleteFormQuestion(Integer id);
+    FormQuestion deleteFormQuestion(Integer id);
 }

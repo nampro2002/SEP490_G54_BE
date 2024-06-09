@@ -6,6 +6,8 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.BloodPressureRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.BloodPressureRecordService;
@@ -23,23 +25,28 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
     private AppUserRepository appUserRepository;
 
     @Override
-    public BloodPressureRecord createBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO)
-    {
-        BloodPressureRecord bloodPressureRecord =  BloodPressureRecord.builder()
+    public BloodPressureRecord createBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO) {
+        BloodPressureRecord bloodPressureRecord = BloodPressureRecord.builder()
                 .diastole(bloodPressureRecordDTO.getDiastole())
                 .systole(bloodPressureRecordDTO.getSystole())
                 .weekStart(bloodPressureRecordDTO.getWeekStart())
                 .date(bloodPressureRecordDTO.getDate()).build();
-        AppUser appUser = appUserRepository.findById(bloodPressureRecordDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
+        Optional<AppUser> appUser = appUserRepository.findById(bloodPressureRecordDTO.getAppUserId());
+        if (appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
-        bloodPressureRecord.setAppUserId(appUser);
-        return  bloodPressureRecordRepository.save(bloodPressureRecord);
+        bloodPressureRecord.setAppUserId(appUser.get());
+        return bloodPressureRecordRepository.save(bloodPressureRecord);
     }
 
     @Override
-    public Optional<BloodPressureRecord> getBloodPressureRecordById(Integer id) {
-        return bloodPressureRecordRepository.findById(id);
+    public BloodPressureRecord getBloodPressureRecordById(Integer id) {
+        Optional<BloodPressureRecord> bloodPressureRecord = bloodPressureRecordRepository.findById(id);
+        if(bloodPressureRecord.isEmpty()) {
+            throw new AppException(ErrorCode.BLOOD_PRESSURE_NOT_FOUND);
+        }
+        return bloodPressureRecord.get();
     }
 
     @Override
@@ -49,22 +56,27 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
 
     @Override
     public BloodPressureRecord updateBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO) {
-        BloodPressureRecord bloodPressureRecord =  BloodPressureRecord.builder()
-                .Id(bloodPressureRecordDTO.getId())
+        BloodPressureRecord bloodPressureRecord = getBloodPressureRecordById(bloodPressureRecordDTO.getId());
+        BloodPressureRecord bloodPressureRecordEntity = BloodPressureRecord.builder()
+                .id(bloodPressureRecordDTO.getId())
                 .diastole(bloodPressureRecordDTO.getDiastole())
                 .systole(bloodPressureRecordDTO.getSystole())
                 .weekStart(bloodPressureRecordDTO.getWeekStart())
                 .date(bloodPressureRecordDTO.getDate()).build();
-        AppUser appUser = appUserRepository.findById(bloodPressureRecordDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
+        Optional<AppUser> appUser = appUserRepository.findById(bloodPressureRecordDTO.getAppUserId());
+        if (appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
-        bloodPressureRecord.setAppUserId(appUser);
-        return  bloodPressureRecordRepository.save(bloodPressureRecord);
+        bloodPressureRecordEntity.setAppUserId(appUser.get());
+        return bloodPressureRecordRepository.save(bloodPressureRecordEntity);
     }
 
     @Override
-    public void deleteBloodPressureRecord(Integer id) {
+    public BloodPressureRecord deleteBloodPressureRecord(Integer id) {
+        BloodPressureRecord bloodPressureRecord = getBloodPressureRecordById(id);
         bloodPressureRecordRepository.deleteById(id);
+        return bloodPressureRecord;
     }
 
 

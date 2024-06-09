@@ -35,14 +35,13 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     public FormQuestion getFormQuestionById(Integer id) {
         Optional<FormQuestion> formQuestion = formQuestionRepository.findById(id);
         if (!formQuestion.isPresent()) {
-            throw new AppException(ErrorCode.NOT_FOUND);
+            throw new AppException(ErrorCode.FORM_QUESTION_NOT_FOUND);
         }
         return formQuestion.get();
     }
 
     @Override
     public List<FormQuestion> getAllFormQuestions() {
-
         return formQuestionRepository.findAll();
     }
 
@@ -59,7 +58,9 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public void deleteFormQuestion(Integer id) {
+    public FormQuestion deleteFormQuestion(Integer id) {
+        FormQuestion formQuestion = getFormQuestionById(id);
         formQuestionRepository.deleteById(id);
+        return formQuestion;
     }
 }

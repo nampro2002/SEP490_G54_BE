@@ -1,8 +1,13 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalHistoryRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalHistoryResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalHistory;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalHistoryService;
 
@@ -15,33 +20,47 @@ public class MedicalHistoryController {
     @Autowired
     private MedicalHistoryService medicalHistoryService;
     @PostMapping
-    public ResponseEntity<MedicalHistory> createMedicalHistory(@RequestBody MedicalHistory medicalHistory) {
-        MedicalHistory createdMedicalHistory = medicalHistoryService.createMedicalHistory(medicalHistory);
-        return ResponseEntity.ok(createdMedicalHistory);
+    public ApiResponse<MedicalHistory> createMedicalHistory(@RequestBody MedicalHistoryRequestDTO medicalHistory) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<MedicalHistory>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(medicalHistoryService.createMedicalHistory(medicalHistory))
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MedicalHistory> getMedicalHistoryById(@PathVariable Integer id) {
-        Optional<MedicalHistory> chronicDisease = medicalHistoryService.getMedicalHistoryById(id);
-        return chronicDisease.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<MedicalHistory> getMedicalHistoryById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicalHistory>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalHistoryService.getMedicalHistoryById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<MedicalHistory>> getAllMedicalHistory() {
-        List<MedicalHistory> medicalHistories = medicalHistoryService.getAllMedicalHistory();
-        return ResponseEntity.ok(medicalHistories);
+    public ApiResponse<List<MedicalHistory>> getAllMedicalHistory() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MedicalHistory>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalHistoryService.getAllMedicalHistory())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MedicalHistory> updateMedicalHistory(@PathVariable Integer id, @RequestBody MedicalHistory medicalHistory) {
-        medicalHistory.setId(id);
-        MedicalHistory updatedMedicalHistory = medicalHistoryService.updateMedicalHistory(medicalHistory);
-        return ResponseEntity.ok(updatedMedicalHistory);
+    public ApiResponse<MedicalHistory> updateMedicalHistory(@RequestBody MedicalHistoryRequestDTO medicalHistory) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicalHistory>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalHistoryService.updateMedicalHistory(medicalHistory))
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteChronicDisease(@PathVariable Integer id) {
-        medicalHistoryService.deleteMedicalHistory(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<MedicalHistory> deleteChronicDisease(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicalHistory>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalHistoryService.deleteMedicalHistory(id))
+                        .build()).getBody();
     }
 }

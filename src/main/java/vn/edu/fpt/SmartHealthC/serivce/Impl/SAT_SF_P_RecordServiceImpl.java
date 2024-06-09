@@ -54,7 +54,7 @@ public class SAT_SF_P_RecordServiceImpl implements SAT_SF_P_RecordService {
     @Override
     public SAT_SF_P_Record updateSAT_SF_P_Record(SAT_SF_P_RecordDTO sat_sf_p_recordDTO) {
         SAT_SF_P_Record sat_sf_p_record =  SAT_SF_P_Record.builder()
-                .Id(sat_sf_p_recordDTO.getId())
+                .id(sat_sf_p_recordDTO.getId())
                 .overallPoint(sat_sf_p_recordDTO.getOverallPoint())
                 .monthStart(sat_sf_p_recordDTO.getMonthStart())
                 .lifePursuit(sat_sf_p_recordDTO.getLifePursuit())

@@ -1,9 +1,11 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
@@ -20,34 +22,47 @@ public class DietRecordController {
     private DietRecordService dietRecordService;
 
     @PostMapping
-    public ResponseEntity<DietRecord> createDietRecord(@RequestBody DietRecordDTO dietRecordDTO) {
-
-        DietRecord createdDietRecord= dietRecordService.createDietRecord(dietRecordDTO);
-        return ResponseEntity.ok(createdDietRecord);
+    public ApiResponse<DietRecord> createDietRecord(@RequestBody DietRecordDTO dietRecordDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<DietRecord>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(dietRecordService.createDietRecord(dietRecordDTO))
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DietRecord> getDietRecordById(@PathVariable Integer id) {
-        Optional<DietRecord> dietRecord = dietRecordService.getDietRecordById(id);
-        return dietRecord.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<DietRecord> getDietRecordById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<DietRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(dietRecordService.getDietRecordById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<DietRecord>> getAllDietRecords() {
-        List<DietRecord> dietRecords = dietRecordService.getAllDietRecords();
-        return ResponseEntity.ok(dietRecords);
+    public ApiResponse<List<DietRecord>> getAllDietRecords() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<DietRecord>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(dietRecordService.getAllDietRecords())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DietRecord> updateDietRecord(@PathVariable Integer id, @RequestBody DietRecordDTO dietRecordDTO) {
-        dietRecordDTO.setId(id);
-        DietRecord updatedDietRecord = dietRecordService.updateDietRecord(dietRecordDTO);
-        return ResponseEntity.ok(updatedDietRecord);
+    public ApiResponse<DietRecord> updateDietRecord(@PathVariable Integer id, @RequestBody DietRecordDTO dietRecordDTO) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<DietRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(dietRecordService.updateDietRecord(dietRecordDTO))
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDietRecord(@PathVariable Integer id) {
-        dietRecordService.deleteDietRecord(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<DietRecord> deleteDietRecord(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<DietRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(dietRecordService.deleteDietRecord(id))
+                        .build()).getBody();
     }
 }

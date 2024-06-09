@@ -17,7 +17,7 @@ import java.util.List;
 public class MedicineType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     private String title;
     private String description;

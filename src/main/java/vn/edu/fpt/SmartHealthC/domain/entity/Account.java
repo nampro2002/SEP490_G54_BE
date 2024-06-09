@@ -34,6 +34,7 @@ public class Account implements UserDetails
     private TypeAccount type;
 
     private Boolean isActive;
+    private boolean isDeleted = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

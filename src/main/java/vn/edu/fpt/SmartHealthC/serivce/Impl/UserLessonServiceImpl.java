@@ -59,7 +59,7 @@ public class UserLessonServiceImpl implements UserLessonService {
     public UserLesson updateUserLesson(UserLessonDTO userLessonDTO) {
 
         UserLesson userLesson =  UserLesson.builder()
-                .Id(userLessonDTO.getId())
+                .id(userLessonDTO.getId())
                 .lessonDate(userLessonDTO.getLessonDate())
                 .build();
         Optional<AppUser> appUser = appUserRepository.findById(userLessonDTO.getAppUserId());

@@ -18,7 +18,7 @@ import java.util.Date;
 public class StepRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")

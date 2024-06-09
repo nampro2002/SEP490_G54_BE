@@ -1,20 +1,25 @@
 package vn.edu.fpt.SmartHealthC.domain.dto.request;
 
-import jakarta.persistence.*;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
+import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 
+import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FormQuestionRequestDTO {
+public class LessonRequestDTO {
     private Integer Id;
 
-    private String question;
-    private TypeQuestion type;
-    private int questionNumber;
+
+    private String title;
+
+    private String video;
+
+    private String text;
+
 }

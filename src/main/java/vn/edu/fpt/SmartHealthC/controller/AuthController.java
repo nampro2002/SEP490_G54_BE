@@ -50,8 +50,8 @@ public class AuthController {
                         .build()).getBody();
     }
 
-    @GetMapping("/accounts")
-    public ResponseEntity<List<Account>> getAccountList(){
-        return ResponseEntity.ok(accountRepository.findAll());
-    }
+//    @GetMapping("/accounts")
+//    public ResponseEntity<List<Account>> getAccountList(){
+//        return ResponseEntity.ok(accountRepository.findAll());
+//    }
 }

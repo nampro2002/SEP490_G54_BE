@@ -4,6 +4,5 @@ public enum TypeAccount {
         ADMIN,
         CUSTOMER_SUPPORT,
         MEDICAL_SPECIALIST,
-        USER,
-        DELETED
+        USER
 }

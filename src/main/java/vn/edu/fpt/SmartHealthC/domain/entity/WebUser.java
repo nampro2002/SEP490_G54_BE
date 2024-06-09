@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class WebUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @OneToOne
     @JoinColumn(name = "account_id")

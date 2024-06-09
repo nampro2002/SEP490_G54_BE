@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ActivityRecordService {
     ActivityRecord createActivityRecord(ActivityRecordDTO activityRecordDTO);
-    Optional<ActivityRecord> getActivityRecordById(Integer id);
+    ActivityRecord getActivityRecordById(Integer id);
     List<ActivityRecord> getAllActivityRecords();
     ActivityRecord updateActivityRecord(ActivityRecordDTO activityRecordDTO);
     ActivityRecord deleteActivityRecord(Integer id);

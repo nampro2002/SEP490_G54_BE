@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class FAQ {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
 
     private String question;

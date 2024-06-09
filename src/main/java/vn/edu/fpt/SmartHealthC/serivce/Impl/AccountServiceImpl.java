@@ -103,21 +103,21 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<Account> getAccountById(Integer id) {
+    public Account getAccountById(Integer id) {
         Optional<Account> account = accountRepository.findById(id);
         if (account.isEmpty()) {
             throw new AppException(ErrorCode.NOT_FOUND);
         }
-        return account;
+        return account.get();
     }
 
     @Override
-    public Optional<Account> getAccountByEmail(String email) {
+    public Account getAccountByEmail(String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         if (account.isEmpty()) {
             throw new AppException(ErrorCode.NOT_FOUND);
         }
-        return account;
+        return account.get();
     }
 
     @Override
@@ -132,11 +132,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account deleteAccount(Integer id) {
-        Optional<Account> account = getAccountById(id);
-        if (account.isPresent()) {
-            accountRepository.delete(account.get());
-        }
-        return account.get();
+        Account account = getAccountById(id);
+        accountRepository.delete(account);
+        return account;
     }
 
 

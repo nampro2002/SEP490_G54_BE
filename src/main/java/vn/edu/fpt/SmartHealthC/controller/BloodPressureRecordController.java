@@ -1,9 +1,12 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.BloodPressureRecordService;
@@ -19,34 +22,47 @@ public class BloodPressureRecordController {
     private BloodPressureRecordService bloodPressureRecordService;
 
     @PostMapping
-    public ResponseEntity<BloodPressureRecord> createBloodPressureRecord(@RequestBody BloodPressureRecordDTO bloodPressureRecordDTO) {
-
-        BloodPressureRecord createdBloodPressureRecord= bloodPressureRecordService.createBloodPressureRecord(bloodPressureRecordDTO);
-        return ResponseEntity.ok(createdBloodPressureRecord);
+    public ApiResponse<BloodPressureRecord> createBloodPressureRecord(@RequestBody BloodPressureRecordDTO bloodPressureRecordDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<BloodPressureRecord>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(bloodPressureRecordService.createBloodPressureRecord(bloodPressureRecordDTO))
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BloodPressureRecord> getBloodPressureRecordById(@PathVariable Integer id) {
-        Optional<BloodPressureRecord> bloodPressureRecord = bloodPressureRecordService.getBloodPressureRecordById(id);
-        return bloodPressureRecord.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<BloodPressureRecord> getBloodPressureRecordById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<BloodPressureRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(bloodPressureRecordService.getBloodPressureRecordById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<BloodPressureRecord>> getAllBloodPressureRecords() {
-        List<BloodPressureRecord> bloodPressureRecords = bloodPressureRecordService.getAllBloodPressureRecords();
-        return ResponseEntity.ok(bloodPressureRecords);
+    public ApiResponse<List<BloodPressureRecord>> getAllBloodPressureRecords() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<BloodPressureRecord>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(bloodPressureRecordService.getAllBloodPressureRecords())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BloodPressureRecord> updateBloodPressureRecord(@PathVariable Integer id, @RequestBody BloodPressureRecordDTO bloodPressureRecordDTO) {
-        bloodPressureRecordDTO.setId(id);
-        BloodPressureRecord updatedStepRecord = bloodPressureRecordService.updateBloodPressureRecord(bloodPressureRecordDTO);
-        return ResponseEntity.ok(updatedStepRecord);
+    public ApiResponse<BloodPressureRecord> updateBloodPressureRecord(@RequestBody BloodPressureRecordDTO bloodPressureRecordDTO) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<BloodPressureRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(bloodPressureRecordService.updateBloodPressureRecord(bloodPressureRecordDTO))
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBloodPressureRecord(@PathVariable Integer id) {
-        bloodPressureRecordService.deleteBloodPressureRecord(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<BloodPressureRecord> deleteBloodPressureRecord(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<BloodPressureRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(bloodPressureRecordService.deleteBloodPressureRecord(id))
+                        .build()).getBody();
     }
 }

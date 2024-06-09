@@ -20,7 +20,7 @@ import java.util.Date;
 public class MedicalAppointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
@@ -28,7 +28,7 @@ public class MedicalAppointment {
 
     private Date date;
 
-    private String location;
+    private String hospital;
 
     @Enumerated(EnumType.STRING)
     private TypeMedicalAppointment type;

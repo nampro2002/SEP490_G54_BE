@@ -11,8 +11,8 @@ import java.util.Optional;
 
 public interface AccountService {
     AuthenticationResponseDto createStaff(WebUserRequestDTO account);
-    Optional<Account> getAccountById(Integer id);
-    Optional<Account> getAccountByEmail(String email);
+    Account getAccountById(Integer id);
+    Account getAccountByEmail(String email);
     List<Account> getAllAccounts();
     Account updateAccount(Account account);
     Account deleteAccount(Integer id);
