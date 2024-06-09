@@ -6,6 +6,8 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicalAppointmentRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
@@ -23,22 +25,27 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     private AppUserRepository appUserRepository;
 
     @Override
-    public MedicalAppointment createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO)
-    {
-        MedicalAppointment medicalAppointment =  MedicalAppointment.builder()
+    public MedicalAppointment createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO) {
+        MedicalAppointment medicalAppointment = MedicalAppointment.builder()
                 .type(medicalAppointmentDTO.getType())
-                .location(medicalAppointmentDTO.getLocation())
+                .hospital(medicalAppointmentDTO.getLocation())
                 .date(medicalAppointmentDTO.getDate()).build();
-        AppUser appUser = appUserRepository.findById(medicalAppointmentDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
+        Optional<AppUser> appUser = appUserRepository.findById(medicalAppointmentDTO.getAppUserId());
+        if (appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
-        medicalAppointment.setAppUserId(appUser);
-        return  medicalAppointmentRepository.save(medicalAppointment);
+        medicalAppointment.setAppUserId(appUser.get());
+        return medicalAppointmentRepository.save(medicalAppointment);
     }
 
     @Override
-    public Optional<MedicalAppointment> getMedicalAppointmentById(Integer id) {
-        return medicalAppointmentRepository.findById(id);
+    public MedicalAppointment getMedicalAppointmentById(Integer id) {
+        Optional<MedicalAppointment> medicalAppointment = medicalAppointmentRepository.findById(id);
+        if (medicalAppointment.isEmpty()) {
+            throw new AppException(ErrorCode.MEDICAL_APPOINTMENT_NOT_FOUND);
+        }
+        return medicalAppointment.get();
     }
 
     @Override
@@ -48,21 +55,25 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 
     @Override
     public MedicalAppointment updateMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO) {
-        MedicalAppointment medicalAppointment =  MedicalAppointment.builder()
-                .Id(medicalAppointmentDTO.getId())
+        MedicalAppointment medicalAppointment = MedicalAppointment.builder()
+                .id(medicalAppointmentDTO.getId())
                 .type(medicalAppointmentDTO.getType())
-                .location(medicalAppointmentDTO.getLocation())
+                .hospital(medicalAppointmentDTO.getLocation())
                 .date(medicalAppointmentDTO.getDate()).build();
-        AppUser appUser = appUserRepository.findById(medicalAppointmentDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
+        Optional<AppUser> appUser = appUserRepository.findById(medicalAppointmentDTO.getAppUserId());
+        if (appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
-        medicalAppointment.setAppUserId(appUser);
-        return  medicalAppointmentRepository.save(medicalAppointment);
+        medicalAppointment.setAppUserId(appUser.get());
+        return medicalAppointmentRepository.save(medicalAppointment);
     }
 
     @Override
-    public void deleteMedicalAppointment(Integer id) {
+    public MedicalAppointment deleteMedicalAppointment(Integer id) {
+        MedicalAppointment medicalAppointment = getMedicalAppointmentById(id);
         medicalAppointmentRepository.deleteById(id);
+        return medicalAppointment;
     }
 
 

@@ -1,9 +1,12 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
@@ -19,34 +22,47 @@ public class MedicalAppointmentController {
     private MedicalAppointmentService medicalAppointmentService;
 
     @PostMapping
-    public ResponseEntity<MedicalAppointment> createMedicalAppointment(@RequestBody MedicalAppointmentDTO medicalAppointmentDTO) {
-
-        MedicalAppointment createdMedicalAppointment= medicalAppointmentService.createMedicalAppointment(medicalAppointmentDTO);
-        return ResponseEntity.ok(createdMedicalAppointment);
+    public ApiResponse<MedicalAppointment> createMedicalAppointment(@RequestBody MedicalAppointmentDTO medicalAppointmentDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<MedicalAppointment>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(medicalAppointmentService.createMedicalAppointment(medicalAppointmentDTO))
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MedicalAppointment> getMedicalAppointmentById(@PathVariable Integer id) {
-        Optional<MedicalAppointment> medicalAppointment = medicalAppointmentService.getMedicalAppointmentById(id);
-        return medicalAppointment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<MedicalAppointment> getMedicalAppointmentById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicalAppointment>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalAppointmentService.getMedicalAppointmentById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<MedicalAppointment>> getAllMedicalAppointments() {
-        List<MedicalAppointment> medicalAppointments = medicalAppointmentService.getAllMedicalAppointments();
-        return ResponseEntity.ok(medicalAppointments);
+    public ApiResponse<List<MedicalAppointment>> getAllMedicalAppointments() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MedicalAppointment>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalAppointmentService.getAllMedicalAppointments())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MedicalAppointment> updateMedicalAppointment(@PathVariable Integer id, @RequestBody MedicalAppointmentDTO medicalAppointmentDTO) {
-        medicalAppointmentDTO.setId(id);
-        MedicalAppointment updatedMedicalAppointment = medicalAppointmentService.updateMedicalAppointment(medicalAppointmentDTO);
-        return ResponseEntity.ok(updatedMedicalAppointment);
+    public ApiResponse<MedicalAppointment> updateMedicalAppointment(@PathVariable Integer id, @RequestBody MedicalAppointmentDTO medicalAppointmentDTO) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicalAppointment>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalAppointmentService.updateMedicalAppointment(medicalAppointmentDTO))
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMedicalAppointment(@PathVariable Integer id) {
-        medicalAppointmentService.deleteMedicalAppointment(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<MedicalAppointment> deleteMedicalAppointment(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicalAppointment>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalAppointmentService.deleteMedicalAppointment(id))
+                        .build()).getBody();
     }
 }

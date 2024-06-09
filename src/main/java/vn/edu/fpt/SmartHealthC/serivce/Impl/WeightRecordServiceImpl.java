@@ -48,7 +48,7 @@ public class WeightRecordServiceImpl implements WeightRecordService {
     @Override
     public WeightRecord updateWeightRecord(WeightRecordDTO weightRecordDTO) {
         WeightRecord weightRecord =  WeightRecord.builder()
-                .Id(weightRecordDTO.getId())
+                .id(weightRecordDTO.getId())
                 .weight(weightRecordDTO.getWeight())
                 .date(weightRecordDTO.getDate()).build();
         AppUser appUser = appUserRepository.findById(weightRecordDTO.getAppUserId())

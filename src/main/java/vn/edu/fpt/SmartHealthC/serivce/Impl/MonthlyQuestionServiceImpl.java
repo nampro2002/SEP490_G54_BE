@@ -52,7 +52,7 @@ public class MonthlyQuestionServiceImpl implements MonthlyQuestionService {
     @Override
     public MonthlyQuestion updateMonthlyQuestion(MonthlyQuestionDTO monthlyQuestionDTO) {
         MonthlyQuestion monthlyQuestion =  MonthlyQuestion.builder()
-                .Id(monthlyQuestionDTO.getId())
+                .id(monthlyQuestionDTO.getId())
                 .monthStart(monthlyQuestionDTO.getMonthStart())
                 .isSAT(monthlyQuestionDTO.getIsSAT())
                 .questionNumber(monthlyQuestionDTO.getQuestionNumber())

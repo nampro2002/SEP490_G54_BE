@@ -53,7 +53,7 @@ public class SAT_SF_C_RecordServiceImpl implements SAT_SF_C_RecordService {
     @Override
     public SAT_SF_C_Record updateSAT_SF_C_Record(SAT_SF_C_RecordDTO sat_sf_c_recordDTO) {
         SAT_SF_C_Record sat_sf_c_record =  SAT_SF_C_Record.builder()
-                .Id(sat_sf_c_recordDTO.getId())
+                .id(sat_sf_c_recordDTO.getId())
                 .overallPoint(sat_sf_c_recordDTO.getOverallPoint())
                 .monthStart(sat_sf_c_recordDTO.getMonthStart())
                 .independence(sat_sf_c_recordDTO.getIndependence())

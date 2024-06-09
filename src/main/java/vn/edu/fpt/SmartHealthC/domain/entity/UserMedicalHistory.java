@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class UserMedicalHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")

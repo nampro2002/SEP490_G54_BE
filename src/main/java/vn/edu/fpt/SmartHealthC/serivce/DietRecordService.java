@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface DietRecordService {
     DietRecord createDietRecord(DietRecordDTO dietRecordDTO);
-    Optional<DietRecord> getDietRecordById(Integer id);
+    DietRecord getDietRecordById(Integer id);
     List<DietRecord> getAllDietRecords();
     DietRecord updateDietRecord(DietRecordDTO dietRecordDTO);
-    void deleteDietRecord(Integer id);
+    DietRecord deleteDietRecord(Integer id);
 }

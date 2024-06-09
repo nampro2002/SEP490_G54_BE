@@ -51,7 +51,7 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
     @Override
     public ForgetPasswordCode updateForgetPasswordCode(ForgetPasswordCodeDTO forgetPasswordCodeDTO) {
          ForgetPasswordCode forgetPasswordCode =  ForgetPasswordCode.builder()
-                 .Id(forgetPasswordCodeDTO.getId())
+                 .id(forgetPasswordCodeDTO.getId())
                 .code(forgetPasswordCodeDTO.getCode())
                 .isUsed(forgetPasswordCodeDTO.getIsUsed()).build();
         Account account = accountRepository.findById(forgetPasswordCodeDTO.getAccountId())

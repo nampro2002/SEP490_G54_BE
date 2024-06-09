@@ -51,7 +51,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     @Override
     public MedicineRecord updateMedicineRecord(MedicineRecordDTO medicineRecordDTO) {
         MedicineRecord medicineRecord =  MedicineRecord.builder()
-                .Id(medicineRecordDTO.getId())
+                .id(medicineRecordDTO.getId())
                 .type(medicineRecordDTO.getType())
                 .hour(medicineRecordDTO.getHour())
                 .weekStart(medicineRecordDTO.getWeekStart())

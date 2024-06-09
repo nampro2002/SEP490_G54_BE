@@ -17,7 +17,7 @@ import java.util.Date;
 public class DietRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")

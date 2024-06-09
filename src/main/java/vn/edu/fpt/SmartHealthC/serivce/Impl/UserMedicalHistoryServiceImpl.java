@@ -54,7 +54,7 @@ public class UserMedicalHistoryServiceImpl implements UserMedicalHistoryService 
     @Override
     public UserMedicalHistory updateUserMedicalHistory(UserMedicalHistoryDTO userMedicalHistoryDTO) {
         UserMedicalHistory userMedicalHistory =  UserMedicalHistory.builder()
-                .Id(userMedicalHistoryDTO.getId())
+                .id(userMedicalHistoryDTO.getId())
                 .build();
         Optional<AppUser> appUser = appUserRepository.findById(userMedicalHistoryDTO.getAppUserId());
         if(appUser.isEmpty()) {

@@ -15,7 +15,7 @@ import java.util.List;
 public class MedicalHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     private String name;
 
@@ -24,6 +24,6 @@ public class MedicalHistory {
 
     @OneToMany(mappedBy = "conditionId")
     private List<UserMedicalHistory> userMedicalHistories;
-
+    private boolean isDeleted = false;
 
 }

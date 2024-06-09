@@ -2,7 +2,11 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalHistoryRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalHistory;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.MedicalHistoryRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalHistoryService;
 
@@ -16,13 +20,22 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     private MedicalHistoryRepository medicalHistoryRepository;
 
     @Override
-    public MedicalHistory createMedicalHistory(MedicalHistory medicalHistory) {
+    public MedicalHistory createMedicalHistory(MedicalHistoryRequestDTO medicalHistoryRequestDTO) {
+        MedicalHistory medicalHistory = MedicalHistory
+                .builder()
+                .name(medicalHistoryRequestDTO.getName())
+                .type(medicalHistoryRequestDTO.getType())
+                .build();
         return medicalHistoryRepository.save(medicalHistory);
     }
 
     @Override
-    public Optional<MedicalHistory> getMedicalHistoryById(Integer id) {
-        return medicalHistoryRepository.findById(id);
+    public MedicalHistory getMedicalHistoryById(Integer id) {
+        Optional<MedicalHistory> medicalHistory = medicalHistoryRepository.findById(id);
+        if (medicalHistory.isEmpty()) {
+            throw new AppException(ErrorCode.MEDICAL_HISTORY_NOT_FOUND);
+        }
+        return medicalHistory.get();
     }
 
     @Override
@@ -31,12 +44,17 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     }
 
     @Override
-    public MedicalHistory updateMedicalHistory(MedicalHistory medicalHistory) {
+    public MedicalHistory updateMedicalHistory(MedicalHistoryRequestDTO medicalHistoryRequestDTO) {
+        MedicalHistory medicalHistory = getMedicalHistoryById(medicalHistoryRequestDTO.getId());
+        medicalHistory.setName(medicalHistoryRequestDTO.getName());
+        medicalHistory.setType(medicalHistoryRequestDTO.getType());
         return medicalHistoryRepository.save(medicalHistory);
     }
 
     @Override
-    public void deleteMedicalHistory(Integer id) {
+    public MedicalHistory deleteMedicalHistory(Integer id) {
+        MedicalHistory medicalHistory = getMedicalHistoryById(id);
         medicalHistoryRepository.deleteById(id);
+        return medicalHistory;
     }
 }

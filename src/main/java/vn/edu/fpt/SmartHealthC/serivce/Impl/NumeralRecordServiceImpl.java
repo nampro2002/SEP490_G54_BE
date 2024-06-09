@@ -51,7 +51,7 @@ public class NumeralRecordServiceImpl implements NumeralRecordService {
     @Override
     public NumeralRecord updateNumeralRecord(NumeralRecordDTO numeralRecordDTO) {
         NumeralRecord numeralRecord =  NumeralRecord.builder()
-                .Id(numeralRecordDTO.getId())
+                .id(numeralRecordDTO.getId())
                 .value(numeralRecordDTO.getValue())
                 .weekStart(numeralRecordDTO.getWeekStart())
                 .date(numeralRecordDTO.getDate())

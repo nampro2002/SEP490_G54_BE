@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface MedicalAppointmentService {
     MedicalAppointment createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO);
-    Optional<MedicalAppointment> getMedicalAppointmentById(Integer id);
+    MedicalAppointment getMedicalAppointmentById(Integer id);
     List<MedicalAppointment> getAllMedicalAppointments();
     MedicalAppointment updateMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO);
-    void deleteMedicalAppointment(Integer id);
+    MedicalAppointment deleteMedicalAppointment(Integer id);
 }

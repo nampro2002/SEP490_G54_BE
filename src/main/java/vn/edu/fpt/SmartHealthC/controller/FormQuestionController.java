@@ -21,34 +21,47 @@ public class FormQuestionController {
     private FormQuestionService formQuestionService;
 
     @PostMapping
-    public ResponseEntity<FormQuestion> createFormQuestion(@RequestBody FormQuestionRequestDTO formQuestion) {
-        FormQuestion createdFormQuestion = formQuestionService.createFormQuestion(formQuestion);
-        return ResponseEntity.ok(createdFormQuestion);
+    public ApiResponse<FormQuestion> createFormQuestion(@RequestBody FormQuestionRequestDTO formQuestion) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<FormQuestion>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(formQuestionService.createFormQuestion(formQuestion))
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
     public ApiResponse<?> getFormQuestionById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FormQuestion>builder()
+                        .code(HttpStatus.OK.value())
                         .result(formQuestionService.getFormQuestionById(id))
                         .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<FormQuestion>> getAllFormQuestions() {
-        List<FormQuestion> formQuestions = formQuestionService.getAllFormQuestions();
-        return ResponseEntity.ok(formQuestions);
+    public ApiResponse<List<FormQuestion>> getAllFormQuestions() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<FormQuestion>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(formQuestionService.getAllFormQuestions())
+                        .build()).getBody();
     }
 
     @PutMapping()
-    public ResponseEntity<FormQuestion> updateFormQuestion(@RequestBody FormQuestionRequestDTO formQuestion) {
-        FormQuestion updatedformQuestion= formQuestionService.updateFormQuestion(formQuestion);
-        return ResponseEntity.ok(updatedformQuestion);
+    public ApiResponse<FormQuestion> updateFormQuestion(@RequestBody FormQuestionRequestDTO formQuestion) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<FormQuestion>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(formQuestionService.updateFormQuestion(formQuestion))
+                        .build()).getBody();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFormQuestion(@PathVariable Integer id) {
-        formQuestionService.deleteFormQuestion(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/delete/{id}")
+    public ApiResponse<FormQuestion> deleteFormQuestion(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<FormQuestion>builder()
+                        .code(HttpStatus.OK.value())
+                        .result( formQuestionService.deleteFormQuestion(id))
+                        .build()).getBody();
     }
 }

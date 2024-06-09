@@ -57,7 +57,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Question updateQuestion(QuestionDTO questionDTO) {
         Question question =  Question.builder()
-                .Id(questionDTO.getId())
+                .id(questionDTO.getId())
                 .title(questionDTO.getTitle())
                 .body(questionDTO.getBody())
                 .answer(questionDTO.getAnswer()).build();

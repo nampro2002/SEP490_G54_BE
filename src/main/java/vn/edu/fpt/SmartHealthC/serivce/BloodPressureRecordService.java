@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface BloodPressureRecordService {
     BloodPressureRecord createBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO);
-    Optional<BloodPressureRecord> getBloodPressureRecordById(Integer id);
+    BloodPressureRecord getBloodPressureRecordById(Integer id);
     List<BloodPressureRecord> getAllBloodPressureRecords();
     BloodPressureRecord updateBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO);
-    void deleteBloodPressureRecord(Integer id);
+    BloodPressureRecord deleteBloodPressureRecord(Integer id);
 }

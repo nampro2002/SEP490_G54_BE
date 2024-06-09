@@ -16,7 +16,7 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 public class ForgetPasswordCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "account_id")

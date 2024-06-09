@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.exception;
 import java.util.Map;
 import java.util.Objects;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolation;
 
 import org.springframework.http.HttpStatus;
@@ -35,16 +36,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
-//    @ExceptionHandler(value = RuntimeException.class)
-//    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
-//        log.error("Exception: ", exception);
-//        ApiResponse apiResponse = new ApiResponse();
-//
-//        apiResponse.setCode(ErrorCode.CREDENTIAL_INVALID.getStatusCode());
-//        apiResponse.setMessage(ErrorCode.CREDENTIAL_INVALID.getMessage());
-//
-//        return ResponseEntity.badRequest().body(apiResponse);
-//    }
+    @ExceptionHandler(value = ExpiredJwtException.class)
+    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
+        log.error("Exception: ", exception);
+        ApiResponse apiResponse = new ApiResponse();
+
+        apiResponse.setCode(ErrorCode.CREDENTIAL_EXPIRED.getStatusCode().value());
+        apiResponse.setMessage(ErrorCode.CREDENTIAL_EXPIRED.getMessage());
+
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
 
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handlingAppException(AppException exception) {

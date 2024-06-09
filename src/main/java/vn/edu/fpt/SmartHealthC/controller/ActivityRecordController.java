@@ -23,30 +23,37 @@ public class ActivityRecordController {
     public ApiResponse<ActivityRecord> createActivityRecord(@RequestBody ActivityRecordDTO activityRecordDTO) {
 
         ActivityRecord createdActivityRecord= activityRecordService.createActivityRecord(activityRecordDTO);
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<ActivityRecord>builder()
+                        .code(HttpStatus.CREATED.value())
                         .result(createdActivityRecord)
                         .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ActivityRecord> getActivityRecordById(@PathVariable Integer id) {
-        Optional<ActivityRecord> activityRecord = activityRecordService.getActivityRecordById(id);
-        return activityRecord.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<ActivityRecord> getActivityRecordById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ActivityRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(activityRecordService.getActivityRecordById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<ActivityRecord>> getAllActivityRecords() {
-        List<ActivityRecord> activityRecords = activityRecordService.getAllActivityRecords();
-        return ResponseEntity.ok(activityRecords);
+    public ApiResponse<List<ActivityRecord>> getAllActivityRecords() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<ActivityRecord>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(activityRecordService.getAllActivityRecords())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<ActivityRecord> updateActivityRecord(@PathVariable Integer id, @RequestBody ActivityRecordDTO activityRecordDTO) {
-        activityRecordDTO.setId(id);
+    public ApiResponse<ActivityRecord> updateActivityRecord(@RequestBody ActivityRecordDTO activityRecordDTO) {
         ActivityRecord updatedActivityRecord = activityRecordService.updateActivityRecord(activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ActivityRecord>builder()
+                        .code(HttpStatus.OK.value())
                         .result(updatedActivityRecord)
                         .build()).getBody();
     }
@@ -55,6 +62,7 @@ public class ActivityRecordController {
     public ApiResponse<ActivityRecord> deleteActivityRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ActivityRecord>builder()
+                        .code(HttpStatus.OK.value())
                         .result(activityRecordService.deleteActivityRecord(id))
                         .build()).getBody();
     }

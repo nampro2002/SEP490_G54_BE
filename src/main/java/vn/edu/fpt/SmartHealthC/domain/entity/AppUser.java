@@ -16,7 +16,7 @@ import java.util.List;
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @OneToOne
     @JoinColumn(name = "account_id")

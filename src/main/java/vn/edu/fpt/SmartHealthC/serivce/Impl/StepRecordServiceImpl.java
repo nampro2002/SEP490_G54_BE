@@ -50,7 +50,7 @@ public class StepRecordServiceImpl implements StepRecordService {
     @Override
     public StepRecord updateStepRecord(StepRecordDTO stepRecordDTO) {
         StepRecord stepRecord =  StepRecord.builder()
-                .Id(stepRecordDTO.getId())
+                .id(stepRecordDTO.getId())
                 .plannedStepPerDay(stepRecordDTO.getPlannedStepPerDay())
                 .weekStart(stepRecordDTO.getWeekStart())
                 .date(stepRecordDTO.getDate()).build();

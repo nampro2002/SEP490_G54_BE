@@ -13,7 +13,7 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
 public class FormQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     private String question;
     @Enumerated(EnumType.STRING)

@@ -3,6 +3,8 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.LessonRepository;
 import vn.edu.fpt.SmartHealthC.serivce.LessonService;
 
@@ -21,8 +23,12 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public Optional<Lesson> getLessonById(Integer id) {
-        return lessonRepository.findById(id);
+    public Lesson getLessonById(Integer id) {
+        Optional<Lesson> lesson =  lessonRepository.findById(id);
+        if (lesson.isEmpty()){
+            throw new AppException(ErrorCode.LESSON_NOT_FOUND);
+        }
+        return lesson.get();
     }
 
     @Override
@@ -36,7 +42,9 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void deleteLesson(Integer id) {
+    public Lesson deleteLesson(Integer id) {
+        Lesson lesson = getLessonById(id);
         lessonRepository.deleteById(id);
+        return lesson;
     }
 }
