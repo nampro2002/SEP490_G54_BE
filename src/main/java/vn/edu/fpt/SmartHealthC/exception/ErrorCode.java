@@ -13,6 +13,7 @@ public enum ErrorCode {
 //    USER_EXISTED(1002, "User existed", HttpStatus.BAD_REQUEST),
 //    UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
 //    UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
+    JWT_INVALID ( "Invalid jwt token", HttpStatus.BAD_REQUEST),
     CREDENTIAL_EXPIRED ( "Your login session has expired", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTED("Email existed", HttpStatus.BAD_REQUEST),
     CREDENTIAL_INVALID("Wrong email or password", HttpStatus.BAD_REQUEST),
