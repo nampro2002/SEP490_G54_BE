@@ -59,16 +59,11 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     @Override
     public ActivityRecord updateActivityRecord(ActivityRecordDTO activityRecordDTO) {
         ActivityRecord activityRecord = getActivityRecordById(activityRecordDTO.getId());
-        Optional<AppUser> appUser = appUserRepository.findById(activityRecordDTO.getAppUserId());
-        if(appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
         activityRecord.setDate(activityRecordDTO.getDate());
         activityRecord.setDuration(activityRecordDTO.getDuration());
         activityRecord.setWeekStart(activityRecordDTO.getWeekStart());
         activityRecord.setType(activityRecordDTO.getType());
         activityRecord.setStatus(activityRecordDTO.isStatus());
-        activityRecord.setAppUserId(appUser.get());
         return  activityRecordRepository.save(activityRecord);
     }
 
