@@ -35,7 +35,6 @@ public class AuthController {
             @RequestBody @Valid RegisterDto request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
-                        .isSuccess(true)
                         .code(HttpStatus.CREATED.value())
                         .result(authService.register(request))
                         .build()).getBody();
@@ -46,7 +45,6 @@ public class AuthController {
             @RequestBody @Valid LoginDto request) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
-                        .isSuccess(true)
                         .code(HttpStatus.OK.value())
                         .result(authService.login(request))
                         .build()).getBody();

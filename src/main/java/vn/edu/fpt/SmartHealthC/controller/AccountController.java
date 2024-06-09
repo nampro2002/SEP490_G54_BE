@@ -30,7 +30,6 @@ public class AccountController {
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
-                        .isSuccess(true)
                         .code(HttpStatus.OK.value())
                         .result(accountService.loginStaff(loginDto))
                         .build()).getBody();
@@ -40,53 +39,70 @@ public class AccountController {
     public ApiResponse<?> createStaff(@RequestBody @Valid WebUserRequestDTO account) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
-                        .isSuccess(true)
                         .code(HttpStatus.CREATED.value())
                         .result(accountService.createStaff(account))
                         .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAccountById(@PathVariable Integer id) {
-        Optional<Account> account = accountService.getAccountById(id);
-        return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<?> getAccountById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<Account>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(accountService.getAccountById(id).get())
+                        .build()).getBody();
     }
 
     @GetMapping("activate/{id}")
     public ResponseEntity<?> activateAccount(@PathVariable Integer appUserId) {
         if (accountService.activateAccount(appUserId)) {
+//            return ResponseEntity.status(HttpStatus.CREATED)
+//                    .body(ApiResponse.<Account>builder()
+//                            .code(HttpStatus.CREATED.value())
+//                            .result(accountService.getAccountById(id).get())
+//                            .build()).getBody();
             return ResponseEntity.ok().build();
         }
         ApiResponse apiResponse = new ApiResponse<>();
-        apiResponse.setSuccess(false);
         apiResponse.setCode(HttpStatus.BAD_REQUEST.value());
         apiResponse.setMessage("Activation failed");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<Account> getAccountByEmail(@PathVariable String email) {
-        Optional<Account> account = accountService.getAccountByEmail(email);
-        return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<?> getAccountByEmail(@PathVariable String email) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<Account>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(accountService.getAccountByEmail(email).get())
+                        .build()).getBody();
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<List<Account>> getAllAccounts() {
-        List<Account> accounts = accountService.getAllAccounts();
-        return ResponseEntity.ok(accounts);
+    public ApiResponse<List<Account>> getAllAccounts() {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<List<Account>>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(accountService.getAllAccounts())
+                        .build()).getBody();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Account> updateAccount(@PathVariable Integer id, @RequestBody Account account) {
-        account.setId(id);
-        Account updatedAccount = accountService.updateAccount(account);
-        return ResponseEntity.ok(updatedAccount);
+ // active / changepass
+    @PutMapping
+    public ApiResponse<Account> updateAccount( @RequestBody Account account) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<Account>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(accountService.updateAccount(account))
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable Integer id) {
-        accountService.deleteAccount(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<Account> deleteAccount(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<Account>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(accountService.deleteAccount(id))
+                        .build()).getBody();
     }
 }

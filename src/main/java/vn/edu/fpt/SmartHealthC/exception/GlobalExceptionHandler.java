@@ -50,7 +50,6 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
         ErrorCode errorCode = exception.getErrorCode();
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setSuccess(false);
         apiResponse.setCode(errorCode.getStatusCode().value());
         apiResponse.setMessage(errorCode.getMessage());
 
@@ -62,7 +61,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse>  handleBindException(BindException e) {
         // Trả về message của lỗi đầu tiên
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setSuccess(false);
         apiResponse.setCode(HttpStatus.BAD_REQUEST.value());
         apiResponse.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);

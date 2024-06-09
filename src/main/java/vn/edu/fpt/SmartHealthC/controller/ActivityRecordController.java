@@ -25,7 +25,6 @@ public class ActivityRecordController {
         ActivityRecord createdActivityRecord= activityRecordService.createActivityRecord(activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ActivityRecord>builder()
-                        .isSuccess(true)
                         .result(createdActivityRecord)
                         .build()).getBody();
     }
@@ -48,14 +47,15 @@ public class ActivityRecordController {
         ActivityRecord updatedActivityRecord = activityRecordService.updateActivityRecord(activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ActivityRecord>builder()
-                        .isSuccess(true)
                         .result(updatedActivityRecord)
                         .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteActivityRecord(@PathVariable Integer id) {
-        activityRecordService.deleteActivityRecord(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<ActivityRecord> deleteActivityRecord(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ActivityRecord>builder()
+                        .result(activityRecordService.deleteActivityRecord(id))
+                        .build()).getBody();
     }
 }

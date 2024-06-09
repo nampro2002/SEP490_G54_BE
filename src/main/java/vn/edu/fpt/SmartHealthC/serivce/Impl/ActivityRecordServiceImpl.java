@@ -77,8 +77,10 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     }
 
     @Override
-    public void deleteActivityRecord(Integer id) {
+    public ActivityRecord deleteActivityRecord(Integer id) {
+        ActivityRecord activityRecord = getActivityRecordById(id).get();
         activityRecordRepository.deleteById(id);
+        return activityRecord;
     }
 
 }

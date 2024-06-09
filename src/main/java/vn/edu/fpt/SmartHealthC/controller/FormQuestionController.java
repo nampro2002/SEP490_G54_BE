@@ -30,7 +30,6 @@ public class FormQuestionController {
     public ApiResponse<?> getFormQuestionById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FormQuestion>builder()
-                        .isSuccess(true)
                         .result(formQuestionService.getFormQuestionById(id))
                         .build()).getBody();
     }

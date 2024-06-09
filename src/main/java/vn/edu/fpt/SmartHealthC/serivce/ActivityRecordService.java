@@ -12,5 +12,5 @@ public interface ActivityRecordService {
     Optional<ActivityRecord> getActivityRecordById(Integer id);
     List<ActivityRecord> getAllActivityRecords();
     ActivityRecord updateActivityRecord(ActivityRecordDTO activityRecordDTO);
-    void deleteActivityRecord(Integer id);
+    ActivityRecord deleteActivityRecord(Integer id);
 }

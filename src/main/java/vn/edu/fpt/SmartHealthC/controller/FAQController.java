@@ -23,7 +23,6 @@ public class FAQController {
     public ApiResponse<?> createFAQ(@RequestBody FAQRequestDTO faqRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<FAQ>builder()
-                        .isSuccess(true)
                         .code(HttpStatus.CREATED.value())
                         .result(faqService.createFAQ(faqRequestDTO))
                         .build()).getBody();
@@ -33,7 +32,6 @@ public class FAQController {
     public ApiResponse<?> getFAQById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FAQ>builder()
-                        .isSuccess(true)
                         .result(faqService.getFAQById(id))
                         .build()).getBody();
     }
@@ -42,7 +40,6 @@ public class FAQController {
     public ApiResponse<?> getAllFAQs() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<FAQ>>builder()
-                        .isSuccess(true)
                         .result(faqService.getAllFAQs())
                         .build()).getBody();
     }
@@ -51,7 +48,6 @@ public class FAQController {
     public ApiResponse<?> updateFAQ(@PathVariable Integer id, @RequestBody FAQRequestDTO faq) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FAQ>builder()
-                        .isSuccess(true)
                         .code(HttpStatus.OK.value())
                         .result(faqService.updateFAQ(faq))
                         .build()).getBody();
@@ -61,7 +57,6 @@ public class FAQController {
     public ApiResponse<?> deleteFAQ(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FAQ>builder()
-                        .isSuccess(true)
                         .result(faqService.deleteFAQ(id))
                         .build()).getBody();
     }
