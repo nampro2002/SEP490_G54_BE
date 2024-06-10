@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypePlanDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.*;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineTypePlanService;
 
@@ -25,20 +27,28 @@ public class MedicineTypePlanServiceImpl implements MedicineTypePlanService {
     @Override
     public MedicineTypePlan createMedicineTypePlan(MedicineTypePlanDTO medicineTypePlanDTO) {
         MedicineTypePlan medicineTypePlan =  new MedicineTypePlan();
-        MedicineType medicineType = medicineTypeRepository.findById(
-                medicineTypePlanDTO.getMedicineTypeId()).orElseThrow(() -> new IllegalArgumentException("MedicineType not found"));
+        Optional<MedicineType> medicineType = medicineTypeRepository.findById(medicineTypePlanDTO.getMedicineTypeId());
+        if(medicineType.isEmpty()) {
+            throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
+        }
+        medicineTypePlan.setMedicineTypeId(medicineType.get());
+        Optional<MedicineRecord> medicineRecord = medicineRecordRepository.findById(medicineTypePlanDTO.getMedicinePlanId());
+        if(medicineRecord.isEmpty()) {
+            throw new AppException(ErrorCode.MEDICINE_NOT_FOUND);
+        }
+        medicineTypePlan.setMedicinePlanId(medicineRecord.get());
 
-        MedicineRecord medicineRecord = medicineRecordRepository.findById(
-                medicineTypePlanDTO.getMedicinePlanId()).orElseThrow(() -> new IllegalArgumentException("MedicineRecord not found"));
-        medicineTypePlan.setMedicinePlanId(medicineRecord);
-        medicineTypePlan.setMedicineTypeId(medicineType);
         return medicineTypePlanRepository.save(medicineTypePlan);
 
     }
 
     @Override
-    public Optional<MedicineTypePlan> getMedicineTypePlanById(Integer id) {
-        return medicineTypePlanRepository.findById(id);
+    public MedicineTypePlan getMedicineTypePlanById(Integer id) {
+        Optional<MedicineTypePlan> medicineTypePlan = medicineTypePlanRepository.findById(id);
+        if(medicineTypePlan.isEmpty()) {
+            throw new AppException(ErrorCode.MEDICINE_TYPE_PLAN_NOT_FOUND);
+        }
+        return medicineTypePlan.get();
     }
 
     @Override
@@ -47,21 +57,26 @@ public class MedicineTypePlanServiceImpl implements MedicineTypePlanService {
     }
 
     @Override
-    public MedicineTypePlan updateMedicineTypePlan(MedicineTypePlanDTO medicineTypePlanDTO) {
-        MedicineTypePlan medicineTypePlan =  new MedicineTypePlan();
-        MedicineType medicineType = medicineTypeRepository.findById(
-                medicineTypePlanDTO.getMedicineTypeId()).orElseThrow(() -> new IllegalArgumentException("MentalRule not found"));
+    public MedicineTypePlan updateMedicineTypePlan(Integer id,MedicineTypePlanDTO medicineTypePlanDTO) {
+        MedicineTypePlan medicineTypePlan =  getMedicineTypePlanById(id);
+        Optional<MedicineType> medicineType = medicineTypeRepository.findById(medicineTypePlanDTO.getMedicineTypeId());
+        if(medicineType.isEmpty()) {
+            throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
+        }
+        medicineTypePlan.setMedicineTypeId(medicineType.get());
+        Optional<MedicineRecord> medicineRecord = medicineRecordRepository.findById(medicineTypePlanDTO.getMedicinePlanId());
+        if(medicineRecord.isEmpty()) {
+            throw new AppException(ErrorCode.MEDICINE_NOT_FOUND);
+        }
+        medicineTypePlan.setMedicinePlanId(medicineRecord.get());
 
-        MedicineRecord medicineRecord = medicineRecordRepository.findById(
-                medicineTypePlanDTO.getMedicinePlanId()).orElseThrow(() -> new IllegalArgumentException("MentalRecord not found"));
-        medicineTypePlan.setId(medicineTypePlanDTO.getId());
-        medicineTypePlan.setMedicinePlanId(medicineRecord);
-        medicineTypePlan.setMedicineTypeId(medicineType);
         return medicineTypePlanRepository.save(medicineTypePlan);
     }
 
     @Override
-    public void deleteMedicineTypePlan(Integer id) {
+    public MedicineTypePlan deleteMedicineTypePlan(Integer id) {
+        MedicineTypePlan medicineTypePlan = getMedicineTypePlanById(id);
         medicineTypePlanRepository.deleteById(id);
+        return medicineTypePlan;
     }
 }

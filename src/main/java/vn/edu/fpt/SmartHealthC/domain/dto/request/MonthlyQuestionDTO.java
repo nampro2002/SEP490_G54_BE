@@ -14,7 +14,6 @@ import java.util.Date;
 @Builder
 public class MonthlyQuestionDTO {
 
-    private int id;
 
     private int appUserId;
 

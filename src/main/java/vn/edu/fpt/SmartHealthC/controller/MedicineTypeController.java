@@ -1,8 +1,11 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineType;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineTypeService;
 
@@ -16,33 +19,49 @@ public class MedicineTypeController {
     private MedicineTypeService medicineTypeService;
 
     @PostMapping
-    public ResponseEntity<MedicineType> createMedicineType(@RequestBody MedicineType medicineType) {
+    public ApiResponse<MedicineType> createMedicineType(@RequestBody MedicineType medicineType) {
         MedicineType createdMedicineType = medicineTypeService.createMedicineType(medicineType);
-        return ResponseEntity.ok(createdMedicineType);
+        return  ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<MedicineType>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(createdMedicineType)
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MedicineType> getMedicineTypeById(@PathVariable Integer id) {
-        Optional<MedicineType> medicineType = medicineTypeService.getMedicineTypeById(id);
-        return medicineType.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<MedicineType>  getMedicineTypeById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicineType>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicineTypeService.getMedicineTypeById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<MedicineType>> getAllMedicineTypes() {
-        List<MedicineType> medicineTypes = medicineTypeService.getAllMedicineTypes();
-        return ResponseEntity.ok(medicineTypes);
+    public ApiResponse<List<MedicineType>> getAllMedicineTypes() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MedicineType>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicineTypeService.getAllMedicineTypes())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MedicineType> updateMedicineType(@PathVariable Integer id, @RequestBody MedicineType medicineType) {
-        medicineType.setId(id);
-        MedicineType updatedMedicineType = medicineTypeService.updateMedicineType(medicineType);
-        return ResponseEntity.ok(updatedMedicineType);
+    public ApiResponse<MedicineType> updateMedicineType(@PathVariable Integer id,@RequestBody MedicineType medicineType) {
+        MedicineType updatedMedicineType = medicineTypeService.updateMedicineType(id,medicineType);
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicineType>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(updatedMedicineType)
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMedicineType(@PathVariable Integer id) {
-        medicineTypeService.deleteMedicineType(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<MedicineType> deleteMedicineType(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicineType>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicineTypeService.deleteMedicineType(id))
+                        .build()).getBody();
     }
 }

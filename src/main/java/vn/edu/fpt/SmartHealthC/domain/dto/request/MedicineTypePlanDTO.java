@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MedicineTypePlanDTO {
 
-    private int id;
 
     private int medicinePlanId;
 

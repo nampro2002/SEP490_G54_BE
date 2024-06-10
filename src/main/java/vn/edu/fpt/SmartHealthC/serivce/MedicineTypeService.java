@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface MedicineTypeService {
     MedicineType createMedicineType(MedicineType medicineType);
-    Optional<MedicineType> getMedicineTypeById(Integer id);
+    MedicineType getMedicineTypeById(Integer id);
     List<MedicineType> getAllMedicineTypes();
-    MedicineType updateMedicineType(MedicineType medicineType);
-    void deleteMedicineType(Integer id);
+    MedicineType updateMedicineType(Integer id,MedicineType medicineType);
+    MedicineType deleteMedicineType(Integer id);
 }

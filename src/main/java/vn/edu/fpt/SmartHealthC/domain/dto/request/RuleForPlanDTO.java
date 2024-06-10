@@ -14,7 +14,6 @@ import java.util.Date;
 @Builder
 public class RuleForPlanDTO {
 
-    private int id;
 
     private int ruleId;
 

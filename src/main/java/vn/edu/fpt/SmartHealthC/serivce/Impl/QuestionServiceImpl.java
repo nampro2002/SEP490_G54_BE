@@ -3,10 +3,9 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.Question;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.*;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.QuestionRepository;
 import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
@@ -34,19 +33,26 @@ public class QuestionServiceImpl implements QuestionService {
                 .title(questionDTO.getTitle())
                 .body(questionDTO.getBody())
                 .answer(questionDTO.getAnswer()).build();
-        AppUser appUser = appUserRepository.findById(questionDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
-        WebUser webUser = webUserRepository.findById(questionDTO.getWebUserId())
-                .orElseThrow(() -> new IllegalArgumentException("WebUser not found"));
-
-        question.setAppUserId(appUser);
-        question.setWebUserId(webUser);
+        Optional<AppUser> appUser = appUserRepository.findById(questionDTO.getAppUserId());
+        if(appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        question.setAppUserId(appUser.get());
+        Optional<WebUser> webUser = webUserRepository.findById(questionDTO.getAppUserId());
+        if(webUser.isEmpty()) {
+            throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
+        }
+        question.setWebUserId(webUser.get());
         return  questionRepository.save(question);
     }
 
     @Override
-    public Optional<Question> getQuestionById(Integer id) {
-        return questionRepository.findById(id);
+    public Question getQuestionById(Integer id) {
+        Optional<Question> question = questionRepository.findById(id);
+        if(question.isEmpty()) {
+            throw new AppException(ErrorCode.QUESTION_NOT_FOUND);
+        }
+        return question.get();
     }
 
     @Override
@@ -55,25 +61,19 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question updateQuestion(QuestionDTO questionDTO) {
-        Question question =  Question.builder()
-                .id(questionDTO.getId())
-                .title(questionDTO.getTitle())
-                .body(questionDTO.getBody())
-                .answer(questionDTO.getAnswer()).build();
-        AppUser appUser = appUserRepository.findById(questionDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
-        WebUser webUser = webUserRepository.findById(questionDTO.getWebUserId())
-                .orElseThrow(() -> new IllegalArgumentException("WebUser not found"));
-
-        question.setAppUserId(appUser);
-        question.setWebUserId(webUser);
+    public Question updateQuestion(Integer id,QuestionDTO questionDTO) {
+        Question question = getQuestionById(id);
+        question.setTitle(questionDTO.getTitle());
+        question.setBody(questionDTO.getBody());
+        question.setAnswer(questionDTO.getAnswer());
         return  questionRepository.save(question);
     }
 
     @Override
-    public void deleteQuestion(Integer id) {
+    public Question deleteQuestion(Integer id) {
+        Question question  = getQuestionById(id);
         questionRepository.deleteById(id);
+        return question;
     }
 
 

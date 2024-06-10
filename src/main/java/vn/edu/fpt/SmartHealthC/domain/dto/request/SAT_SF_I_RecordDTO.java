@@ -13,7 +13,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class SAT_SF_I_RecordDTO {
-    private Integer Id;
 
     private int appUserId;
 

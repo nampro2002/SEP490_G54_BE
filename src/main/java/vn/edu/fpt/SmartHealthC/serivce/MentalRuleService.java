@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface MentalRuleService {
     MentalRule createMentalRule(MentalRule mentalRule);
-    Optional<MentalRule> getMentalRuleById(Integer id);
+    MentalRule getMentalRuleById(Integer id);
     List<MentalRule> getAllMentalRules();
-    MentalRule updateMentalRule(MentalRule mentalRule);
-    void deleteMentalRule(Integer id);
+    MentalRule updateMentalRule(Integer id,MentalRule mentalRule);
+    MentalRule deleteMentalRule(Integer id);
 }

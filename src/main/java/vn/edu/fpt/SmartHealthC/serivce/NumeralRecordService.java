@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface NumeralRecordService {
     NumeralRecord createNumeralRecord(NumeralRecordDTO numeralRecordDTO);
-    Optional<NumeralRecord> getNumeralRecordById(Integer id);
+   NumeralRecord getNumeralRecordById(Integer id);
     List<NumeralRecord> getAllNumeralRecords();
-    NumeralRecord updateNumeralRecord(NumeralRecordDTO numeralRecordDTO);
-    void deleteNumeralRecord(Integer id);
+    NumeralRecord updateNumeralRecord(Integer id,NumeralRecordDTO numeralRecordDTO);
+    NumeralRecord deleteNumeralRecord(Integer id);
 }

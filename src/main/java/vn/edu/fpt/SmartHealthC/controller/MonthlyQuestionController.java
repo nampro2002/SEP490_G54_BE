@@ -1,9 +1,12 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyQuestion;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.MonthlyQuestionService;
@@ -19,34 +22,51 @@ public class MonthlyQuestionController {
     private MonthlyQuestionService monthlyQuestionService;
 
     @PostMapping
-    public ResponseEntity<MonthlyQuestion> createMonthlyQuestion(@RequestBody MonthlyQuestionDTO monthlyQuestionDTO) {
+    public ApiResponse<MonthlyQuestion> createMonthlyQuestion(@RequestBody MonthlyQuestionDTO monthlyQuestionDTO) {
 
          MonthlyQuestion createdMonthlyQuestion=  monthlyQuestionService.createMonthlyQuestion(monthlyQuestionDTO);
-        return ResponseEntity.ok(createdMonthlyQuestion);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<MonthlyQuestion>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(createdMonthlyQuestion)
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity< MonthlyQuestion> getMonthlyQuestionById(@PathVariable Integer id) {
-        Optional< MonthlyQuestion> monthlyQuestion =  monthlyQuestionService.getMonthlyQuestionById(id);
-        return monthlyQuestion.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse< MonthlyQuestion> getMonthlyQuestionById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MonthlyQuestion>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(monthlyQuestionService.getMonthlyQuestionById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List< MonthlyQuestion>> getAllMonthlyQuestions() {
-        List< MonthlyQuestion> monthlyQuestions =  monthlyQuestionService.getAllMonthlyQuestions();
-        return ResponseEntity.ok(monthlyQuestions);
+    public ApiResponse<List< MonthlyQuestion>> getAllMonthlyQuestions() {
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List< MonthlyQuestion>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(monthlyQuestionService.getAllMonthlyQuestions())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity< MonthlyQuestion> updateMonthlyQuestion(@PathVariable Integer id, @RequestBody  MonthlyQuestionDTO monthlyQuestionDTO) {
-        monthlyQuestionDTO.setId(id);
-         MonthlyQuestion updatedMonthlyQuestion =  monthlyQuestionService.updateMonthlyQuestion(monthlyQuestionDTO);
-        return ResponseEntity.ok(updatedMonthlyQuestion);
+    public ApiResponse< MonthlyQuestion> updateMonthlyQuestion(@PathVariable Integer id, @RequestBody  MonthlyQuestionDTO monthlyQuestionDTO) {
+         MonthlyQuestion updatedMonthlyQuestion =  monthlyQuestionService.updateMonthlyQuestion(id,monthlyQuestionDTO);
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MonthlyQuestion>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(updatedMonthlyQuestion)
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMonthlyQuestion(@PathVariable Integer id) {
+    public ApiResponse<MonthlyQuestion> deleteMonthlyQuestion(@PathVariable Integer id) {
          monthlyQuestionService.deleteMonthlyQuestion(id);
-        return ResponseEntity.noContent().build();
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MonthlyQuestion>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(monthlyQuestionService.deleteMonthlyQuestion(id))
+                        .build()).getBody();
     }
 }

@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface MedicineRecordService {
     MedicineRecord createMedicineRecord(MedicineRecordDTO medicineRecordDTO);
-    Optional<MedicineRecord> getMedicineRecordById(Integer id);
+    MedicineRecord getMedicineRecordById(Integer id);
     List<MedicineRecord> getAllMedicineRecords();
-    MedicineRecord updateMedicineRecord(MedicineRecordDTO medicineRecordDTO);
-    void deleteMedicineRecord(Integer id);
+    MedicineRecord updateMedicineRecord(Integer id,MedicineRecordDTO medicineRecordDTO);
+    MedicineRecord deleteMedicineRecord(Integer id);
 }

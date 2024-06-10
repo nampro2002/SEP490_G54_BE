@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyQuestion;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MonthlyQuestionRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MonthlyQuestionService;
@@ -32,16 +35,22 @@ public class MonthlyQuestionServiceImpl implements MonthlyQuestionService {
                 .question(monthlyQuestionDTO.getQuestion())
                 .answer(monthlyQuestionDTO.getAnswer())
                 .build();
-        AppUser appUser = appUserRepository.findById(monthlyQuestionDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
-
-        monthlyQuestion.setAppUserId(appUser);
+        Optional<AppUser> appUser = appUserRepository.findById(monthlyQuestionDTO.getAppUserId());
+        if(appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        monthlyQuestion.setAppUserId(appUser.get());
         return  monthlyQuestionRepository.save(monthlyQuestion);
     }
 
     @Override
-    public Optional<MonthlyQuestion> getMonthlyQuestionById(Integer id) {
-        return monthlyQuestionRepository.findById(id);
+    public MonthlyQuestion getMonthlyQuestionById(Integer id) {
+        Optional<MonthlyQuestion> monthlyQuestion = monthlyQuestionRepository.findById(id);
+        if(monthlyQuestion.isEmpty()) {
+            throw new AppException(ErrorCode.MONTHLY_QUESTION_NOTFOUND);
+        }
+
+        return monthlyQuestion.get();
     }
 
     @Override
@@ -50,25 +59,22 @@ public class MonthlyQuestionServiceImpl implements MonthlyQuestionService {
     }
 
     @Override
-    public MonthlyQuestion updateMonthlyQuestion(MonthlyQuestionDTO monthlyQuestionDTO) {
-        MonthlyQuestion monthlyQuestion =  MonthlyQuestion.builder()
-                .id(monthlyQuestionDTO.getId())
-                .monthStart(monthlyQuestionDTO.getMonthStart())
-                .isSAT(monthlyQuestionDTO.getIsSAT())
-                .questionNumber(monthlyQuestionDTO.getQuestionNumber())
-                .question(monthlyQuestionDTO.getQuestion())
-                .answer(monthlyQuestionDTO.getAnswer())
-                .build();
-        AppUser appUser = appUserRepository.findById(monthlyQuestionDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
+    public MonthlyQuestion updateMonthlyQuestion(Integer id,MonthlyQuestionDTO monthlyQuestionDTO) {
 
-        monthlyQuestion.setAppUserId(appUser);
+        MonthlyQuestion monthlyQuestion = getMonthlyQuestionById(id);
+        monthlyQuestion.setMonthStart(monthlyQuestionDTO.getMonthStart());
+        monthlyQuestion.setIsSAT(monthlyQuestionDTO.getIsSAT());
+        monthlyQuestion.setQuestionNumber(monthlyQuestionDTO.getQuestionNumber());
+        monthlyQuestion.setQuestion(monthlyQuestionDTO.getQuestion());
+        monthlyQuestion.setAnswer(monthlyQuestionDTO.getAnswer());
         return  monthlyQuestionRepository.save(monthlyQuestion);
     }
 
     @Override
-    public void deleteMonthlyQuestion(Integer id) {
+    public MonthlyQuestion deleteMonthlyQuestion(Integer id) {
+        MonthlyQuestion monthlyQuestion = getMonthlyQuestionById(id);
         monthlyQuestionRepository.deleteById(id);
+        return monthlyQuestion;
     }
 
 

@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface RuleForPlanService {
     RuleForPlan createRuleForPlan( RuleForPlanDTO ruleForPlanDTO);
-    Optional<RuleForPlan> getRuleForPlanById(Integer id);
+    RuleForPlan getRuleForPlanById(Integer id);
     List<RuleForPlan> getAllRuleForPlans();
-    RuleForPlan updateRuleForPlan( RuleForPlanDTO  ruleForPlanDTO);
-    void deleteRuleForPlan(Integer id);
+    RuleForPlan updateRuleForPlan(Integer id, RuleForPlanDTO  ruleForPlanDTO);
+    RuleForPlan deleteRuleForPlan(Integer id);
 }
