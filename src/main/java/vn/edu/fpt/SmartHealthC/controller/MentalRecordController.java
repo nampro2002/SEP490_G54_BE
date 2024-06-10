@@ -1,9 +1,12 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 
@@ -18,33 +21,49 @@ public class MentalRecordController {
     private MentalRecordService mentalRecordService;
 
     @PostMapping
-    public ResponseEntity<MentalRecord> createMentalRecord(@RequestBody MentalRecordDTO mentalRecordDTO) {
+    public ApiResponse<MentalRecord> createMentalRecord(@RequestBody MentalRecordDTO mentalRecordDTO) {
         MentalRecord createdMentalRecord = mentalRecordService.createMentalRecord(mentalRecordDTO);
-        return ResponseEntity.ok(createdMentalRecord);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<MentalRecord>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(createdMentalRecord)
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MentalRecord> getMentalRecordById(@PathVariable Integer id) {
-        Optional<MentalRecord> mentalRecord = mentalRecordService.getMentalRecordById(id);
-        return mentalRecord.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<MentalRecord> getMentalRecordById(@PathVariable Integer id) {
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MentalRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(mentalRecordService.getMentalRecordById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<MentalRecord>> getAllMentalRecords() {
-        List<MentalRecord> mentalRecords = mentalRecordService.getAllMentalRecords();
-        return ResponseEntity.ok(mentalRecords);
+    public ApiResponse<List<MentalRecord>> getAllMentalRecords() {
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MentalRecord>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(mentalRecordService.getAllMentalRecords())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MentalRecord> updateMentalRecord(@PathVariable Integer id, @RequestBody MentalRecordDTO mentalRecordDTO) {
-        mentalRecordDTO.setId(id);
-        MentalRecord updatedMentalRecord = mentalRecordService.updateMentalRecord(mentalRecordDTO);
-        return ResponseEntity.ok(updatedMentalRecord);
+    public ApiResponse<MentalRecord> updateMentalRecord(@PathVariable Integer id, @RequestBody MentalRecordDTO mentalRecordDTO) {
+        MentalRecord updatedMentalRecord = mentalRecordService.updateMentalRecord(id,mentalRecordDTO);
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MentalRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(updatedMentalRecord)
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMentalRecord(@PathVariable Integer id) {
-        mentalRecordService.deleteMentalRecord(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<MentalRecord> deleteMentalRecord(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MentalRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result( mentalRecordService.deleteMentalRecord(id))
+                        .build()).getBody();
     }
 }

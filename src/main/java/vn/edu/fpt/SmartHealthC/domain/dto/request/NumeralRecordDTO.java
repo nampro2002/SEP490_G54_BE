@@ -18,7 +18,6 @@ import java.util.Date;
 @Builder
 public class NumeralRecordDTO {
 
-    private int id;
 
     private int appUserId;
 

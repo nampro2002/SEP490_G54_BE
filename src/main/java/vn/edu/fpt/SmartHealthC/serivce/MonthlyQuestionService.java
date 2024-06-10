@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface MonthlyQuestionService {
     MonthlyQuestion createMonthlyQuestion(MonthlyQuestionDTO monthlyQuestionDTO);
-    Optional<MonthlyQuestion> getMonthlyQuestionById(Integer id);
+   MonthlyQuestion getMonthlyQuestionById(Integer id);
     List<MonthlyQuestion> getAllMonthlyQuestions();
-    MonthlyQuestion updateMonthlyQuestion(MonthlyQuestionDTO monthlyQuestionDTO);
-    void deleteMonthlyQuestion(Integer id);
+    MonthlyQuestion updateMonthlyQuestion(Integer id,MonthlyQuestionDTO monthlyQuestionDTO);
+    MonthlyQuestion deleteMonthlyQuestion(Integer id);
 }

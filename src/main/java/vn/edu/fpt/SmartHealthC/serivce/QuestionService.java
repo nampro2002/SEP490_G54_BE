@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface QuestionService {
     Question createQuestion(QuestionDTO questionDTO);
-    Optional<Question> getQuestionById(Integer id);
+    Question getQuestionById(Integer id);
     List<Question> getAllQuestions();
-    Question updateQuestion(QuestionDTO questionDTO);
-    void deleteQuestion(Integer id);
+    Question updateQuestion(Integer id,QuestionDTO questionDTO);
+    Question deleteQuestion(Integer id);
 }

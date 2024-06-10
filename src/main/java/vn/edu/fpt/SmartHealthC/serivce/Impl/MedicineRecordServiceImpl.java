@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
@@ -39,8 +40,13 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     }
 
     @Override
-    public Optional<MedicineRecord> getMedicineRecordById(Integer id) {
-        return medicineRecordRepository.findById(id);
+    public MedicineRecord getMedicineRecordById(Integer id) {
+        Optional<MedicineRecord> medicineRecord = medicineRecordRepository.findById(id);
+        if(medicineRecord.isEmpty()) {
+            throw new AppException(ErrorCode.MEDICINE_NOT_FOUND);
+        }
+
+        return medicineRecord.get();
     }
 
     @Override
@@ -49,25 +55,20 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     }
 
     @Override
-    public MedicineRecord updateMedicineRecord(MedicineRecordDTO medicineRecordDTO) {
-        MedicineRecord medicineRecord =  MedicineRecord.builder()
-                .id(medicineRecordDTO.getId())
-                .type(medicineRecordDTO.getType())
-                .hour(medicineRecordDTO.getHour())
-                .weekStart(medicineRecordDTO.getWeekStart())
-                .date(medicineRecordDTO.getDate())
-                .status(medicineRecordDTO.getStatus())
-                .build();
-        Optional<AppUser> appUser = appUserRepository.findById(medicineRecordDTO.getAppUserId());
-        if(appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        medicineRecord.setAppUserId(appUser.get());
+    public MedicineRecord updateMedicineRecord(Integer id, MedicineRecordDTO medicineRecordDTO) {
+        MedicineRecord medicineRecord =  getMedicineRecordById(id);
+        medicineRecordDTO.setType(medicineRecordDTO.getType());
+        medicineRecordDTO.setHour(medicineRecordDTO.getHour());
+        medicineRecordDTO.setWeekStart(medicineRecordDTO.getWeekStart());
+        medicineRecordDTO.setDate(medicineRecordDTO.getDate());
+        medicineRecordDTO.setStatus(medicineRecordDTO.getStatus());
         return medicineRecordRepository.save(medicineRecord);
     }
 
     @Override
-    public void deleteMedicineRecord(Integer id) {
+    public MedicineRecord deleteMedicineRecord(Integer id) {
+        MedicineRecord medicineRecord = getMedicineRecordById(id);
         medicineRecordRepository.deleteById(id);
+        return medicineRecord;
     }
 }

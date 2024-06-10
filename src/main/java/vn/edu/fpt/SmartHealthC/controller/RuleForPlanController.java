@@ -1,9 +1,12 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.RuleForPlanDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.Question;
 import vn.edu.fpt.SmartHealthC.domain.entity.RuleForPlan;
 import vn.edu.fpt.SmartHealthC.serivce.RuleForPlanService;
@@ -19,34 +22,50 @@ public class RuleForPlanController {
     private RuleForPlanService ruleForPlanService;
 
     @PostMapping
-    public ResponseEntity<RuleForPlan> createRuleForPlan(@RequestBody RuleForPlanDTO ruleForPlanDTO) {
+    public ApiResponse<RuleForPlan> createRuleForPlan(@RequestBody RuleForPlanDTO ruleForPlanDTO) {
 
         RuleForPlan createdRuleForPlan= ruleForPlanService.createRuleForPlan(ruleForPlanDTO);
-        return ResponseEntity.ok(createdRuleForPlan);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<RuleForPlan>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(createdRuleForPlan)
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RuleForPlan> getRuleForPlanById(@PathVariable Integer id) {
-        Optional<RuleForPlan> ruleForPlan = ruleForPlanService.getRuleForPlanById(id);
-        return ruleForPlan.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<RuleForPlan> getRuleForPlanById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<RuleForPlan>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(ruleForPlanService.getRuleForPlanById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<RuleForPlan>> getAllRuleForPlans() {
-        List<RuleForPlan> ruleForPlans = ruleForPlanService.getAllRuleForPlans();
-        return ResponseEntity.ok(ruleForPlans);
+    public ApiResponse<List<RuleForPlan>> getAllRuleForPlans() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<RuleForPlan>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(ruleForPlanService.getAllRuleForPlans())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RuleForPlan> updateRuleForPlan(@PathVariable Integer id, @RequestBody RuleForPlanDTO ruleForPlanDTO) {
-        ruleForPlanDTO.setId(id);
-        RuleForPlan updatedRuleForPlan = ruleForPlanService.updateRuleForPlan(ruleForPlanDTO);
-        return ResponseEntity.ok(updatedRuleForPlan);
+    public ApiResponse<RuleForPlan> updateRuleForPlan(@PathVariable Integer id,@RequestBody RuleForPlanDTO ruleForPlanDTO) {
+        RuleForPlan updatedRuleForPlan = ruleForPlanService.updateRuleForPlan(id,ruleForPlanDTO);
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<RuleForPlan>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(updatedRuleForPlan)
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRuleForPlan(@PathVariable Integer id) {
-        ruleForPlanService.deleteRuleForPlan(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<RuleForPlan> deleteRuleForPlan(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<RuleForPlan>builder()
+                        .code(HttpStatus.OK.value())
+                        .result( ruleForPlanService.deleteRuleForPlan(id))
+                        .build()).getBody();
     }
 }

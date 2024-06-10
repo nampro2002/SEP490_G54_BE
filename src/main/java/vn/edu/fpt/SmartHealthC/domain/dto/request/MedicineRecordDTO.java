@@ -17,7 +17,6 @@ import java.util.Date;
 @Builder
 public class MedicineRecordDTO {
 
-    private int id;
 
     private int appUserId;
 

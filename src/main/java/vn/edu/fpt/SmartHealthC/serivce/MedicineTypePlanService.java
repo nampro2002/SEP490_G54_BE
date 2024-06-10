@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface MedicineTypePlanService {
     MedicineTypePlan createMedicineTypePlan(MedicineTypePlanDTO medicineTypePlanDTO);
-    Optional<MedicineTypePlan> getMedicineTypePlanById(Integer id);
+    MedicineTypePlan getMedicineTypePlanById(Integer id);
     List<MedicineTypePlan> getAllMedicineTypePlans();
-    MedicineTypePlan updateMedicineTypePlan( MedicineTypePlanDTO  medicineTypePlanDTOs);
-    void deleteMedicineTypePlan(Integer id);
+    MedicineTypePlan updateMedicineTypePlan(Integer id, MedicineTypePlanDTO  medicineTypePlanDTOs);
+    MedicineTypePlan deleteMedicineTypePlan(Integer id);
 }

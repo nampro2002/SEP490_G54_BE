@@ -39,8 +39,12 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     }
 
     @Override
-    public Optional<MentalRecord> getMentalRecordById(Integer id) {
-        return mentalRecordRepository.findById(id);
+    public MentalRecord getMentalRecordById(Integer id) {
+        Optional<MentalRecord> mentalRecord = mentalRecordRepository.findById(id);
+        if(mentalRecord.isEmpty()) {
+            throw new AppException(ErrorCode.MENTAL_NOT_FOUND);
+        }
+        return mentalRecord.get();
     }
 
     @Override
@@ -49,23 +53,18 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     }
 
     @Override
-    public MentalRecord updateMentalRecord(MentalRecordDTO mentalRecordDTO) {
-        MentalRecord mentalRecord =  MentalRecord.builder()
-                .id(mentalRecordDTO.getId())
-                .point(mentalRecordDTO.getPoint())
-                .weekStart(mentalRecordDTO.getWeekStart())
-                .date(mentalRecordDTO.getDate())
-                .build();
-        Optional<AppUser> appUser = appUserRepository.findById(mentalRecordDTO.getAppUserId());
-        if(appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        mentalRecord.setAppUserId(appUser.get());
+    public MentalRecord updateMentalRecord(Integer id,MentalRecordDTO mentalRecordDTO) {
+        MentalRecord mentalRecord =  getMentalRecordById(id);
+        mentalRecord.setPoint(mentalRecordDTO.getPoint());
+        mentalRecord.setWeekStart(mentalRecordDTO.getWeekStart());
+        mentalRecord.setDate(mentalRecordDTO.getDate());
         return mentalRecordRepository.save(mentalRecord);
     }
 
     @Override
-    public void deleteMentalRecord(Integer id) {
+    public MentalRecord deleteMentalRecord(Integer id) {
+        MentalRecord mentalRecord = getMentalRecordById(id);
         mentalRecordRepository.deleteById(id);
+        return mentalRecord;
     }
 }

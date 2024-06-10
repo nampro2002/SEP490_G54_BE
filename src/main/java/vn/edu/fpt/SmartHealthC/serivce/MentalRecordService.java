@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface MentalRecordService {
     MentalRecord createMentalRecord(MentalRecordDTO mentalRecordDTO);
-    Optional<MentalRecord> getMentalRecordById(Integer id);
+    MentalRecord getMentalRecordById(Integer id);
     List<MentalRecord> getAllMentalRecords();
-    MentalRecord updateMentalRecord(MentalRecordDTO mentalRecordDTO);
-    void deleteMentalRecord(Integer id);
+    MentalRecord updateMentalRecord(Integer id,MentalRecordDTO mentalRecordDTO);
+    MentalRecord deleteMentalRecord(Integer id);
 }
