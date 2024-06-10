@@ -57,19 +57,11 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
     @Override
     public BloodPressureRecord updateBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO) {
         BloodPressureRecord bloodPressureRecord = getBloodPressureRecordById(bloodPressureRecordDTO.getId());
-        BloodPressureRecord bloodPressureRecordEntity = BloodPressureRecord.builder()
-                .id(bloodPressureRecordDTO.getId())
-                .diastole(bloodPressureRecordDTO.getDiastole())
-                .systole(bloodPressureRecordDTO.getSystole())
-                .weekStart(bloodPressureRecordDTO.getWeekStart())
-                .date(bloodPressureRecordDTO.getDate()).build();
-        Optional<AppUser> appUser = appUserRepository.findById(bloodPressureRecordDTO.getAppUserId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-
-        bloodPressureRecordEntity.setAppUserId(appUser.get());
-        return bloodPressureRecordRepository.save(bloodPressureRecordEntity);
+        bloodPressureRecord.setDiastole(bloodPressureRecordDTO.getDiastole());
+        bloodPressureRecord.setSystole(bloodPressureRecordDTO.getSystole());
+        bloodPressureRecord.setWeekStart(bloodPressureRecordDTO.getWeekStart());
+        bloodPressureRecord.setDate(bloodPressureRecordDTO.getDate());
+        return bloodPressureRecordRepository.save(bloodPressureRecord);
     }
 
     @Override
