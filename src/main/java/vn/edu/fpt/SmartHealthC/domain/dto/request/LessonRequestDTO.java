@@ -13,9 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class LessonRequestDTO {
-    private Integer Id;
-
-
     private String title;
 
     private String video;

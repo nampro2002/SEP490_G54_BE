@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface SF_RecordService {
     SF_Record createSF_Record(SF_RecordDTO sf_recordDTO);
-    Optional<SF_Record> getSF_RecordById(Integer id);
+    SF_Record getSF_RecordById(Integer id);
     List<SF_Record> getAllSF_Records();
-    SF_Record updateSF_Record(SF_RecordDTO sf_recordDTO);
-    void deleteSF_Record(Integer id);
+    SF_Record updateSF_Record(Integer id, SF_RecordDTO sf_recordDTO);
+    SF_Record deleteSF_Record(Integer id);
 }

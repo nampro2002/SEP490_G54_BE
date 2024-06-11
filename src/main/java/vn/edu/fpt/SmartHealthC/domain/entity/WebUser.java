@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -24,9 +26,7 @@ public class WebUser {
     private String userName;
 
 
+    @OneToMany(mappedBy = "webUser")
+    private List<AppUser> appUserList;
     private String phoneNumber;
-//
-//    @OneToMany(mappedBy = "webUserId")
-//    private List<Question> question;
-
 }

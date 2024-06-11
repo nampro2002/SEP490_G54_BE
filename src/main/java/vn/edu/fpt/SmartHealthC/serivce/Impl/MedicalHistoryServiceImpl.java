@@ -44,8 +44,8 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     }
 
     @Override
-    public MedicalHistory updateMedicalHistory(MedicalHistoryRequestDTO medicalHistoryRequestDTO) {
-        MedicalHistory medicalHistory = getMedicalHistoryById(medicalHistoryRequestDTO.getId());
+    public MedicalHistory updateMedicalHistory(Integer id, MedicalHistoryRequestDTO medicalHistoryRequestDTO) {
+        MedicalHistory medicalHistory = getMedicalHistoryById(id);
         medicalHistory.setName(medicalHistoryRequestDTO.getName());
         medicalHistory.setType(medicalHistoryRequestDTO.getType());
         return medicalHistoryRepository.save(medicalHistory);

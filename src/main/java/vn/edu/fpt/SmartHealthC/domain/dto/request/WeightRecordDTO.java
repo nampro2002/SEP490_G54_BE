@@ -14,11 +14,9 @@ import java.util.Date;
 @Builder
 public class WeightRecordDTO {
 
-    private int id;
-
     private int appUserId;
 
-    private Float  weight;
+    private float  weight;
 
     private Date date;
 

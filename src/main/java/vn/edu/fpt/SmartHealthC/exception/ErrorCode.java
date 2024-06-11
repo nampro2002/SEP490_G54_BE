@@ -13,7 +13,8 @@ public enum ErrorCode {
 //    USER_EXISTED(1002, "User existed", HttpStatus.BAD_REQUEST),
 //    UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
 //    UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
-    JWT_INVALID ( "Invalid jwt token", HttpStatus.BAD_REQUEST),
+
+    JWT_INVALID ( ",Invalid jwt token", HttpStatus.BAD_REQUEST),
     CREDENTIAL_EXPIRED ( "Your login session has expired", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTED("Email existed", HttpStatus.BAD_REQUEST),
     CREDENTIAL_INVALID("Wrong email or password", HttpStatus.BAD_REQUEST),
@@ -29,11 +30,13 @@ public enum ErrorCode {
     ACTIVITY_RECORD_NOT_FOUND("Activity record not found", HttpStatus.NOT_FOUND),
     FORM_QUESTION_NOT_FOUND("Form question not found", HttpStatus.NOT_FOUND),
     LESSON_NOT_FOUND("Lesson not found", HttpStatus.NOT_FOUND),
+    USER_LESSON_NOT_FOUND("User lesson not found", HttpStatus.NOT_FOUND),
     MEDICINE_NOT_FOUND("Medicine not found", HttpStatus.NOT_FOUND),
     SAT_SF_C_NOT_FOUND("SAT_SF_C not found", HttpStatus.NOT_FOUND),
     SAT_SF_I_NOT_FOUND("SAT_SF_I not found", HttpStatus.NOT_FOUND),
     SAT_SF_P_NOT_FOUND("SAT_SF_P not found", HttpStatus.NOT_FOUND),
     SF_NOT_FOUND("SF not found", HttpStatus.NOT_FOUND),
+    STEP_RECORD_NOT_FOUND("Step record not found", HttpStatus.NOT_FOUND),
     QUESTION_NOT_FOUND("Question not found", HttpStatus.NOT_FOUND),
     NUMERAL_NOT_FOUND("Numeral not found", HttpStatus.NOT_FOUND),
     MONTHLY_QUESTION_NOTFOUND("Monthly Question not found", HttpStatus.NOT_FOUND),
@@ -44,6 +47,9 @@ public enum ErrorCode {
     MEDICINE_TYPE_NOT_FOUND("Medicine type not found", HttpStatus.NOT_FOUND),
     MEDICAL_APPOINTMENT_NOT_FOUND("Medical appointment not found", HttpStatus.NOT_FOUND),
     MEDICAL_HISTORY_NOT_FOUND("Medical history not found", HttpStatus.NOT_FOUND),
+    USER_MEDICAL_HISTORY_NOT_FOUND("User medical history not found", HttpStatus.NOT_FOUND),
+    WEIGHT_RECORD_NOT_FOUND("Weight record not found", HttpStatus.NOT_FOUND),
+    ACCOUNT_NOT_FOUND("Account not found", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(String message, HttpStatusCode statusCode) {

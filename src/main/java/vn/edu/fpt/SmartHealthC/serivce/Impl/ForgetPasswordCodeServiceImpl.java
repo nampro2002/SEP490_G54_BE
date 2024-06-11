@@ -7,6 +7,8 @@ import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.ForgetPasswordCode;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.ForgetPasswordCodeRepository;
@@ -32,15 +34,19 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
                 .code(forgetPasswordCodeDTO.getCode())
                 .isUsed(forgetPasswordCodeDTO.getIsUsed()).build();
         Account account = accountRepository.findById(forgetPasswordCodeDTO.getAccountId())
-                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
 
         forgetPasswordCode.setAccountId(account);
         return  forgetPasswordCodeRepository.save(forgetPasswordCode);
     }
 
     @Override
-    public Optional<ForgetPasswordCode> getForgetPasswordCodeById(Integer id) {
-        return forgetPasswordCodeRepository.findById(id);
+    public ForgetPasswordCode getForgetPasswordCodeById(Integer id) {
+        Optional<ForgetPasswordCode> forgetPasswordCode = forgetPasswordCodeRepository.findById(id);
+        if (forgetPasswordCode.isEmpty()) {
+            throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+        return forgetPasswordCode.get();
     }
 
     @Override
@@ -49,21 +55,18 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
     }
 
     @Override
-    public ForgetPasswordCode updateForgetPasswordCode(ForgetPasswordCodeDTO forgetPasswordCodeDTO) {
-         ForgetPasswordCode forgetPasswordCode =  ForgetPasswordCode.builder()
-                 .id(forgetPasswordCodeDTO.getId())
-                .code(forgetPasswordCodeDTO.getCode())
-                .isUsed(forgetPasswordCodeDTO.getIsUsed()).build();
-        Account account = accountRepository.findById(forgetPasswordCodeDTO.getAccountId())
-                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
-
-        forgetPasswordCode.setAccountId(account);
+    public ForgetPasswordCode updateForgetPasswordCode( Integer id,ForgetPasswordCodeDTO forgetPasswordCodeDTO) {
+        ForgetPasswordCode forgetPasswordCode = getForgetPasswordCodeById(id);
+        forgetPasswordCode.setCode(forgetPasswordCode.getCode());
+        forgetPasswordCode.setIsUsed(forgetPasswordCodeDTO.getIsUsed());
         return  forgetPasswordCodeRepository.save(forgetPasswordCode);
     }
 
     @Override
-    public void deleteForgetPasswordCode(Integer id) {
+    public ForgetPasswordCode deleteForgetPasswordCode(Integer id) {
+        ForgetPasswordCode forgetPasswordCode = getForgetPasswordCodeById(id);
         forgetPasswordCodeRepository.deleteById(id);
+        return forgetPasswordCode;
     }
 
 

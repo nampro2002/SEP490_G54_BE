@@ -49,8 +49,8 @@ public class ActivityRecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<ActivityRecord> updateActivityRecord(@RequestBody ActivityRecordDTO activityRecordDTO) {
-        ActivityRecord updatedActivityRecord = activityRecordService.updateActivityRecord(activityRecordDTO);
+    public ApiResponse<ActivityRecord> updateActivityRecord(@PathVariable Integer id, @RequestBody ActivityRecordDTO activityRecordDTO) {
+        ActivityRecord updatedActivityRecord = activityRecordService.updateActivityRecord(id, activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ActivityRecord>builder()
                         .code(HttpStatus.OK.value())

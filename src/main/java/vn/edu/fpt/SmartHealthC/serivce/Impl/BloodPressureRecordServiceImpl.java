@@ -55,8 +55,8 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
     }
 
     @Override
-    public BloodPressureRecord updateBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO) {
-        BloodPressureRecord bloodPressureRecord = getBloodPressureRecordById(bloodPressureRecordDTO.getId());
+    public BloodPressureRecord updateBloodPressureRecord( Integer id, BloodPressureRecordDTO bloodPressureRecordDTO) {
+        BloodPressureRecord bloodPressureRecord = getBloodPressureRecordById(id);
         bloodPressureRecord.setDiastole(bloodPressureRecordDTO.getDiastole());
         bloodPressureRecord.setSystole(bloodPressureRecordDTO.getSystole());
         bloodPressureRecord.setWeekStart(bloodPressureRecordDTO.getWeekStart());

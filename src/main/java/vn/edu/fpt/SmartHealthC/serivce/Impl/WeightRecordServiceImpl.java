@@ -6,6 +6,8 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.WeightRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.WeightRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
@@ -29,15 +31,18 @@ public class WeightRecordServiceImpl implements WeightRecordService {
                 .weight(weightRecordDTO.getWeight())
                 .date(weightRecordDTO.getDate()).build();
         AppUser appUser = appUserRepository.findById(weightRecordDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
-
+                .orElseThrow(() -> new AppException(ErrorCode.APP_USER_NOT_FOUND));
         weightRecord.setAppUserId(appUser);
         return  weightRecordRepository.save(weightRecord);
     }
 
     @Override
-    public Optional<WeightRecord> getWeightRecordById(Integer id) {
-        return weightRecordRepository.findById(id);
+    public WeightRecord getWeightRecordById(Integer id) {
+        Optional<WeightRecord> weightRecord  = weightRecordRepository.findById(id);
+        if(weightRecord.isEmpty()){
+            throw new AppException(ErrorCode.WEIGHT_RECORD_NOT_FOUND);
+        }
+        return weightRecord.get();
     }
 
     @Override
@@ -46,21 +51,18 @@ public class WeightRecordServiceImpl implements WeightRecordService {
     }
 
     @Override
-    public WeightRecord updateWeightRecord(WeightRecordDTO weightRecordDTO) {
-        WeightRecord weightRecord =  WeightRecord.builder()
-                .id(weightRecordDTO.getId())
-                .weight(weightRecordDTO.getWeight())
-                .date(weightRecordDTO.getDate()).build();
-        AppUser appUser = appUserRepository.findById(weightRecordDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
+    public WeightRecord updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO) {
 
-        weightRecord.setAppUserId(appUser);
+        WeightRecord weightRecord = getWeightRecordById(id);
+        weightRecord.setWeight(weightRecordDTO.getWeight());
         return  weightRecordRepository.save(weightRecord);
     }
 
     @Override
-    public void deleteWeightRecord(Integer id) {
+    public WeightRecord deleteWeightRecord(Integer id) {
+        WeightRecord weightRecord = getWeightRecordById(id);
         weightRecordRepository.deleteById(id);
+        return weightRecord;
     }
 
 

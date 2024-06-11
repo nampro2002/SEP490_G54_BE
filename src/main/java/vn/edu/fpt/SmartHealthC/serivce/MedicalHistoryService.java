@@ -10,6 +10,6 @@ public interface MedicalHistoryService {
     MedicalHistory createMedicalHistory(MedicalHistoryRequestDTO medicalHistory);
     MedicalHistory getMedicalHistoryById(Integer id);
     List<MedicalHistory> getAllMedicalHistory();
-    MedicalHistory updateMedicalHistory(MedicalHistoryRequestDTO medicalHistory);
+    MedicalHistory updateMedicalHistory(Integer id, MedicalHistoryRequestDTO medicalHistory);
     MedicalHistory deleteMedicalHistory(Integer id);
 }

@@ -14,8 +14,6 @@ import java.util.Date;
 @Builder
 public class DietRecordDTO {
 
-    private int id;
-
     private int appUserId;
 
     private int  dishPerDay;

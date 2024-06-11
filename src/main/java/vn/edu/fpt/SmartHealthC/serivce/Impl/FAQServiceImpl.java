@@ -46,8 +46,8 @@ public class FAQServiceImpl implements FAQService {
     }
 
     @Override
-    public FAQ updateFAQ(FAQRequestDTO faq) {
-        FAQ faqEntity = getFAQById(faq.getId());
+    public FAQ updateFAQ(Integer id,FAQRequestDTO faq) {
+        FAQ faqEntity = getFAQById(id);
         faqEntity.setQuestion(faq.getQuestion());
         faqEntity.setAnswer(faq.getAnswer());
         return faqRepository.save(faqEntity);

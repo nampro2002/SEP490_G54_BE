@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface StepRecordService {
     StepRecord createStepRecord(StepRecordDTO stepRecordDTO);
-    Optional<StepRecord> getStepRecordById(Integer id);
+    StepRecord getStepRecordById(Integer id);
     List<StepRecord> getAllStepRecords();
-    StepRecord updateStepRecord(StepRecordDTO stepRecordDTO);
-    void deleteStepRecord(Integer id);
+    StepRecord updateStepRecord( Integer id, StepRecordDTO stepRecordDTO);
+    StepRecord deleteStepRecord(Integer id);
 }

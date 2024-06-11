@@ -16,6 +16,7 @@ import vn.edu.fpt.SmartHealthC.serivce.UserLessonService;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class UserLessonServiceImpl implements UserLessonService {
 
@@ -29,16 +30,16 @@ public class UserLessonServiceImpl implements UserLessonService {
     @Override
     public UserLesson createUserLesson(UserLessonDTO userLessonDTO) {
 
-        UserLesson userLesson =  UserLesson.builder()
+        UserLesson userLesson = UserLesson.builder()
                 .lessonDate(userLessonDTO.getLessonDate())
                 .build();
         Optional<AppUser> appUser = appUserRepository.findById(userLessonDTO.getAppUserId());
-        if(appUser.isEmpty()) {
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         Optional<Lesson> lesson = lessonRepository.findById(userLessonDTO.getLessonId());
-        if(lesson.isEmpty()) {
-            throw new AppException(ErrorCode.NOT_FOUND);
+        if (lesson.isEmpty()) {
+            throw new AppException(ErrorCode.LESSON_NOT_FOUND);
         }
         userLesson.setAppUserId(appUser.get());
         userLesson.setLessonId(lesson.get());
@@ -46,8 +47,10 @@ public class UserLessonServiceImpl implements UserLessonService {
     }
 
     @Override
-    public Optional<UserLesson> getUserLessonById(Integer id) {
-        return userLessonRepository.findById(id);
+    public UserLesson getUserLessonById(Integer id) {
+        Optional<UserLesson> userLesson = userLessonRepository.findById(id);
+        if (userLesson.isEmpty()) throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
+        return userLesson.get();
     }
 
     @Override
@@ -55,28 +58,18 @@ public class UserLessonServiceImpl implements UserLessonService {
         return userLessonRepository.findAll();
     }
 
+    // cái này chắc k update
     @Override
-    public UserLesson updateUserLesson(UserLessonDTO userLessonDTO) {
-
-        UserLesson userLesson =  UserLesson.builder()
-                .id(userLessonDTO.getId())
-                .lessonDate(userLessonDTO.getLessonDate())
-                .build();
-        Optional<AppUser> appUser = appUserRepository.findById(userLessonDTO.getAppUserId());
-        if(appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        Optional<Lesson> lesson = lessonRepository.findById(userLessonDTO.getLessonId());
-        if(lesson.isEmpty()) {
-            throw new AppException(ErrorCode.NOT_FOUND);
-        }
-        userLesson.setAppUserId(appUser.get());
-        userLesson.setLessonId(lesson.get());
+    public UserLesson updateUserLesson(Integer id, UserLessonDTO userLessonDTO) {
+        UserLesson userLesson = getUserLessonById(id);
+        userLesson.setLessonDate(userLessonDTO.getLessonDate());
         return userLessonRepository.save(userLesson);
     }
 
     @Override
-    public void deleteUserLesson(Integer id) {
+    public UserLesson deleteUserLesson(Integer id) {
+        UserLesson userLesson = getUserLessonById(id);
         userLessonRepository.deleteById(id);
+        return userLesson;
     }
 }

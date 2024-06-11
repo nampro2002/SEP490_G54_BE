@@ -57,8 +57,8 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     }
 
     @Override
-    public ActivityRecord updateActivityRecord(ActivityRecordDTO activityRecordDTO) {
-        ActivityRecord activityRecord = getActivityRecordById(activityRecordDTO.getId());
+    public ActivityRecord updateActivityRecord(Integer id, ActivityRecordDTO activityRecordDTO) {
+        ActivityRecord activityRecord = getActivityRecordById(id);
         activityRecord.setDate(activityRecordDTO.getDate());
         activityRecord.setDuration(activityRecordDTO.getDuration());
         activityRecord.setWeekStart(activityRecordDTO.getWeekStart());

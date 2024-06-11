@@ -11,6 +11,6 @@ public interface ActivityRecordService {
     ActivityRecord createActivityRecord(ActivityRecordDTO activityRecordDTO);
     ActivityRecord getActivityRecordById(Integer id);
     List<ActivityRecord> getAllActivityRecords();
-    ActivityRecord updateActivityRecord(ActivityRecordDTO activityRecordDTO);
+    ActivityRecord updateActivityRecord(Integer id, ActivityRecordDTO activityRecordDTO);
     ActivityRecord deleteActivityRecord(Integer id);
 }

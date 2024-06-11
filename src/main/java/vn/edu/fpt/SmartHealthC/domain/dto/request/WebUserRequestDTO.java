@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 
 import java.util.Date;
 
@@ -20,5 +21,6 @@ public class WebUserRequestDTO {
     private String username;
 
     private String phoneNumber;
+    private TypeAccount typeAccount;
 
 }

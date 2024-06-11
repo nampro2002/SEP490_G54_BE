@@ -4,15 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NumeralRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.NumeralRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.NumeralRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.NumeralRecordService;
-import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +29,7 @@ public class NumeralRecordServiceImpl implements NumeralRecordService {
                 .value(numeralRecordDTO.getValue())
                 .weekStart(numeralRecordDTO.getWeekStart())
                 .date(numeralRecordDTO.getDate())
-                .typeNumeral(numeralRecordDTO.getTypeNumeral())
+                .typeCardinalIndex(numeralRecordDTO.getTypeCardinalIndex())
                 .timeMeasure(numeralRecordDTO.getTimeMeasure()).build();
         Optional<AppUser> appUser = appUserRepository.findById(numeralRecordDTO.getAppUserId());
         if(appUser.isEmpty()) {
@@ -62,7 +59,7 @@ public class NumeralRecordServiceImpl implements NumeralRecordService {
         numeralRecord.setValue(numeralRecordDTO.getValue());
         numeralRecord.setWeekStart(numeralRecordDTO.getWeekStart());
         numeralRecord.setDate(numeralRecordDTO.getDate());
-        numeralRecord.setTypeNumeral(numeralRecordDTO.getTypeNumeral());
+        numeralRecord.setTypeCardinalIndex(numeralRecordDTO.getTypeCardinalIndex());
         numeralRecord.setTimeMeasure(numeralRecordDTO.getTimeMeasure());
         return  numeralRecordRepository.save(numeralRecord);
     }

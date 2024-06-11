@@ -1,9 +1,12 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserLessonDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 import vn.edu.fpt.SmartHealthC.serivce.UserLessonService;
 
@@ -17,34 +20,48 @@ public class UserLessonController {
     private UserLessonService userLessonService;
 
     @PostMapping
-    public ResponseEntity<UserLesson> createUserLesson(@RequestBody UserLessonDTO userLessonDTO) {
-        UserLesson createdUserLesson = userLessonService.createUserLesson(userLessonDTO);
-        return ResponseEntity.ok(createdUserLesson);
+    public ApiResponse<UserLesson> createUserLesson(@RequestBody UserLessonDTO userLessonDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<UserLesson>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(userLessonService.createUserLesson(userLessonDTO))
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserLesson> getUserLessonById(@PathVariable Integer id) {
-        Optional<UserLesson> userLesson = userLessonService.getUserLessonById(id);
-        return userLesson.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public  ApiResponse<UserLesson> getUserLessonById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<UserLesson>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(userLessonService.getUserLessonById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<UserLesson>> getAllUserLessons() {
-        List<UserLesson> userLessons = userLessonService.getAllUserLessons();
-        return ResponseEntity.ok(userLessons);
+    public ApiResponse<List<UserLesson>> getAllUserLessons() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<UserLesson>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(userLessonService.getAllUserLessons())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserLesson> updateUserLesson(@PathVariable Integer id, @RequestBody UserLessonDTO userLessonDTO) {
-        userLessonDTO.setId(id);
-        UserLesson updatedUserLesson = userLessonService.updateUserLesson(userLessonDTO);
-        return ResponseEntity.ok(updatedUserLesson);
+    public ApiResponse<UserLesson> updateUserLesson(@PathVariable Integer id, @RequestBody UserLessonDTO userLessonDTO) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<UserLesson>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(userLessonService.updateUserLesson(id, userLessonDTO))
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserLesson(@PathVariable Integer id) {
-        userLessonService.deleteUserLesson(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<UserLesson> deleteUserLesson(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<UserLesson>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(userLessonService.deleteUserLesson(id))
+                        .build()).getBody();
     }
 
 }

@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface ForgetPasswordCodeService {
     ForgetPasswordCode createForgetPasswordCode(ForgetPasswordCodeDTO forgetPasswordCodeDTO);
-    Optional<ForgetPasswordCode> getForgetPasswordCodeById(Integer id);
+    ForgetPasswordCode getForgetPasswordCodeById(Integer id);
     List<ForgetPasswordCode> getAllForgetPasswordCodes();
-    ForgetPasswordCode updateForgetPasswordCode(ForgetPasswordCodeDTO forgetPasswordCodeDTO);
-    void deleteForgetPasswordCode(Integer id);
+    ForgetPasswordCode updateForgetPasswordCode( Integer id,ForgetPasswordCodeDTO forgetPasswordCodeDTO);
+    ForgetPasswordCode deleteForgetPasswordCode(Integer id);
 }

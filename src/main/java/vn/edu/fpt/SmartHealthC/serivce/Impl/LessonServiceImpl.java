@@ -2,6 +2,7 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.LessonRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -18,7 +19,12 @@ public class LessonServiceImpl implements LessonService {
     private LessonRepository lessonRepository;
 
     @Override
-    public Lesson createLesson(Lesson lesson) {
+    public Lesson createLesson(LessonRequestDTO lessonRequestDTO) {
+        Lesson lesson = Lesson.builder()
+                .title(lessonRequestDTO.getTitle())
+                .text(lessonRequestDTO.getText())
+                .video(lessonRequestDTO.getVideo())
+                .build();
         return lessonRepository.save(lesson);
     }
 
@@ -37,8 +43,12 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public Lesson updateLesson(Lesson lesson) {
-        return lessonRepository.save(lesson);
+    public Lesson updateLesson(Integer id, LessonRequestDTO lesson) {
+        Lesson lessonToUpdate = getLessonById(id);
+        lessonToUpdate.setTitle(lesson.getTitle());
+        lessonToUpdate.setText(lesson.getText());
+        lessonToUpdate.setVideo(lesson.getVideo());
+        return lessonRepository.save(lessonToUpdate);
     }
 
     @Override

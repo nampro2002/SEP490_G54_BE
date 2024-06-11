@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface WeightRecordService {
     WeightRecord createWeightRecord(WeightRecordDTO weightRecordDTO);
-    Optional<WeightRecord> getWeightRecordById(Integer id);
+    WeightRecord getWeightRecordById(Integer id);
     List<WeightRecord> getAllWeightRecords();
-    WeightRecord updateWeightRecord(WeightRecordDTO weightRecordDTO);
-    void deleteWeightRecord(Integer id);
+    WeightRecord updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO);
+    WeightRecord deleteWeightRecord(Integer id);
 }

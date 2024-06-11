@@ -47,11 +47,11 @@ public class MedicalHistoryController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MedicalHistory> updateMedicalHistory(@RequestBody MedicalHistoryRequestDTO medicalHistory) {
+    public ApiResponse<MedicalHistory> updateMedicalHistory(@PathVariable Integer id, @RequestBody MedicalHistoryRequestDTO medicalHistory) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicalHistory>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicalHistoryService.updateMedicalHistory(medicalHistory))
+                        .result(medicalHistoryService.updateMedicalHistory(id, medicalHistory))
                         .build()).getBody();
     }
 

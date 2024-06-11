@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.LessonRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
@@ -19,7 +20,7 @@ public class LessonController {
     private LessonService lessonService;
 
     @PostMapping
-    public ApiResponse<Lesson> createLesson(@RequestBody Lesson lesson) {
+    public ApiResponse<Lesson> createLesson(@RequestBody LessonRequestDTO lesson) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<Lesson>builder()
                         .code(HttpStatus.CREATED.value())
@@ -46,11 +47,11 @@ public class LessonController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Lesson> updateLesson(@PathVariable Integer id, @RequestBody Lesson lesson) {
+    public ApiResponse<Lesson> updateLesson(@PathVariable Integer id, @RequestBody LessonRequestDTO lessonRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Lesson>builder()
                         .code(HttpStatus.OK.value())
-                        .result(lessonService.updateLesson(lesson))
+                        .result(lessonService.updateLesson(id,lessonRequestDTO))
                         .build()).getBody();
     }
 

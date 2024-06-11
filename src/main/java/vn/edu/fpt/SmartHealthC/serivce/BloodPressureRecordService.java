@@ -11,6 +11,6 @@ public interface BloodPressureRecordService {
     BloodPressureRecord createBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO);
     BloodPressureRecord getBloodPressureRecordById(Integer id);
     List<BloodPressureRecord> getAllBloodPressureRecords();
-    BloodPressureRecord updateBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO);
+    BloodPressureRecord updateBloodPressureRecord( Integer id,BloodPressureRecordDTO bloodPressureRecordDTO);
     BloodPressureRecord deleteBloodPressureRecord(Integer id);
 }

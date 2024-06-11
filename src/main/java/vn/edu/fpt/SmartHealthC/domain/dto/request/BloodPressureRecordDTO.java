@@ -14,7 +14,6 @@ import java.util.Date;
 @Builder
 public class BloodPressureRecordDTO {
 
-    private int id;
 
     private int appUserId;
 

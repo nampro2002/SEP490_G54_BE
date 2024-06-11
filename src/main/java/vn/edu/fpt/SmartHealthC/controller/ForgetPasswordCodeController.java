@@ -1,9 +1,12 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ForgetPasswordCodeDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.entity.FAQ;
 import vn.edu.fpt.SmartHealthC.domain.entity.ForgetPasswordCode;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.ForgetPasswordCodeService;
@@ -20,33 +23,47 @@ public class ForgetPasswordCodeController {
     private ForgetPasswordCodeService forgetPasswordCodeService;
 
     @PostMapping
-    public ResponseEntity<ForgetPasswordCode> createForgetPasswordCode(@RequestBody ForgetPasswordCodeDTO forgetPasswordCodeDTO) {
-        ForgetPasswordCode createdForgetPasswordCode= forgetPasswordCodeService.createForgetPasswordCode(forgetPasswordCodeDTO);
-        return ResponseEntity.ok(createdForgetPasswordCode);
+    public ApiResponse<ForgetPasswordCode> createForgetPasswordCode(@RequestBody ForgetPasswordCodeDTO forgetPasswordCodeDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<ForgetPasswordCode>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(forgetPasswordCodeService.createForgetPasswordCode(forgetPasswordCodeDTO))
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ForgetPasswordCode> getForgetPasswordCodeById(@PathVariable Integer id) {
-        Optional<ForgetPasswordCode> forgetPasswordCode = forgetPasswordCodeService.getForgetPasswordCodeById(id);
-        return forgetPasswordCode.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<ForgetPasswordCode> getForgetPasswordCodeById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ForgetPasswordCode>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(forgetPasswordCodeService.getForgetPasswordCodeById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<ForgetPasswordCode>> getAllForgetPasswordCodes() {
-        List<ForgetPasswordCode> forgetPasswordCodes = forgetPasswordCodeService.getAllForgetPasswordCodes();
-        return ResponseEntity.ok(forgetPasswordCodes);
+    public ApiResponse<List<ForgetPasswordCode>> getAllForgetPasswordCodes() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<ForgetPasswordCode>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(forgetPasswordCodeService.getAllForgetPasswordCodes())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ForgetPasswordCode> updateForgetPasswordCode(@PathVariable Integer id, @RequestBody ForgetPasswordCodeDTO forgetPasswordCodeDTO) {
-        forgetPasswordCodeDTO.setId(id);
-        ForgetPasswordCode updatedForgetPasswordCode = forgetPasswordCodeService.updateForgetPasswordCode(forgetPasswordCodeDTO);
-        return ResponseEntity.ok(updatedForgetPasswordCode);
+    public ApiResponse<ForgetPasswordCode> updateForgetPasswordCode(@PathVariable Integer id, @RequestBody ForgetPasswordCodeDTO forgetPasswordCodeDTO) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ForgetPasswordCode>builder()
+                        .code(HttpStatus.OK.value())
+                        .result( forgetPasswordCodeService.updateForgetPasswordCode(id, forgetPasswordCodeDTO))
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteForgetPasswordCode(@PathVariable Integer id) {
-        forgetPasswordCodeService.deleteForgetPasswordCode(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<ForgetPasswordCode> deleteForgetPasswordCode(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ForgetPasswordCode>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(forgetPasswordCodeService.deleteForgetPasswordCode(id))
+                        .build()).getBody();
     }
 }

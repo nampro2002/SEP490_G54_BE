@@ -11,6 +11,6 @@ public interface FAQService {
     FAQ createFAQ(FAQRequestDTO faq);
     FAQ getFAQById(Integer id);
     List<FAQ> getAllFAQs();
-    FAQ updateFAQ(FAQRequestDTO faq);
+    FAQ updateFAQ(Integer id,FAQRequestDTO faq);
     FAQ deleteFAQ(Integer id);
 }
