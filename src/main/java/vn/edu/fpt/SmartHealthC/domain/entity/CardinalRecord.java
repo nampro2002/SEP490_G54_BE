@@ -1,11 +1,9 @@
 package vn.edu.fpt.SmartHealthC.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeCardinalIndex;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeTimeMeasure;
 
@@ -16,13 +14,15 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NumeralRecord {
+public class CardinalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
+    @JsonIgnore
+    @ToString.Exclude
     private AppUser appUserId;
 
     private Date weekStart;
@@ -34,6 +34,6 @@ public class NumeralRecord {
     @Enumerated(EnumType.STRING)
     private TypeCardinalIndex typeCardinalIndex;
 
-    private float value;
+    private Float value;
 
 }

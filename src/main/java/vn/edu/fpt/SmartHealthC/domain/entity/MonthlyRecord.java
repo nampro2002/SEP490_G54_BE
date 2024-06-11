@@ -1,6 +1,7 @@
-package vn.edu.fpt.SmartHealthC.domain.dto.request;
+package vn.edu.fpt.SmartHealthC.domain.entity;
 
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,17 +10,22 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
 
 import java.util.Date;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MonthlyQuestionDTO {
+public class MonthlyRecord {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-
-    private int appUserId;
+    @ManyToOne
+    @JoinColumn(name = "appuser_id")
+    private AppUser appUserId;
 
     private Date monthStart;
-
+    @Enumerated(EnumType.STRING)
     private MonthlyRecordType monthlyRecordType;
 
     private int questionNumber;
@@ -27,7 +33,5 @@ public class MonthlyQuestionDTO {
     private String question;
 
     private String answer;
-
-
 
 }

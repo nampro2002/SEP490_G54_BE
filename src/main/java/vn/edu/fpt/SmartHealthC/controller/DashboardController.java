@@ -25,7 +25,7 @@ public class DashboardController {
 
 
     @GetMapping("admin-question")
-    public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListAdmin(){
+    public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListAdmin() {
         List<QuestionResponseDTO> responseDTOList = questionService.getAllQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
@@ -33,8 +33,9 @@ public class DashboardController {
                         .result(responseDTOList)
                         .build()).getBody();
     }
+
     @GetMapping("/availablems")
-    public ApiResponse<List<AvailableMSResponseDTO>> getAvailableMSList(){
+    public ApiResponse<List<AvailableMSResponseDTO>> getAvailableMSList() {
         List<AvailableMSResponseDTO> availableMSResponseDTOList = accountService.getAvailableMS();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<AvailableMSResponseDTO>>builder()
@@ -42,18 +43,18 @@ public class DashboardController {
                         .result(availableMSResponseDTOList)
                         .build()).getBody();
     }
+
     @GetMapping("/register-request")
-    public ApiResponse<List<AppUserResponseDTO>> getUserPendingList(@RequestParam(defaultValue = "0") Integer pageNo){
-        List<AppUserResponseDTO> appUserResponseDTOList = accountService.getPendingAccount(pageNo);
+    public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getUserPendingList(@RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<AppUserResponseDTO>>builder()
+                .body(ApiResponse.<ResponsePaging<List<AppUserResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(appUserResponseDTOList)
+                        .result(accountService.getPendingAccount(pageNo - 1))
                         .build()).getBody();
     }
 
     @GetMapping("ms-question")
-    public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListMs(){
+    public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListMs() {
         List<QuestionResponseDTO> responseDTOList = questionService.getAllQuestionsByType(TypeUserQuestion.ASSIGN_MS);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
@@ -61,17 +62,15 @@ public class DashboardController {
                         .result(responseDTOList)
                         .build()).getBody();
     }
-    @GetMapping("/medical-appointment")
-    public ApiResponse<List<MedicalAppointmentResponseDTO>> getQuestionResponseList(@PathVariable Integer id, @RequestParam(defaultValue = "0") Integer pageNo){
-        List<MedicalAppointmentResponseDTO> medicalAppointmentResponseDTOList = medicalAppointmentService.getAllMedicalAppointmentsPending(id, pageNo);
+
+    @GetMapping("/medical-appointment/{id}")
+    public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getQuestionResponseList(@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MedicalAppointmentResponseDTO>>builder()
+                .body(ApiResponse.<ResponsePaging<List<MedicalAppointmentResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicalAppointmentResponseDTOList)
+                        .result(medicalAppointmentService.getAllMedicalAppointmentsPending(id, pageNo - 1))
                         .build()).getBody();
     }
-
-
 
 
 //    @GetMapping("/{id}")

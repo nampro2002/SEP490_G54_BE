@@ -1,7 +1,9 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
 
@@ -15,5 +17,5 @@ public interface MedicalAppointmentService {
     MedicalAppointment updateMedicalAppointment(Integer id, MedicalAppointmentDTO medicalAppointmentDTO);
     MedicalAppointment deleteMedicalAppointment(Integer id);
 
-    List<MedicalAppointmentResponseDTO> getAllMedicalAppointmentsPending(Integer id, Integer pageNo);
+    ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointmentsPending(Integer id, Integer pageNo);
 }
