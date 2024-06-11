@@ -28,10 +28,10 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
-//    private static final String[] SWAGGER = { "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
-//            "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
-//            "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
-//            "/api/test/**", "/authenticate" };
+    private static final String[] SWAGGER = { "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
+            "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
+            "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
+            "/api/test/**", "/authenticate" };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( req ->
                         req.requestMatchers("/api/**").permitAll()
-//                                .requestMatchers(SWAGGER).permitAll()
+                                .requestMatchers(SWAGGER).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(s ->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

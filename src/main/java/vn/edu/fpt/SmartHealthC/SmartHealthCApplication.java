@@ -9,12 +9,12 @@ import vn.edu.fpt.SmartHealthC.serivce.FormQuestionService;
 import vn.edu.fpt.SmartHealthC.serivce.Impl.FormQuestionServiceImpl;
 
 @SpringBootApplication
-//@OpenAPIDefinition(
-//		info = @Info(title="SmartHealthC API",
-//				version = "1.0",
-//				description = "App checking health for old people"
-//		)
-//)
+@OpenAPIDefinition(
+		info = @Info(title="SmartHealthC API",
+				version = "1.0",
+				description = "App checking health for old people"
+		)
+)
 public class SmartHealthCApplication {
 
 	public static void main(String[] args) {
