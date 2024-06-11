@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
@@ -25,6 +27,7 @@ public class AppUser {
 
     @ManyToOne
     @JoinColumn(name = "web_user_id")
+    @ToString.Exclude
     private WebUser webUser;
 
     private String name;

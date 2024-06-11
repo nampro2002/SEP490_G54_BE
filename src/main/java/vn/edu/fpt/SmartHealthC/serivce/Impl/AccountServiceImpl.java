@@ -113,7 +113,6 @@ public class AccountServiceImpl implements AccountService {
         List<WebUser> accountList = webUserService.getAllWebUsers();
         return accountList.stream().filter(record ->
                 (record.getAccountId().getIsActive()
-                        && record.getAccountId().getType().equals(TypeAccount.MEDICAL_SPECIALIST)
                         && record.getAppUserList().size() < 10
                 ))
                 .map(record -> {
