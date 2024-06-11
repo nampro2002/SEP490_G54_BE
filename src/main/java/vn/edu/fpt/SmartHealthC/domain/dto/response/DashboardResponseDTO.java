@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class DashboardResponseDTO {
-    private List<QuestionResponseDTO> questionResponseDTOS;
-    private List<MedicalAppointmentResponseDTO> medicalAppointmentResponseDTOList;
-    private List<AppUserResponseDTO> appUserResponseDTOList;
-    private List<AvailableMSResponseDTO> availableMSResponseDTOList;
+    private List<QuestionResponseDTO> questionResponseDTOS = new ArrayList<>();
+    private List<MedicalAppointmentResponseDTO> medicalAppointmentResponseDTOList = new ArrayList<>();
+    private List<AppUserResponseDTO> appUserResponseDTOList = new ArrayList<>();
+    private List<AvailableMSResponseDTO> availableMSResponseDTOList = new ArrayList<>();
 }

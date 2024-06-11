@@ -15,5 +15,5 @@ public interface MedicalAppointmentService {
     MedicalAppointment updateMedicalAppointment(Integer id, MedicalAppointmentDTO medicalAppointmentDTO);
     MedicalAppointment deleteMedicalAppointment(Integer id);
 
-    List<MedicalAppointmentResponseDTO> getAllMedicalAppointmentsPending(Integer id);
+    List<MedicalAppointmentResponseDTO> getAllMedicalAppointmentsPending(Integer id, Integer pageNo);
 }
