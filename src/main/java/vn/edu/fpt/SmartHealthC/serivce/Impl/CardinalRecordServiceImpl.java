@@ -3,7 +3,8 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeCardinalIndex;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.NumeralRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeTimeMeasure;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.CardinalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordResDTOFolder.CardinalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordResDTOFolder.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
@@ -11,51 +12,48 @@ import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
-import vn.edu.fpt.SmartHealthC.repository.NumeralRecordRepository;
-import vn.edu.fpt.SmartHealthC.serivce.NumeralRecordService;
+import vn.edu.fpt.SmartHealthC.repository.CardinalRecordRepository;
+import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
-public class NumeralRecordServiceImpl implements NumeralRecordService {
+public class CardinalRecordServiceImpl implements CardinalRecordService {
 
     @Autowired
-    private NumeralRecordRepository numeralRecordRepository;
+    private CardinalRecordRepository CardinalRecordRepository;
     @Autowired
     private AppUserRepository appUserRepository;
     @Override
-    public CardinalRecord createNumeralRecord(NumeralRecordDTO numeralRecordDTO)
+    public CardinalRecord createCardinalRecord(CardinalRecordDTO CardinalRecordDTO)
     {
         CardinalRecord cardinalRecord =  CardinalRecord.builder()
-                .value(numeralRecordDTO.getValue())
-                .weekStart(numeralRecordDTO.getWeekStart())
-                .date(numeralRecordDTO.getDate())
-                .typeCardinalIndex(numeralRecordDTO.getTypeCardinalIndex())
-                .timeMeasure(numeralRecordDTO.getTimeMeasure()).build();
-        Optional<AppUser> appUser = appUserRepository.findById(numeralRecordDTO.getAppUserId());
+                .value(CardinalRecordDTO.getValue())
+                .weekStart(CardinalRecordDTO.getWeekStart())
+                .date(CardinalRecordDTO.getDate())
+                .typeCardinalIndex(CardinalRecordDTO.getTypeCardinalIndex())
+                .timeMeasure(CardinalRecordDTO.getTimeMeasure()).build();
+        Optional<AppUser> appUser = appUserRepository.findById(CardinalRecordDTO.getAppUserId());
         if(appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         cardinalRecord.setAppUserId(appUser.get());
-        return  numeralRecordRepository.save(cardinalRecord);
+        return  CardinalRecordRepository.save(cardinalRecord);
     }
 
     @Override
-    public CardinalRecord getNumeralRecordById(Integer id) {
-        Optional<CardinalRecord> numeralRecord = numeralRecordRepository.findById(id);
-        if(numeralRecord.isEmpty()) {
-            throw new AppException(ErrorCode.NUMERAL_NOT_FOUND);
+    public CardinalRecord getCardinalRecordById(Integer id) {
+        Optional<CardinalRecord> CardinalRecord = CardinalRecordRepository.findById(id);
+        if(CardinalRecord.isEmpty()) {
+            throw new AppException(ErrorCode.CARDINAL_NOT_FOUND);
         }
-        return numeralRecord.get();
+        return CardinalRecord.get();
     }
 
     @Override
-    public List<CardinalRecordResponseDTO> getAllNumeralRecords(Integer userId) {
+    public List<CardinalRecordResponseDTO> getAllCardinalRecords(Integer userId) {
 
-        List<Date> cardinalWeekList = numeralRecordRepository.findDistinctWeek(userId);
+        List<Date> cardinalWeekList = CardinalRecordRepository.findDistinctWeek(userId);
         List<CardinalRecordResponseDTO> responseDTOList = new ArrayList<>();
         for (Date week : cardinalWeekList) {
             CardinalRecordResponseDTO cardinalRecordResponseDTO = CardinalRecordResponseDTO.builder()
@@ -66,7 +64,7 @@ public class NumeralRecordServiceImpl implements NumeralRecordService {
         }
 
         for (CardinalRecordResponseDTO record : responseDTOList) {
-            List<CardinalRecord> cardinalRecords = numeralRecordRepository.findByWeekStart(record.getWeekStart());
+            List<CardinalRecord> cardinalRecords = CardinalRecordRepository.findByWeekStart(record.getWeekStart());
             List<RecordPerDay> recordPerDayList = new ArrayList<>();
             Float avgCholesterol = 0f;
             Float avgHBA1C = 0f;
@@ -82,6 +80,8 @@ public class NumeralRecordServiceImpl implements NumeralRecordService {
                         .HBA1C(cardinalRecord.getValue())
                         .BloodSugar(cardinalRecord.getValue()).build();
                 recordPerDayList.add(recordPerDay);
+                //sortby getTimeMeasure getIndex
+                recordPerDayList.sort(Comparator.comparingInt(o -> TypeTimeMeasure.getIndex(o.getTimeMeasure())));
                 if (cardinalRecord.getTypeCardinalIndex().equals(TypeCardinalIndex.Cholesterol) ) {
                     if(cardinalRecord.getValue() != null){
                         avgCholesterol += cardinalRecord.getValue();
@@ -119,7 +119,7 @@ public class NumeralRecordServiceImpl implements NumeralRecordService {
 
     @Override
     public List<CardinalRecordResponseDTO> getAllCardinalRecordsByAppUserId(Integer id) {
-//        List<CardinalRecord> cardinalRecords = numeralRecordRepository.findByAppUserId();
+//        List<CardinalRecord> cardinalRecords = CardinalRecordRepository.findByAppUserId();
         List<CardinalRecordResponseDTO> responseDTOList = new ArrayList<>();
 //        for (CardinalRecord cardinalRecord : cardinalRecords) {
 //            CardinalRecordResponseDTO cardinalRecordResponseDTO = CardinalRecordResponseDTO.builder()
@@ -137,26 +137,26 @@ public class NumeralRecordServiceImpl implements NumeralRecordService {
     }
 
     @Override
-    public List<CardinalRecord> getAllNumeralRecordsVip() {
-        return numeralRecordRepository.findAll();
+    public List<CardinalRecord> getAllCardinalRecordsVip() {
+        return CardinalRecordRepository.findAll();
     }
 
 
     @Override
-    public CardinalRecord updateNumeralRecord(Integer id, NumeralRecordDTO numeralRecordDTO) {
-        CardinalRecord cardinalRecord = getNumeralRecordById(id);
-        cardinalRecord.setValue(numeralRecordDTO.getValue());
-        cardinalRecord.setWeekStart(numeralRecordDTO.getWeekStart());
-        cardinalRecord.setDate(numeralRecordDTO.getDate());
-        cardinalRecord.setTypeCardinalIndex(numeralRecordDTO.getTypeCardinalIndex());
-        cardinalRecord.setTimeMeasure(numeralRecordDTO.getTimeMeasure());
-        return  numeralRecordRepository.save(cardinalRecord);
+    public CardinalRecord updateCardinalRecord(Integer id, CardinalRecordDTO CardinalRecordDTO) {
+        CardinalRecord cardinalRecord = getCardinalRecordById(id);
+        cardinalRecord.setValue(CardinalRecordDTO.getValue());
+        cardinalRecord.setWeekStart(CardinalRecordDTO.getWeekStart());
+        cardinalRecord.setDate(CardinalRecordDTO.getDate());
+        cardinalRecord.setTypeCardinalIndex(CardinalRecordDTO.getTypeCardinalIndex());
+        cardinalRecord.setTimeMeasure(CardinalRecordDTO.getTimeMeasure());
+        return  CardinalRecordRepository.save(cardinalRecord);
     }
 
     @Override
-    public CardinalRecord deleteNumeralRecord(Integer id) {
-        CardinalRecord cardinalRecord = getNumeralRecordById(id);
-        numeralRecordRepository.deleteById(id);
+    public CardinalRecord deleteCardinalRecord(Integer id) {
+        CardinalRecord cardinalRecord = getCardinalRecordById(id);
+        CardinalRecordRepository.deleteById(id);
         return cardinalRecord;
     }
 

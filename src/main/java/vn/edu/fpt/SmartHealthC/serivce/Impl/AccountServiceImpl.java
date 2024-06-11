@@ -5,13 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.AvailableMSResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.Question;
@@ -86,14 +85,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AppUserResponseDTO> getPendingAccount(Integer pageNo) {
+    public ResponsePaging<List<AppUserResponseDTO>> getPendingAccount(Integer pageNo) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
         Page<AppUser> pagedResult = appUserRepository.findAll(paging);
         List<AppUser> accountList = new ArrayList<>();
-        if(pagedResult.hasContent()) {
+        if (pagedResult.hasContent()) {
             accountList = pagedResult.getContent();
         }
-        return accountList.stream()
+        List<AppUserResponseDTO> listResponse = accountList.stream()
                 .filter(record -> (!record.getAccountId().getIsActive() && record.getAccountId().getType().equals(TypeAccount.USER)))
                 .map(record -> {
                     AppUserResponseDTO dto = new AppUserResponseDTO();
@@ -108,6 +107,12 @@ public class AccountServiceImpl implements AccountService {
                     return dto;
                 })
                 .toList();
+        return ResponsePaging.<List<AppUserResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(listResponse)
+                .build();
     }
 
 
@@ -115,9 +120,9 @@ public class AccountServiceImpl implements AccountService {
     public List<AvailableMSResponseDTO> getAvailableMS() {
         List<WebUser> accountList = webUserService.getAllWebUsers();
         return accountList.stream().filter(record ->
-                (record.getAccountId().getIsActive()
-                        && record.getAppUserList().size() < 10
-                ))
+                        (record.getAccountId().getIsActive()
+                                && record.getAppUserList().size() < 10
+                        ))
                 .map(record -> {
                     AvailableMSResponseDTO dto = new AvailableMSResponseDTO();
                     dto.setId(record.getId());

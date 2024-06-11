@@ -38,7 +38,7 @@ public enum ErrorCode {
     SF_NOT_FOUND("SF not found", HttpStatus.NOT_FOUND),
     STEP_RECORD_NOT_FOUND("Step record not found", HttpStatus.NOT_FOUND),
     QUESTION_NOT_FOUND("Question not found", HttpStatus.NOT_FOUND),
-    NUMERAL_NOT_FOUND("Numeral not found", HttpStatus.NOT_FOUND),
+    CARDINAL_NOT_FOUND("Numeral not found", HttpStatus.NOT_FOUND),
     MONTHLY_QUESTION_NOTFOUND("Monthly Question not found", HttpStatus.NOT_FOUND),
     RULE_FOR_PLAN_NOTFOUND("Rule For Plan not found", HttpStatus.NOT_FOUND),
     MENTAL_RULE_NOT_FOUND("Mental Rule not found", HttpStatus.NOT_FOUND),
