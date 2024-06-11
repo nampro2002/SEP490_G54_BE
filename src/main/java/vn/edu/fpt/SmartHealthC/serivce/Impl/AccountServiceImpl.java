@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AvailableMSResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
@@ -19,7 +22,10 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AccountService;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
+import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,46 +39,89 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private AppUserRepository appUserRepository;
+    private AppUserService appUserService;
     @Autowired
     private JwtProvider jwtProvider;
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private WebUserService webUserService;
+    @Autowired
+    private AppUserRepository appUserRepository;
 
-    @Override
-    public AuthenticationResponseDto loginStaff(LoginDto request) {
-        Optional<Account> optionalUser = accountRepository.findByEmail(request.getEmail());
-        if (optionalUser.isEmpty()) {
-            throw new AppException(ErrorCode.CREDENTIAL_INVALID);
-        }
-        Account existingUser = optionalUser.get();
-        //check password
-        if (!passwordEncoder.matches(request.getPassword(), existingUser.getPassword())) {
-            throw new AppException(ErrorCode.CREDENTIAL_INVALID);
-        }
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        var jwt = jwtProvider.generateToken(optionalUser.get());
-        return AuthenticationResponseDto.builder()
-                .type(optionalUser.get().getType())
-                .token(jwt)
-                .build();
-    }
+//    @Override
+//    public AuthenticationResponseDto loginStaff(LoginDto request) {
+//        Optional<Account> optionalUser = accountRepository.findByEmail(request.getEmail());
+//        if (optionalUser.isEmpty()) {
+//            throw new AppException(ErrorCode.CREDENTIAL_INVALID);
+//        }
+//        Account existingUser = optionalUser.get();
+//        //check password
+//        if (!passwordEncoder.matches(request.getPassword(), existingUser.getPassword())) {
+//            throw new AppException(ErrorCode.CREDENTIAL_INVALID);
+//        }
+//        authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(
+//                        request.getEmail(),
+//                        request.getPassword()
+//                )
+//        );
+//        var jwt = jwtProvider.generateToken(optionalUser.get());
+//        return AuthenticationResponseDto.builder()
+//                .type(optionalUser.get().getType())
+//                .idUser(optionalUser.get().getId())
+//                .token(jwt)
+//                .build();
+//    }
 
     @Override
     public boolean activateAccount(Integer id) {
         AppUser appUser = appUserRepository.findById(id).orElseThrow();
-        if (!(appUser.getWebUserId() == null)) {
+        if (!(appUser.getWebUser() == null)) {
             Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
             account.setIsActive(true);
             accountRepository.save(account);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<AppUserResponseDTO> getPendingAccount() {
+        List<AppUser> accountList = appUserService.findAll();
+        return accountList.stream()
+                .filter(record -> (!record.getAccountId().getIsActive() && record.getAccountId().getType().equals(TypeAccount.USER)))
+                .map(record -> {
+                    AppUserResponseDTO dto = new AppUserResponseDTO();
+                    dto.setAccountId(record.getAccountId().getId());
+                    dto.setEmail(record.getAccountId().getEmail());
+                    return getAppUserResponseDTO(record, dto);
+                })
+                .toList();
+    }
+
+    private AppUserResponseDTO getAppUserResponseDTO(AppUser record, AppUserResponseDTO dto) {
+        dto.setAppUserId(record.getId());
+        dto.setName(record.getName());
+        dto.setHospitalNumber(record.getHospitalNumber());
+        dto.setDob(record.getDob());
+        dto.setGender(record.isGender());
+        dto.setPhoneNumber(record.getPhoneNumber());
+        return dto;
+    }
+
+    @Override
+    public List<AvailableMSResponseDTO> getAvailableMS() {
+        List<WebUser> accountList = webUserService.getAllWebUsers();
+        return accountList.stream().filter(record ->
+                (record.getAccountId().getIsActive()
+                        && record.getAccountId().getType().equals(TypeAccount.MEDICAL_SPECIALIST)
+                        && record.getAppUserList().size() < 10
+                ))
+                .map(record -> {
+                    AvailableMSResponseDTO dto = new AvailableMSResponseDTO();
+                    dto.setId(record.getId());
+                    dto.setMedicalSpecialistName(record.getUserName());
+                    return dto;
+                }).toList();
     }
 
     @Override
@@ -85,8 +134,8 @@ public class AccountServiceImpl implements AccountService {
         Account newAccount = Account.builder()
                 .email(account.getEmail())
                 .password(encodedPassword)
-                .type(TypeAccount.ADMIN)
-                .isActive(false)
+                .type(account.getTypeAccount())
+                .isActive(true)
                 .build();
         newAccount = accountRepository.save(newAccount);
         WebUser newAppUserInfo = WebUser.builder()
@@ -98,6 +147,7 @@ public class AccountServiceImpl implements AccountService {
         var jwt = jwtProvider.generateToken(newAccount);
         return AuthenticationResponseDto.builder()
                 .type(newAccount.getType())
+                .idUser(newAccount.getId())
                 .token(jwt)
                 .build();
     }
@@ -124,6 +174,7 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
     }
+
 
     @Override
     public Account updateAccount(Account account) {

@@ -11,6 +11,6 @@ public interface FormQuestionService {
     FormQuestion createFormQuestion(FormQuestionRequestDTO formQuestion);
     FormQuestion  getFormQuestionById(Integer id);
     List<FormQuestion> getAllFormQuestions();
-    FormQuestion updateFormQuestion(FormQuestionRequestDTO formQuestion);
+    FormQuestion updateFormQuestion(Integer id,FormQuestionRequestDTO formQuestion);
     FormQuestion deleteFormQuestion(Integer id);
 }

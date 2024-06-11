@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface SAT_SF_P_RecordService {
     SAT_SF_P_Record createSAT_SF_P_Record(SAT_SF_P_RecordDTO sat_sf_p_recordDTO);
-    Optional<SAT_SF_P_Record> getSAT_SF_P_RecordById(Integer id);
+    SAT_SF_P_Record getSAT_SF_P_RecordById(Integer id);
     List<SAT_SF_P_Record> getAllSAT_SF_P_Records();
-    SAT_SF_P_Record updateSAT_SF_P_Record(SAT_SF_P_RecordDTO sat_sf_p_recordDTO);
-    void deleteSAT_SF_P_Record(Integer id);
+    SAT_SF_P_Record updateSAT_SF_P_Record(Integer id, SAT_SF_P_RecordDTO sat_sf_p_recordDTO);
+    SAT_SF_P_Record deleteSAT_SF_P_Record(Integer id);
 }

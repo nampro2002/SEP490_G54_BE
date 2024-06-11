@@ -1,33 +1,27 @@
-package vn.edu.fpt.SmartHealthC.domain.dto.request;
+package vn.edu.fpt.SmartHealthC.domain.dto.response;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
-
 import java.util.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionDTO {
+public class QuestionResponseDTO {
+    private Integer id;
 
+    private String appUserName;
 
-    private int appUserId;
+    private String webUserName;
 
-    private int webUserId;
-
-    private TypeUserQuestion typeUserQuestion;
-
-    private String  title;
+    private String title;
 
     private String body;
 
     private String answer;
 
     private Date questionDate;
-
 }

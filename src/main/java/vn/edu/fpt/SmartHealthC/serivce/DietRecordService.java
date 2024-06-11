@@ -11,6 +11,6 @@ public interface DietRecordService {
     DietRecord createDietRecord(DietRecordDTO dietRecordDTO);
     DietRecord getDietRecordById(Integer id);
     List<DietRecord> getAllDietRecords();
-    DietRecord updateDietRecord(DietRecordDTO dietRecordDTO);
+    DietRecord updateDietRecord(Integer id,DietRecordDTO dietRecordDTO);
     DietRecord deleteDietRecord(Integer id);
 }

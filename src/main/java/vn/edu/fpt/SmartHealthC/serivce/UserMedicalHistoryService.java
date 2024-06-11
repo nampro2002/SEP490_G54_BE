@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface UserMedicalHistoryService {
     UserMedicalHistory createUserMedicalHistory(UserMedicalHistoryDTO userMedicalHistoryDTO);
-    Optional<UserMedicalHistory> getUserMedicalHistoryById(Integer id);
+    UserMedicalHistory getUserMedicalHistoryById(Integer id);
     List<UserMedicalHistory> getAllUserMedicalHistory();
-    UserMedicalHistory updateUserMedicalHistory(UserMedicalHistoryDTO userMedicalHistoryDTO);
-    void deleteUserMedicalHistory(Integer id);
+//    UserMedicalHistory updateUserMedicalHistory(Integer id, UserMedicalHistoryDTO userMedicalHistoryDTO);
+    UserMedicalHistory deleteUserMedicalHistory(Integer id);
 }

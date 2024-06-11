@@ -53,7 +53,7 @@ public class DietRecordController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<DietRecord>builder()
                         .code(HttpStatus.OK.value())
-                        .result(dietRecordService.updateDietRecord(dietRecordDTO))
+                        .result(dietRecordService.updateDietRecord(id, dietRecordDTO))
                         .build()).getBody();
     }
 

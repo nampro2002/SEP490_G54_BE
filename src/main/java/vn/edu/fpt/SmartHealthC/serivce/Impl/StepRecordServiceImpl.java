@@ -6,6 +6,8 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MentalRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.StepRecordRepository;
@@ -38,8 +40,12 @@ public class StepRecordServiceImpl implements StepRecordService {
     }
 
     @Override
-    public Optional<StepRecord> getStepRecordById(Integer id) {
-        return stepRecordRepository.findById(id);
+    public StepRecord getStepRecordById(Integer id) {
+        Optional<StepRecord> stepRecord = stepRecordRepository.findById(id);
+        if(stepRecord.isEmpty()){
+            throw new AppException(ErrorCode.STEP_RECORD_NOT_FOUND);
+        }
+        return stepRecord.get();
     }
 
     @Override
@@ -48,22 +54,19 @@ public class StepRecordServiceImpl implements StepRecordService {
     }
 
     @Override
-    public StepRecord updateStepRecord(StepRecordDTO stepRecordDTO) {
-        StepRecord stepRecord =  StepRecord.builder()
-                .id(stepRecordDTO.getId())
-                .plannedStepPerDay(stepRecordDTO.getPlannedStepPerDay())
-                .weekStart(stepRecordDTO.getWeekStart())
-                .date(stepRecordDTO.getDate()).build();
-        AppUser appUser = appUserRepository.findById(stepRecordDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
-
-        stepRecord.setAppUserId(appUser);
+    public StepRecord updateStepRecord( Integer id, StepRecordDTO stepRecordDTO) {
+        StepRecord stepRecord =  getStepRecordById(id);
+        stepRecord.setPlannedStepPerDay(stepRecordDTO.getPlannedStepPerDay());
+        stepRecord.setWeekStart(stepRecordDTO.getWeekStart());
+        stepRecord.setDate(stepRecordDTO.getDate());
         return  stepRecordRepository.save(stepRecord);
     }
 
     @Override
-    public void deleteStepRecord(Integer id) {
+    public StepRecord deleteStepRecord(Integer id) {
+        StepRecord stepRecord =  getStepRecordById(id);
         stepRecordRepository.deleteById(id);
+        return stepRecord;
     }
 
 

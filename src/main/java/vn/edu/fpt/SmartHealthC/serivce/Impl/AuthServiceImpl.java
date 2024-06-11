@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +31,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthServiceImpl implements AuthService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
@@ -60,6 +62,7 @@ public class AuthServiceImpl implements AuthService {
         var jwt = jwtProvider.generateToken(optionalUser.get());
         return AuthenticationResponseDto.builder()
                 .type(optionalUser.get().getType())
+                .idUser(optionalUser.get().getId())
                 .token(jwt)
                 .build();
     }
@@ -90,18 +93,20 @@ public class AuthServiceImpl implements AuthService {
                 .hospitalNumber(request.getHospitalNumber())
                 .build();
         newAppUserInfo = appUserRepository.save(newAppUserInfo);
-        for(Integer i : request.getListMedicalHistory()){
-            MedicalHistory medicalHistory = medicalHistoryRepository.findById(i)
-                    .orElseThrow();
-            UserMedicalHistory userMedicalHistory  = UserMedicalHistory
-                    .builder()
-                    .appUserId(newAppUserInfo)
-                    .conditionId(medicalHistory)
-                    .build();
-            userMedicalHistoryRepository.save(userMedicalHistory);
-        }
+//        for(Integer i : request.getListMedicalHistory()){
+//            MedicalHistory medicalHistory = medicalHistoryRepository.findById(i)
+//                    .orElseThrow();
+//            UserMedicalHistory userMedicalHistory  = UserMedicalHistory
+//                    .builder()
+//                    .appUserId(newAppUserInfo)
+//                    .conditionId(medicalHistory)
+//                    .build();
+//            userMedicalHistoryRepository.save(userMedicalHistory);
+//        }
         var jwt = jwtProvider.generateToken(newAccount);
         return AuthenticationResponseDto.builder()
+                .type(newAccount.getType())
+                .idUser(newAccount.getId())
                 .token(jwt)
                 .build();
     }

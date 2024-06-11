@@ -15,8 +15,6 @@ import java.util.Date;
 @Builder
 public class ActivityRecordDTO {
 
-    private int id;
-
     private int appUserId;
 
     private TypeActivity type;

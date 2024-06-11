@@ -1,10 +1,13 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.SF_Record;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
@@ -20,34 +23,47 @@ public class StepRecordController {
     private StepRecordService stepRecordService;
 
     @PostMapping
-    public ResponseEntity<StepRecord> createStepRecord(@RequestBody StepRecordDTO stepRecordDTO) {
-
-        StepRecord createdStepRecord= stepRecordService.createStepRecord(stepRecordDTO);
-        return ResponseEntity.ok(createdStepRecord);
+    public ApiResponse<StepRecord> createStepRecord(@RequestBody StepRecordDTO stepRecordDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<StepRecord>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(stepRecordService.createStepRecord(stepRecordDTO))
+                        .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StepRecord> getStepRecordById(@PathVariable Integer id) {
-        Optional<StepRecord> stepRecord = stepRecordService.getStepRecordById(id);
-        return stepRecord.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ApiResponse<StepRecord> getStepRecordById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<StepRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(stepRecordService.getStepRecordById(id))
+                        .build()).getBody();
     }
 
     @GetMapping
-    public ResponseEntity<List<StepRecord>> getAllStepRecords() {
-        List<StepRecord> stepRecords = stepRecordService.getAllStepRecords();
-        return ResponseEntity.ok(stepRecords);
+    public ApiResponse<List<StepRecord>> getAllStepRecords() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<StepRecord>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(stepRecordService.getAllStepRecords())
+                        .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StepRecord> updateStepRecord(@PathVariable Integer id, @RequestBody StepRecordDTO stepRecordDTO) {
-        stepRecordDTO.setId(id);
-        StepRecord updatedStepRecord = stepRecordService.updateStepRecord(stepRecordDTO);
-        return ResponseEntity.ok(updatedStepRecord);
+    public ApiResponse<StepRecord> updateStepRecord(@PathVariable Integer id, @RequestBody StepRecordDTO stepRecordDTO) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<StepRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(stepRecordService.updateStepRecord(id, stepRecordDTO))
+                        .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStepRecord(@PathVariable Integer id) {
-        stepRecordService.deleteStepRecord(id);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<StepRecord> deleteStepRecord(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<StepRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result( stepRecordService.deleteStepRecord(id))
+                        .build()).getBody();
     }
 }

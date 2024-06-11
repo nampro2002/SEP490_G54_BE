@@ -6,6 +6,8 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.SAT_SF_P_RecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.SAT_SF_I_Record;
 import vn.edu.fpt.SmartHealthC.domain.entity.SAT_SF_P_Record;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.SAT_SF_P_RecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.SAT_SF_I_RecordService;
@@ -42,8 +44,12 @@ public class SAT_SF_P_RecordServiceImpl implements SAT_SF_P_RecordService {
     }
 
     @Override
-    public Optional<SAT_SF_P_Record> getSAT_SF_P_RecordById(Integer id) {
-        return sat_sf_p_recordRepository.findById(id);
+    public SAT_SF_P_Record getSAT_SF_P_RecordById(Integer id) {
+        Optional<SAT_SF_P_Record> record = sat_sf_p_recordRepository.findById(id);
+        if(record.isEmpty()){
+            throw new AppException(ErrorCode.SAT_SF_P_NOT_FOUND);
+        }
+        return record.get();
     }
 
     @Override
@@ -52,27 +58,23 @@ public class SAT_SF_P_RecordServiceImpl implements SAT_SF_P_RecordService {
     }
 
     @Override
-    public SAT_SF_P_Record updateSAT_SF_P_Record(SAT_SF_P_RecordDTO sat_sf_p_recordDTO) {
-        SAT_SF_P_Record sat_sf_p_record =  SAT_SF_P_Record.builder()
-                .id(sat_sf_p_recordDTO.getId())
-                .overallPoint(sat_sf_p_recordDTO.getOverallPoint())
-                .monthStart(sat_sf_p_recordDTO.getMonthStart())
-                .lifePursuit(sat_sf_p_recordDTO.getLifePursuit())
-                .planning(sat_sf_p_recordDTO.getPlanning())
-                .rightDecision(sat_sf_p_recordDTO.getRightDecision())
-                .priorityFocus(sat_sf_p_recordDTO.getPriorityFocus())
-                .healthyEnvironment(sat_sf_p_recordDTO.getHealthyEnvironment())
-                .build();
-        AppUser appUser = appUserRepository.findById(sat_sf_p_recordDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
-
-        sat_sf_p_record.setAppUserId(appUser);
-        return  sat_sf_p_recordRepository.save(sat_sf_p_record);
+    public SAT_SF_P_Record updateSAT_SF_P_Record(Integer id, SAT_SF_P_RecordDTO sat_sf_p_recordDTO) {
+        SAT_SF_P_Record sat_sf_i_record =  getSAT_SF_P_RecordById(id);
+        sat_sf_i_record.setOverallPoint( sat_sf_p_recordDTO.getOverallPoint());
+        sat_sf_i_record.setMonthStart( sat_sf_p_recordDTO.getMonthStart());
+        sat_sf_i_record.setLifePursuit( sat_sf_p_recordDTO.getLifePursuit());
+        sat_sf_i_record.setPlanning( sat_sf_p_recordDTO.getPlanning());
+        sat_sf_i_record.setHealthyEnvironment( sat_sf_p_recordDTO.getHealthyEnvironment());
+        sat_sf_i_record.setRightDecision( sat_sf_p_recordDTO.getRightDecision());
+        sat_sf_i_record.setPriorityFocus( sat_sf_p_recordDTO.getPriorityFocus());
+        return  sat_sf_p_recordRepository.save(sat_sf_i_record);
     }
 
     @Override
-    public void deleteSAT_SF_P_Record(Integer id) {
+    public SAT_SF_P_Record deleteSAT_SF_P_Record(Integer id) {
+        SAT_SF_P_Record sat_sf_i_record =  getSAT_SF_P_RecordById(id);
         sat_sf_p_recordRepository.deleteById(id);
+        return sat_sf_i_record;
     }
 
 

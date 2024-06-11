@@ -6,11 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeActivity;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicine;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
@@ -27,9 +24,9 @@ public class MedicineRecord {
     private AppUser appUserId;
 
     private Date weekStart;
-
-    @Enumerated(EnumType.STRING)
-    private TypeMedicine type;
+//
+//    @Enumerated(EnumType.STRING)
+//    private TypeMedicine type;
 
     private Float hour;
 

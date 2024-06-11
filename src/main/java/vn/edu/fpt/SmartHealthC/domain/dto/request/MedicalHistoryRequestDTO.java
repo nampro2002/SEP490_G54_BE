@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MedicalHistoryRequestDTO {
-    private Integer id;
 
     private String name;
 

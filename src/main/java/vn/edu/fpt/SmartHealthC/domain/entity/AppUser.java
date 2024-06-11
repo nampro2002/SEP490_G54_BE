@@ -22,9 +22,10 @@ public class AppUser {
     @JoinColumn(name = "account_id")
     private Account accountId;
 
-    @OneToOne
-    @JoinColumn(name = "webuser_id")
-    private WebUser webUserId;
+
+    @ManyToOne
+    @JoinColumn(name = "web_user_id")
+    private WebUser webUser;
 
     private String name;
 
@@ -38,8 +39,8 @@ public class AppUser {
 
     private Float weight;
 
-    private String  phoneNumber;
-    private String doctorNote;
+    private String phoneNumber;
+    private String medicalSpecialistNote;
 
 //    @OneToMany(mappedBy = "appUserId")
 //    private List<Question> question;

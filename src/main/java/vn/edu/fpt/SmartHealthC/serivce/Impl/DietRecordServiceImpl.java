@@ -55,8 +55,8 @@ public class DietRecordServiceImpl implements DietRecordService {
     }
 
     @Override
-    public DietRecord updateDietRecord(DietRecordDTO dietRecordDTO) {
-        DietRecord dietRecord = getDietRecordById(dietRecordDTO.getId());
+    public DietRecord updateDietRecord(Integer id,DietRecordDTO dietRecordDTO) {
+        DietRecord dietRecord = getDietRecordById(id);
         dietRecord.setDishPerDay(dietRecordDTO.getDishPerDay());
         dietRecord.setWeekStart(dietRecordDTO.getWeekStart());
         dietRecord.setDate(dietRecordDTO.getDate());

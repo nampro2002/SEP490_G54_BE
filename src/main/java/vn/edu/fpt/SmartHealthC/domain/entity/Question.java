@@ -37,13 +37,6 @@ public class Question {
 
     private String answer;
 
-    private boolean gender;
-
-    private Float height;
-
-    private Float weight;
-
-    private String phoneNumber;
     private Date questionDate;
 
 }

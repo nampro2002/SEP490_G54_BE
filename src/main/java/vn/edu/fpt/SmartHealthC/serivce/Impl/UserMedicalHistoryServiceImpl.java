@@ -42,8 +42,12 @@ public class UserMedicalHistoryServiceImpl implements UserMedicalHistoryService 
     }
 
     @Override
-    public Optional<UserMedicalHistory> getUserMedicalHistoryById(Integer id) {
-        return userMedicalHistoryRepository.findById(id);
+    public UserMedicalHistory getUserMedicalHistoryById(Integer id) {
+        Optional<UserMedicalHistory> userMedicalHistory = userMedicalHistoryRepository.findById(id);
+        if(userMedicalHistory.isEmpty()){
+            throw new AppException(ErrorCode.USER_MEDICAL_HISTORY_NOT_FOUND);
+        }
+        return userMedicalHistory.get();
     }
 
     @Override
@@ -51,26 +55,28 @@ public class UserMedicalHistoryServiceImpl implements UserMedicalHistoryService 
         return userMedicalHistoryRepository.findAll();
     }
 
-    @Override
-    public UserMedicalHistory updateUserMedicalHistory(UserMedicalHistoryDTO userMedicalHistoryDTO) {
-        UserMedicalHistory userMedicalHistory =  UserMedicalHistory.builder()
-                .id(userMedicalHistoryDTO.getId())
-                .build();
-        Optional<AppUser> appUser = appUserRepository.findById(userMedicalHistoryDTO.getAppUserId());
-        if(appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        Optional<MedicalHistory> medicalHistory = medicalHistoryRepository.findById(userMedicalHistoryDTO.getConditionId());
-        if(medicalHistory.isEmpty()) {
-            throw new AppException(ErrorCode.NOT_FOUND);
-        }
-        userMedicalHistory.setAppUserId(appUser.get());
-        userMedicalHistory.setConditionId(medicalHistory.get());
-        return userMedicalHistoryRepository.save(userMedicalHistory);
-    }
+//    @Override
+//    public UserMedicalHistory updateUserMedicalHistory(Integer id, UserMedicalHistoryDTO userMedicalHistoryDTO) {
+//        UserMedicalHistory userMedicalHistory = getUserMedicalHistoryById(id);
+//                .id(userMedicalHistoryDTO.getId())
+//                .build();
+//        Optional<AppUser> appUser = appUserRepository.findById(userMedicalHistoryDTO.getAppUserId());
+//        if(appUser.isEmpty()) {
+//            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+//        }
+//        Optional<MedicalHistory> medicalHistory = medicalHistoryRepository.findById(userMedicalHistoryDTO.getConditionId());
+//        if(medicalHistory.isEmpty()) {
+//            throw new AppException(ErrorCode.NOT_FOUND);
+//        }
+//        userMedicalHistory.setAppUserId(appUser.get());
+//        userMedicalHistory.setConditionId(medicalHistory.get());
+//        return userMedicalHistoryRepository.save(userMedicalHistory);
+//    }
 
     @Override
-    public void deleteUserMedicalHistory(Integer id) {
+    public UserMedicalHistory deleteUserMedicalHistory(Integer id) {
+        UserMedicalHistory userMedicalHistory = getUserMedicalHistoryById(id);
         userMedicalHistoryRepository.deleteById(id);
+        return userMedicalHistory;
     }
 }

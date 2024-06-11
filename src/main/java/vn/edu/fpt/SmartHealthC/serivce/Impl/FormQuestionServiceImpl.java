@@ -46,8 +46,8 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public FormQuestion updateFormQuestion(FormQuestionRequestDTO formQuestionRequestDTO) {
-        FormQuestion formQuestion = getFormQuestionById(formQuestionRequestDTO.getId());
+    public FormQuestion updateFormQuestion(Integer id,FormQuestionRequestDTO formQuestionRequestDTO) {
+        FormQuestion formQuestion = getFormQuestionById(id);
         formQuestion.setQuestion(formQuestionRequestDTO.getQuestion());
         formQuestion.setQuestionNumber(formQuestionRequestDTO.getQuestionNumber());
         formQuestion.setType(formQuestionRequestDTO.getType());

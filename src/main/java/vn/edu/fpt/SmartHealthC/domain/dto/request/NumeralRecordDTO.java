@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNumeral;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeCardinalIndex;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeTimeMeasure;
 
 import java.util.Date;
@@ -25,7 +25,7 @@ public class NumeralRecordDTO {
     private TypeTimeMeasure timeMeasure;
 
     @Enumerated(EnumType.STRING)
-    private TypeNumeral typeNumeral;
+    private TypeCardinalIndex typeCardinalIndex;
 
     private Date weekStart;
 

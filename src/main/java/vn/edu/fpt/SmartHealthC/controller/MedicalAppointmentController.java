@@ -53,7 +53,7 @@ public class MedicalAppointmentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicalAppointment>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicalAppointmentService.updateMedicalAppointment(medicalAppointmentDTO))
+                        .result(medicalAppointmentService.updateMedicalAppointment(id, medicalAppointmentDTO))
                         .build()).getBody();
     }
 

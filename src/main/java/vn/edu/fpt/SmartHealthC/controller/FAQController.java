@@ -49,7 +49,7 @@ public class FAQController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FAQ>builder()
                         .code(HttpStatus.OK.value())
-                        .result(faqService.updateFAQ(faq))
+                        .result(faqService.updateFAQ(id,faq))
                         .build()).getBody();
     }
 

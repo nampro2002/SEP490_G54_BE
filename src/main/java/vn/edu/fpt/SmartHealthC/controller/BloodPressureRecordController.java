@@ -49,11 +49,11 @@ public class BloodPressureRecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<BloodPressureRecord> updateBloodPressureRecord(@RequestBody BloodPressureRecordDTO bloodPressureRecordDTO) {
+    public ApiResponse<BloodPressureRecord> updateBloodPressureRecord(@PathVariable Integer id, @RequestBody BloodPressureRecordDTO bloodPressureRecordDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<BloodPressureRecord>builder()
                         .code(HttpStatus.OK.value())
-                        .result(bloodPressureRecordService.updateBloodPressureRecord(bloodPressureRecordDTO))
+                        .result(bloodPressureRecordService.updateBloodPressureRecord(id, bloodPressureRecordDTO))
                         .build()).getBody();
     }
 

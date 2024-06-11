@@ -15,8 +15,6 @@ import java.util.Date;
 @Builder
 public class MedicalAppointmentDTO {
 
-    private int id;
-
     private int appUserId;
 
     private String  location;

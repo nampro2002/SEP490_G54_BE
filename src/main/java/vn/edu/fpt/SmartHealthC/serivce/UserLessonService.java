@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface UserLessonService {
     UserLesson createUserLesson(UserLessonDTO userLessonDTO);
-    Optional<UserLesson> getUserLessonById(Integer id);
+    UserLesson getUserLessonById(Integer id);
     List<UserLesson> getAllUserLessons();
-    UserLesson updateUserLesson(UserLessonDTO userLessonDTO);
-    void deleteUserLesson(Integer id);
+    UserLesson updateUserLesson(Integer id,UserLessonDTO userLessonDTO);
+    UserLesson deleteUserLesson(Integer id);
 }

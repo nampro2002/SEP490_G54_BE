@@ -2,7 +2,10 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointmentStatus;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
@@ -27,7 +30,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     @Override
     public MedicalAppointment createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO) {
         MedicalAppointment medicalAppointment = MedicalAppointment.builder()
-                .type(medicalAppointmentDTO.getType())
+                .typeMedicalAppointment(medicalAppointmentDTO.getType())
                 .hospital(medicalAppointmentDTO.getLocation())
                 .date(medicalAppointmentDTO.getDate()).build();
         Optional<AppUser> appUser = appUserRepository.findById(medicalAppointmentDTO.getAppUserId());
@@ -54,9 +57,9 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     }
 
     @Override
-    public MedicalAppointment updateMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO) {
-        MedicalAppointment medicalAppointment = getMedicalAppointmentById(medicalAppointmentDTO.getId());
-        medicalAppointment.setType(medicalAppointmentDTO.getType());
+    public MedicalAppointment updateMedicalAppointment(Integer id, MedicalAppointmentDTO medicalAppointmentDTO) {
+        MedicalAppointment medicalAppointment = getMedicalAppointmentById(id);
+        medicalAppointment.setTypeMedicalAppointment(medicalAppointmentDTO.getType());
         medicalAppointment.setDate(medicalAppointmentDTO.getDate());
         medicalAppointment.setHospital(medicalAppointmentDTO.getLocation());
         return medicalAppointmentRepository.save(medicalAppointment);
@@ -67,6 +70,25 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         MedicalAppointment medicalAppointment = getMedicalAppointmentById(id);
         medicalAppointmentRepository.deleteById(id);
         return medicalAppointment;
+    }
+
+    @Override
+    public List<MedicalAppointmentResponseDTO> getAllMedicalAppointmentsPending(Integer id) {
+        List<MedicalAppointment> medicalAppointmentList =  getAllMedicalAppointments();
+        return medicalAppointmentList.stream()
+                .filter(record -> (record.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.PENDING)&&
+                record.getAppUserId().getId() == id))
+                .map(record -> {
+                    MedicalAppointmentResponseDTO dto = new MedicalAppointmentResponseDTO();
+                    dto.setId(record.getId());
+                    dto.setAppUserName(record.getAppUserId().getName());
+                    dto.setDate(record.getDate());
+                    dto.setHospital(record.getHospital());
+                    dto.setTypeMedicalAppointment(record.getTypeMedicalAppointment());
+                    dto.setStatusMedicalAppointment(record.getStatusMedicalAppointment());
+                    return dto;
+                })
+                .toList();
     }
 
 

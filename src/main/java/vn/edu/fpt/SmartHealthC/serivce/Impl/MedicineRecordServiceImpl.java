@@ -25,7 +25,6 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     @Override
     public MedicineRecord createMedicineRecord(MedicineRecordDTO medicineRecordDTO) {
         MedicineRecord medicineRecord =  MedicineRecord.builder()
-                .type(medicineRecordDTO.getType())
                 .hour(medicineRecordDTO.getHour())
                 .weekStart(medicineRecordDTO.getWeekStart())
                 .date(medicineRecordDTO.getDate())
@@ -57,7 +56,6 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     @Override
     public MedicineRecord updateMedicineRecord(Integer id, MedicineRecordDTO medicineRecordDTO) {
         MedicineRecord medicineRecord =  getMedicineRecordById(id);
-        medicineRecordDTO.setType(medicineRecordDTO.getType());
         medicineRecordDTO.setHour(medicineRecordDTO.getHour());
         medicineRecordDTO.setWeekStart(medicineRecordDTO.getWeekStart());
         medicineRecordDTO.setDate(medicineRecordDTO.getDate());

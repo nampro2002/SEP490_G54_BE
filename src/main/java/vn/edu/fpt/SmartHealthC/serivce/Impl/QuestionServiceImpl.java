@@ -2,7 +2,9 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -32,7 +34,9 @@ public class QuestionServiceImpl implements QuestionService {
         Question question =  Question.builder()
                 .title(questionDTO.getTitle())
                 .body(questionDTO.getBody())
-                .answer(questionDTO.getAnswer()).build();
+                .typeUserQuestion(questionDTO.getTypeUserQuestion())
+                .questionDate(questionDTO.getQuestionDate())
+                .build();
         Optional<AppUser> appUser = appUserRepository.findById(questionDTO.getAppUserId());
         if(appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
@@ -66,6 +70,8 @@ public class QuestionServiceImpl implements QuestionService {
         question.setTitle(questionDTO.getTitle());
         question.setBody(questionDTO.getBody());
         question.setAnswer(questionDTO.getAnswer());
+        question.setQuestionDate(questionDTO.getQuestionDate());
+        question.setTypeUserQuestion(questionDTO.getTypeUserQuestion());
         return  questionRepository.save(question);
     }
 
@@ -74,6 +80,27 @@ public class QuestionServiceImpl implements QuestionService {
         Question question  = getQuestionById(id);
         questionRepository.deleteById(id);
         return question;
+    }
+
+    @Override
+    public List<QuestionResponseDTO> getAllQuestionsByType(TypeUserQuestion typeUserQuestion) {
+        List<Question> questionList = getAllQuestions();
+        List<QuestionResponseDTO> responseDTOList = questionList.stream()
+                .filter(question -> (question.getAnswer() == null || question.getAnswer().isEmpty()) &&
+                        question.getTypeUserQuestion() == typeUserQuestion)
+                .map(question -> {
+                    QuestionResponseDTO dto = new QuestionResponseDTO();
+                    dto.setId(question.getId());
+                    dto.setAppUserName(question.getAppUserId().getName());
+                    dto.setWebUserName(question.getWebUserId().getUserName());
+                    dto.setTitle(question.getTitle());
+                    dto.setBody(question.getBody());
+                    dto.setAnswer(question.getAnswer());
+                    dto.setQuestionDate(question.getQuestionDate());
+                    return dto;
+                })
+                .toList();
+        return responseDTOList;
     }
 
 
