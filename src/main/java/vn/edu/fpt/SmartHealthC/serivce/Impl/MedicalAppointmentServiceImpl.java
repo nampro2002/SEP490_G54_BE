@@ -37,7 +37,10 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         MedicalAppointment medicalAppointment = MedicalAppointment.builder()
                 .typeMedicalAppointment(medicalAppointmentDTO.getType())
                 .hospital(medicalAppointmentDTO.getLocation())
-                .date(medicalAppointmentDTO.getDate()).build();
+                .date(medicalAppointmentDTO.getDate())
+                .statusMedicalAppointment(TypeMedicalAppointmentStatus.PENDING)
+                .build();
+
         Optional<AppUser> appUser = appUserRepository.findById(medicalAppointmentDTO.getAppUserId());
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);

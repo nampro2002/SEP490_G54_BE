@@ -1,16 +1,24 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NumeralRecordDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.NumeralRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.NumeralRecord;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordResDTOFolder.CardinalRecordResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.NMRDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface NumeralRecordService {
-    NumeralRecord createNumeralRecord(NumeralRecordDTO numeralRecordDTO);
-   NumeralRecord getNumeralRecordById(Integer id);
-    List<NumeralRecord> getAllNumeralRecords();
-    NumeralRecord updateNumeralRecord(Integer id,NumeralRecordDTO numeralRecordDTO);
-    NumeralRecord deleteNumeralRecord(Integer id);
+    CardinalRecord createNumeralRecord(NumeralRecordDTO numeralRecordDTO);
+
+    CardinalRecord getNumeralRecordById(Integer id);
+
+    List<CardinalRecordResponseDTO> getAllNumeralRecords(Integer userId);
+
+    CardinalRecord updateNumeralRecord(Integer id, NumeralRecordDTO numeralRecordDTO);
+
+    CardinalRecord deleteNumeralRecord(Integer id);
+
+    List<CardinalRecordResponseDTO> getAllCardinalRecordsByAppUserId(Integer id);
+
+    List<CardinalRecord> getAllNumeralRecordsVip();
 }

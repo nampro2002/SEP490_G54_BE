@@ -4,15 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyQuestion;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MonthlyQuestionRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MonthlyQuestionService;
-import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,27 +23,26 @@ public class MonthlyQuestionServiceImpl implements MonthlyQuestionService {
     private AppUserRepository appUserRepository;
 
     @Override
-    public MonthlyQuestion createMonthlyQuestion(MonthlyQuestionDTO monthlyQuestionDTO)
-    {
-        MonthlyQuestion monthlyQuestion =  MonthlyQuestion.builder()
+    public MonthlyRecord createMonthlyQuestion(MonthlyQuestionDTO monthlyQuestionDTO) {
+        MonthlyRecord monthlyRecord = MonthlyRecord.builder()
                 .monthStart(monthlyQuestionDTO.getMonthStart())
-                .isSAT(monthlyQuestionDTO.getIsSAT())
+                .monthlyRecordType(monthlyQuestionDTO.getMonthlyRecordType())
                 .questionNumber(monthlyQuestionDTO.getQuestionNumber())
                 .question(monthlyQuestionDTO.getQuestion())
                 .answer(monthlyQuestionDTO.getAnswer())
                 .build();
         Optional<AppUser> appUser = appUserRepository.findById(monthlyQuestionDTO.getAppUserId());
-        if(appUser.isEmpty()) {
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
-        monthlyQuestion.setAppUserId(appUser.get());
-        return  monthlyQuestionRepository.save(monthlyQuestion);
+        monthlyRecord.setAppUserId(appUser.get());
+        return monthlyQuestionRepository.save(monthlyRecord);
     }
 
     @Override
-    public MonthlyQuestion getMonthlyQuestionById(Integer id) {
-        Optional<MonthlyQuestion> monthlyQuestion = monthlyQuestionRepository.findById(id);
-        if(monthlyQuestion.isEmpty()) {
+    public MonthlyRecord getMonthlyQuestionById(Integer id) {
+        Optional<MonthlyRecord> monthlyQuestion = monthlyQuestionRepository.findById(id);
+        if (monthlyQuestion.isEmpty()) {
             throw new AppException(ErrorCode.MONTHLY_QUESTION_NOTFOUND);
         }
 
@@ -54,27 +50,27 @@ public class MonthlyQuestionServiceImpl implements MonthlyQuestionService {
     }
 
     @Override
-    public List<MonthlyQuestion> getAllMonthlyQuestions() {
+    public List<MonthlyRecord> getAllMonthlyQuestions() {
         return monthlyQuestionRepository.findAll();
     }
 
     @Override
-    public MonthlyQuestion updateMonthlyQuestion(Integer id,MonthlyQuestionDTO monthlyQuestionDTO) {
+    public MonthlyRecord updateMonthlyQuestion(Integer id, MonthlyQuestionDTO monthlyQuestionDTO) {
 
-        MonthlyQuestion monthlyQuestion = getMonthlyQuestionById(id);
-        monthlyQuestion.setMonthStart(monthlyQuestionDTO.getMonthStart());
-        monthlyQuestion.setIsSAT(monthlyQuestionDTO.getIsSAT());
-        monthlyQuestion.setQuestionNumber(monthlyQuestionDTO.getQuestionNumber());
-        monthlyQuestion.setQuestion(monthlyQuestionDTO.getQuestion());
-        monthlyQuestion.setAnswer(monthlyQuestionDTO.getAnswer());
-        return  monthlyQuestionRepository.save(monthlyQuestion);
+        MonthlyRecord monthlyRecord = getMonthlyQuestionById(id);
+        monthlyRecord.setMonthStart(monthlyQuestionDTO.getMonthStart());
+        monthlyRecord.setMonthlyRecordType(monthlyQuestionDTO.getMonthlyRecordType());
+        monthlyRecord.setQuestionNumber(monthlyQuestionDTO.getQuestionNumber());
+        monthlyRecord.setQuestion(monthlyQuestionDTO.getQuestion());
+        monthlyRecord.setAnswer(monthlyQuestionDTO.getAnswer());
+        return monthlyQuestionRepository.save(monthlyRecord);
     }
 
     @Override
-    public MonthlyQuestion deleteMonthlyQuestion(Integer id) {
-        MonthlyQuestion monthlyQuestion = getMonthlyQuestionById(id);
+    public MonthlyRecord deleteMonthlyQuestion(Integer id) {
+        MonthlyRecord monthlyRecord = getMonthlyQuestionById(id);
         monthlyQuestionRepository.deleteById(id);
-        return monthlyQuestion;
+        return monthlyRecord;
     }
 
 

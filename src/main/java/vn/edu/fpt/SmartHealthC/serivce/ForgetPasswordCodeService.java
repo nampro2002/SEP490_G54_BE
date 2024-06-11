@@ -1,7 +1,16 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ForgetPasswordCodeDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.ForgetPasswordCode;
+import vn.edu.fpt.SmartHealthC.domain.entity.ForgetPasswordCode;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface ForgetPasswordCodeService {
-    String sendEmailCode(ForgetPasswordCodeDTO forgetPasswordCodeDTO);
+    ForgetPasswordCode createForgetPasswordCode(ForgetPasswordCodeDTO forgetPasswordCodeDTO);
+    ForgetPasswordCode getForgetPasswordCodeById(Integer id);
+    List<ForgetPasswordCode> getAllForgetPasswordCodes();
+    ForgetPasswordCode updateForgetPasswordCode( Integer id,ForgetPasswordCodeDTO forgetPasswordCodeDTO);
+    ForgetPasswordCode deleteForgetPasswordCode(Integer id);
 }

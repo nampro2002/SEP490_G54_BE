@@ -61,7 +61,7 @@ public class DashboardController {
                         .result(responseDTOList)
                         .build()).getBody();
     }
-    @GetMapping("/medical-appointment")
+    @GetMapping("/medical-appointment/{id}")
     public ApiResponse<List<MedicalAppointmentResponseDTO>> getQuestionResponseList(@PathVariable Integer id, @RequestParam(defaultValue = "0") Integer pageNo){
         List<MedicalAppointmentResponseDTO> medicalAppointmentResponseDTOList = medicalAppointmentService.getAllMedicalAppointmentsPending(id, pageNo);
         return ResponseEntity.status(HttpStatus.OK)

@@ -6,13 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NumeralRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.NumeralRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordResDTOFolder.CardinalRecordResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.NMRDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.serivce.NumeralRecordService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/numeral-records")
@@ -22,48 +21,58 @@ public class NumeralRecordController {
     private NumeralRecordService numeralRecordService;
 
     @PostMapping
-    public ApiResponse<NumeralRecord> createNumeralRecord(@RequestBody NumeralRecordDTO numeralRecordDTO) {
+    public ApiResponse<CardinalRecord> createNumeralRecord(@RequestBody NumeralRecordDTO numeralRecordDTO) {
 
-        NumeralRecord createdNumeralRecord= numeralRecordService.createNumeralRecord(numeralRecordDTO);
+        CardinalRecord createdCardinalRecord = numeralRecordService.createNumeralRecord(numeralRecordDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.<NumeralRecord>builder()
+                .body(ApiResponse.<CardinalRecord>builder()
                         .code(HttpStatus.CREATED.value())
-                        .result(createdNumeralRecord)
+                        .result(createdCardinalRecord)
                         .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<NumeralRecord> getNumeralRecordById(@PathVariable Integer id) {
+    public ApiResponse<CardinalRecord> getNumeralRecordById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<NumeralRecord>builder()
+                .body(ApiResponse.<CardinalRecord>builder()
                         .code(HttpStatus.OK.value())
                         .result(numeralRecordService.getNumeralRecordById(id))
                         .build()).getBody();
     }
 
-    @GetMapping
-    public ApiResponse<List<NumeralRecord>> getAllNumeralRecords() {
+    @GetMapping("getByAppUser/{id}")
+    public ApiResponse< List<CardinalRecordResponseDTO>> getAllNumeralRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<NumeralRecord>>builder()
+                .body(ApiResponse.< List<CardinalRecordResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(numeralRecordService.getAllNumeralRecords())
+                        .result(numeralRecordService.getAllNumeralRecords(id))
                         .build()).getBody();
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<NumeralRecord> updateNumeralRecord(@PathVariable Integer id,@RequestBody NumeralRecordDTO numeralRecordDTO) {
-        NumeralRecord updatedNumeralRecord = numeralRecordService.updateNumeralRecord(id,numeralRecordDTO);
+    @GetMapping("/vip")
+    public ApiResponse< List<CardinalRecord>> getAllNumeralRecordsVip() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<NumeralRecord>builder()
+                .body(ApiResponse.< List<CardinalRecord>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(updatedNumeralRecord)
+                        .result(numeralRecordService.getAllNumeralRecordsVip())
+                        .build()).getBody();
+    }
+
+
+    @PutMapping("/{id}")
+    public ApiResponse<CardinalRecord> updateNumeralRecord(@PathVariable Integer id, @RequestBody NumeralRecordDTO numeralRecordDTO) {
+        CardinalRecord updatedCardinalRecord = numeralRecordService.updateNumeralRecord(id,numeralRecordDTO);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<CardinalRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(updatedCardinalRecord)
                         .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<NumeralRecord> deleteNumeralRecord(@PathVariable Integer id) {
+    public ApiResponse<CardinalRecord> deleteNumeralRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<NumeralRecord>builder()
+                .body(ApiResponse.<CardinalRecord>builder()
                         .code(HttpStatus.OK.value())
                         .result(numeralRecordService.deleteNumeralRecord(id))
                         .build()).getBody();

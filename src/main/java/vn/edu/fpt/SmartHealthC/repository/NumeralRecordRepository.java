@@ -1,8 +1,19 @@
 package vn.edu.fpt.SmartHealthC.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import vn.edu.fpt.SmartHealthC.domain.entity.NumeralRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import org.springframework.data.jpa.repository.Query;
+import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 
-public interface NumeralRecordRepository extends JpaRepository<NumeralRecord, Integer> {
+import java.util.Date;
+import java.util.List;
+
+public interface NumeralRecordRepository extends JpaRepository<CardinalRecord, Integer> {
+
+    @Query("SELECT c FROM CardinalRecord c WHERE c.appUserId = ?1")
+    List<CardinalRecord> findByAppUserId();
+    @Query("SELECT DISTINCT c.weekStart FROM CardinalRecord c WHERE c.appUserId.id = ?1")
+    List<Date> findDistinctWeek(Integer id);
+
+    @Query("SELECT c FROM CardinalRecord c WHERE c.weekStart = ?1")
+    List<CardinalRecord> findByWeekStart(Date record);
 }
