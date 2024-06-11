@@ -43,7 +43,7 @@ public class DashboardController {
                         .build()).getBody();
     }
     @GetMapping("/register-request")
-    public ApiResponse<List<AppUserResponseDTO>> getUserPendingList(@RequestParam(defaultValue = "1") Integer pageNo){
+    public ApiResponse<List<AppUserResponseDTO>> getUserPendingList(@RequestParam(defaultValue = "0") Integer pageNo){
         List<AppUserResponseDTO> appUserResponseDTOList = accountService.getPendingAccount(pageNo);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<AppUserResponseDTO>>builder()
@@ -62,7 +62,7 @@ public class DashboardController {
                         .build()).getBody();
     }
     @GetMapping("/medical-appointment")
-    public ApiResponse<List<MedicalAppointmentResponseDTO>> getQuestionResponseList(@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo){
+    public ApiResponse<List<MedicalAppointmentResponseDTO>> getQuestionResponseList(@PathVariable Integer id, @RequestParam(defaultValue = "0") Integer pageNo){
         List<MedicalAppointmentResponseDTO> medicalAppointmentResponseDTOList = medicalAppointmentService.getAllMedicalAppointmentsPending(id, pageNo);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MedicalAppointmentResponseDTO>>builder()

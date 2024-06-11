@@ -88,11 +88,8 @@ public class AppUser {
 //    @OneToMany(mappedBy = "appUserId")
 //    private List<WeightRecord> weightRecords;
 //
-//    @OneToMany(mappedBy = "appUserId")
-//    private List<UserChronicDisease> userChronicDiseases;
-//
-//    @OneToMany(mappedBy = "appUserId")
-//    private List<UserMedicalRecord> userMedicalRecords;
+    @OneToMany(mappedBy = "appUserId")
+    private List<UserMedicalHistory> userMedicalHistoryList;
 //
 //    @OneToMany(mappedBy = "appUserId")
 //    private List<UserLesson> userLessons;

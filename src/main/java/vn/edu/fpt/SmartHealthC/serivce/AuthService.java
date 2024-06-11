@@ -7,5 +7,5 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 public interface AuthService {
     AuthenticationResponseDto login(LoginDto request);
 
-    AuthenticationResponseDto register(RegisterDto request);
+    void register(RegisterDto request);
 }
