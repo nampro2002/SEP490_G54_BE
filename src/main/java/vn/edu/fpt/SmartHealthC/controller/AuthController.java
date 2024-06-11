@@ -33,10 +33,11 @@ public class AuthController {
     @PostMapping("/register")
     public ApiResponse<?> register(
             @RequestBody @Valid RegisterDto request) {
+        authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
                         .code(HttpStatus.CREATED.value())
-                        .result(authService.register(request))
+                        .message("Account created successfully")
                         .build()).getBody();
     }
 

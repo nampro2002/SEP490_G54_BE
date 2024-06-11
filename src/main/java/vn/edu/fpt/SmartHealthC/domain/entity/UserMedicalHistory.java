@@ -1,11 +1,9 @@
 package vn.edu.fpt.SmartHealthC.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
@@ -19,6 +17,8 @@ public class UserMedicalHistory {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
+    @JsonIgnore
+    @ToString.Exclude
     private AppUser appUserId;
 
     @ManyToOne

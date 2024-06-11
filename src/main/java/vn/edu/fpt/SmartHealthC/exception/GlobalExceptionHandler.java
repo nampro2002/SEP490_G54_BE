@@ -32,7 +32,11 @@ public class GlobalExceptionHandler {
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(HttpStatus.BAD_REQUEST.value());
-        apiResponse.setMessage(exception.getMessage());
+        if (Objects.isNull(exception.getMessage())) {
+            apiResponse.setMessage(exception.toString());
+        } else {
+            apiResponse.setMessage(exception.getMessage());
+        }
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
@@ -71,7 +75,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)  // Nếu validate fail thì trả về 400
-    public ResponseEntity<ApiResponse>  handleBindException(BindException e) {
+    public ResponseEntity<ApiResponse> handleBindException(BindException e) {
         // Trả về message của lỗi đầu tiên
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setCode(HttpStatus.BAD_REQUEST.value());

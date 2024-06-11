@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalHistory;
@@ -23,6 +24,8 @@ public class MedicalHistory {
     private TypeMedicalHistory type;
 
     @OneToMany(mappedBy = "conditionId")
+    @JsonIgnore
+    @ToString.Exclude
     private List<UserMedicalHistory> userMedicalHistories;
     private boolean isDeleted = false;
 

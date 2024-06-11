@@ -4,14 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserDetailResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/app-user")
@@ -30,4 +31,27 @@ public class AppUserController {
                         .message("Assign success")
                         .build()).getBody();
     }
+
+    //getListAppUser with paging and search
+    @GetMapping()
+    public ApiResponse<?> getListAppUser (@RequestParam(defaultValue = "0") Integer pageNo,
+                                          @RequestParam(defaultValue = "") String search) {
+        List<AppUserResponseDTO> listAppUser =  appUserService.getListAppUser(pageNo, search);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<AppUserResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(listAppUser)
+                        .build()).getBody();
+    }
+    //getAppUserById
+    @GetMapping("/{id}")
+    public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailById (@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<AppUserDetailResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(appUserService.getAppUserDetailById(id))
+                        .build()).getBody();
+    }
+
+
 }

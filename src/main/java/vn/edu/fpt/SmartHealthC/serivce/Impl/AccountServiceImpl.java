@@ -99,21 +99,17 @@ public class AccountServiceImpl implements AccountService {
                     AppUserResponseDTO dto = new AppUserResponseDTO();
                     dto.setAccountId(record.getAccountId().getId());
                     dto.setEmail(record.getAccountId().getEmail());
-                    return getAppUserResponseDTO(record, dto);
+                    dto.setAppUserId(record.getId());
+                    dto.setName(record.getName());
+                    dto.setHospitalNumber(record.getHospitalNumber());
+                    dto.setDob(record.getDob());
+                    dto.setGender(record.isGender());
+                    dto.setPhoneNumber(record.getPhoneNumber());
+                    return dto;
                 })
                 .toList();
     }
 
-
-    private AppUserResponseDTO getAppUserResponseDTO(AppUser record, AppUserResponseDTO dto) {
-        dto.setAppUserId(record.getId());
-        dto.setName(record.getName());
-        dto.setHospitalNumber(record.getHospitalNumber());
-        dto.setDob(record.getDob());
-        dto.setGender(record.isGender());
-        dto.setPhoneNumber(record.getPhoneNumber());
-        return dto;
-    }
 
     @Override
     public List<AvailableMSResponseDTO> getAvailableMS() {

@@ -68,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthenticationResponseDto register(RegisterDto request) {
+    public void register(RegisterDto request) {
         Optional<Account> existingAccount = accountRepository.findByEmail(request.getEmail());
 
         if(existingAccount.isPresent()) {
@@ -93,21 +93,15 @@ public class AuthServiceImpl implements AuthService {
                 .hospitalNumber(request.getHospitalNumber())
                 .build();
         newAppUserInfo = appUserRepository.save(newAppUserInfo);
-//        for(Integer i : request.getListMedicalHistory()){
-//            MedicalHistory medicalHistory = medicalHistoryRepository.findById(i)
-//                    .orElseThrow();
-//            UserMedicalHistory userMedicalHistory  = UserMedicalHistory
-//                    .builder()
-//                    .appUserId(newAppUserInfo)
-//                    .conditionId(medicalHistory)
-//                    .build();
-//            userMedicalHistoryRepository.save(userMedicalHistory);
-//        }
-        var jwt = jwtProvider.generateToken(newAccount);
-        return AuthenticationResponseDto.builder()
-                .type(newAccount.getType())
-                .idUser(newAccount.getId())
-                .token(jwt)
-                .build();
+        for(Integer i : request.getListMedicalHistory()){
+            MedicalHistory medicalHistory = medicalHistoryRepository.findById(i)
+                    .orElseThrow();
+            UserMedicalHistory userMedicalHistory  = UserMedicalHistory
+                    .builder()
+                    .appUserId(newAppUserInfo)
+                    .conditionId(medicalHistory)
+                    .build();
+            userMedicalHistoryRepository.save(userMedicalHistory);
+        }
     }
 }

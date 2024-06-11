@@ -50,19 +50,18 @@ public class AccountController {
     }
 
     @GetMapping("activate/{id}")
-    public ResponseEntity<?> activateAccount(@PathVariable Integer appUserId) {
+    public ApiResponse<?> activateAccount(@PathVariable Integer appUserId) {
         if (accountService.activateAccount(appUserId)) {
-//            return ResponseEntity.status(HttpStatus.CREATED)
-//                    .body(ApiResponse.<Account>builder()
-//                            .code(HttpStatus.CREATED.value())
-//                            .result(accountService.getAccountById(id).get())
-//                            .build()).getBody();
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(ApiResponse.builder()
+                            .code(HttpStatus.CREATED.value())
+                            .message("Activation successful")
+                            .build()).getBody();
         }
         ApiResponse apiResponse = new ApiResponse<>();
         apiResponse.setCode(HttpStatus.BAD_REQUEST.value());
         apiResponse.setMessage("Activation failed");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse).getBody();
     }
 
     @GetMapping("/email/{email}")
