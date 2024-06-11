@@ -1,19 +1,20 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AvailableMSResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.Question;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -85,8 +86,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AppUserResponseDTO> getPendingAccount() {
-        List<AppUser> accountList = appUserService.findAll();
+    public List<AppUserResponseDTO> getPendingAccount(Integer pageNo) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<AppUser> pagedResult = appUserRepository.findAll(paging);
+        List<AppUser> accountList = new ArrayList<>();
+        if(pagedResult.hasContent()) {
+            accountList = pagedResult.getContent();
+        }
         return accountList.stream()
                 .filter(record -> (!record.getAccountId().getIsActive() && record.getAccountId().getType().equals(TypeAccount.USER)))
                 .map(record -> {
@@ -97,6 +103,7 @@ public class AccountServiceImpl implements AccountService {
                 })
                 .toList();
     }
+
 
     private AppUserResponseDTO getAppUserResponseDTO(AppUser record, AppUserResponseDTO dto) {
         dto.setAppUserId(record.getId());
@@ -113,7 +120,6 @@ public class AccountServiceImpl implements AccountService {
         List<WebUser> accountList = webUserService.getAllWebUsers();
         return accountList.stream().filter(record ->
                 (record.getAccountId().getIsActive()
-                        && record.getAccountId().getType().equals(TypeAccount.MEDICAL_SPECIALIST)
                         && record.getAppUserList().size() < 10
                 ))
                 .map(record -> {

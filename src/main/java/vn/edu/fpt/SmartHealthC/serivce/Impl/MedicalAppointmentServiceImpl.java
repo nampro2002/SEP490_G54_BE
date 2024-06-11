@@ -1,6 +1,10 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointmentStatus;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
@@ -16,6 +20,7 @@ import vn.edu.fpt.SmartHealthC.repository.MedicalAppointmentRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,11 +78,16 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     }
 
     @Override
-    public List<MedicalAppointmentResponseDTO> getAllMedicalAppointmentsPending(Integer id) {
-        List<MedicalAppointment> medicalAppointmentList =  getAllMedicalAppointments();
+    public List<MedicalAppointmentResponseDTO> getAllMedicalAppointmentsPending(Integer id, Integer pageNo) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAll(paging);
+        List<MedicalAppointment> medicalAppointmentList = new ArrayList<>();
+        if (pagedResult.hasContent()) {
+            medicalAppointmentList = pagedResult.getContent();
+        }
         return medicalAppointmentList.stream()
-                .filter(record -> (record.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.PENDING)&&
-                record.getAppUserId().getId() == id))
+                .filter(record -> (record.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.PENDING) &&
+                        record.getAppUserId().getId() == id))
                 .map(record -> {
                     MedicalAppointmentResponseDTO dto = new MedicalAppointmentResponseDTO();
                     dto.setId(record.getId());
