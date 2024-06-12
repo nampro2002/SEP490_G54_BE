@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.Question;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
@@ -41,18 +43,26 @@ public class QuestionController {
                         .build()).getBody();
     }
 
-    @GetMapping
-    public ApiResponse<List<Question>> getAllQuestions() {
+    @GetMapping("/questionAdmin")
+    public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsAd() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<Question>>builder()
+                .body(ApiResponse.<List<QuestionResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(questionService.getAllQuestions())
+                        .result(questionService.getAllPendingQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN))
                         .build()).getBody();
     }
-
+    @GetMapping("/questionMs")
+    public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsMs() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<QuestionResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(questionService.getAllPendingQuestionsByType(TypeUserQuestion.ASSIGN_MS))
+                        .build()).getBody();
+    }
+    //answer question
     @PutMapping("/{id}")
-    public ApiResponse<Question> updateQuestion(@PathVariable Integer id,@RequestBody QuestionDTO questionDTO) {
-        Question updatedQuestion = questionService.updateQuestion(id,questionDTO);
+    public ApiResponse<Question> updateQuestion(@PathVariable Integer id,@RequestBody String answer) {
+        Question updatedQuestion = questionService.updateQuestion(id,answer);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Question>builder()
                         .code(HttpStatus.OK.value())

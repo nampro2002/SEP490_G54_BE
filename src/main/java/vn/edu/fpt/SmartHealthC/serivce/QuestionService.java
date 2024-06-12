@@ -12,7 +12,8 @@ public interface QuestionService {
     Question createQuestion(QuestionDTO questionDTO);
     Question getQuestionById(Integer id);
     List<Question> getAllQuestions();
-    Question updateQuestion(Integer id,QuestionDTO questionDTO);
+    Question updateQuestion(Integer id,String answer);
     Question deleteQuestion(Integer id);
+    List<QuestionResponseDTO> getAllPendingQuestionsByType(TypeUserQuestion typeUserQuestion);
     List<QuestionResponseDTO> getAllQuestionsByType(TypeUserQuestion typeUserQuestion);
 }

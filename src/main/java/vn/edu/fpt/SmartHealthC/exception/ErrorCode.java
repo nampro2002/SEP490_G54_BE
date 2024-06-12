@@ -17,6 +17,8 @@ public enum ErrorCode {
     JWT_INVALID ( ",Invalid jwt token", HttpStatus.BAD_REQUEST),
     CREDENTIAL_EXPIRED ( "Your login session has expired", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTED("Email existed", HttpStatus.BAD_REQUEST),
+    SEND_EMAIL_FAIL("Send email fail", HttpStatus.BAD_REQUEST),
+    EMAIL_NOT_EXISTED("Email not existed", HttpStatus.BAD_REQUEST),
     CREDENTIAL_INVALID("Wrong email or password", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED("Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED("You do not have permission", HttpStatus.FORBIDDEN),
@@ -50,6 +52,7 @@ public enum ErrorCode {
     USER_MEDICAL_HISTORY_NOT_FOUND("User medical history not found", HttpStatus.NOT_FOUND),
     WEIGHT_RECORD_NOT_FOUND("Weight record not found", HttpStatus.NOT_FOUND),
     ACCOUNT_NOT_FOUND("Account not found", HttpStatus.NOT_FOUND),
+    NULL_ANSWER("Answer is null", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(String message, HttpStatusCode statusCode) {

@@ -65,7 +65,4 @@ public class Account implements UserDetails
     public boolean isEnabled() {
         return true;
     }
-
-    @OneToMany(mappedBy = "accountId")
-    private List<ForgetPasswordCode> forgetPasswordCode;
 }

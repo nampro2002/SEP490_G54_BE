@@ -83,14 +83,14 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     @Override
     public ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointmentsPending(Integer id, Integer pageNo) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAll(paging);
+        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllPendingByUserId(TypeMedicalAppointmentStatus.PENDING, id, paging);
         List<MedicalAppointment> medicalAppointmentList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicalAppointmentList = pagedResult.getContent();
         }
         List<MedicalAppointmentResponseDTO> listResponse =  medicalAppointmentList.stream()
-                .filter(record -> (record.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.PENDING) &&
-                        record.getAppUserId().getId() == id))
+//                .filter(record -> (record.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.PENDING) &&
+//                        record.getAppUserId().getId() == id))
                 .map(record -> {
                     MedicalAppointmentResponseDTO dto = new MedicalAppointmentResponseDTO();
                     dto.setId(record.getId());

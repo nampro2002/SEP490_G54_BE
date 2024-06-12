@@ -27,6 +27,9 @@ public class RuleForPlan {
     @JoinColumn(name = "plan_id")
     private MentalRecord planId;
 
+    private Date Date;
+    private Boolean isCompleted;
+
 
 
 }
