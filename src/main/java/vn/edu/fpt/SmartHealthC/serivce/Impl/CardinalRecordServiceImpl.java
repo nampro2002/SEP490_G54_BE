@@ -99,14 +99,17 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
             }
             if (countCholesterol != 0) {
                 avgCholesterol = avgCholesterol / countCholesterol;
+                avgCholesterol = (float) (Math.round(avgCholesterol * 100) / 100);
             }
             if (countHBA1C != 0) {
                 avgHBA1C = avgHBA1C / countHBA1C;
+                avgHBA1C = (float) (Math.round(avgHBA1C * 100) / 100);
             }
             if (countBloodSugar != 0) {
                 avgBloodSugar = avgBloodSugar / countBloodSugar;
+                avgBloodSugar = (float) (Math.round(avgBloodSugar * 100) / 100);
             }
-            record.setAvgValue("주간평균:  " + avgHBA1C + "%" + avgCholesterol + "mg/DL" + avgBloodSugar + "mg/DL");
+            record.setAvgValue("주간평균:  " + avgHBA1C + "% / " + avgCholesterol + " mg/DL /  " + avgBloodSugar + "mg/DL");
             record.setRecordPerDayList(recordPerDayList);
         }
 

@@ -24,4 +24,5 @@ public class QuestionResponseDTO {
     private String answer;
 
     private Date questionDate;
+    private Date answerDate;
 }

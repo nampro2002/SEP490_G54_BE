@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureResponseDTO.BloodPressureResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.BloodPressureRecordService;
@@ -39,12 +40,12 @@ public class BloodPressureRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping
-    public ApiResponse<List<BloodPressureRecord>> getAllBloodPressureRecords() {
+    @GetMapping("getByAppUser/{id}")
+    public ApiResponse<List<BloodPressureResponseDTO>> getAllBloodPressureRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<BloodPressureRecord>>builder()
+                .body(ApiResponse.<List<BloodPressureResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(bloodPressureRecordService.getAllBloodPressureRecords())
+                        .result(bloodPressureRecordService.getListBloodPressureRecordsByUser(id))
                         .build()).getBody();
     }
 

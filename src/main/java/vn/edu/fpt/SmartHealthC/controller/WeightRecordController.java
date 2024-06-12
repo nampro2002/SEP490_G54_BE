@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WeightRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
@@ -39,12 +40,12 @@ public class WeightRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping
-    public ApiResponse<List<WeightRecord>> getAllWeightRecords() {
+    @GetMapping("getByAppUser/{id}")
+    public ApiResponse<List<WeightResponseDTO>> getAllWeightRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<WeightRecord>>builder()
+                .body(ApiResponse.<List<WeightResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(weightRecordService.getAllWeightRecords())
+                        .result(weightRecordService.getWeightRecordList(id))
                         .build()).getBody();
     }
 

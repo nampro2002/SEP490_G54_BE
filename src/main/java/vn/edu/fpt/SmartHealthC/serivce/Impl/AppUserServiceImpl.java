@@ -45,6 +45,8 @@ public class AppUserServiceImpl implements AppUserService {
         dto.setEmail(appUser.getAccountId().getEmail());
         dto.setAppUserId(appUser.getId());
         dto.setName(appUser.getName());
+        dto.setHeight(appUser.getHeight());
+        dto.setWeight(appUser.getWeight());
         dto.setHospitalNumber(appUser.getHospitalNumber());
         dto.setDob(appUser.getDob());
         dto.setGender(appUser.isGender());

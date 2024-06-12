@@ -20,6 +20,8 @@ public class AppUserDetailResponseDTO {
     private String hospitalNumber;
     private Date dob;
     private boolean gender;
+    private Float height;
+    private Float weight;
     private String phoneNumber;
     private String msName;
     private String chronicDiseases;

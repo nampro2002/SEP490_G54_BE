@@ -38,5 +38,6 @@ public class Question {
     private String answer;
 
     private Date questionDate;
+    private Date answerDate;
 
 }
