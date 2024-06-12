@@ -81,8 +81,9 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                         .BloodSugar(cardinalRecord.getBloodSugar())
                         .build();
                 recordPerDayList.add(recordPerDay);
-                //sortby getTimeMeasure getIndex
-                recordPerDayList.sort(Comparator.comparingInt(o -> TypeTimeMeasure.getIndex(o.getTimeMeasure())));
+                //sortby getTimeMeasure getIndex and Date date;
+                recordPerDayList.sort(Comparator.comparing(RecordPerDay::getDate).thenComparing(RecordPerDay::getTimeMeasure));
+
                 if (cardinalRecord.getCholesterol() != null) {
                     avgCholesterol += cardinalRecord.getCholesterol();
                     countCholesterol++;
