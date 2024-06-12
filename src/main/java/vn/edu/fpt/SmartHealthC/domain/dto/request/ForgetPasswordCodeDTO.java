@@ -15,13 +15,8 @@ import java.util.Date;
 @Builder
 public class ForgetPasswordCodeDTO {
 
-    private int id;
-
-    private int accountId;
-
+    private String email;
     private String code;
-
-    private Boolean isUsed;
 
 
 }

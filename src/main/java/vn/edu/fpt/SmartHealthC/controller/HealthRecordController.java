@@ -43,64 +43,64 @@ public class HealthRecordController {
                         .result(cardinalRecordService.getAllCardinalRecords(id))
                         .build()).getBody();
     }
-
-    @GetMapping
-    public ApiResponse<List<BloodPressureRecord>> getAllBloodPressureRecords() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<BloodPressureRecord>>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(bloodPressureRecordService.getAllBloodPressureRecords())
-                        .build()).getBody();
-    }
-
-    @GetMapping
-    public ApiResponse<List<WeightRecord>> getAllWeightRecords() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<WeightRecord>>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(weightRecordService.getAllWeightRecords())
-                        .build()).getBody();
-    }
-
-    @GetMapping
-    public ApiResponse<List<MentalRecord>> getAllMentalRecords() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MentalRecord>>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(mentalRecordService.getAllMentalRecords())
-                        .build()).getBody();
-    }
-    @GetMapping
-    public ApiResponse<List<ActivityRecord>> getAllActivityRecords() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<ActivityRecord>>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(activityRecordService.getAllActivityRecords())
-                        .build()).getBody();
-    }
-
-    @GetMapping
-    public ApiResponse<List<DietRecord>> getAllDietRecords() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<DietRecord>>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(dietRecordService.getAllDietRecords())
-                        .build()).getBody();
-    }
-    @GetMapping
-    public  ApiResponse<List<MedicineRecord>> getAllMedicineRecords() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MedicineRecord>>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(medicineRecordService.getAllMedicineRecords())
-                        .build()).getBody();
-    }
-    @GetMapping
-    public ApiResponse<List<StepRecord>> getAllStepRecords() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<StepRecord>>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(stepRecordService.getAllStepRecords())
-                        .build()).getBody();
-    }
+//
+//    @GetMapping
+//    public ApiResponse<List<BloodPressureRecord>> getAllBloodPressureRecords() {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<List<BloodPressureRecord>>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(bloodPressureRecordService.getAllBloodPressureRecords())
+//                        .build()).getBody();
+//    }
+//
+//    @GetMapping
+//    public ApiResponse<List<WeightRecord>> getAllWeightRecords() {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<List<WeightRecord>>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(weightRecordService.getAllWeightRecords())
+//                        .build()).getBody();
+//    }
+//
+//    @GetMapping
+//    public ApiResponse<List<MentalRecord>> getAllMentalRecords() {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<List<MentalRecord>>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(mentalRecordService.getAllMentalRecords())
+//                        .build()).getBody();
+//    }
+//    @GetMapping
+//    public ApiResponse<List<ActivityRecord>> getAllActivityRecords() {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<List<ActivityRecord>>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(activityRecordService.getAllActivityRecords())
+//                        .build()).getBody();
+//    }
+//
+//    @GetMapping
+//    public ApiResponse<List<DietRecord>> getAllDietRecords() {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<List<DietRecord>>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(dietRecordService.getAllDietRecords())
+//                        .build()).getBody();
+//    }
+//    @GetMapping
+//    public  ApiResponse<List<MedicineRecord>> getAllMedicineRecords() {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<List<MedicineRecord>>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(medicineRecordService.getAllMedicineRecords())
+//                        .build()).getBody();
+//    }
+//    @GetMapping
+//    public ApiResponse<List<StepRecord>> getAllStepRecords() {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<List<StepRecord>>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(stepRecordService.getAllStepRecords())
+//                        .build()).getBody();
+//    }
 }
