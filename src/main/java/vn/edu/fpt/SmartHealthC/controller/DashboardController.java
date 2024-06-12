@@ -55,7 +55,7 @@ public class DashboardController {
 
     @GetMapping("ms-question")
     public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListMs() {
-        List<QuestionResponseDTO> responseDTOList = questionService.getAllQuestionsByType(TypeUserQuestion.ASSIGN_MS);
+        List<QuestionResponseDTO> responseDTOList = questionService.getAllPendingQuestionsByType(TypeUserQuestion.ASSIGN_MS);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
