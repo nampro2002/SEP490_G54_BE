@@ -14,6 +14,6 @@ public interface CardinalRecordRepository extends JpaRepository<CardinalRecord, 
     @Query("SELECT DISTINCT c.weekStart FROM CardinalRecord c WHERE c.appUserId.id = ?1")
     List<Date> findDistinctWeek(Integer id);
 
-    @Query("SELECT c FROM CardinalRecord c WHERE c.weekStart = ?1")
-    List<CardinalRecord> findByWeekStart(Date record);
+    @Query("SELECT c FROM CardinalRecord c WHERE c.weekStart = ?1 AND c.appUserId.id = ?2")
+    List<CardinalRecord> findByWeekStart( Date record, Integer userId);
 }

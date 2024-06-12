@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.AnswerQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
@@ -14,6 +15,7 @@ import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
 import vn.edu.fpt.SmartHealthC.serivce.QuestionService;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,28 +31,33 @@ public class QuestionServiceImpl implements QuestionService {
     private WebUserRepository webUserRepository;
 
     @Override
-    public Question createQuestion(QuestionDTO questionDTO) {
+    public QuestionResponseDTO createQuestion(QuestionDTO questionDTO) {
         Question question = Question.builder()
                 .title(questionDTO.getTitle())
                 .body(questionDTO.getBody())
                 .typeUserQuestion(questionDTO.getTypeUserQuestion())
                 .questionDate(questionDTO.getQuestionDate())
+                .answer("")
+                .answerDate(questionDTO.getQuestionDate())
                 .build();
         Optional<AppUser> appUser = appUserRepository.findById(questionDTO.getAppUserId());
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         question.setAppUserId(appUser.get());
-        Optional<WebUser> webUser = webUserRepository.findById(questionDTO.getAppUserId());
-        if (webUser.isEmpty()) {
-            throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
-        }
-        question.setWebUserId(webUser.get());
-        return questionRepository.save(question);
+        question = questionRepository.save(question);
+        QuestionResponseDTO dto = new QuestionResponseDTO();
+        dto.setId(question.getId());
+        dto.setAppUserName(question.getAppUserId().getName());
+        dto.setTitle(question.getTitle());
+        dto.setBody(question.getBody());
+        dto.setAnswer("");
+        dto.setQuestionDate(question.getQuestionDate());
+        return dto;
     }
 
     @Override
-    public Question getQuestionById(Integer id) {
+    public Question getQuestionByIdEntity(Integer id) {
         Optional<Question> question = questionRepository.findById(id);
         if (question.isEmpty()) {
             throw new AppException(ErrorCode.QUESTION_NOT_FOUND);
@@ -59,25 +66,84 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public QuestionResponseDTO getQuestionById(Integer id) {
+        Optional<Question> question = questionRepository.findById(id);
+        if (question.isEmpty()) {
+            throw new AppException(ErrorCode.QUESTION_NOT_FOUND);
+        }
+        QuestionResponseDTO dto = new QuestionResponseDTO();
+        dto.setId(question.get().getId());
+        dto.setAppUserName(question.get().getAppUserId().getName());
+        if (!question.get().getAnswer().isBlank()) {
+            dto.setWebUserName(question.get().getWebUserId().getUserName());
+        }
+        dto.setTitle(question.get().getTitle());
+        dto.setBody(question.get().getBody());
+        dto.setAnswer(question.get().getAnswer());
+        dto.setQuestionDate(question.get().getQuestionDate());
+        dto.setAnswerDate(question.get().getAnswerDate());
+        if (!question.get().getAnswer().isEmpty()) {
+            dto.setAnswerDate(question.get().getAnswerDate());
+        }
+        return dto;
+    }
+
+
+    @Override
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
 
     @Override
-    public Question updateQuestion(Integer id, String answer) {
-        Question question = getQuestionById(id);
-        if (answer == null || answer.isEmpty()) {
+    public QuestionResponseDTO updateQuestion(Integer id, AnswerQuestionRequestDTO answer) {
+        Question question = getQuestionByIdEntity(id);
+        if (answer == null || answer.getAnswer().isEmpty()) {
             throw new AppException(ErrorCode.NULL_ANSWER);
         }
-        question.setAnswer(answer);
-        return questionRepository.save(question);
+        Optional<WebUser> webUser = webUserRepository.findById(answer.getWebUserId());
+        if (webUser.isEmpty()) {
+            throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
+        }
+        question.setWebUserId(webUser.get());
+        question.setAnswer(answer.getAnswer());
+        question.setAnswerDate(new Date());
+        question = questionRepository.save(question);
+        QuestionResponseDTO dto = new QuestionResponseDTO();
+        dto.setId(question.getId());
+        dto.setAppUserName(question.getAppUserId().getName());
+        if (!question.getAnswer().isBlank()) {
+            dto.setWebUserName(question.getWebUserId().getUserName());
+        }else{
+            dto.setWebUserName("");
+        }
+        dto.setTitle(question.getTitle());
+        dto.setBody(question.getBody());
+        dto.setAnswer(question.getAnswer());
+        dto.setQuestionDate(question.getQuestionDate());
+        dto.setAnswerDate(question.getAnswerDate());
+        return dto;
     }
 
     @Override
-    public Question deleteQuestion(Integer id) {
-        Question question = getQuestionById(id);
+    public QuestionResponseDTO deleteQuestion(Integer id) {
+        Question question = getQuestionByIdEntity(id);
         questionRepository.deleteById(id);
-        return question;
+        QuestionResponseDTO dto = new QuestionResponseDTO();
+        dto.setId(question.getId());
+        dto.setAppUserName(question.getAppUserId().getName());
+        if (!question.getAnswer().isBlank()) {
+            dto.setWebUserName(question.getWebUserId().getUserName());
+        }
+        dto.setTitle(question.getTitle());
+        dto.setBody(question.getBody());
+        dto.setAnswer(question.getAnswer());
+        dto.setQuestionDate(question.getQuestionDate());
+        dto.setAnswerDate(question.getAnswerDate());
+        if (!question.getAnswer().isEmpty()) {
+            dto.setAnswerDate(question.getAnswerDate());
+        }
+
+        return dto;
     }
 
     @Override
@@ -90,11 +156,18 @@ public class QuestionServiceImpl implements QuestionService {
                     QuestionResponseDTO dto = new QuestionResponseDTO();
                     dto.setId(question.getId());
                     dto.setAppUserName(question.getAppUserId().getName());
-                    dto.setWebUserName(question.getWebUserId().getUserName());
+                    if (!question.getAnswer().isBlank()) {
+                        dto.setWebUserName(question.getWebUserId().getUserName());
+                    }else{
+                        dto.setWebUserName("");
+                    }
                     dto.setTitle(question.getTitle());
                     dto.setBody(question.getBody());
                     dto.setAnswer(question.getAnswer());
                     dto.setQuestionDate(question.getQuestionDate());
+                    if (!question.getAnswer().isBlank()) {
+                        dto.setAnswerDate(question.getAnswerDate());
+                    }
                     return dto;
                 })
                 .toList();
@@ -112,11 +185,47 @@ public class QuestionServiceImpl implements QuestionService {
                     QuestionResponseDTO dto = new QuestionResponseDTO();
                     dto.setId(question.getId());
                     dto.setAppUserName(question.getAppUserId().getName());
-                    dto.setWebUserName(question.getWebUserId().getUserName());
+                    if (!question.getAnswer().isBlank()) {
+                        dto.setWebUserName(question.getWebUserId().getUserName());
+                    }else{
+                        dto.setWebUserName("");
+                    }
                     dto.setTitle(question.getTitle());
                     dto.setBody(question.getBody());
                     dto.setAnswer(question.getAnswer());
                     dto.setQuestionDate(question.getQuestionDate());
+                    if (!question.getAnswer().isBlank()) {
+                        dto.setAnswerDate(question.getAnswerDate());
+                    }
+                    return dto;
+                })
+                .toList();
+        return responseDTOList;
+    }
+
+    @Override
+    public List<QuestionResponseDTO> getQuestionsByType(TypeUserQuestion typeUserQuestion) {
+        List<Question> questionList = getAllQuestions();
+        List<QuestionResponseDTO> responseDTOList = questionList.stream()
+                .filter(question ->
+                        question.getTypeUserQuestion() == typeUserQuestion)
+                .map(question -> {
+                    QuestionResponseDTO dto = new QuestionResponseDTO();
+                    dto.setId(question.getId());
+                    dto.setAppUserName(question.getAppUserId().getName());
+                    if (!question.getAnswer().isBlank()) {
+                        dto.setWebUserName(question.getWebUserId().getUserName());
+                    }else{
+                        dto.setWebUserName("");
+                    }
+                    dto.setTitle(question.getTitle());
+                    dto.setBody(question.getBody());
+                    dto.setAnswer(question.getAnswer());
+                    dto.setAnswer(question.getAnswer());
+                    dto.setQuestionDate(question.getQuestionDate());
+                    if (!question.getAnswer().isBlank()) {
+                        dto.setAnswerDate(question.getAnswerDate());
+                    }
                     return dto;
                 })
                 .toList();

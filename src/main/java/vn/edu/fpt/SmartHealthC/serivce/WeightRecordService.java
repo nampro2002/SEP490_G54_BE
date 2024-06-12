@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WeightRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface WeightRecordService {
     List<WeightRecord> getAllWeightRecords();
     WeightRecord updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO);
     WeightRecord deleteWeightRecord(Integer id);
+    List<WeightResponseDTO> getWeightRecordList(Integer userId);
 }

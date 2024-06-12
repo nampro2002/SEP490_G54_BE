@@ -3,18 +3,18 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureResponseDTO.BloodPressureResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureResponseDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.BloodPressureRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.BloodPressureRecordService;
-import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BloodPressureRecordServiceImpl implements BloodPressureRecordService {
@@ -43,7 +43,7 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
     @Override
     public BloodPressureRecord getBloodPressureRecordById(Integer id) {
         Optional<BloodPressureRecord> bloodPressureRecord = bloodPressureRecordRepository.findById(id);
-        if(bloodPressureRecord.isEmpty()) {
+        if (bloodPressureRecord.isEmpty()) {
             throw new AppException(ErrorCode.BLOOD_PRESSURE_NOT_FOUND);
         }
         return bloodPressureRecord.get();
@@ -55,7 +55,58 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
     }
 
     @Override
-    public BloodPressureRecord updateBloodPressureRecord( Integer id, BloodPressureRecordDTO bloodPressureRecordDTO) {
+    public List<BloodPressureResponseDTO> getListBloodPressureRecordsByUser(Integer userId) {
+        List<Date> bloodPressureWeekList = bloodPressureRecordRepository.findDistinctWeek(userId);
+        List<BloodPressureResponseDTO> responseDTOList = new ArrayList<>();
+        for (Date week : bloodPressureWeekList) {
+            BloodPressureResponseDTO bloodPressureResponseDTO = BloodPressureResponseDTO.builder()
+                    .appUserId(userId)
+                    .weekStart(week)
+                    .build();
+            responseDTOList.add(bloodPressureResponseDTO);
+        }
+
+        for (BloodPressureResponseDTO record : responseDTOList) {
+            List<BloodPressureRecord> bloodPressureRecords = bloodPressureRecordRepository.findByWeekStart(record.getWeekStart(), userId);
+            List<RecordPerDay> recordPerDayList = new ArrayList<>();
+            Float systole = 0f;
+            Float diastole = 0f;
+            int countSystole = 0;
+            int countDiastole = 0;
+            for (BloodPressureRecord bloodPressureRecord : bloodPressureRecords) {
+                RecordPerDay recordPerDay = RecordPerDay.builder()
+                        .date(bloodPressureRecord.getDate())
+                        .systole(bloodPressureRecord.getSystole())
+                        .diastole(bloodPressureRecord.getDiastole())
+                        .build();
+                recordPerDayList.add(recordPerDay);
+                //sort by  Date date;
+                recordPerDayList.sort(Comparator.comparing(RecordPerDay::getDate));
+                if (bloodPressureRecord.getSystole() != null) {
+                    systole += bloodPressureRecord.getSystole();
+                    countSystole++;
+                }
+                if (bloodPressureRecord.getDiastole() != null) {
+                    diastole += bloodPressureRecord.getDiastole();
+                    countDiastole++;
+                }
+            }
+            if (countSystole != 0) {
+                systole = systole / countSystole;
+                systole = (float) (Math.round(systole * 100) / 100);
+            }
+            if (countDiastole != 0) {
+                diastole = diastole / countDiastole;
+                diastole = (float) (Math.round(diastole * 100) / 100);
+            }
+            record.setAvgValue(systole + "mmHG" + " / " + diastole + "mmHG");
+            record.setRecordPerDayList(recordPerDayList);
+        }
+        return responseDTOList;
+    }
+
+    @Override
+    public BloodPressureRecord updateBloodPressureRecord(Integer id, BloodPressureRecordDTO bloodPressureRecordDTO) {
         BloodPressureRecord bloodPressureRecord = getBloodPressureRecordById(id);
         bloodPressureRecord.setDiastole(bloodPressureRecordDTO.getDiastole());
         bloodPressureRecord.setSystole(bloodPressureRecordDTO.getSystole());

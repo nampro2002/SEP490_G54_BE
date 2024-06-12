@@ -26,14 +26,12 @@ public class CardinalRecord {
     private AppUser appUserId;
 
     private Date weekStart;
-
     private Date date;
     @Enumerated(EnumType.STRING)
     private TypeTimeMeasure timeMeasure;
+    private Float Cholesterol;
+    private Float BloodSugar;
+    private Float HBA1C;
 
-    @Enumerated(EnumType.STRING)
-    private TypeCardinalIndex typeCardinalIndex;
-
-    private Float value;
 
 }

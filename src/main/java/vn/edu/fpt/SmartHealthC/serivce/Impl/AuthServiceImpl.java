@@ -93,15 +93,15 @@ public class AuthServiceImpl implements AuthService {
                 .hospitalNumber(request.getHospitalNumber())
                 .build();
         newAppUserInfo = appUserRepository.save(newAppUserInfo);
-        for(Integer i : request.getListMedicalHistory()){
-            MedicalHistory medicalHistory = medicalHistoryRepository.findById(i)
-                    .orElseThrow();
-            UserMedicalHistory userMedicalHistory  = UserMedicalHistory
-                    .builder()
-                    .appUserId(newAppUserInfo)
-                    .conditionId(medicalHistory)
-                    .build();
-            userMedicalHistoryRepository.save(userMedicalHistory);
-        }
+//        for(Integer i : request.getListMedicalHistory()){
+//            MedicalHistory medicalHistory = medicalHistoryRepository.findById(i)
+//                    .orElseThrow();
+//            UserMedicalHistory userMedicalHistory  = UserMedicalHistory
+//                    .builder()
+//                    .appUserId(newAppUserInfo)
+//                    .conditionId(medicalHistory)
+//                    .build();
+//            userMedicalHistoryRepository.save(userMedicalHistory);
+//        }
     }
 }

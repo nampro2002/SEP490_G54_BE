@@ -21,13 +21,13 @@ public class CardinalRecordDTO {
 
     private TypeTimeMeasure timeMeasure;
 
-    private TypeCardinalIndex typeCardinalIndex;
-
     private Date weekStart;
 
     private Date date;
 
-    private Float value;
+    private Float cholesterol;
+    private Float bloodSugar;
+    private Float hba1c;
 
 
 }
