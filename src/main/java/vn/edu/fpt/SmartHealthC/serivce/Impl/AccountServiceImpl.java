@@ -87,7 +87,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public ResponsePaging<List<AppUserResponseDTO>> getPendingAccount(Integer pageNo) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<AppUser> pagedResult = appUserRepository.findAllInactiveAccountUser(TypeAccount.CUSTOMER_SUPPORT, paging);
+        Page<AppUser> pagedResult = appUserRepository.findAllInactiveAccountUser(TypeAccount.USER, paging);
         List<AppUser> accountList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             accountList = pagedResult.getContent();
