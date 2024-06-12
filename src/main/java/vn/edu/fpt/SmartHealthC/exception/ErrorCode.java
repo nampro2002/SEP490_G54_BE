@@ -50,6 +50,7 @@ public enum ErrorCode {
     USER_MEDICAL_HISTORY_NOT_FOUND("User medical history not found", HttpStatus.NOT_FOUND),
     WEIGHT_RECORD_NOT_FOUND("Weight record not found", HttpStatus.NOT_FOUND),
     ACCOUNT_NOT_FOUND("Account not found", HttpStatus.NOT_FOUND),
+    NULL_ANSWER("Answer is null", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(String message, HttpStatusCode statusCode) {

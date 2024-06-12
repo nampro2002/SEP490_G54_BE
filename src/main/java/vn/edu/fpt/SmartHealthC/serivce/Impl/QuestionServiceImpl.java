@@ -29,31 +29,30 @@ public class QuestionServiceImpl implements QuestionService {
     private WebUserRepository webUserRepository;
 
     @Override
-    public Question createQuestion(QuestionDTO questionDTO)
-    {
-        Question question =  Question.builder()
+    public Question createQuestion(QuestionDTO questionDTO) {
+        Question question = Question.builder()
                 .title(questionDTO.getTitle())
                 .body(questionDTO.getBody())
                 .typeUserQuestion(questionDTO.getTypeUserQuestion())
                 .questionDate(questionDTO.getQuestionDate())
                 .build();
         Optional<AppUser> appUser = appUserRepository.findById(questionDTO.getAppUserId());
-        if(appUser.isEmpty()) {
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         question.setAppUserId(appUser.get());
         Optional<WebUser> webUser = webUserRepository.findById(questionDTO.getAppUserId());
-        if(webUser.isEmpty()) {
+        if (webUser.isEmpty()) {
             throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
         }
         question.setWebUserId(webUser.get());
-        return  questionRepository.save(question);
+        return questionRepository.save(question);
     }
 
     @Override
     public Question getQuestionById(Integer id) {
         Optional<Question> question = questionRepository.findById(id);
-        if(question.isEmpty()) {
+        if (question.isEmpty()) {
             throw new AppException(ErrorCode.QUESTION_NOT_FOUND);
         }
         return question.get();
@@ -65,22 +64,43 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question updateQuestion(Integer id,QuestionDTO questionDTO) {
+    public Question updateQuestion(Integer id, String answer) {
         Question question = getQuestionById(id);
-        question.setTitle(questionDTO.getTitle());
-        question.setBody(questionDTO.getBody());
-        question.setAnswer(questionDTO.getAnswer());
-        question.setQuestionDate(questionDTO.getQuestionDate());
-        question.setTypeUserQuestion(questionDTO.getTypeUserQuestion());
-        return  questionRepository.save(question);
+        if (answer == null || answer.isEmpty()) {
+            throw new AppException(ErrorCode.NULL_ANSWER);
+        }
+        question.setAnswer(answer);
+        return questionRepository.save(question);
     }
 
     @Override
     public Question deleteQuestion(Integer id) {
-        Question question  = getQuestionById(id);
+        Question question = getQuestionById(id);
         questionRepository.deleteById(id);
         return question;
     }
+
+    @Override
+    public List<QuestionResponseDTO> getAllPendingQuestionsByType(TypeUserQuestion typeUserQuestion) {
+        List<Question> questionList = getAllQuestions();
+        List<QuestionResponseDTO> responseDTOList = questionList.stream()
+                .filter(question -> (question.getAnswer() == null || question.getAnswer().isEmpty()) &&
+                        question.getTypeUserQuestion() == typeUserQuestion)
+                .map(question -> {
+                    QuestionResponseDTO dto = new QuestionResponseDTO();
+                    dto.setId(question.getId());
+                    dto.setAppUserName(question.getAppUserId().getName());
+                    dto.setWebUserName(question.getWebUserId().getUserName());
+                    dto.setTitle(question.getTitle());
+                    dto.setBody(question.getBody());
+                    dto.setAnswer(question.getAnswer());
+                    dto.setQuestionDate(question.getQuestionDate());
+                    return dto;
+                })
+                .toList();
+        return responseDTOList;
+    }
+
 
     @Override
     public List<QuestionResponseDTO> getAllQuestionsByType(TypeUserQuestion typeUserQuestion) {
@@ -102,6 +122,4 @@ public class QuestionServiceImpl implements QuestionService {
                 .toList();
         return responseDTOList;
     }
-
-
 }
