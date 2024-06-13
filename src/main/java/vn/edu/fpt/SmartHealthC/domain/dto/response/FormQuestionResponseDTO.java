@@ -1,4 +1,4 @@
-package vn.edu.fpt.SmartHealthC.domain.dto.request;
+package vn.edu.fpt.SmartHealthC.domain.dto.response;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,8 +11,11 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FormQuestionRequestDTO {
+public class FormQuestionResponseDTO {
+    private Integer id;
     private String question;
     private TypeQuestion type;
     private int questionNumber;
 }
+
+

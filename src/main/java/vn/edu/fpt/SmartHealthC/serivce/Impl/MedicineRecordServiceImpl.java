@@ -3,12 +3,14 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.*;
+import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicineRecordRepository;
-import vn.edu.fpt.SmartHealthC.repository.MedicineTypeRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineRecordService;
 
 import java.util.List;
@@ -19,8 +21,6 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     private MedicineRecordRepository medicineRecordRepository;
     @Autowired
     private AppUserRepository appUserRepository;
-    @Autowired
-    private MedicineTypeRepository medicineTypeRepository;
 
     @Override
     public MedicineRecord createMedicineRecord(MedicineRecordDTO medicineRecordDTO) {
@@ -35,11 +35,6 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         medicineRecord.setAppUserId(appUser.get());
-        Optional<MedicineType>  medicineType = medicineTypeRepository.findById(medicineRecordDTO.getMedicineTypeId());
-        if(medicineType.isEmpty()) {
-            throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
-        }
-        medicineRecord.setMedicineType(medicineType.get());
         return medicineRecordRepository.save(medicineRecord);
     }
 

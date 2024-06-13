@@ -30,10 +30,8 @@ public class MentalRecord {
 
     private Date date;
 
-
-    @ManyToOne
-    @JoinColumn(name = "mentalRuleId")
-    private MentalRule mentalRule;
+    @OneToMany(mappedBy = "planId")
+    private List<RuleForPlan> ruleForPlans;
 
 
 }

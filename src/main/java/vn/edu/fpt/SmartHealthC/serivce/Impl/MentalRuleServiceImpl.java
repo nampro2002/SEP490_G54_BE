@@ -39,7 +39,6 @@ public class MentalRuleServiceImpl implements MentalRuleService {
     @Override
     public MentalRule updateMentalRule(Integer id,MentalRule mentalRule) {
         MentalRule updatedMentalRule = getMentalRuleById(id);
-        updatedMentalRule.setDeleted(mentalRule.isDeleted());
         updatedMentalRule.setDescription(mentalRule.getDescription());
         updatedMentalRule.setTitle(mentalRule.getTitle());
         return mentalRuleRepository.save(mentalRule);

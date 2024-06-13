@@ -17,6 +17,6 @@ public class ForgetPasswordCodeDTO {
 
     private String email;
     private String code;
-    private Date expiredDate;
+
 
 }

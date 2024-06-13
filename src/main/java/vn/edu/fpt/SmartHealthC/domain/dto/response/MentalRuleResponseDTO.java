@@ -5,22 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MedicalHistoryResponseDTO {
+public class MentalRuleResponseDTO {
+    private Integer id;
     private String title;
-    private List<MedicalRecord> data;
-}
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
- class MedicalRecord{
-    private int id;
-    private String name;
+    private String description;
 }

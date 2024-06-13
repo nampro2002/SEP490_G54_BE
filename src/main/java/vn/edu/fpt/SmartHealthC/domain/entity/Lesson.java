@@ -25,7 +25,7 @@ public class Lesson {
 
     private String video;
 
-    private String content;
+    private String text;
 
     @OneToMany(mappedBy = "lessonId")
     private List<UserLesson> userLessons;

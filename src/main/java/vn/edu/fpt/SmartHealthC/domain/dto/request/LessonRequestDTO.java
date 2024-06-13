@@ -17,6 +17,6 @@ public class LessonRequestDTO {
 
     private String video;
 
-    private String content;
+    private String text;
 
 }

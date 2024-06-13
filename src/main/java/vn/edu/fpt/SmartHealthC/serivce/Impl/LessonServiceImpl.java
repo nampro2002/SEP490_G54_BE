@@ -3,12 +3,14 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LessonRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.LessonResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.LessonRepository;
 import vn.edu.fpt.SmartHealthC.serivce.LessonService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,42 +21,90 @@ public class LessonServiceImpl implements LessonService {
     private LessonRepository lessonRepository;
 
     @Override
-    public Lesson createLesson(LessonRequestDTO lessonRequestDTO) {
+    public LessonResponseDTO createLesson(LessonRequestDTO lessonRequestDTO) {
         Lesson lesson = Lesson.builder()
                 .title(lessonRequestDTO.getTitle())
-                .content(lessonRequestDTO.getContent())
+                .text(lessonRequestDTO.getText())
                 .video(lessonRequestDTO.getVideo())
                 .build();
-        return lessonRepository.save(lesson);
+        lesson = lessonRepository.save(lesson);
+        LessonResponseDTO lessonResponseDTO = LessonResponseDTO
+                .builder()
+                .title(lesson.getTitle())
+                .text(lesson.getText())
+                .video(lesson.getVideo())
+                .build();
+        return lessonResponseDTO;
     }
 
     @Override
-    public Lesson getLessonById(Integer id) {
-        Optional<Lesson> lesson =  lessonRepository.findById(id);
-        if (lesson.isEmpty()){
+    public LessonResponseDTO getLessonById(Integer id) {
+        Optional<Lesson> lesson = lessonRepository.findById(id);
+        if (lesson.isEmpty()) {
+            throw new AppException(ErrorCode.LESSON_NOT_FOUND);
+        }
+        LessonResponseDTO lessonResponseDTO = LessonResponseDTO
+                .builder()
+                .title(lesson.get().getTitle())
+                .text(lesson.get().getText())
+                .video(lesson.get().getVideo())
+                .build();
+        return lessonResponseDTO;
+    }
+
+
+    @Override
+    public Lesson getLessonEntityById(Integer id) {
+        Optional<Lesson> lesson = lessonRepository.findById(id);
+        if (lesson.isEmpty()) {
             throw new AppException(ErrorCode.LESSON_NOT_FOUND);
         }
         return lesson.get();
     }
 
     @Override
-    public List<Lesson> getAllLessons() {
-        return lessonRepository.findAll();
+    public List<LessonResponseDTO> getAllLessons() {
+        List<Lesson> lessons = lessonRepository.findAll();
+        List<LessonResponseDTO> lessonResponseDTOList = new ArrayList<>();
+        for (Lesson lesson : lessons) {
+            LessonResponseDTO lessonResponseDTO = LessonResponseDTO
+                    .builder()
+                    .title(lesson.getTitle())
+                    .text(lesson.getText())
+                    .video(lesson.getVideo())
+                    .build();
+            lessonResponseDTOList.add(lessonResponseDTO);
+        }
+        return lessonResponseDTOList;
     }
 
     @Override
-    public Lesson updateLesson(Integer id, LessonRequestDTO lesson) {
-        Lesson lessonToUpdate = getLessonById(id);
+    public LessonResponseDTO updateLesson(Integer id, LessonRequestDTO lesson) {
+        Lesson lessonToUpdate = getLessonEntityById(id);
         lessonToUpdate.setTitle(lesson.getTitle());
-        lessonToUpdate.setContent(lesson.getContent());
+        lessonToUpdate.setText(lesson.getText());
         lessonToUpdate.setVideo(lesson.getVideo());
-        return lessonRepository.save(lessonToUpdate);
+        lessonToUpdate = lessonRepository.save(lessonToUpdate);
+        LessonResponseDTO lessonResponseDTO = LessonResponseDTO
+                .builder()
+                .title(lessonToUpdate.getTitle())
+                .text(lessonToUpdate.getText())
+                .video(lessonToUpdate.getVideo())
+                .build();
+
+        return lessonResponseDTO;
     }
 
     @Override
-    public Lesson deleteLesson(Integer id) {
-        Lesson lesson = getLessonById(id);
+    public LessonResponseDTO deleteLesson(Integer id) {
+        Lesson lesson = getLessonEntityById(id);
         lessonRepository.deleteById(id);
-        return lesson;
+        LessonResponseDTO lessonResponseDTO = LessonResponseDTO
+                .builder()
+                .title(lesson.getTitle())
+                .text(lesson.getText())
+                .video(lesson.getVideo())
+                .build();
+        return lessonResponseDTO;
     }
 }

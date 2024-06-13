@@ -28,7 +28,7 @@ public class RegisterDto {
 
     private String name;
 
-    private String cic;
+    private String hospitalNumber;
 
     private Date dob;
 

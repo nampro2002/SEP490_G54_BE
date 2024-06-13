@@ -17,17 +17,15 @@ public class ActivityRecordDTO {
 
     private int appUserId;
 
-    private TypeActivity planType;
-    private TypeActivity actualType;
+    private TypeActivity type;
 
     private Date weekStart;
 
-    private Float planDuration;
-
-    private Float actualDuration;
-
     private Date date;
 
+    private Float duration;
+
+    private boolean status;
 
 
 }

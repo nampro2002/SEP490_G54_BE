@@ -31,8 +31,8 @@ public class AppUser {
     private WebUser webUser;
 
     private String name;
-    //citizen identification card
-    private String cic;
+
+    private String hospitalNumber;
 
     private Date dob;
 

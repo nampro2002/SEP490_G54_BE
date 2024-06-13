@@ -21,6 +21,6 @@ public class DietRecordDTO {
     private Date weekStart;
 
     private Date date;
-    private float  actualValue;
+
 
 }

@@ -17,7 +17,7 @@ public class AppUserDetailResponseDTO {
     private String email;
     private Integer appUserId;
     private String name;
-    private String cic;
+    private String hospitalNumber;
     private Date dob;
     private boolean gender;
     private Float height;

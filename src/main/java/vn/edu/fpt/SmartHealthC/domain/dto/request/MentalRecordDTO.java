@@ -21,8 +21,6 @@ public class MentalRecordDTO {
 
     private Date weekStart;
 
-    private int mentalRuleId;
-
     private Date date;
 
 }

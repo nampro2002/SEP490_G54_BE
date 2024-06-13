@@ -90,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
                 .height(request.getHeight())
                 .weight(request.getWeight())
                 .phoneNumber(request.getPhoneNumber())
-                .cic(request.getCic())
+                .hospitalNumber(request.getHospitalNumber())
                 .build();
         newAppUserInfo = appUserRepository.save(newAppUserInfo);
 //        for(Integer i : request.getListMedicalHistory()){

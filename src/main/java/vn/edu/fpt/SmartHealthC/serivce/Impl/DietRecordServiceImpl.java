@@ -31,7 +31,6 @@ public class DietRecordServiceImpl implements DietRecordService {
         DietRecord dietRecord =  DietRecord.builder()
                 .dishPerDay(dietRecordDTO.getDishPerDay())
                 .weekStart(dietRecordDTO.getWeekStart())
-                .actualValue(dietRecordDTO.getActualValue())
                 .date(dietRecordDTO.getDate()).build();
         Optional<AppUser> appUser = appUserRepository.findById(dietRecordDTO.getAppUserId());
         if (appUser.isEmpty()) {
@@ -60,7 +59,6 @@ public class DietRecordServiceImpl implements DietRecordService {
         DietRecord dietRecord = getDietRecordById(id);
         dietRecord.setDishPerDay(dietRecordDTO.getDishPerDay());
         dietRecord.setWeekStart(dietRecordDTO.getWeekStart());
-        dietRecord.setActualValue(dietRecordDTO.getActualValue());
         dietRecord.setDate(dietRecordDTO.getDate());
         return  dietRecordRepository.save(dietRecord);
     }

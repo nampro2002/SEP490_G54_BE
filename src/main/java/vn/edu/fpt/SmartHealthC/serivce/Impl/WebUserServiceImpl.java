@@ -39,8 +39,6 @@ public class WebUserServiceImpl implements WebUserService {
     @Override
     public WebUser updateWebUser(WebUserRequestDTO webUserRequestDTO, Integer id) {
         WebUser webUser = getWebUserById(id);
-        webUser.setDob(webUserRequestDTO.getDob());
-        webUser.setGender(webUserRequestDTO.isGender());
         webUser.setUserName(webUserRequestDTO.getUsername());
         webUser.setPhoneNumber(webUserRequestDTO.getPhoneNumber());
         return webUserRepository.save(webUser);
