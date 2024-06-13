@@ -40,11 +40,11 @@ public class MentalRuleController {
     }
 
     @GetMapping
-    public ApiResponse<List<MentalRuleResponseDTO>> getAllMentalRules() {
+    public ApiResponse<List<MentalRuleResponseDTO>> getAllMentalRules(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MentalRuleResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(mentalRuleService.getAllMentalRules())
+                        .result(mentalRuleService.getAllMentalRules(pageNo-1, search))
                         .build()).getBody();
     }
 

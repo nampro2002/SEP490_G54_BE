@@ -11,7 +11,7 @@ public interface MentalRuleService {
     MentalRuleResponseDTO createMentalRule(MentalRuleRequestDTO mentalRule);
     MentalRule getMentalRuleEntityById(Integer id);
     MentalRuleResponseDTO getMentalRuleById(Integer id);
-    List<MentalRuleResponseDTO> getAllMentalRules();
+    List<MentalRuleResponseDTO> getAllMentalRules(Integer pageNo, String search);
     MentalRuleResponseDTO updateMentalRule(Integer id, MentalRuleRequestDTO mentalRule);
     MentalRuleResponseDTO deleteMentalRule(Integer id);
 }

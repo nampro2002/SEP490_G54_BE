@@ -39,11 +39,11 @@ public class MedicineTypeController {
     }
 
     @GetMapping
-    public ApiResponse<List<MedicineTypeResponseDTO>> getAllMedicineTypes() {
+    public ApiResponse<List<MedicineTypeResponseDTO>> getAllMedicineTypes(@RequestParam(defaultValue = "1") Integer pageNo,  @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MedicineTypeResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicineTypeService.getAllMedicineTypes())
+                        .result(medicineTypeService.getAllMedicineTypes(pageNo-1, search))
                         .build()).getBody();
     }
 

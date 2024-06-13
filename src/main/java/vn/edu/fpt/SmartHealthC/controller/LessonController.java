@@ -39,11 +39,11 @@ public class LessonController {
     }
 
     @GetMapping
-    public ApiResponse<List<LessonResponseDTO>> getAllLessons() {
+    public ApiResponse<List<LessonResponseDTO>> getAllLessons(@RequestParam(defaultValue = "1") Integer pageNo,  @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<LessonResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(lessonService.getAllLessons())
+                        .result(lessonService.getAllLessons(pageNo-1, search))
                         .build()).getBody();
     }
 

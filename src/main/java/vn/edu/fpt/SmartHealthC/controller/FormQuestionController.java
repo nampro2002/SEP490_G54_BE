@@ -40,11 +40,11 @@ public class FormQuestionController {
     }
 
     @GetMapping
-    public ApiResponse<List<FormQuestionResponseDTO>> getAllFormQuestions() {
+    public ApiResponse<List<FormQuestionResponseDTO>> getAllFormQuestions(@RequestParam(defaultValue = "1") Integer pageNo,  @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<FormQuestionResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(formQuestionService.getAllFormQuestions())
+                        .result(formQuestionService.getAllFormQuestions(pageNo-1, search))
                         .build()).getBody();
     }
 

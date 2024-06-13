@@ -11,7 +11,7 @@ public interface LessonService {
     LessonResponseDTO createLesson(LessonRequestDTO lesson);
     LessonResponseDTO getLessonById(Integer id);
     Lesson getLessonEntityById(Integer id);
-    List<LessonResponseDTO> getAllLessons();
+    List<LessonResponseDTO> getAllLessons(Integer pageNo, String search);
     LessonResponseDTO updateLesson(Integer id, LessonRequestDTO lesson);
     LessonResponseDTO deleteLesson(Integer id);
 }

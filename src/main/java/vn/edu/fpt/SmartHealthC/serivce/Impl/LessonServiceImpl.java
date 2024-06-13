@@ -1,6 +1,10 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LessonRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.LessonResponseDTO;
@@ -26,13 +30,15 @@ public class LessonServiceImpl implements LessonService {
                 .title(lessonRequestDTO.getTitle())
                 .content(lessonRequestDTO.getContent())
                 .video(lessonRequestDTO.getVideo())
+                .lessonNumber(lessonRequestDTO.getLessonNumber())
                 .build();
         lesson = lessonRepository.save(lesson);
         LessonResponseDTO lessonResponseDTO = LessonResponseDTO
                 .builder()
                 .title(lesson.getTitle())
-                .content(lessonRequestDTO.getContent())
+                .content(lesson.getContent())
                 .video(lesson.getVideo())
+                .lessonNumber(lesson.getLessonNumber())
                 .build();
         return lessonResponseDTO;
     }
@@ -48,6 +54,7 @@ public class LessonServiceImpl implements LessonService {
                 .title(lesson.get().getTitle())
                 .content(lesson.get().getContent())
                 .video(lesson.get().getVideo())
+                .lessonNumber(lesson.get().getLessonNumber())
                 .build();
         return lessonResponseDTO;
     }
@@ -63,8 +70,13 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<LessonResponseDTO> getAllLessons() {
-        List<Lesson> lessons = lessonRepository.findAll();
+    public List<LessonResponseDTO> getAllLessons(Integer pageNo, String search) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<Lesson> pagedResult = lessonRepository.findAll(paging);
+        List<Lesson> lessons = new ArrayList<>();
+        if (pagedResult.hasContent()) {
+            lessons = pagedResult.getContent();
+        }
         List<LessonResponseDTO> lessonResponseDTOList = new ArrayList<>();
         for (Lesson lesson : lessons) {
             LessonResponseDTO lessonResponseDTO = LessonResponseDTO
@@ -72,10 +84,11 @@ public class LessonServiceImpl implements LessonService {
                     .title(lesson.getTitle())
                     .content(lesson.getContent())
                     .video(lesson.getVideo())
+                    .lessonNumber(lesson.getLessonNumber())
                     .build();
             lessonResponseDTOList.add(lessonResponseDTO);
         }
-        return lessonResponseDTOList;
+        return lessonResponseDTOList.stream().filter(record -> record.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
     }
 
     @Override
@@ -85,26 +98,25 @@ public class LessonServiceImpl implements LessonService {
         lessonToUpdate.setContent(lesson.getContent());
         lessonToUpdate.setVideo(lesson.getVideo());
         lessonToUpdate = lessonRepository.save(lessonToUpdate);
-        LessonResponseDTO lessonResponseDTO = LessonResponseDTO
+        return LessonResponseDTO
                 .builder()
                 .title(lessonToUpdate.getTitle())
                 .content(lessonToUpdate.getContent())
                 .video(lessonToUpdate.getVideo())
+                .lessonNumber(lessonToUpdate.getLessonNumber())
                 .build();
-
-        return lessonResponseDTO;
     }
 
     @Override
     public LessonResponseDTO deleteLesson(Integer id) {
         Lesson lesson = getLessonEntityById(id);
         lessonRepository.deleteById(id);
-        LessonResponseDTO lessonResponseDTO = LessonResponseDTO
+        return LessonResponseDTO
                 .builder()
                 .title(lesson.getTitle())
                 .content(lesson.getContent())
                 .video(lesson.getVideo())
+                .lessonNumber(lesson.getLessonNumber())
                 .build();
-        return lessonResponseDTO;
     }
 }

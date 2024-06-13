@@ -56,6 +56,8 @@ public enum ErrorCode {
     USER_CREATED("User created successfully", HttpStatus.CREATED),
     STAFF_CREATED("Staff created successfully", HttpStatus.CREATED),
     WRONG_OLD_PASSWORD("Wrong old password", HttpStatus.BAD_REQUEST),
+    ACCOUNT_DELETED("Account has been deleted", HttpStatus.OK),
+    ACCOUNT_ACTIVATED("Account has been activated", HttpStatus.OK),
     ;
 
     ErrorCode(String message, HttpStatusCode statusCode) {

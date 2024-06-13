@@ -34,9 +34,9 @@ public class AppUserController {
 
     //getListAppUser with paging and search
     @GetMapping()
-    public ApiResponse<?> getListAppUser (@RequestParam(defaultValue = "0") Integer pageNo,
+    public ApiResponse<?> getListAppUser (@RequestParam(defaultValue = "1") Integer pageNo,
                                           @RequestParam(defaultValue = "") String search) {
-        List<AppUserResponseDTO> listAppUser =  appUserService.getListAppUser(pageNo, search);
+        List<AppUserResponseDTO> listAppUser =  appUserService.getListAppUser(pageNo -1, search);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<AppUserResponseDTO>>builder()
                         .code(HttpStatus.OK.value())

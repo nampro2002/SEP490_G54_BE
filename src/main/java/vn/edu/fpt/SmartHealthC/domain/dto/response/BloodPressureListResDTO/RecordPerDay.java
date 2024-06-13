@@ -1,21 +1,21 @@
-package vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordResListDTO;
+package vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeActivity;
 
 import java.util.Date;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class RecordPerDay {
-    private TypeActivity activityType;
-
-    private Float duration;
-
     private Date date;
+    //Tâm thu
+    private Float systole;
+
+    //Tâm trương
+    private Float diastole;
 }

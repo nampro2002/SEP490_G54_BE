@@ -12,7 +12,7 @@ public interface FormQuestionService {
     FormQuestionResponseDTO createFormQuestion(FormQuestionRequestDTO formQuestion);
     FormQuestionResponseDTO  getFormQuestionById(Integer id);
     FormQuestion  getFormQuestionEntityById(Integer id);
-    List<FormQuestionResponseDTO> getAllFormQuestions();
+    List<FormQuestionResponseDTO> getAllFormQuestions(Integer pageNo, String search);
     FormQuestionResponseDTO updateFormQuestion(Integer id,FormQuestionRequestDTO formQuestion);
     FormQuestionResponseDTO deleteFormQuestion(Integer id);
 }

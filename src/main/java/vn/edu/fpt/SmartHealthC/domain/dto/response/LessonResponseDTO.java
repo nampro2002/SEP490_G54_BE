@@ -15,4 +15,6 @@ public class LessonResponseDTO {
     private String video;
 
     private String content;
+
+    private Integer lessonNumber;
 }

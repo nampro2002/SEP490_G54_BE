@@ -1,9 +1,14 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
@@ -67,8 +72,13 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public List<FormQuestionResponseDTO> getAllFormQuestions() {
-        List<FormQuestion> formQuestions = formQuestionRepository.findAll();
+    public List<FormQuestionResponseDTO> getAllFormQuestions(Integer pageNo, String search) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<FormQuestion> pagedResult  = formQuestionRepository.findAll(paging);
+        List<FormQuestion> formQuestions = new ArrayList<>();
+        if (pagedResult.hasContent()) {
+            formQuestions = pagedResult.getContent();
+        }
         List<FormQuestionResponseDTO> formQuestionResponseDTOS = new ArrayList<>();
         for (FormQuestion formQuestion : formQuestions) {
             FormQuestionResponseDTO formQuestionResponseDTO = FormQuestionResponseDTO
@@ -80,7 +90,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                     .build();
             formQuestionResponseDTOS.add(formQuestionResponseDTO);
         }
-        return formQuestionResponseDTOS;
+        return formQuestionResponseDTOS.stream().filter(record -> record.getQuestion().toLowerCase().contains(search.toLowerCase())).toList();
     }
 
     @Override

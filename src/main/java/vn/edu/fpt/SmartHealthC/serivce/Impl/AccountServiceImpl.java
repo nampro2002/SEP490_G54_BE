@@ -75,7 +75,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean activateAccount(Integer id) {
-        AppUser appUser = appUserRepository.findById(id).orElseThrow();
+        AppUser appUser = appUserRepository.findById(id).orElseThrow(()->
+                new AppException(ErrorCode.APP_USER_NOT_FOUND));
+        if(appUser.getAccountId().getIsActive()){
+            throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
+        }
         if (!(appUser.getWebUser() == null)) {
             Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
             account.setIsActive(true);
@@ -119,10 +123,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<AvailableMSResponseDTO> getAvailableMS() {
-        List<WebUser> accountList = webUserService.getAllWebUsers();
+        List<WebUser> accountList = webUserService.getAllUnDeletedMS();
         return accountList.stream().filter(record ->
-                        (record.getAccountId().getIsActive()
-                                && record.getAppUserList().size() < 10
+                        (record.getAppUserList().stream().filter(appUser -> !appUser.getAccountId().isDeleted()).count() < 10
                         ))
                 .map(record -> {
                     AvailableMSResponseDTO dto = new AvailableMSResponseDTO();
@@ -197,6 +200,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account deleteAccount(Integer id) {
         Account account = getAccountById(id);
+        if(account.isDeleted()){
+            throw new AppException(ErrorCode.ACCOUNT_DELETED);
+        }
         account.setDeleted(true);
         accountRepository.save(account);
         return account;
