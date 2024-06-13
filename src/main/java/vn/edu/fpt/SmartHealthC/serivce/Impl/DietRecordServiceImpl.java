@@ -3,19 +3,17 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietRecordListResDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.DietRecordRepository;
-import vn.edu.fpt.SmartHealthC.repository.StepRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
-import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DietRecordServiceImpl implements DietRecordService {
@@ -51,8 +49,45 @@ public class DietRecordServiceImpl implements DietRecordService {
     }
 
     @Override
-    public List<DietRecord> getAllDietRecords() {
-        return dietRecordRepository.findAll();
+    public List<DietRecordListResDTO> getAllDietRecords(Integer userId) {
+        List<Date> dietWeekList = dietRecordRepository.findDistinctWeek(userId);
+        List<DietRecordListResDTO> responseDTOList = new ArrayList<>();
+        for (Date week : dietWeekList) {
+            DietRecordListResDTO dietRecordListResDTO = DietRecordListResDTO.builder()
+                    .appUserId(userId)
+                    .weekStart(week)
+                    .build();
+            responseDTOList.add(dietRecordListResDTO);
+        }
+
+        for (DietRecordListResDTO record : responseDTOList) {
+            List<DietRecord> dietRecords = dietRecordRepository.findByWeekStart(record.getWeekStart(), userId);
+            List<RecordPerDay> recordPerDayList = new ArrayList<>();
+            Float avgDish = 0f;
+            int count = 0;
+            for (DietRecord dietRecord : dietRecords) {
+                RecordPerDay recordPerDay = RecordPerDay.builder()
+                        .date(dietRecord.getDate())
+                        .dishPerDay(dietRecord.getActualValue())
+                        .build();
+                recordPerDayList.add(recordPerDay);
+                //sortby getTimeMeasure getIndex and Date date;
+                recordPerDayList.sort(Comparator.comparing(RecordPerDay::getDate));
+
+                if (dietRecord.getDishPerDay() != null) {
+                    avgDish += dietRecord.getActualValue() ;
+                    count++;
+                }
+            }
+            if (count != 0) {
+                avgDish = avgDish / count;
+                avgDish = (float) (Math.round(avgDish * 100) / 100);
+            }
+            record.setAvgValue(avgDish);
+            record.setRecordPerDayList(recordPerDayList);
+        }
+
+        return responseDTOList;
     }
 
     @Override

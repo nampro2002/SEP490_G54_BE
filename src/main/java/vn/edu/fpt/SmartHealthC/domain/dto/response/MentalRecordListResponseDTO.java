@@ -5,22 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MedicalHistoryResponseDTO {
-    private String title;
-    private List<MedicalRecord> data;
-}
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
- class MedicalRecord{
-    private int id;
-    private String name;
+public class MentalRecordListResponseDTO {
+    private Date date;
+    private String status;
+    private List<String> mentalRuleTitle = new ArrayList<>();
 }

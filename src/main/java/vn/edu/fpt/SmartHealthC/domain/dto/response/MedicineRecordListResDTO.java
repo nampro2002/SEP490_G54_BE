@@ -5,13 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MentalRuleResponseDTO {
-    private Integer id;
-    private String title;
-    private String description;
-    private boolean isDeleted;
+public class MedicineRecordListResDTO {
+    private Date date;
+    private String medicineStatus;
 }

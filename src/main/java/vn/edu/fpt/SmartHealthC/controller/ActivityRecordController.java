@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordResListDTO.ActivityRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.serivce.ActivityRecordService;
@@ -39,12 +40,12 @@ public class ActivityRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping
-    public ApiResponse<List<ActivityRecord>> getAllActivityRecords() {
+    @GetMapping("/getByAppUser/{id}")
+    public ApiResponse<List<ActivityRecordResListDTO>> getAllActivityRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<ActivityRecord>>builder()
+                .body(ApiResponse.<List<ActivityRecordResListDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(activityRecordService.getAllActivityRecords())
+                        .result(activityRecordService.getAllActivityRecords(id))
                         .build()).getBody();
     }
 

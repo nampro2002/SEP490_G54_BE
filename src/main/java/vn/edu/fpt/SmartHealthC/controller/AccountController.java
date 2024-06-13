@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.UpdatePasswordRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.serivce.AccountService;
 
 import java.util.List;
@@ -33,10 +35,11 @@ public class AccountController {
 
     @PostMapping("/staff")
     public ApiResponse<?> createStaff(@RequestBody @Valid WebUserRequestDTO account) {
+        accountService.createStaff(account);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
                         .code(HttpStatus.CREATED.value())
-                        .result(accountService.createStaff(account))
+                        .message(ErrorCode.STAFF_CREATED.getMessage())
                         .build()).getBody();
     }
 
@@ -82,8 +85,15 @@ public class AccountController {
                         .build()).getBody();
     }
 
- // active / changepass
-
+    // active / changepass
+    @PutMapping("change-pass/{id}")
+    public ApiResponse<Account> changePassword(@PathVariable Integer id, @RequestBody UpdatePasswordRequestDTO updatePasswordRequestDTO) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Account>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(accountService.changePassword(id, updatePasswordRequestDTO))
+                        .build()).getBody();
+    }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Account> deleteAccount(@PathVariable Integer id) {

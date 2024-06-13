@@ -6,14 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
-import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.SF_Record;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordResListDTO.StepRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
-import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/step-records")
@@ -40,12 +37,12 @@ public class StepRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping
-    public ApiResponse<List<StepRecord>> getAllStepRecords() {
+    @GetMapping("getByAppUser/{id}")
+    public ApiResponse<List<StepRecordResListDTO>> getAllStepRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<StepRecord>>builder()
+                .body(ApiResponse.<List<StepRecordResListDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(stepRecordService.getAllStepRecords())
+                        .result(stepRecordService.getAllStepRecords(id))
                         .build()).getBody();
     }
 

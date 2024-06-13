@@ -1,11 +1,9 @@
 package vn.edu.fpt.SmartHealthC.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeActivity;
 
@@ -23,6 +21,8 @@ public class ActivityRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
+    @ToString.Exclude
+    @JsonIgnore
     private AppUser appUserId;
 
     private Date weekStart;

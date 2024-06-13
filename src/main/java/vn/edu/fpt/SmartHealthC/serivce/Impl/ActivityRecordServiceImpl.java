@@ -3,18 +3,17 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.Account;
-import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordResListDTO.ActivityRecordResListDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordResListDTO.RecordPerDay;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordResDTOFolder.CardinalRecordResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.ActivityRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.serivce.ActivityRecordService;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ActivityRecordServiceImpl implements ActivityRecordService {
@@ -29,9 +28,8 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     {
         ActivityRecord activityRecord =  ActivityRecord.builder()
                 .planDuration(activityRecordDTO.getPlanDuration())
-                .actualDuration(activityRecordDTO.getActualDuration())
+                .actualDuration(0f)
                 .planType(activityRecordDTO.getPlanType())
-                .actualType(activityRecordDTO.getActualType())
                 .weekStart(activityRecordDTO.getWeekStart())
                 .date(activityRecordDTO.getDate()).build();
         Optional<AppUser> appUser = appUserRepository.findById(activityRecordDTO.getAppUserId());
@@ -53,8 +51,45 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     }
 
     @Override
-    public List<ActivityRecord> getAllActivityRecords() {
-        return activityRecordRepository.findAll();
+    public List<ActivityRecordResListDTO> getAllActivityRecords(Integer userId) {
+        List<Date> activityWeekList = activityRecordRepository.findDistinctWeek(userId);
+        List<ActivityRecordResListDTO> responseDTOList = new ArrayList<>();
+        for (Date week : activityWeekList) {
+            ActivityRecordResListDTO activityRecordResListDTO = ActivityRecordResListDTO.builder()
+                    .appUserId(userId)
+                    .weekStart(week)
+                    .build();
+            responseDTOList.add(activityRecordResListDTO);
+        }
+
+        for (ActivityRecordResListDTO record : responseDTOList) {
+            List<ActivityRecord> activityRecordList = activityRecordRepository.findByWeekStart(record.getWeekStart(), userId);
+            List<RecordPerDay> recordPerDayList = new ArrayList<>();
+            Float avgDuration = 0f;
+            int countDuration = 0;
+            for (ActivityRecord activityRecord : activityRecordList) {
+                RecordPerDay recordPerDay = RecordPerDay
+                        .builder()
+                        .date(activityRecord.getDate())
+                        .duration(activityRecord.getActualDuration())
+                        .build();
+                if (activityRecord.getActualType() != null) {
+                    recordPerDay.setActivityType(activityRecord.getActualType());
+                }
+                if (recordPerDay.getDuration() != null) {
+                    avgDuration += recordPerDay.getDuration();
+                    countDuration++;
+                }
+                recordPerDayList.add(recordPerDay);
+            }
+            if (countDuration != 0) {
+                avgDuration = avgDuration / countDuration;
+                avgDuration = (float) (Math.round(avgDuration * 100) / 100);
+            }
+            record.setAvgValue(avgDuration);
+            record.setRecordPerDayList(recordPerDayList);
+        }
+        return responseDTOList;
     }
 
     @Override

@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MentalRuleResponseDTO {
+public class MedicineTypeResponseDTO {
     private Integer id;
+
     private String title;
     private String description;
     private boolean isDeleted;
