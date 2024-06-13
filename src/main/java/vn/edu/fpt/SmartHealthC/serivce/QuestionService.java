@@ -19,6 +19,4 @@ public interface QuestionService {
     List<QuestionResponseDTO> getAllPendingQuestionsByType(TypeUserQuestion typeUserQuestion);
     List<QuestionResponseDTO> getAllQuestionsByType(TypeUserQuestion typeUserQuestion);
     List<QuestionResponseDTO> getQuestionsByType(TypeUserQuestion typeUserQuestion);
-
-    QuestionResponseDTO removeAnswer(Integer id);
 }

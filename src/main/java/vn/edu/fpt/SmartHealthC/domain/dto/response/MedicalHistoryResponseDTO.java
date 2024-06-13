@@ -16,10 +16,7 @@ public class MedicalHistoryResponseDTO {
     private List<MedicalRecord> data;
 }
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+
  class MedicalRecord{
     private int id;
     private String name;

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.CardinalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CardinalRecordResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordResDTOFolder.CardinalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
 

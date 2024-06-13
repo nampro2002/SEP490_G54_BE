@@ -1,17 +1,15 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MentalRecordService {
-    MentalRecordResponseDTO createMentalRecord(MentalRecordDTO mentalRecordDTO);
-    MentalRecord getMentalRecordEntityById(Integer id);
-    MentalRecordResponseDTO getMentalRecordById(Integer id);
-    List<MentalRecordListResDTO> getAllMentalRecords(Integer userId);
-    MentalRecordResponseDTO updateMentalRecord(Integer id,MentalRecordDTO mentalRecordDTO);
-    MentalRecordResponseDTO deleteMentalRecord(Integer id);
+    MentalRecord createMentalRecord(MentalRecordDTO mentalRecordDTO);
+    MentalRecord getMentalRecordById(Integer id);
+    List<MentalRecord> getAllMentalRecords();
+    MentalRecord updateMentalRecord(Integer id,MentalRecordDTO mentalRecordDTO);
+    MentalRecord deleteMentalRecord(Integer id);
 }

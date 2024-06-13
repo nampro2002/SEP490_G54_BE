@@ -1,9 +1,11 @@
 package vn.edu.fpt.SmartHealthC.domain.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -19,15 +21,13 @@ public class DietRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    @ToString.Exclude
-    @JsonIgnore
     private AppUser appUserId;
 
-    private Integer  dishPerDay;
+    private int  dishPerDay;
 
     private Date weekStart;
 
     private Date date;
 
-    private Float actualValue;
+    private float  actualValue;
 }

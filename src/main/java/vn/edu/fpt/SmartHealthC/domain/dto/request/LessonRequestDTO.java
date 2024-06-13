@@ -19,6 +19,4 @@ public class LessonRequestDTO {
 
     private String content;
 
-    private Integer lessonNumber;
-
 }

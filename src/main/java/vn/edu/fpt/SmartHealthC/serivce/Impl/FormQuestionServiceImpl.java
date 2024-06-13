@@ -1,15 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
@@ -19,7 +12,6 @@ import vn.edu.fpt.SmartHealthC.repository.LessonRepository;
 import vn.edu.fpt.SmartHealthC.serivce.FormQuestionService;
 import vn.edu.fpt.SmartHealthC.serivce.LessonService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,26 +21,18 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     private FormQuestionRepository formQuestionRepository;
 
     @Override
-    public FormQuestionResponseDTO createFormQuestion(FormQuestionRequestDTO formQuestionRequestDTO) {
+    public FormQuestion createFormQuestion(FormQuestionRequestDTO formQuestionRequestDTO) {
         FormQuestion formQuestion = FormQuestion
                 .builder()
                 .question(formQuestionRequestDTO.getQuestion())
                 .questionNumber(formQuestionRequestDTO.getQuestionNumber())
                 .type(formQuestionRequestDTO.getType())
                 .build();
-        formQuestion = formQuestionRepository.save(formQuestion);
-        FormQuestionResponseDTO formQuestionResponseDTO = FormQuestionResponseDTO
-                .builder()
-                .id(formQuestion.getId())
-                .question(formQuestion.getQuestion())
-                .questionNumber(formQuestion.getQuestionNumber())
-                .type(formQuestion.getType())
-                .build();
-        return formQuestionResponseDTO;
+        return formQuestionRepository.save(formQuestion);
     }
 
     @Override
-    public FormQuestion getFormQuestionEntityById(Integer id) {
+    public FormQuestion getFormQuestionById(Integer id) {
         Optional<FormQuestion> formQuestion = formQuestionRepository.findById(id);
         if (!formQuestion.isPresent()) {
             throw new AppException(ErrorCode.FORM_QUESTION_NOT_FOUND);
@@ -57,77 +41,23 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public FormQuestionResponseDTO getFormQuestionById(Integer id) {
-        Optional<FormQuestion> formQuestion = formQuestionRepository.findById(id);
-        if (!formQuestion.isPresent()) {
-            throw new AppException(ErrorCode.FORM_QUESTION_NOT_FOUND);
-        }
-        FormQuestionResponseDTO formQuestionResponseDTO = FormQuestionResponseDTO
-                .builder()
-                .id(formQuestion.get().getId())
-                .question(formQuestion.get().getQuestion())
-                .questionNumber(formQuestion.get().getQuestionNumber())
-                .type(formQuestion.get().getType())
-                .build();
-        return formQuestionResponseDTO;
+    public List<FormQuestion> getAllFormQuestions() {
+        return formQuestionRepository.findAll();
     }
 
     @Override
-    public ResponsePaging<List<FormQuestionResponseDTO>> getAllFormQuestions(Integer pageNo, String search) {
-        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<FormQuestion> pagedResult  = formQuestionRepository.findAll(paging);
-        List<FormQuestion> formQuestions = new ArrayList<>();
-        if (pagedResult.hasContent()) {
-            formQuestions = pagedResult.getContent();
-        }
-        List<FormQuestionResponseDTO> formQuestionResponseDTOS = new ArrayList<>();
-        for (FormQuestion formQuestion : formQuestions) {
-            FormQuestionResponseDTO formQuestionResponseDTO = FormQuestionResponseDTO
-                    .builder()
-                    .id(formQuestion.getId())
-                    .question(formQuestion.getQuestion())
-                    .questionNumber(formQuestion.getQuestionNumber())
-                    .type(formQuestion.getType())
-                    .build();
-            formQuestionResponseDTOS.add(formQuestionResponseDTO);
-        }
-        formQuestionResponseDTOS =  formQuestionResponseDTOS.stream().filter(record -> record.getQuestion().toLowerCase().contains(search.toLowerCase())).toList();
-        return ResponsePaging.<List<FormQuestionResponseDTO>>builder()
-                .totalPages(pagedResult.getTotalPages())
-                .currentPage(pageNo + 1)
-                .totalItems((int) pagedResult.getTotalElements())
-                .dataResponse(formQuestionResponseDTOS)
-                .build();
-    }
-
-    @Override
-    public FormQuestionResponseDTO updateFormQuestion(Integer id,FormQuestionRequestDTO formQuestionRequestDTO) {
-        FormQuestion formQuestion = getFormQuestionEntityById(id);
+    public FormQuestion updateFormQuestion(Integer id,FormQuestionRequestDTO formQuestionRequestDTO) {
+        FormQuestion formQuestion = getFormQuestionById(id);
         formQuestion.setQuestion(formQuestionRequestDTO.getQuestion());
         formQuestion.setQuestionNumber(formQuestionRequestDTO.getQuestionNumber());
         formQuestion.setType(formQuestionRequestDTO.getType());
-        formQuestion = formQuestionRepository.save(formQuestion);
-        FormQuestionResponseDTO formQuestionResponseDTO = FormQuestionResponseDTO
-                .builder()
-                .id(formQuestion.getId())
-                .question(formQuestion.getQuestion())
-                .questionNumber(formQuestion.getQuestionNumber())
-                .type(formQuestion.getType())
-                .build();
-        return formQuestionResponseDTO;
+        return formQuestionRepository.save(formQuestion);
     }
 
     @Override
-    public FormQuestionResponseDTO deleteFormQuestion(Integer id) {
-        FormQuestion formQuestion = getFormQuestionEntityById(id);
+    public FormQuestion deleteFormQuestion(Integer id) {
+        FormQuestion formQuestion = getFormQuestionById(id);
         formQuestionRepository.deleteById(id);
-        FormQuestionResponseDTO formQuestionResponseDTO = FormQuestionResponseDTO
-                .builder()
-                .id(formQuestion.getId())
-                .question(formQuestion.getQuestion())
-                .questionNumber(formQuestion.getQuestionNumber())
-                .type(formQuestion.getType())
-                .build();
-        return formQuestionResponseDTO;
+        return formQuestion;
     }
 }

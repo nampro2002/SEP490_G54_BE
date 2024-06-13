@@ -1,9 +1,11 @@
 package vn.edu.fpt.SmartHealthC.domain.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
@@ -20,8 +22,6 @@ public class MentalRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
-    @JsonIgnore
-    @ToString.Exclude
     private AppUser appUserId;
 
     private boolean status;

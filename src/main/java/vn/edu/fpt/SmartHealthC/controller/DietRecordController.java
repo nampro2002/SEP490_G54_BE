@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
@@ -40,12 +39,12 @@ public class DietRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/getByAppUser/{id}")
-    public ApiResponse<List<DietRecordListResDTO>> getAllDietRecords(@PathVariable Integer id) {
+    @GetMapping
+    public ApiResponse<List<DietRecord>> getAllDietRecords() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<DietRecordListResDTO>>builder()
+                .body(ApiResponse.<List<DietRecord>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(dietRecordService.getAllDietRecords(id))
+                        .result(dietRecordService.getAllDietRecords())
                         .build()).getBody();
     }
 

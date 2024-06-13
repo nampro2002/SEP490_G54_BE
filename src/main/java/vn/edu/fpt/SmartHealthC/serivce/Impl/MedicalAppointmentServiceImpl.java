@@ -33,7 +33,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     private AppUserRepository appUserRepository;
 
     @Override
-    public MedicalAppointmentResponseDTO createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO) {
+    public MedicalAppointment createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO) {
         MedicalAppointment medicalAppointment = MedicalAppointment.builder()
                 .typeMedicalAppointment(medicalAppointmentDTO.getType())
                 .hospital(medicalAppointmentDTO.getLocation())
@@ -47,20 +47,11 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         }
 
         medicalAppointment.setAppUserId(appUser.get());
-        medicalAppointment = medicalAppointmentRepository.save(medicalAppointment);
-        MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
-                .id(medicalAppointment.getId())
-                .appUserName(medicalAppointment.getAppUserId().getName())
-                .date(medicalAppointment.getDate())
-                .hospital(medicalAppointment.getHospital())
-                .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
-                .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
-                .build();
-        return medicalAppointmentResponseDTO;
+        return medicalAppointmentRepository.save(medicalAppointment);
     }
 
     @Override
-    public MedicalAppointment getMedicalAppointmentEntityById(Integer id) {
+    public MedicalAppointment getMedicalAppointmentById(Integer id) {
         Optional<MedicalAppointment> medicalAppointment = medicalAppointmentRepository.findById(id);
         if (medicalAppointment.isEmpty()) {
             throw new AppException(ErrorCode.MEDICAL_APPOINTMENT_NOT_FOUND);
@@ -69,72 +60,24 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     }
 
     @Override
-    public MedicalAppointmentResponseDTO getMedicalAppointmentById(Integer id) {
-        Optional<MedicalAppointment> medicalAppointment = medicalAppointmentRepository.findById(id);
-        if (medicalAppointment.isEmpty()) {
-            throw new AppException(ErrorCode.MEDICAL_APPOINTMENT_NOT_FOUND);
-        }
-        MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
-                .id(medicalAppointment.get().getId())
-                .appUserName(medicalAppointment.get().getAppUserId().getName())
-                .date(medicalAppointment.get().getDate())
-                .hospital(medicalAppointment.get().getHospital())
-                .typeMedicalAppointment(medicalAppointment.get().getTypeMedicalAppointment())
-                .statusMedicalAppointment(medicalAppointment.get().getStatusMedicalAppointment())
-                .build();
-        return medicalAppointmentResponseDTO;
-
+    public List<MedicalAppointment> getAllMedicalAppointments() {
+        return medicalAppointmentRepository.findAll();
     }
 
     @Override
-    public List<MedicalAppointmentResponseDTO> getAllMedicalAppointments() {
-        List<MedicalAppointmentResponseDTO> responseDTOList = new ArrayList<>();
-        List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAll();
-        for (MedicalAppointment medicalAppointment : medicalAppointmentList) {
-            MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
-                    .id(medicalAppointment.getId())
-                    .appUserName(medicalAppointment.getAppUserId().getName())
-                    .date(medicalAppointment.getDate())
-                    .hospital(medicalAppointment.getHospital())
-                    .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
-                    .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
-                    .build();
-            responseDTOList.add(medicalAppointmentResponseDTO);
-        }
-        return responseDTOList;
-    }
-
-    @Override
-    public MedicalAppointmentResponseDTO updateMedicalAppointment(Integer id, MedicalAppointmentDTO medicalAppointmentDTO) {
-        MedicalAppointment medicalAppointment = getMedicalAppointmentEntityById(id);
+    public MedicalAppointment updateMedicalAppointment(Integer id, MedicalAppointmentDTO medicalAppointmentDTO) {
+        MedicalAppointment medicalAppointment = getMedicalAppointmentById(id);
         medicalAppointment.setTypeMedicalAppointment(medicalAppointmentDTO.getType());
         medicalAppointment.setDate(medicalAppointmentDTO.getDate());
         medicalAppointment.setHospital(medicalAppointmentDTO.getLocation());
-        medicalAppointment = medicalAppointmentRepository.save(medicalAppointment);
-        MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
-                .id(medicalAppointment.getId())
-                .appUserName(medicalAppointment.getAppUserId().getName())
-                .date(medicalAppointment.getDate())
-                .hospital(medicalAppointment.getHospital())
-                .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
-                .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
-                .build();
-        return medicalAppointmentResponseDTO;
+        return medicalAppointmentRepository.save(medicalAppointment);
     }
 
     @Override
-    public MedicalAppointmentResponseDTO deleteMedicalAppointment(Integer id) {
-        MedicalAppointment medicalAppointment = getMedicalAppointmentEntityById(id);
+    public MedicalAppointment deleteMedicalAppointment(Integer id) {
+        MedicalAppointment medicalAppointment = getMedicalAppointmentById(id);
         medicalAppointmentRepository.deleteById(id);
-        MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
-                .id(medicalAppointment.getId())
-                .appUserName(medicalAppointment.getAppUserId().getName())
-                .date(medicalAppointment.getDate())
-                .hospital(medicalAppointment.getHospital())
-                .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
-                .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
-                .build();
-        return medicalAppointmentResponseDTO;
+        return medicalAppointment;
     }
 
     @Override
@@ -145,7 +88,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         if (pagedResult.hasContent()) {
             medicalAppointmentList = pagedResult.getContent();
         }
-        List<MedicalAppointmentResponseDTO> listResponse = medicalAppointmentList.stream()
+        List<MedicalAppointmentResponseDTO> listResponse =  medicalAppointmentList.stream()
 //                .filter(record -> (record.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.PENDING) &&
 //                        record.getAppUserId().getId() == id))
                 .map(record -> {

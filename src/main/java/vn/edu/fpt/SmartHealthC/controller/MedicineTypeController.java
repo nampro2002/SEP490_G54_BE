@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypeRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineTypeResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineType;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineTypeService;
@@ -22,45 +19,47 @@ public class MedicineTypeController {
     private MedicineTypeService medicineTypeService;
 
     @PostMapping
-    public ApiResponse<MedicineTypeResponseDTO> createMedicineType(@RequestBody MedicineTypeRequestDTO medicineType) {
+    public ApiResponse<MedicineType> createMedicineType(@RequestBody MedicineType medicineType) {
+        MedicineType createdMedicineType = medicineTypeService.createMedicineType(medicineType);
         return  ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.<MedicineTypeResponseDTO>builder()
+                .body(ApiResponse.<MedicineType>builder()
                         .code(HttpStatus.CREATED.value())
-                        .result(medicineTypeService.createMedicineType(medicineType))
+                        .result(createdMedicineType)
                         .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<MedicineTypeResponseDTO>  getMedicineTypeById(@PathVariable Integer id) {
+    public ApiResponse<MedicineType>  getMedicineTypeById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MedicineTypeResponseDTO>builder()
+                .body(ApiResponse.<MedicineType>builder()
                         .code(HttpStatus.OK.value())
                         .result(medicineTypeService.getMedicineTypeById(id))
                         .build()).getBody();
     }
 
     @GetMapping
-    public ApiResponse<ResponsePaging<List<MedicineTypeResponseDTO>>> getAllMedicineTypes(@RequestParam(defaultValue = "1") Integer pageNo,  @RequestParam(defaultValue = "") String search) {
+    public ApiResponse<List<MedicineType>> getAllMedicineTypes() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<ResponsePaging<List<MedicineTypeResponseDTO>>>builder()
+                .body(ApiResponse.<List<MedicineType>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicineTypeService.getAllMedicineTypes(pageNo-1, search))
+                        .result(medicineTypeService.getAllMedicineTypes())
                         .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MedicineTypeResponseDTO> updateMedicineType(@PathVariable Integer id,@RequestBody MedicineTypeRequestDTO medicineType) {
+    public ApiResponse<MedicineType> updateMedicineType(@PathVariable Integer id,@RequestBody MedicineType medicineType) {
+        MedicineType updatedMedicineType = medicineTypeService.updateMedicineType(id,medicineType);
         return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MedicineTypeResponseDTO>builder()
+                .body(ApiResponse.<MedicineType>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicineTypeService.updateMedicineType(id,medicineType))
+                        .result(updatedMedicineType)
                         .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<MedicineTypeResponseDTO> deleteMedicineType(@PathVariable Integer id) {
+    public ApiResponse<MedicineType> deleteMedicineType(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MedicineTypeResponseDTO>builder()
+                .body(ApiResponse.<MedicineType>builder()
                         .code(HttpStatus.OK.value())
                         .result(medicineTypeService.deleteMedicineType(id))
                         .build()).getBody();
