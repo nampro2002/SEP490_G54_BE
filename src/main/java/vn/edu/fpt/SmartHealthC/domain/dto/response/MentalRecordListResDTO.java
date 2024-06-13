@@ -5,14 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class MentalRecordListResDTO {
-    private Integer id;
-    private Float point;
-    private String weekStart;
-    private String date;
-    private String mentalRule;
+    private Date date;
+    private String status;
+    private List<String> mentalRuleTitle = new ArrayList<>();
 }

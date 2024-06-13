@@ -8,6 +8,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalHistoryRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalHistoryResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalHistoryResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalHistory;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalHistoryService;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/chronic-diseases")
+@RequestMapping("/api/medical-history")
 public class MedicalHistoryController {
     @Autowired
     private MedicalHistoryService medicalHistoryService;
@@ -39,11 +40,11 @@ public class MedicalHistoryController {
     }
 
     @GetMapping
-    public ApiResponse<List<MedicalHistoryResDTO>> getAllMedicalHistory() {
+    public ApiResponse<ResponsePaging<List<MedicalHistoryResDTO>>> getAllMedicalHistory(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MedicalHistoryResDTO>>builder()
+                .body(ApiResponse.<ResponsePaging<List<MedicalHistoryResDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicalHistoryService.getAllMedicalHistory())
+                        .result(medicalHistoryService.getAllMedicalHistory(pageNo - 1, search))
                         .build()).getBody();
     }
 
@@ -57,7 +58,7 @@ public class MedicalHistoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<MedicalHistoryResDTO> deleteChronicDisease(@PathVariable Integer id) {
+    public ApiResponse<MedicalHistoryResDTO> deleteMedicalHistory(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicalHistoryResDTO>builder()
                         .code(HttpStatus.OK.value())

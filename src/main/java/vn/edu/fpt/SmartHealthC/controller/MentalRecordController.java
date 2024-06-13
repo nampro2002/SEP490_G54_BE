@@ -6,14 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/mental-records")
@@ -41,9 +38,9 @@ public class MentalRecordController {
     }
 
     @GetMapping("getByAppUser/{id}")
-    public ApiResponse<List<MentalRecordListResponseDTO>> getAllMentalRecords(@PathVariable Integer id) {
+    public ApiResponse<List<MentalRecordListResDTO>> getAllMentalRecords(@PathVariable Integer id) {
         return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MentalRecordListResponseDTO>>builder()
+                .body(ApiResponse.<List<MentalRecordListResDTO>>builder()
                         .code(HttpStatus.OK.value())
                         .result(mentalRecordService.getAllMentalRecords(id))
                         .build()).getBody();

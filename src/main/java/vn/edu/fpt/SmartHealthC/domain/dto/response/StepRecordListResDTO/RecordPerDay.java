@@ -1,10 +1,9 @@
-package vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureResponseDTO;
+package vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeTimeMeasure;
 
 import java.util.Date;
 
@@ -14,9 +13,5 @@ import java.util.Date;
 @AllArgsConstructor
 public class RecordPerDay {
     private Date date;
-    //Tâm thu
-    private Float systole;
-
-    //Tâm trương
-    private Float diastole;
+    private Float step;
 }

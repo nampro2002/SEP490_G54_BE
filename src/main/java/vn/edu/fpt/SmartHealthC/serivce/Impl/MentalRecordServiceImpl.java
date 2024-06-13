@@ -3,10 +3,9 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
@@ -83,15 +82,15 @@ public class MentalRecordServiceImpl implements MentalRecordService {
 
 
     @Override
-    public List<MentalRecordListResponseDTO> getAllMentalRecords(Integer userId) {
+    public List<MentalRecordListResDTO> getAllMentalRecords(Integer userId) {
         List<Date> mentalDate = mentalRecordRepository.findDistinctDate(userId);
-        List<MentalRecordListResponseDTO> listResponseDTOList = new ArrayList<>();
+        List<MentalRecordListResDTO> listResponseDTOList = new ArrayList<>();
         for (Date date : mentalDate) {
-            listResponseDTOList.add(MentalRecordListResponseDTO.builder()
+            listResponseDTOList.add(MentalRecordListResDTO.builder()
                     .date(date)
                     .build());
         }
-        for (MentalRecordListResponseDTO record : listResponseDTOList) {
+        for (MentalRecordListResDTO record : listResponseDTOList) {
             List<MentalRecord> mentalRecords = mentalRecordRepository.findByAppUserIdAndDate(userId, record.getDate());
             record.setMentalRuleTitle(new ArrayList<>());
             int count = 0;

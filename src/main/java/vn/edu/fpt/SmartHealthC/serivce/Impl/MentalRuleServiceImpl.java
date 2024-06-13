@@ -1,9 +1,15 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRuleRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRuleResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
+import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
@@ -63,8 +69,13 @@ public class MentalRuleServiceImpl implements MentalRuleService {
                 .build();
     }
     @Override
-    public List<MentalRuleResponseDTO> getAllMentalRules() {
-        List<MentalRule> mentalRuleList = mentalRuleRepository.findAll();
+    public ResponsePaging<List<MentalRuleResponseDTO>> getAllMentalRules(Integer pageNo, String search) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<MentalRule> pagedResult = mentalRuleRepository.findAll(paging);
+        List<MentalRule> mentalRuleList= new ArrayList<>();
+        if (pagedResult.hasContent()) {
+            mentalRuleList = pagedResult.getContent();
+        }
         List<MentalRuleResponseDTO> mentalRuleResponseDTOList = new ArrayList<>();
         for (MentalRule mentalRule : mentalRuleList) {
             MentalRuleResponseDTO mentalRuleResponseDTO = MentalRuleResponseDTO
@@ -76,7 +87,13 @@ public class MentalRuleServiceImpl implements MentalRuleService {
                     .build();
             mentalRuleResponseDTOList.add(mentalRuleResponseDTO);
         }
-        return mentalRuleResponseDTOList;
+        mentalRuleResponseDTOList = mentalRuleResponseDTOList.stream().filter(record -> record.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
+        return ResponsePaging.<List<MentalRuleResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(mentalRuleResponseDTOList)
+                .build();
     }
 
     @Override

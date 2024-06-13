@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRuleRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.LessonResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRuleResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRuleService;
@@ -40,11 +42,11 @@ public class MentalRuleController {
     }
 
     @GetMapping
-    public ApiResponse<List<MentalRuleResponseDTO>> getAllMentalRules() {
+    public ApiResponse<ResponsePaging<List<MentalRuleResponseDTO>>> getAllMentalRules(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MentalRuleResponseDTO>>builder()
+                .body(ApiResponse.<ResponsePaging<List<MentalRuleResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(mentalRuleService.getAllMentalRules())
+                        .result(mentalRuleService.getAllMentalRules(pageNo-1, search))
                         .build()).getBody();
     }
 

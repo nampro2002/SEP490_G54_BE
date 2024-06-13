@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypeRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineTypeResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineType;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineTypeService;
@@ -39,11 +40,11 @@ public class MedicineTypeController {
     }
 
     @GetMapping
-    public ApiResponse<List<MedicineTypeResponseDTO>> getAllMedicineTypes() {
+    public ApiResponse<ResponsePaging<List<MedicineTypeResponseDTO>>> getAllMedicineTypes(@RequestParam(defaultValue = "1") Integer pageNo,  @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MedicineTypeResponseDTO>>builder()
+                .body(ApiResponse.<ResponsePaging<List<MedicineTypeResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicineTypeService.getAllMedicineTypes())
+                        .result(medicineTypeService.getAllMedicineTypes(pageNo-1, search))
                         .build()).getBody();
     }
 

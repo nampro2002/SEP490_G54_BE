@@ -1,11 +1,17 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypeRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineTypeResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineType;
+import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.MedicineTypeRepository;
@@ -64,8 +70,13 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     }
 
     @Override
-    public List<MedicineTypeResponseDTO> getAllMedicineTypes() {
-        List<MedicineType> medicineTypeList= medicineTypeRepository.findAll();
+    public ResponsePaging<List<MedicineTypeResponseDTO>> getAllMedicineTypes(Integer pageNo, String search) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<MedicineType> pagedResult = medicineTypeRepository.findAll(paging);
+        List<MedicineType> medicineTypeList= new ArrayList<>();
+        if (pagedResult.hasContent()) {
+            medicineTypeList = pagedResult.getContent();
+        }
         List<MedicineTypeResponseDTO> medicineTypeResponseDTOList = new ArrayList<>();
         for(MedicineType medicineType:medicineTypeList){
             medicineTypeResponseDTOList.add(MedicineTypeResponseDTO.builder()
@@ -75,7 +86,13 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
                     .isDeleted(medicineType.isDeleted())
                     .build());
         }
-        return medicineTypeResponseDTOList;
+        medicineTypeResponseDTOList = medicineTypeResponseDTOList.stream().filter(record -> record.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
+        return ResponsePaging.<List<MedicineTypeResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(medicineTypeResponseDTOList)
+                .build();
     }
 
     @Override

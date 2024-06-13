@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LessonResponseDTO {
-    private String title;
+public class FAQResponseDTO {
+    private Integer id;
 
-    private String video;
+    private String question;
 
-    private String content;
+    private String answer;
 
-    private Integer lessonNumber;
 }
