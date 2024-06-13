@@ -17,7 +17,7 @@ public class MentalRecordDTO {
 
     private int appUserId;
 
-    private Float point;
+    private boolean status;
 
     private Date weekStart;
 

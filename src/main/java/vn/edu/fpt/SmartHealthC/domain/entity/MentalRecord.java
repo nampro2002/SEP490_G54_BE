@@ -24,7 +24,7 @@ public class MentalRecord {
     @JoinColumn(name = "appuser_id")
     private AppUser appUserId;
 
-    private Float point;
+    private boolean status;
 
     private Date weekStart;
 
