@@ -22,7 +22,7 @@ public class AppUserResponseDTO {
 
     private String name;
 
-    private String hospitalNumber;
+    private String cic;
 
     private Date dob;
 

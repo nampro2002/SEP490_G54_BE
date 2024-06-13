@@ -100,7 +100,7 @@ public class AccountServiceImpl implements AccountService {
                     dto.setEmail(record.getAccountId().getEmail());
                     dto.setAppUserId(record.getId());
                     dto.setName(record.getName());
-                    dto.setHospitalNumber(record.getHospitalNumber());
+                    dto.setCic(record.getCic());
                     dto.setDob(record.getDob());
                     dto.setGender(record.isGender());
                     dto.setPhoneNumber(record.getPhoneNumber());

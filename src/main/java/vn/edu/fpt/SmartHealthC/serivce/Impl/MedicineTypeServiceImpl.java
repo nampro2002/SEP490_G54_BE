@@ -42,6 +42,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     @Override
     public MedicineType updateMedicineType(Integer id,MedicineType medicineType) {
         MedicineType medicineTypeUpdate = getMedicineTypeById(id);
+        medicineTypeUpdate.setDeleted(medicineType.isDeleted());
         medicineTypeUpdate.setDescription(medicineType.getDescription());
         medicineTypeUpdate.setTitle(medicineType.getTitle());
         return medicineTypeRepository.save(medicineTypeUpdate);

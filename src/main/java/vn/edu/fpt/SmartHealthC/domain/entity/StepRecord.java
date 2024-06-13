@@ -30,5 +30,7 @@ public class StepRecord {
 
     private Date date;
 
+    private float  actualValue;
+
 
 }

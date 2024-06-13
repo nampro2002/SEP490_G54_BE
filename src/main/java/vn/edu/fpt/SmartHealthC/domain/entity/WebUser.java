@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,8 @@ public class WebUser {
 
     private String userName;
 
+    private Date dob;
+    private boolean gender;
 
     @OneToMany(mappedBy = "webUser")
     private List<AppUser> appUserList;

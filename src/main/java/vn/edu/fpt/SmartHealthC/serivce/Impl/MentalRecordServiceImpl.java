@@ -6,10 +6,12 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MentalRecordRepository;
+import vn.edu.fpt.SmartHealthC.repository.MentalRuleRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 
 import java.util.List;
@@ -22,6 +24,8 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     private MentalRecordRepository mentalRecordRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private MentalRuleRepository mentalRuleRepository;
 
     @Override
     public MentalRecord createMentalRecord(MentalRecordDTO mentalRecordDTO) {
@@ -35,6 +39,11 @@ public class MentalRecordServiceImpl implements MentalRecordService {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         mentalRecord.setAppUserId(appUser.get());
+        Optional<MentalRule> mentalRule = mentalRuleRepository.findById(mentalRecordDTO.getMentalRuleId());
+        if(mentalRule.isEmpty()) {
+            throw new AppException(ErrorCode.MENTAL_RULE_NOT_FOUND);
+        }
+        mentalRecord.setMentalRule(mentalRule.get());
         return mentalRecordRepository.save(mentalRecord);
     }
 
