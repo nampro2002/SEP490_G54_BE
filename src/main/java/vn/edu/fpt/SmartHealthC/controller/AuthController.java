@@ -12,6 +12,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.exception.BadRequestException;
 import vn.edu.fpt.SmartHealthC.exception.DataNotFoundException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
 
@@ -37,7 +38,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
                         .code(HttpStatus.CREATED.value())
-                        .message("Account created successfully")
+                        .message(ErrorCode.STAFF_CREATED.getMessage())
                         .build()).getBody();
     }
 

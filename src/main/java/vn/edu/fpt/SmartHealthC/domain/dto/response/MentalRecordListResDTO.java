@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MentalRuleResponseDTO {
+public class MentalRecordListResDTO {
     private Integer id;
-    private String title;
-    private String description;
-    private boolean isDeleted;
+    private Float point;
+    private String weekStart;
+    private String date;
+    private String mentalRule;
 }
