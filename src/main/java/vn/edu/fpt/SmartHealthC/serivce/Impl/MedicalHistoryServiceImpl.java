@@ -1,9 +1,16 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointmentStatus;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalHistoryRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalHistoryResDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalHistory;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
@@ -61,8 +68,13 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     }
 
     @Override
-    public List<MedicalHistoryResDTO> getAllMedicalHistory() {
-        List<MedicalHistory> medicalHistories = medicalHistoryRepository.findAll();
+    public ResponsePaging<List<MedicalHistoryResDTO>> getAllMedicalHistory(Integer pageNo, String search) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<MedicalHistory> pagedResult = medicalHistoryRepository.findAll(paging);
+        List<MedicalHistory> medicalHistories= new ArrayList<>();
+        if (pagedResult.hasContent()) {
+            medicalHistories = pagedResult.getContent();
+        }
         List<MedicalHistoryResDTO> medicalHistoryResDTOList = new ArrayList<>();
         for (MedicalHistory medicalHistory : medicalHistories) {
             MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
@@ -72,7 +84,12 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                     .build();
             medicalHistoryResDTOList.add(medicalHistoryResDTO);
         }
-        return medicalHistoryResDTOList;
+        return ResponsePaging.<List<MedicalHistoryResDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(medicalHistoryResDTOList)
+                .build();
     }
 
     @Override

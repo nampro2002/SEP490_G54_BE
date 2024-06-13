@@ -11,11 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MedicalAppointmentService {
-    MedicalAppointment createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO);
-    MedicalAppointment getMedicalAppointmentById(Integer id);
-    List<MedicalAppointment> getAllMedicalAppointments();
-    MedicalAppointment updateMedicalAppointment(Integer id, MedicalAppointmentDTO medicalAppointmentDTO);
-    MedicalAppointment deleteMedicalAppointment(Integer id);
+    MedicalAppointmentResponseDTO createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO);
+    MedicalAppointment getMedicalAppointmentEntityById(Integer id);
+    MedicalAppointmentResponseDTO getMedicalAppointmentById(Integer id);
+    List<MedicalAppointmentResponseDTO> getAllMedicalAppointments();
+    MedicalAppointmentResponseDTO updateMedicalAppointment(Integer id, MedicalAppointmentDTO medicalAppointmentDTO);
+    MedicalAppointmentResponseDTO deleteMedicalAppointment(Integer id);
 
     ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointmentsPending(Integer id, Integer pageNo);
 }
