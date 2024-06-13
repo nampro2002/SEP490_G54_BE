@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LessonRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.LessonResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.serivce.LessonService;
@@ -22,45 +20,45 @@ public class LessonController {
     private LessonService lessonService;
 
     @PostMapping
-    public ApiResponse<LessonResponseDTO> createLesson(@RequestBody LessonRequestDTO lesson) {
+    public ApiResponse<Lesson> createLesson(@RequestBody LessonRequestDTO lesson) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.<LessonResponseDTO>builder()
+                .body(ApiResponse.<Lesson>builder()
                         .code(HttpStatus.CREATED.value())
                         .result(lessonService.createLesson(lesson))
                         .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<LessonResponseDTO> getLessonById(@PathVariable Integer id) {
+    public ApiResponse<Lesson> getLessonById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<LessonResponseDTO>builder()
+                .body(ApiResponse.<Lesson>builder()
                         .code(HttpStatus.OK.value())
                         .result(lessonService.getLessonById(id))
                         .build()).getBody();
     }
 
     @GetMapping
-    public ApiResponse<ResponsePaging<List<LessonResponseDTO>>> getAllLessons(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
+    public ApiResponse<List<Lesson>> getAllLessons() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<ResponsePaging<List<LessonResponseDTO>>>builder()
+                .body(ApiResponse.<List<Lesson>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(lessonService.getAllLessons(pageNo-1, search))
+                        .result(lessonService.getAllLessons())
                         .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<LessonResponseDTO> updateLesson(@PathVariable Integer id, @RequestBody LessonRequestDTO lessonRequestDTO) {
+    public ApiResponse<Lesson> updateLesson(@PathVariable Integer id, @RequestBody LessonRequestDTO lessonRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<LessonResponseDTO>builder()
+                .body(ApiResponse.<Lesson>builder()
                         .code(HttpStatus.OK.value())
                         .result(lessonService.updateLesson(id,lessonRequestDTO))
                         .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<LessonResponseDTO> deleteLesson(@PathVariable Integer id) {
+    public ApiResponse<Lesson> deleteLesson(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<LessonResponseDTO>builder()
+                .body(ApiResponse.<Lesson>builder()
                         .code(HttpStatus.OK.value())
                         .result(lessonService.deleteLesson(id))
                         .build()).getBody();

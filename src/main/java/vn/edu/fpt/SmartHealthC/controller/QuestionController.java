@@ -79,20 +79,12 @@ public class QuestionController {
 
 
     //answer question
-    @PutMapping("{id}")
-    public ApiResponse<QuestionResponseDTO> answerQuestion(@PathVariable Integer id,@RequestBody AnswerQuestionRequestDTO answer) {
+    @PutMapping("/{id}")
+    public ApiResponse<QuestionResponseDTO> updateQuestion(@PathVariable Integer id,@RequestBody AnswerQuestionRequestDTO answer) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<QuestionResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(questionService.updateQuestion(id,answer))
-                        .build()).getBody();
-    }
-    @PutMapping("removeAnswer/{id}")
-    public ApiResponse<QuestionResponseDTO> removeAnswer(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<QuestionResponseDTO>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(questionService.removeAnswer(id))
                         .build()).getBody();
     }
 

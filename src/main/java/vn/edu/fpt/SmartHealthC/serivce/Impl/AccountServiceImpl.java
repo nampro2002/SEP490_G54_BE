@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.UpdatePasswordRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
@@ -75,11 +74,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean activateAccount(Integer id) {
-        AppUser appUser = appUserRepository.findById(id).orElseThrow(()->
-                new AppException(ErrorCode.APP_USER_NOT_FOUND));
-        if(appUser.getAccountId().getIsActive()){
-            throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
-        }
+        AppUser appUser = appUserRepository.findById(id).orElseThrow();
         if (!(appUser.getWebUser() == null)) {
             Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
             account.setIsActive(true);
@@ -123,9 +118,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<AvailableMSResponseDTO> getAvailableMS() {
-        List<WebUser> accountList = webUserService.getAllUnDeletedMS();
+        List<WebUser> accountList = webUserService.getAllWebUsers();
         return accountList.stream().filter(record ->
-                        (record.getAppUserList().stream().filter(appUser -> !appUser.getAccountId().isDeleted()).count() < 10
+                        (record.getAccountId().getIsActive()
+                                && record.getAppUserList().size() < 10
                         ))
                 .map(record -> {
                     AvailableMSResponseDTO dto = new AvailableMSResponseDTO();
@@ -136,17 +132,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account changePassword(Integer id, UpdatePasswordRequestDTO updatePasswordRequestDTO) {
-        Account account = getAccountById(id);
-        if (!passwordEncoder.matches(updatePasswordRequestDTO.getOldPassword(), account.getPassword())) {
-            throw new AppException(ErrorCode.WRONG_OLD_PASSWORD);
-        }
-        account.setPassword(passwordEncoder.encode(updatePasswordRequestDTO.getNewPassword()));
-        return accountRepository.save(account);
-    }
-
-    @Override
-    public void createStaff(WebUserRequestDTO account) {
+    public AuthenticationResponseDto createStaff(WebUserRequestDTO account) {
         Optional<Account> existingAccount = accountRepository.findByEmail(account.getEmail());
         if (existingAccount.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
@@ -166,6 +152,11 @@ public class AccountServiceImpl implements AccountService {
                 .build();
         webUserRepository.save(newAppUserInfo);
         var jwt = jwtProvider.generateToken(newAccount);
+        return AuthenticationResponseDto.builder()
+                .type(newAccount.getType())
+                .idUser(newAccount.getId())
+                .token(jwt)
+                .build();
     }
 
     @Override
@@ -200,11 +191,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account deleteAccount(Integer id) {
         Account account = getAccountById(id);
-        if(account.isDeleted()){
-            throw new AppException(ErrorCode.ACCOUNT_DELETED);
-        }
-        account.setDeleted(true);
-        accountRepository.save(account);
+        accountRepository.delete(account);
         return account;
     }
 

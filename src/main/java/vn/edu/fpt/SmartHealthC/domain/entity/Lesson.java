@@ -27,7 +27,6 @@ public class Lesson {
 
     private String content;
 
-    private Integer lessonNumber;
     @OneToMany(mappedBy = "lessonId")
     private List<UserLesson> userLessons;
 

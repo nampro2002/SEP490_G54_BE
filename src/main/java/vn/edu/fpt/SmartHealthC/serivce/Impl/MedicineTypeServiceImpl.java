@@ -1,23 +1,14 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypeRequestDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineTypeResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineType;
-import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.MedicineTypeRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineTypeService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,38 +19,12 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     private MedicineTypeRepository medicineTypeRepository;
 
     @Override
-    public MedicineTypeResponseDTO createMedicineType(MedicineTypeRequestDTO medicineTypeRequestDTO) {
-        MedicineType medicineType =  MedicineType.builder()
-                .title(medicineTypeRequestDTO.getTitle())
-                .description(medicineTypeRequestDTO.getDescription())
-                .isDeleted(false)
-                .build();
-        medicineType =  medicineTypeRepository.save(medicineType);
-        return MedicineTypeResponseDTO.builder()
-                .id(medicineType.getId())
-                .title(medicineType.getTitle())
-                .description(medicineType.getDescription())
-                .isDeleted(medicineType.isDeleted())
-                .build();
+    public MedicineType createMedicineType(MedicineType medicineType) {
+        return medicineTypeRepository.save(medicineType);
     }
 
     @Override
-    public MedicineTypeResponseDTO getMedicineTypeById(Integer id) {
-
-        Optional<MedicineType> medicineType = medicineTypeRepository.findById(id);
-        if(medicineType.isEmpty()) {
-            throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
-        }
-
-        return MedicineTypeResponseDTO.builder()
-                .id(medicineType.get().getId())
-                .title(medicineType.get().getTitle())
-                .description(medicineType.get().getDescription())
-                .isDeleted(medicineType.get().isDeleted())
-                .build();
-    }
-    @Override
-    public MedicineType getMedicineTypeEntityById(Integer id) {
+    public MedicineType getMedicineTypeById(Integer id) {
 
         Optional<MedicineType> medicineType = medicineTypeRepository.findById(id);
         if(medicineType.isEmpty()) {
@@ -70,55 +35,23 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     }
 
     @Override
-    public ResponsePaging<List<MedicineTypeResponseDTO>> getAllMedicineTypes(Integer pageNo, String search) {
-        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicineType> pagedResult = medicineTypeRepository.findAll(paging);
-        List<MedicineType> medicineTypeList= new ArrayList<>();
-        if (pagedResult.hasContent()) {
-            medicineTypeList = pagedResult.getContent();
-        }
-        List<MedicineTypeResponseDTO> medicineTypeResponseDTOList = new ArrayList<>();
-        for(MedicineType medicineType:medicineTypeList){
-            medicineTypeResponseDTOList.add(MedicineTypeResponseDTO.builder()
-                    .id(medicineType.getId())
-                    .title(medicineType.getTitle())
-                    .description(medicineType.getDescription())
-                    .isDeleted(medicineType.isDeleted())
-                    .build());
-        }
-        medicineTypeResponseDTOList = medicineTypeResponseDTOList.stream().filter(record -> record.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
-        return ResponsePaging.<List<MedicineTypeResponseDTO>>builder()
-                .totalPages(pagedResult.getTotalPages())
-                .currentPage(pageNo + 1)
-                .totalItems((int) pagedResult.getTotalElements())
-                .dataResponse(medicineTypeResponseDTOList)
-                .build();
+    public List<MedicineType> getAllMedicineTypes() {
+        return medicineTypeRepository.findAll();
     }
 
     @Override
-    public MedicineTypeResponseDTO updateMedicineType(Integer id,MedicineTypeRequestDTO medicineTypeRequestDTO) {
-        MedicineType medicineType = getMedicineTypeEntityById(id);
-        medicineType.setDeleted(medicineTypeRequestDTO.isDeleted());
-        medicineType.setDescription(medicineTypeRequestDTO.getDescription());
-        medicineType.setTitle(medicineTypeRequestDTO.getTitle());
-        medicineType = medicineTypeRepository.save(medicineType);
-        return MedicineTypeResponseDTO.builder()
-                .id(medicineType.getId())
-                .title(medicineType.getTitle())
-                .description(medicineType.getDescription())
-                .isDeleted(medicineType.isDeleted())
-                .build();
+    public MedicineType updateMedicineType(Integer id,MedicineType medicineType) {
+        MedicineType medicineTypeUpdate = getMedicineTypeById(id);
+        medicineTypeUpdate.setDeleted(medicineType.isDeleted());
+        medicineTypeUpdate.setDescription(medicineType.getDescription());
+        medicineTypeUpdate.setTitle(medicineType.getTitle());
+        return medicineTypeRepository.save(medicineTypeUpdate);
     }
 
     @Override
-    public MedicineTypeResponseDTO deleteMedicineType(Integer id) {
-        MedicineType medicineType = getMedicineTypeEntityById(id);
+    public MedicineType deleteMedicineType(Integer id) {
+        MedicineType medicineType = getMedicineTypeById(id);
         medicineTypeRepository.deleteById(id);
-        return MedicineTypeResponseDTO.builder()
-                .id(medicineType.getId())
-                .title(medicineType.getTitle())
-                .description(medicineType.getDescription())
-                .isDeleted(medicineType.isDeleted())
-                .build();
+        return medicineType;
     }
 }

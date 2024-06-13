@@ -23,6 +23,7 @@ public enum ErrorCode {
     UNAUTHENTICATED("Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED("You do not have permission", HttpStatus.FORBIDDEN),
     APP_USER_NOT_FOUND("AppUser not found", HttpStatus.NOT_FOUND),
+    USER_WEEK_START_NOT_EXIST("User not have record about week start", HttpStatus.NOT_FOUND),
     WEB_USER_NOT_FOUND("WebUser not found", HttpStatus.NOT_FOUND),
     BPS_NOT_FOUND("bps not found", HttpStatus.NOT_FOUND),
     NOT_FOUND("Not found", HttpStatus.NOT_FOUND),
@@ -53,11 +54,6 @@ public enum ErrorCode {
     WEIGHT_RECORD_NOT_FOUND("Weight record not found", HttpStatus.NOT_FOUND),
     ACCOUNT_NOT_FOUND("Account not found", HttpStatus.NOT_FOUND),
     NULL_ANSWER("Answer is null", HttpStatus.BAD_REQUEST),
-    USER_CREATED("User created successfully", HttpStatus.CREATED),
-    STAFF_CREATED("Staff created successfully", HttpStatus.CREATED),
-    WRONG_OLD_PASSWORD("Wrong old password", HttpStatus.BAD_REQUEST),
-    ACCOUNT_DELETED("Account has been deleted", HttpStatus.OK),
-    ACCOUNT_ACTIVATED("Account has been activated", HttpStatus.OK),
     ;
 
     ErrorCode(String message, HttpStatusCode statusCode) {

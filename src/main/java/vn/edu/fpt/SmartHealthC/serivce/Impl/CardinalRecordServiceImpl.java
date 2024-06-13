@@ -2,9 +2,10 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeTimeMeasure;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.CardinalRecordDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CardinalRecordResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.RecordPerDay;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordResDTOFolder.CardinalRecordResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordResDTOFolder.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;

@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthenticationResponseDto login(LoginDto request){
-        Optional<Account> optionalUser = accountRepository.findAccountByEmail(request.getEmail());
+        Optional<Account> optionalUser = accountRepository.findByEmail(request.getEmail());
         if(optionalUser.isEmpty()) {
             throw new AppException(ErrorCode.CREDENTIAL_INVALID);
         }
