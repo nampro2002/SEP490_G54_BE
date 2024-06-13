@@ -12,6 +12,8 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
 @AllArgsConstructor
 @Builder
 public class FormQuestionRequestDTO {
+    private Integer Id;
+
     private String question;
     private TypeQuestion type;
     private int questionNumber;
