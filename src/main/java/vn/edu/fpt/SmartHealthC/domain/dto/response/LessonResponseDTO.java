@@ -1,5 +1,4 @@
-package vn.edu.fpt.SmartHealthC.domain.dto.request;
-
+package vn.edu.fpt.SmartHealthC.domain.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,11 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MedicineTypePlanDTO {
+public class LessonResponseDTO {
+    private String title;
 
+    private String video;
 
-    private int medicinePlanId;
-
-    private int medicineTypeId;
-
+    private String content;
 }

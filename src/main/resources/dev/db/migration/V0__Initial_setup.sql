@@ -1,590 +1,590 @@
--- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
+-- -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
+-- --
+-- -- Host: 127.0.0.1    Database: smarthealthc
+-- -- ------------------------------------------------------
+-- -- Server version	8.0.37
+-- use smarthealthc;
+-- /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+-- /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+-- /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+-- /*!50503 SET NAMES utf8 */;
+-- /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+-- /*!40103 SET TIME_ZONE='+00:00' */;
+-- /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+-- /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+-- /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+-- /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 --
--- Host: 127.0.0.1    Database: smarthealthc
--- ------------------------------------------------------
--- Server version	8.0.37
-use smarthealthc;
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
+-- --
+-- -- Table structure for table `account`
+-- --
 --
--- Table structure for table `account`
+-- DROP TABLE IF EXISTS `account`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `account` (
+--                            `id` int NOT NULL AUTO_INCREMENT,
+--                            `email` varchar(255) DEFAULT NULL,
+--                            `is_active` bit(1) DEFAULT NULL,
+--                            `is_deleted` bit(1) NOT NULL,
+--                            `password` varchar(255) DEFAULT NULL,
+--                            `type` enum('ADMIN','CUSTOMER_SUPPORT','MEDICAL_SPECIALIST','USER') DEFAULT NULL,
+--                            PRIMARY KEY (`id`),
+--                            UNIQUE KEY `UK_q0uja26qgu1atulenwup9rxyr` (`email`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `account`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `account` (
-                           `id` int NOT NULL AUTO_INCREMENT,
-                           `email` varchar(255) DEFAULT NULL,
-                           `is_active` bit(1) DEFAULT NULL,
-                           `is_deleted` bit(1) NOT NULL,
-                           `password` varchar(255) DEFAULT NULL,
-                           `type` enum('ADMIN','CUSTOMER_SUPPORT','MEDICAL_SPECIALIST','USER') DEFAULT NULL,
-                           PRIMARY KEY (`id`),
-                           UNIQUE KEY `UK_q0uja26qgu1atulenwup9rxyr` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `activity_record`
+-- --
 --
--- Table structure for table `activity_record`
+-- DROP TABLE IF EXISTS `activity_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `activity_record` (
+--                                    `id` int NOT NULL AUTO_INCREMENT,
+--                                    `date` datetime(6) DEFAULT NULL,
+--                                    `duration` float DEFAULT NULL,
+--                                    `status` bit(1) DEFAULT NULL,
+--                                    `type` enum('HEAVY','LIGHT','MEDIUM') DEFAULT NULL,
+--                                    `week_start` datetime(6) DEFAULT NULL,
+--                                    `appuser_id` int DEFAULT NULL,
+--                                    PRIMARY KEY (`id`),
+--                                    KEY `FKcokpi2p2wcoucs4gi3ve5r7jc` (`appuser_id`),
+--                                    CONSTRAINT `FKcokpi2p2wcoucs4gi3ve5r7jc` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `activity_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `activity_record` (
-                                   `id` int NOT NULL AUTO_INCREMENT,
-                                   `date` datetime(6) DEFAULT NULL,
-                                   `duration` float DEFAULT NULL,
-                                   `status` bit(1) DEFAULT NULL,
-                                   `type` enum('HEAVY','LIGHT','MEDIUM') DEFAULT NULL,
-                                   `week_start` datetime(6) DEFAULT NULL,
-                                   `appuser_id` int DEFAULT NULL,
-                                   PRIMARY KEY (`id`),
-                                   KEY `FKcokpi2p2wcoucs4gi3ve5r7jc` (`appuser_id`),
-                                   CONSTRAINT `FKcokpi2p2wcoucs4gi3ve5r7jc` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `app_user`
+-- --
 --
--- Table structure for table `app_user`
+-- DROP TABLE IF EXISTS `app_user`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `app_user` (
+--                             `id` int NOT NULL AUTO_INCREMENT,
+--                             `dob` datetime(6) DEFAULT NULL,
+--                             `gender` bit(1) NOT NULL,
+--                             `height` float DEFAULT NULL,
+--                             `hospital_number` varchar(255) DEFAULT NULL,
+--                             `medical_specialist_note` varchar(255) DEFAULT NULL,
+--                             `name` varchar(255) DEFAULT NULL,
+--                             `phone_number` varchar(255) DEFAULT NULL,
+--                             `weight` float DEFAULT NULL,
+--                             `account_id` int DEFAULT NULL,
+--                             `web_user_id` int DEFAULT NULL,
+--                             PRIMARY KEY (`id`),
+--                             UNIQUE KEY `UK_mc8v5krsv6n13f3sxqs3c5upu` (`account_id`),
+--                             KEY `FKrk1k6ks3fmxvjyhm4qwsj5x43` (`web_user_id`),
+--                             CONSTRAINT `FKngs581vugannc8it964ohg2pt` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
+--                             CONSTRAINT `FKrk1k6ks3fmxvjyhm4qwsj5x43` FOREIGN KEY (`web_user_id`) REFERENCES `web_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `app_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `app_user` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `dob` datetime(6) DEFAULT NULL,
-                            `gender` bit(1) NOT NULL,
-                            `height` float DEFAULT NULL,
-                            `hospital_number` varchar(255) DEFAULT NULL,
-                            `medical_specialist_note` varchar(255) DEFAULT NULL,
-                            `name` varchar(255) DEFAULT NULL,
-                            `phone_number` varchar(255) DEFAULT NULL,
-                            `weight` float DEFAULT NULL,
-                            `account_id` int DEFAULT NULL,
-                            `web_user_id` int DEFAULT NULL,
-                            PRIMARY KEY (`id`),
-                            UNIQUE KEY `UK_mc8v5krsv6n13f3sxqs3c5upu` (`account_id`),
-                            KEY `FKrk1k6ks3fmxvjyhm4qwsj5x43` (`web_user_id`),
-                            CONSTRAINT `FKngs581vugannc8it964ohg2pt` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
-                            CONSTRAINT `FKrk1k6ks3fmxvjyhm4qwsj5x43` FOREIGN KEY (`web_user_id`) REFERENCES `web_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `blood_pressure_record`
+-- --
 --
--- Table structure for table `blood_pressure_record`
+-- DROP TABLE IF EXISTS `blood_pressure_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `blood_pressure_record` (
+--                                          `id` int NOT NULL AUTO_INCREMENT,
+--                                          `date` datetime(6) DEFAULT NULL,
+--                                          `diastole` float DEFAULT NULL,
+--                                          `systole` float DEFAULT NULL,
+--                                          `week_start` datetime(6) DEFAULT NULL,
+--                                          `appuser_id` int DEFAULT NULL,
+--                                          PRIMARY KEY (`id`),
+--                                          KEY `FK59b0ry6pr9l4c5h49pljptouf` (`appuser_id`),
+--                                          CONSTRAINT `FK59b0ry6pr9l4c5h49pljptouf` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `blood_pressure_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `blood_pressure_record` (
-                                         `id` int NOT NULL AUTO_INCREMENT,
-                                         `date` datetime(6) DEFAULT NULL,
-                                         `diastole` float DEFAULT NULL,
-                                         `systole` float DEFAULT NULL,
-                                         `week_start` datetime(6) DEFAULT NULL,
-                                         `appuser_id` int DEFAULT NULL,
-                                         PRIMARY KEY (`id`),
-                                         KEY `FK59b0ry6pr9l4c5h49pljptouf` (`appuser_id`),
-                                         CONSTRAINT `FK59b0ry6pr9l4c5h49pljptouf` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `diet_record`
+-- --
 --
--- Table structure for table `diet_record`
+-- DROP TABLE IF EXISTS `diet_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `diet_record` (
+--                                `id` int NOT NULL AUTO_INCREMENT,
+--                                `date` datetime(6) DEFAULT NULL,
+--                                `dish_per_day` int NOT NULL,
+--                                `week_start` datetime(6) DEFAULT NULL,
+--                                `appuser_id` int DEFAULT NULL,
+--                                PRIMARY KEY (`id`),
+--                                KEY `FKl8afh79idhbhnqrxp3b401oj9` (`appuser_id`),
+--                                CONSTRAINT `FKl8afh79idhbhnqrxp3b401oj9` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `diet_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `diet_record` (
-                               `id` int NOT NULL AUTO_INCREMENT,
-                               `date` datetime(6) DEFAULT NULL,
-                               `dish_per_day` int NOT NULL,
-                               `week_start` datetime(6) DEFAULT NULL,
-                               `appuser_id` int DEFAULT NULL,
-                               PRIMARY KEY (`id`),
-                               KEY `FKl8afh79idhbhnqrxp3b401oj9` (`appuser_id`),
-                               CONSTRAINT `FKl8afh79idhbhnqrxp3b401oj9` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `faq`
+-- --
 --
--- Table structure for table `faq`
+-- DROP TABLE IF EXISTS `faq`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `faq` (
+--                        `id` int NOT NULL AUTO_INCREMENT,
+--                        `answer` varchar(255) DEFAULT NULL,
+--                        `question` varchar(255) DEFAULT NULL,
+--                        PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `faq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `faq` (
-                       `id` int NOT NULL AUTO_INCREMENT,
-                       `answer` varchar(255) DEFAULT NULL,
-                       `question` varchar(255) DEFAULT NULL,
-                       PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `form_question`
+-- --
 --
--- Table structure for table `form_question`
+-- DROP TABLE IF EXISTS `form_question`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `form_question` (
+--                                  `id` int NOT NULL AUTO_INCREMENT,
+--                                  `question` varchar(255) DEFAULT NULL,
+--                                  `question_number` int NOT NULL,
+--                                  `type` enum('SAT_SF','SF') DEFAULT NULL,
+--                                  PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `form_question`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `form_question` (
-                                 `id` int NOT NULL AUTO_INCREMENT,
-                                 `question` varchar(255) DEFAULT NULL,
-                                 `question_number` int NOT NULL,
-                                 `type` enum('SAT_SF','SF') DEFAULT NULL,
-                                 PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `lesson`
+-- --
 --
--- Table structure for table `lesson`
+-- DROP TABLE IF EXISTS `lesson`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `lesson` (
+--                           `id` int NOT NULL AUTO_INCREMENT,
+--                           `text` varchar(255) DEFAULT NULL,
+--                           `title` varchar(255) DEFAULT NULL,
+--                           `video` varchar(255) DEFAULT NULL,
+--                           PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `lesson`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `lesson` (
-                          `id` int NOT NULL AUTO_INCREMENT,
-                          `text` varchar(255) DEFAULT NULL,
-                          `title` varchar(255) DEFAULT NULL,
-                          `video` varchar(255) DEFAULT NULL,
-                          PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `medical_appointment`
+-- --
 --
--- Table structure for table `medical_appointment`
+-- DROP TABLE IF EXISTS `medical_appointment`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `medical_appointment` (
+--                                        `id` int NOT NULL AUTO_INCREMENT,
+--                                        `date` datetime(6) DEFAULT NULL,
+--                                        `hospital` varchar(255) DEFAULT NULL,
+--                                        `status_medical_appointment` enum('CONFIRM','DONE','PENDING') DEFAULT NULL,
+--                                        `type_medical_appointment` enum('DIAGNOSIS','MEDICAL_CHECKUP') DEFAULT NULL,
+--                                        `appuser_id` int DEFAULT NULL,
+--                                        PRIMARY KEY (`id`),
+--                                        KEY `FK69h8dnll1rty4bswhf21xb1mu` (`appuser_id`),
+--                                        CONSTRAINT `FK69h8dnll1rty4bswhf21xb1mu` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `medical_appointment`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `medical_appointment` (
-                                       `id` int NOT NULL AUTO_INCREMENT,
-                                       `date` datetime(6) DEFAULT NULL,
-                                       `hospital` varchar(255) DEFAULT NULL,
-                                       `status_medical_appointment` enum('CONFIRM','DONE','PENDING') DEFAULT NULL,
-                                       `type_medical_appointment` enum('DIAGNOSIS','MEDICAL_CHECKUP') DEFAULT NULL,
-                                       `appuser_id` int DEFAULT NULL,
-                                       PRIMARY KEY (`id`),
-                                       KEY `FK69h8dnll1rty4bswhf21xb1mu` (`appuser_id`),
-                                       CONSTRAINT `FK69h8dnll1rty4bswhf21xb1mu` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `medical_history`
+-- --
 --
--- Table structure for table `medical_history`
+-- DROP TABLE IF EXISTS `medical_history`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `medical_history` (
+--                                    `id` int NOT NULL AUTO_INCREMENT,
+--                                    `is_deleted` bit(1) NOT NULL,
+--                                    `name` varchar(255) DEFAULT NULL,
+--                                    `type` enum('ARTHRITIS','CARDINAL','HABIT','OTHERS','RESPIRATORY') DEFAULT NULL,
+--                                    PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `medical_history`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `medical_history` (
-                                   `id` int NOT NULL AUTO_INCREMENT,
-                                   `is_deleted` bit(1) NOT NULL,
-                                   `name` varchar(255) DEFAULT NULL,
-                                   `type` enum('ARTHRITIS','CARDINAL','HABIT','OTHERS','RESPIRATORY') DEFAULT NULL,
-                                   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `medicine_record`
+-- --
 --
--- Table structure for table `medicine_record`
+-- DROP TABLE IF EXISTS `medicine_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `medicine_record` (
+--                                    `id` int NOT NULL AUTO_INCREMENT,
+--                                    `date` datetime(6) DEFAULT NULL,
+--                                    `hour` float DEFAULT NULL,
+--                                    `status` bit(1) DEFAULT NULL,
+--                                    `week_start` datetime(6) DEFAULT NULL,
+--                                    `appuser_id` int DEFAULT NULL,
+--                                    PRIMARY KEY (`id`),
+--                                    KEY `FKebvs97hc30u0vkfbqbc1pcr88` (`appuser_id`),
+--                                    CONSTRAINT `FKebvs97hc30u0vkfbqbc1pcr88` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `medicine_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `medicine_record` (
-                                   `id` int NOT NULL AUTO_INCREMENT,
-                                   `date` datetime(6) DEFAULT NULL,
-                                   `hour` float DEFAULT NULL,
-                                   `status` bit(1) DEFAULT NULL,
-                                   `week_start` datetime(6) DEFAULT NULL,
-                                   `appuser_id` int DEFAULT NULL,
-                                   PRIMARY KEY (`id`),
-                                   KEY `FKebvs97hc30u0vkfbqbc1pcr88` (`appuser_id`),
-                                   CONSTRAINT `FKebvs97hc30u0vkfbqbc1pcr88` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `medicine_type`
+-- --
 --
--- Table structure for table `medicine_type`
+-- DROP TABLE IF EXISTS `medicine_type`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `medicine_type` (
+--                                  `id` int NOT NULL AUTO_INCREMENT,
+--                                  `description` varchar(255) DEFAULT NULL,
+--                                  `title` varchar(255) DEFAULT NULL,
+--                                  PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `medicine_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `medicine_type` (
-                                 `id` int NOT NULL AUTO_INCREMENT,
-                                 `description` varchar(255) DEFAULT NULL,
-                                 `title` varchar(255) DEFAULT NULL,
-                                 PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `medicine_type_plan`
+-- --
 --
--- Table structure for table `medicine_type_plan`
+-- DROP TABLE IF EXISTS `medicine_type_plan`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `medicine_type_plan` (
+--                                       `id` int NOT NULL AUTO_INCREMENT,
+--                                       `medicine_plan_id` int DEFAULT NULL,
+--                                       `medicine_type_id` int DEFAULT NULL,
+--                                       PRIMARY KEY (`id`),
+--                                       KEY `FKaf41aaa36eca6vhvfchnj4bsg` (`medicine_plan_id`),
+--                                       KEY `FKi0mp9le4dknsjywmlt7n8oo0a` (`medicine_type_id`),
+--                                       CONSTRAINT `FKaf41aaa36eca6vhvfchnj4bsg` FOREIGN KEY (`medicine_plan_id`) REFERENCES `medicine_record` (`id`),
+--                                       CONSTRAINT `FKi0mp9le4dknsjywmlt7n8oo0a` FOREIGN KEY (`medicine_type_id`) REFERENCES `medicine_type` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `medicine_type_plan`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `medicine_type_plan` (
-                                      `id` int NOT NULL AUTO_INCREMENT,
-                                      `medicine_plan_id` int DEFAULT NULL,
-                                      `medicine_type_id` int DEFAULT NULL,
-                                      PRIMARY KEY (`id`),
-                                      KEY `FKaf41aaa36eca6vhvfchnj4bsg` (`medicine_plan_id`),
-                                      KEY `FKi0mp9le4dknsjywmlt7n8oo0a` (`medicine_type_id`),
-                                      CONSTRAINT `FKaf41aaa36eca6vhvfchnj4bsg` FOREIGN KEY (`medicine_plan_id`) REFERENCES `medicine_record` (`id`),
-                                      CONSTRAINT `FKi0mp9le4dknsjywmlt7n8oo0a` FOREIGN KEY (`medicine_type_id`) REFERENCES `medicine_type` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `mental_record`
+-- --
 --
--- Table structure for table `mental_record`
+-- DROP TABLE IF EXISTS `mental_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `mental_record` (
+--                                  `id` int NOT NULL AUTO_INCREMENT,
+--                                  `date` datetime(6) DEFAULT NULL,
+--                                  `point` float DEFAULT NULL,
+--                                  `week_start` datetime(6) DEFAULT NULL,
+--                                  `appuser_id` int DEFAULT NULL,
+--                                  PRIMARY KEY (`id`),
+--                                  KEY `FKhdjaqfcol4ndj2el5gcfj9u8` (`appuser_id`),
+--                                  CONSTRAINT `FKhdjaqfcol4ndj2el5gcfj9u8` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `mental_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `mental_record` (
-                                 `id` int NOT NULL AUTO_INCREMENT,
-                                 `date` datetime(6) DEFAULT NULL,
-                                 `point` float DEFAULT NULL,
-                                 `week_start` datetime(6) DEFAULT NULL,
-                                 `appuser_id` int DEFAULT NULL,
-                                 PRIMARY KEY (`id`),
-                                 KEY `FKhdjaqfcol4ndj2el5gcfj9u8` (`appuser_id`),
-                                 CONSTRAINT `FKhdjaqfcol4ndj2el5gcfj9u8` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `mental_rule`
+-- --
 --
--- Table structure for table `mental_rule`
+-- DROP TABLE IF EXISTS `mental_rule`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `mental_rule` (
+--                                `id` int NOT NULL AUTO_INCREMENT,
+--                                `description` varchar(255) DEFAULT NULL,
+--                                `title` varchar(255) DEFAULT NULL,
+--                                PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `mental_rule`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `mental_rule` (
-                               `id` int NOT NULL AUTO_INCREMENT,
-                               `description` varchar(255) DEFAULT NULL,
-                               `title` varchar(255) DEFAULT NULL,
-                               PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `monthly_question`
+-- --
 --
--- Table structure for table `monthly_question`
+-- DROP TABLE IF EXISTS `monthly_question`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `monthly_question` (
+--                                     `id` int NOT NULL AUTO_INCREMENT,
+--                                     `answer` varchar(255) DEFAULT NULL,
+--                                     `issat` bit(1) DEFAULT NULL,
+--                                     `month_start` datetime(6) DEFAULT NULL,
+--                                     `question` varchar(255) DEFAULT NULL,
+--                                     `question_number` int NOT NULL,
+--                                     `appuser_id` int DEFAULT NULL,
+--                                     PRIMARY KEY (`id`),
+--                                     KEY `FK33fvhkklgclk5ga5b9w0kxibp` (`appuser_id`),
+--                                     CONSTRAINT `FK33fvhkklgclk5ga5b9w0kxibp` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `monthly_question`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `monthly_question` (
-                                    `id` int NOT NULL AUTO_INCREMENT,
-                                    `answer` varchar(255) DEFAULT NULL,
-                                    `issat` bit(1) DEFAULT NULL,
-                                    `month_start` datetime(6) DEFAULT NULL,
-                                    `question` varchar(255) DEFAULT NULL,
-                                    `question_number` int NOT NULL,
-                                    `appuser_id` int DEFAULT NULL,
-                                    PRIMARY KEY (`id`),
-                                    KEY `FK33fvhkklgclk5ga5b9w0kxibp` (`appuser_id`),
-                                    CONSTRAINT `FK33fvhkklgclk5ga5b9w0kxibp` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `numeral_record`
+-- --
 --
--- Table structure for table `numeral_record`
+-- DROP TABLE IF EXISTS `numeral_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `numeral_record` (
+--                                   `id` int NOT NULL AUTO_INCREMENT,
+--                                   `date` datetime(6) DEFAULT NULL,
+--                                   `time_measure` enum('AFTER_BREAKFAST','AFTER_DINNER','AFTER_LUNCH','BEFORE_BREAKFAST','BEFORE_DINNER','BEFORE_LUNCH') DEFAULT NULL,
+--                                   `type_cardinal_index` enum('BloodSugar','Cholesterol','HBA1CRecord') DEFAULT NULL,
+--                                   `value` float NOT NULL,
+--                                   `week_start` datetime(6) DEFAULT NULL,
+--                                   `appuser_id` int DEFAULT NULL,
+--                                   PRIMARY KEY (`id`),
+--                                   KEY `FKdg75ylqltu2n2scu2mt4vy5oj` (`appuser_id`),
+--                                   CONSTRAINT `FKdg75ylqltu2n2scu2mt4vy5oj` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `numeral_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `numeral_record` (
-                                  `id` int NOT NULL AUTO_INCREMENT,
-                                  `date` datetime(6) DEFAULT NULL,
-                                  `time_measure` enum('AFTER_BREAKFAST','AFTER_DINNER','AFTER_LUNCH','BEFORE_BREAKFAST','BEFORE_DINNER','BEFORE_LUNCH') DEFAULT NULL,
-                                  `type_cardinal_index` enum('BloodSugar','Cholesterol','HBA1CRecord') DEFAULT NULL,
-                                  `value` float NOT NULL,
-                                  `week_start` datetime(6) DEFAULT NULL,
-                                  `appuser_id` int DEFAULT NULL,
-                                  PRIMARY KEY (`id`),
-                                  KEY `FKdg75ylqltu2n2scu2mt4vy5oj` (`appuser_id`),
-                                  CONSTRAINT `FKdg75ylqltu2n2scu2mt4vy5oj` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `question`
+-- --
 --
--- Table structure for table `question`
+-- DROP TABLE IF EXISTS `question`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `question` (
+--                             `id` int NOT NULL AUTO_INCREMENT,
+--                             `answer` varchar(255) DEFAULT NULL,
+--                             `body` varchar(255) DEFAULT NULL,
+--                             `question_date` datetime(6) DEFAULT NULL,
+--                             `title` varchar(255) DEFAULT NULL,
+--                             `type_user_question` enum('ASSIGN_ADMIN','ASSIGN_MS') DEFAULT NULL,
+--                             `appuser_id` int DEFAULT NULL,
+--                             `webuser_id` int DEFAULT NULL,
+--                             PRIMARY KEY (`id`),
+--                             KEY `FK8jju1d5enwfvxbfi3veg5rcak` (`appuser_id`),
+--                             KEY `FK8wk86m3lwpbonn91355qmymjx` (`webuser_id`),
+--                             CONSTRAINT `FK8jju1d5enwfvxbfi3veg5rcak` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`),
+--                             CONSTRAINT `FK8wk86m3lwpbonn91355qmymjx` FOREIGN KEY (`webuser_id`) REFERENCES `web_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `question`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `question` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `answer` varchar(255) DEFAULT NULL,
-                            `body` varchar(255) DEFAULT NULL,
-                            `question_date` datetime(6) DEFAULT NULL,
-                            `title` varchar(255) DEFAULT NULL,
-                            `type_user_question` enum('ASSIGN_ADMIN','ASSIGN_MS') DEFAULT NULL,
-                            `appuser_id` int DEFAULT NULL,
-                            `webuser_id` int DEFAULT NULL,
-                            PRIMARY KEY (`id`),
-                            KEY `FK8jju1d5enwfvxbfi3veg5rcak` (`appuser_id`),
-                            KEY `FK8wk86m3lwpbonn91355qmymjx` (`webuser_id`),
-                            CONSTRAINT `FK8jju1d5enwfvxbfi3veg5rcak` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`),
-                            CONSTRAINT `FK8wk86m3lwpbonn91355qmymjx` FOREIGN KEY (`webuser_id`) REFERENCES `web_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `rule_for_plan`
+-- --
 --
--- Table structure for table `rule_for_plan`
+-- DROP TABLE IF EXISTS `rule_for_plan`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `rule_for_plan` (
+--                                  `id` int NOT NULL AUTO_INCREMENT,
+--                                  `plan_id` int DEFAULT NULL,
+--                                  `rule_id` int DEFAULT NULL,
+--                                  PRIMARY KEY (`id`),
+--                                  KEY `FKsfedhp4km3nrngyolr19ivhxi` (`plan_id`),
+--                                  KEY `FKh8r1l0swsiah98n1lbgbldepd` (`rule_id`),
+--                                  CONSTRAINT `FKh8r1l0swsiah98n1lbgbldepd` FOREIGN KEY (`rule_id`) REFERENCES `mental_rule` (`id`),
+--                                  CONSTRAINT `FKsfedhp4km3nrngyolr19ivhxi` FOREIGN KEY (`plan_id`) REFERENCES `mental_record` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `rule_for_plan`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `rule_for_plan` (
-                                 `id` int NOT NULL AUTO_INCREMENT,
-                                 `plan_id` int DEFAULT NULL,
-                                 `rule_id` int DEFAULT NULL,
-                                 PRIMARY KEY (`id`),
-                                 KEY `FKsfedhp4km3nrngyolr19ivhxi` (`plan_id`),
-                                 KEY `FKh8r1l0swsiah98n1lbgbldepd` (`rule_id`),
-                                 CONSTRAINT `FKh8r1l0swsiah98n1lbgbldepd` FOREIGN KEY (`rule_id`) REFERENCES `mental_rule` (`id`),
-                                 CONSTRAINT `FKsfedhp4km3nrngyolr19ivhxi` FOREIGN KEY (`plan_id`) REFERENCES `mental_record` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `sat_sf_c_record`
+-- --
 --
--- Table structure for table `sat_sf_c_record`
+-- DROP TABLE IF EXISTS `sat_sf_c_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `sat_sf_c_record` (
+--                                    `id` int NOT NULL AUTO_INCREMENT,
+--                                    `independence` int NOT NULL,
+--                                    `month_start` datetime(6) DEFAULT NULL,
+--                                    `optimistic` int NOT NULL,
+--                                    `overall_point` int NOT NULL,
+--                                    `relationship` int NOT NULL,
+--                                    `shared_story` int NOT NULL,
+--                                    `appuser_id` int DEFAULT NULL,
+--                                    PRIMARY KEY (`id`),
+--                                    KEY `FKbukb1m90m4v6lxjgbrxtxowtm` (`appuser_id`),
+--                                    CONSTRAINT `FKbukb1m90m4v6lxjgbrxtxowtm` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `sat_sf_c_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sat_sf_c_record` (
-                                   `id` int NOT NULL AUTO_INCREMENT,
-                                   `independence` int NOT NULL,
-                                   `month_start` datetime(6) DEFAULT NULL,
-                                   `optimistic` int NOT NULL,
-                                   `overall_point` int NOT NULL,
-                                   `relationship` int NOT NULL,
-                                   `shared_story` int NOT NULL,
-                                   `appuser_id` int DEFAULT NULL,
-                                   PRIMARY KEY (`id`),
-                                   KEY `FKbukb1m90m4v6lxjgbrxtxowtm` (`appuser_id`),
-                                   CONSTRAINT `FKbukb1m90m4v6lxjgbrxtxowtm` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `sat_sf_i_record`
+-- --
 --
--- Table structure for table `sat_sf_i_record`
+-- DROP TABLE IF EXISTS `sat_sf_i_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `sat_sf_i_record` (
+--                                    `id` int NOT NULL AUTO_INCREMENT,
+--                                    `consistency` int NOT NULL,
+--                                    `energy_conservation` int NOT NULL,
+--                                    `month_start` datetime(6) DEFAULT NULL,
+--                                    `motivation` int NOT NULL,
+--                                    `overall_point` int NOT NULL,
+--                                    `revision` int NOT NULL,
+--                                    `self_control` int NOT NULL,
+--                                    `stress_facing` int NOT NULL,
+--                                    `appuser_id` int DEFAULT NULL,
+--                                    PRIMARY KEY (`id`),
+--                                    KEY `FKpa2dk4rvwok9ljug3hnybv7dt` (`appuser_id`),
+--                                    CONSTRAINT `FKpa2dk4rvwok9ljug3hnybv7dt` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `sat_sf_i_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sat_sf_i_record` (
-                                   `id` int NOT NULL AUTO_INCREMENT,
-                                   `consistency` int NOT NULL,
-                                   `energy_conservation` int NOT NULL,
-                                   `month_start` datetime(6) DEFAULT NULL,
-                                   `motivation` int NOT NULL,
-                                   `overall_point` int NOT NULL,
-                                   `revision` int NOT NULL,
-                                   `self_control` int NOT NULL,
-                                   `stress_facing` int NOT NULL,
-                                   `appuser_id` int DEFAULT NULL,
-                                   PRIMARY KEY (`id`),
-                                   KEY `FKpa2dk4rvwok9ljug3hnybv7dt` (`appuser_id`),
-                                   CONSTRAINT `FKpa2dk4rvwok9ljug3hnybv7dt` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `sat_sf_p_record`
+-- --
 --
--- Table structure for table `sat_sf_p_record`
+-- DROP TABLE IF EXISTS `sat_sf_p_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `sat_sf_p_record` (
+--                                    `id` int NOT NULL AUTO_INCREMENT,
+--                                    `healthy_environment` int NOT NULL,
+--                                    `life_pursuit` int NOT NULL,
+--                                    `month_start` datetime(6) DEFAULT NULL,
+--                                    `overall_point` int NOT NULL,
+--                                    `planning` int NOT NULL,
+--                                    `priority_focus` int NOT NULL,
+--                                    `right_decision` int NOT NULL,
+--                                    `appuser_id` int DEFAULT NULL,
+--                                    PRIMARY KEY (`id`),
+--                                    KEY `FKhbrmpdew742giv33xsyr5kbsh` (`appuser_id`),
+--                                    CONSTRAINT `FKhbrmpdew742giv33xsyr5kbsh` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `sat_sf_p_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sat_sf_p_record` (
-                                   `id` int NOT NULL AUTO_INCREMENT,
-                                   `healthy_environment` int NOT NULL,
-                                   `life_pursuit` int NOT NULL,
-                                   `month_start` datetime(6) DEFAULT NULL,
-                                   `overall_point` int NOT NULL,
-                                   `planning` int NOT NULL,
-                                   `priority_focus` int NOT NULL,
-                                   `right_decision` int NOT NULL,
-                                   `appuser_id` int DEFAULT NULL,
-                                   PRIMARY KEY (`id`),
-                                   KEY `FKhbrmpdew742giv33xsyr5kbsh` (`appuser_id`),
-                                   CONSTRAINT `FKhbrmpdew742giv33xsyr5kbsh` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `sf_record`
+-- --
 --
--- Table structure for table `sf_record`
+-- DROP TABLE IF EXISTS `sf_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `sf_record` (
+--                              `id` int NOT NULL AUTO_INCREMENT,
+--                              `activity` int NOT NULL,
+--                              `activity_habit` int NOT NULL,
+--                              `activity_planning` int NOT NULL,
+--                              `diet` int NOT NULL,
+--                              `diet_habit` int NOT NULL,
+--                              `healthy_diet` int NOT NULL,
+--                              `medication` int NOT NULL,
+--                              `medication_habit` int NOT NULL,
+--                              `month_start` datetime(6) DEFAULT NULL,
+--                              `plan_compliance` int NOT NULL,
+--                              `positivity` int NOT NULL,
+--                              `vegetable_prioritization` int NOT NULL,
+--                              `appuser_id` int DEFAULT NULL,
+--                              PRIMARY KEY (`id`),
+--                              KEY `FKhlien69e58c092npvreltnxqn` (`appuser_id`),
+--                              CONSTRAINT `FKhlien69e58c092npvreltnxqn` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `sf_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sf_record` (
-                             `id` int NOT NULL AUTO_INCREMENT,
-                             `activity` int NOT NULL,
-                             `activity_habit` int NOT NULL,
-                             `activity_planning` int NOT NULL,
-                             `diet` int NOT NULL,
-                             `diet_habit` int NOT NULL,
-                             `healthy_diet` int NOT NULL,
-                             `medication` int NOT NULL,
-                             `medication_habit` int NOT NULL,
-                             `month_start` datetime(6) DEFAULT NULL,
-                             `plan_compliance` int NOT NULL,
-                             `positivity` int NOT NULL,
-                             `vegetable_prioritization` int NOT NULL,
-                             `appuser_id` int DEFAULT NULL,
-                             PRIMARY KEY (`id`),
-                             KEY `FKhlien69e58c092npvreltnxqn` (`appuser_id`),
-                             CONSTRAINT `FKhlien69e58c092npvreltnxqn` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `step_record`
+-- --
 --
--- Table structure for table `step_record`
+-- DROP TABLE IF EXISTS `step_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `step_record` (
+--                                `id` int NOT NULL AUTO_INCREMENT,
+--                                `date` datetime(6) DEFAULT NULL,
+--                                `planned_step_per_day` int NOT NULL,
+--                                `week_start` datetime(6) DEFAULT NULL,
+--                                `appuser_id` int DEFAULT NULL,
+--                                PRIMARY KEY (`id`),
+--                                KEY `FK2ajbmalg3nrs71i3r6hk4tp0b` (`appuser_id`),
+--                                CONSTRAINT `FK2ajbmalg3nrs71i3r6hk4tp0b` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `step_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `step_record` (
-                               `id` int NOT NULL AUTO_INCREMENT,
-                               `date` datetime(6) DEFAULT NULL,
-                               `planned_step_per_day` int NOT NULL,
-                               `week_start` datetime(6) DEFAULT NULL,
-                               `appuser_id` int DEFAULT NULL,
-                               PRIMARY KEY (`id`),
-                               KEY `FK2ajbmalg3nrs71i3r6hk4tp0b` (`appuser_id`),
-                               CONSTRAINT `FK2ajbmalg3nrs71i3r6hk4tp0b` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `user_lesson`
+-- --
 --
--- Table structure for table `user_lesson`
+-- DROP TABLE IF EXISTS `user_lesson`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `user_lesson` (
+--                                `id` int NOT NULL AUTO_INCREMENT,
+--                                `lesson_date` datetime(6) DEFAULT NULL,
+--                                `appuser_id` int DEFAULT NULL,
+--                                `lesson_id` int DEFAULT NULL,
+--                                PRIMARY KEY (`id`),
+--                                KEY `FK61d2bd1482jnp2810xfthq7jt` (`appuser_id`),
+--                                KEY `FKaoad4p1ijn3vbv7yyn1k52uk8` (`lesson_id`),
+--                                CONSTRAINT `FK61d2bd1482jnp2810xfthq7jt` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`),
+--                                CONSTRAINT `FKaoad4p1ijn3vbv7yyn1k52uk8` FOREIGN KEY (`lesson_id`) REFERENCES `lesson` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `user_lesson`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_lesson` (
-                               `id` int NOT NULL AUTO_INCREMENT,
-                               `lesson_date` datetime(6) DEFAULT NULL,
-                               `appuser_id` int DEFAULT NULL,
-                               `lesson_id` int DEFAULT NULL,
-                               PRIMARY KEY (`id`),
-                               KEY `FK61d2bd1482jnp2810xfthq7jt` (`appuser_id`),
-                               KEY `FKaoad4p1ijn3vbv7yyn1k52uk8` (`lesson_id`),
-                               CONSTRAINT `FK61d2bd1482jnp2810xfthq7jt` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`),
-                               CONSTRAINT `FKaoad4p1ijn3vbv7yyn1k52uk8` FOREIGN KEY (`lesson_id`) REFERENCES `lesson` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `user_medical_history`
+-- --
 --
--- Table structure for table `user_medical_history`
+-- DROP TABLE IF EXISTS `user_medical_history`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `user_medical_history` (
+--                                         `id` int NOT NULL AUTO_INCREMENT,
+--                                         `appuser_id` int DEFAULT NULL,
+--                                         `condition_id` int DEFAULT NULL,
+--                                         PRIMARY KEY (`id`),
+--                                         KEY `FKiatsukhbvajtlfixf7vocc1sc` (`appuser_id`),
+--                                         KEY `FKsd6bhal1j62iiq8w2xgfvuyua` (`condition_id`),
+--                                         CONSTRAINT `FKiatsukhbvajtlfixf7vocc1sc` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`),
+--                                         CONSTRAINT `FKsd6bhal1j62iiq8w2xgfvuyua` FOREIGN KEY (`condition_id`) REFERENCES `medical_history` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `user_medical_history`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_medical_history` (
-                                        `id` int NOT NULL AUTO_INCREMENT,
-                                        `appuser_id` int DEFAULT NULL,
-                                        `condition_id` int DEFAULT NULL,
-                                        PRIMARY KEY (`id`),
-                                        KEY `FKiatsukhbvajtlfixf7vocc1sc` (`appuser_id`),
-                                        KEY `FKsd6bhal1j62iiq8w2xgfvuyua` (`condition_id`),
-                                        CONSTRAINT `FKiatsukhbvajtlfixf7vocc1sc` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`),
-                                        CONSTRAINT `FKsd6bhal1j62iiq8w2xgfvuyua` FOREIGN KEY (`condition_id`) REFERENCES `medical_history` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `web_user`
+-- --
 --
--- Table structure for table `web_user`
+-- DROP TABLE IF EXISTS `web_user`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `web_user` (
+--                             `id` int NOT NULL AUTO_INCREMENT,
+--                             `phone_number` varchar(255) DEFAULT NULL,
+--                             `user_name` varchar(255) DEFAULT NULL,
+--                             `account_id` int DEFAULT NULL,
+--                             PRIMARY KEY (`id`),
+--                             UNIQUE KEY `UK_30lhb0i5t6m3037ytkpswsxcu` (`account_id`),
+--                             CONSTRAINT `FKh1i9vc0mjqu60o2cgv0rq4ds1` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `web_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `web_user` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `phone_number` varchar(255) DEFAULT NULL,
-                            `user_name` varchar(255) DEFAULT NULL,
-                            `account_id` int DEFAULT NULL,
-                            PRIMARY KEY (`id`),
-                            UNIQUE KEY `UK_30lhb0i5t6m3037ytkpswsxcu` (`account_id`),
-                            CONSTRAINT `FKh1i9vc0mjqu60o2cgv0rq4ds1` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Table structure for table `weight_record`
+-- --
 --
--- Table structure for table `weight_record`
+-- DROP TABLE IF EXISTS `weight_record`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `weight_record` (
+--                                  `id` int NOT NULL AUTO_INCREMENT,
+--                                  `date` datetime(6) DEFAULT NULL,
+--                                  `week_start` datetime(6) DEFAULT NULL,
+--                                  `weight` float DEFAULT NULL,
+--                                  `appuser_id` int DEFAULT NULL,
+--                                  PRIMARY KEY (`id`),
+--                                  KEY `FK9gxkbwuisy35naa5nismto1n0` (`appuser_id`),
+--                                  CONSTRAINT `FK9gxkbwuisy35naa5nismto1n0` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
-
-DROP TABLE IF EXISTS `weight_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `weight_record` (
-                                 `id` int NOT NULL AUTO_INCREMENT,
-                                 `date` datetime(6) DEFAULT NULL,
-                                 `week_start` datetime(6) DEFAULT NULL,
-                                 `weight` float DEFAULT NULL,
-                                 `appuser_id` int DEFAULT NULL,
-                                 PRIMARY KEY (`id`),
-                                 KEY `FK9gxkbwuisy35naa5nismto1n0` (`appuser_id`),
-                                 CONSTRAINT `FK9gxkbwuisy35naa5nismto1n0` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- --
+-- -- Dumping events for database 'smarthealthc'
+-- --
 --
--- Dumping events for database 'smarthealthc'
+-- --
+-- -- Dumping routines for database 'smarthealthc'
+-- --
 --
-
+-- /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 --
--- Dumping routines for database 'smarthealthc'
+-- /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+-- /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+-- /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+-- /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+-- /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+-- /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 --
-
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2024-05-30 15:44:08
+-- -- Dump completed on 2024-05-30 15:44:08

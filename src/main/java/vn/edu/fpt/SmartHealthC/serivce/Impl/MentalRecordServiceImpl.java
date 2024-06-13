@@ -30,7 +30,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     @Override
     public MentalRecord createMentalRecord(MentalRecordDTO mentalRecordDTO) {
         MentalRecord mentalRecord =  MentalRecord.builder()
-                .point(mentalRecordDTO.getPoint())
+                .status(mentalRecordDTO.isStatus())
                 .weekStart(mentalRecordDTO.getWeekStart())
                 .date(mentalRecordDTO.getDate())
                 .build();
@@ -64,7 +64,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     @Override
     public MentalRecord updateMentalRecord(Integer id,MentalRecordDTO mentalRecordDTO) {
         MentalRecord mentalRecord =  getMentalRecordById(id);
-        mentalRecord.setPoint(mentalRecordDTO.getPoint());
+        mentalRecord.setStatus(mentalRecordDTO.isStatus());
         mentalRecord.setWeekStart(mentalRecordDTO.getWeekStart());
         mentalRecord.setDate(mentalRecordDTO.getDate());
         return mentalRecordRepository.save(mentalRecord);
