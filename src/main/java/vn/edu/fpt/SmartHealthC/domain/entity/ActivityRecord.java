@@ -28,12 +28,14 @@ public class ActivityRecord {
     private Date weekStart;
 
     @Enumerated(EnumType.STRING)
-    private TypeActivity type;
+    private TypeActivity planType;
+    @Enumerated(EnumType.STRING)
+    private TypeActivity actualType;
 
-    private Float duration;
+    private Float planDuration;
+
+    private Float actualDuration;
 
     private Date date;
-
-    private Boolean status;
 
 }

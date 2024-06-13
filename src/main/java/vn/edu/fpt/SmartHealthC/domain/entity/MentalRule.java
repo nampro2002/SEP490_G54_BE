@@ -21,6 +21,7 @@ public class MentalRule {
 
     private String title;
     private String description;
+    private boolean isDeleted;
 
 //    @OneToMany(mappedBy = "ruleId")
 //    private List<RuleForPlan> ruleForPlans;

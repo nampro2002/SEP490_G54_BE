@@ -24,7 +24,7 @@ public class LessonServiceImpl implements LessonService {
     public LessonResponseDTO createLesson(LessonRequestDTO lessonRequestDTO) {
         Lesson lesson = Lesson.builder()
                 .title(lessonRequestDTO.getTitle())
-                .text(lessonRequestDTO.getText())
+                .content(lessonRequestDTO.getContent())
                 .video(lessonRequestDTO.getVideo())
                 .build();
         lesson = lessonRepository.save(lesson);
@@ -82,7 +82,7 @@ public class LessonServiceImpl implements LessonService {
     public LessonResponseDTO updateLesson(Integer id, LessonRequestDTO lesson) {
         Lesson lessonToUpdate = getLessonEntityById(id);
         lessonToUpdate.setTitle(lesson.getTitle());
-        lessonToUpdate.setText(lesson.getText());
+        lessonToUpdate.setContent(lesson.getContent());
         lessonToUpdate.setVideo(lesson.getVideo());
         lessonToUpdate = lessonRepository.save(lessonToUpdate);
         LessonResponseDTO lessonResponseDTO = LessonResponseDTO
