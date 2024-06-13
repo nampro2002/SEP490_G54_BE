@@ -1,12 +1,12 @@
 package vn.edu.fpt.SmartHealthC.domain.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
+
+import java.util.Date;
 
 @Entity
 @Data
@@ -16,7 +16,7 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 public class ForgetPasswordCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer Id;
 
     @ManyToOne
     @JoinColumn(name = "account_id")
@@ -24,5 +24,5 @@ public class ForgetPasswordCode {
 
     private String code;
 
-    private Boolean isUsed;
+    private Date expiredDate;
 }

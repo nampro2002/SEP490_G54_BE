@@ -28,11 +28,16 @@ public class MedicineRecord {
 //    @Enumerated(EnumType.STRING)
 //    private TypeMedicine type;
 
+    @ManyToOne
+    @JoinColumn(name = "medicineTypeId")
+    private MedicineType medicineType;
+
     private Float hour;
 
     private Date date;
 
     private Boolean status;
+
 
 //    @OneToMany(mappedBy = "medicinePlanId")
 //    private List<MedicineTypePlan> medicineTypePlans;

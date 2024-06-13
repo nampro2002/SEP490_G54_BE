@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ForgetPasswordCodeDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
+import vn.edu.fpt.SmartHealthC.domain.entity.ForgetPasswordCode;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
@@ -11,6 +12,7 @@ import vn.edu.fpt.SmartHealthC.serivce.EmailService;
 import vn.edu.fpt.SmartHealthC.serivce.ForgetPasswordCodeService;
 
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -51,6 +53,10 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
        }
         ForgetPasswordCodeDTO forgetPasswordCodeDTOCreate = ForgetPasswordCodeDTO.builder()
                 .code(codeVerify).build();
+        ForgetPasswordCode forgetPasswordCode =ForgetPasswordCode.builder()
+                .code(codeVerify)
+                .accountId(account.get())
+                .expiredDate(forgetPasswordCodeDTO.getExpiredDate()).build();
         return codeVerify;
     }
 }

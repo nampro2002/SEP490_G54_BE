@@ -20,6 +20,9 @@ public class WebUserRequestDTO {
 
     private String username;
 
+    private Date dob;
+    private boolean gender;
+
     private String phoneNumber;
     private TypeAccount typeAccount;
 

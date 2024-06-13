@@ -45,7 +45,9 @@ public class AppUserServiceImpl implements AppUserService {
         dto.setEmail(appUser.getAccountId().getEmail());
         dto.setAppUserId(appUser.getId());
         dto.setName(appUser.getName());
-        dto.setHospitalNumber(appUser.getHospitalNumber());
+        dto.setHeight(appUser.getHeight());
+        dto.setWeight(appUser.getWeight());
+        dto.setCic(appUser.getCic());
         dto.setDob(appUser.getDob());
         dto.setGender(appUser.isGender());
         dto.setPhoneNumber(appUser.getPhoneNumber());
@@ -152,7 +154,7 @@ public class AppUserServiceImpl implements AppUserService {
                     dto.setEmail(record.getAccountId().getEmail());
                     dto.setAppUserId(record.getId());
                     dto.setName(record.getName());
-                    dto.setHospitalNumber(record.getHospitalNumber());
+                    dto.setCic(record.getCic());
                     dto.setDob(record.getDob());
                     dto.setGender(record.isGender());
                     dto.setPhoneNumber(record.getPhoneNumber());

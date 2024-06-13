@@ -26,5 +26,7 @@ public class StepRecordDTO {
 
     private Date date;
 
+    private float  actualValue;
+
 
 }

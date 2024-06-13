@@ -21,6 +21,7 @@ public class MedicineType {
 
     private String title;
     private String description;
+    private boolean isDeleted;
 
 //    @OneToMany(mappedBy = "medicineTypeId")
 //    private List<MedicineTypePlan> medicineTypeId;

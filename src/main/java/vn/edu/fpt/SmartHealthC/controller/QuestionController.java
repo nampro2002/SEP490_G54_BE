@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.AnswerQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
@@ -24,22 +25,38 @@ public class QuestionController {
     private QuestionService questionService;
 
     @PostMapping
-    public ApiResponse<Question> createQuestion(@RequestBody QuestionDTO questionDTO) {
+    public ApiResponse<QuestionResponseDTO> createQuestion(@RequestBody QuestionDTO questionDTO) {
 
-        Question createdQuestion= questionService.createQuestion(questionDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.<Question>builder()
+                .body(ApiResponse.<QuestionResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
-                        .result(createdQuestion)
+                        .result(questionService.createQuestion(questionDTO))
                         .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<Question> getQuestionById(@PathVariable Integer id) {
+    public ApiResponse<QuestionResponseDTO> getQuestionById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Question>builder()
+                .body(ApiResponse.<QuestionResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(questionService.getQuestionById(id))
+                        .build()).getBody();
+    }
+
+    @GetMapping("/questionPAdmin")
+    public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsPendingAd() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<QuestionResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(questionService.getAllPendingQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN))
+                        .build()).getBody();
+    }
+    @GetMapping("/questionPMs")
+    public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsPendingMs() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<QuestionResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(questionService.getAllPendingQuestionsByType(TypeUserQuestion.ASSIGN_MS))
                         .build()).getBody();
     }
 
@@ -48,7 +65,7 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(questionService.getAllPendingQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN))
+                        .result(questionService.getQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN))
                         .build()).getBody();
     }
     @GetMapping("/questionMs")
@@ -56,26 +73,27 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(questionService.getAllPendingQuestionsByType(TypeUserQuestion.ASSIGN_MS))
+                        .result(questionService.getQuestionsByType(TypeUserQuestion.ASSIGN_MS))
                         .build()).getBody();
     }
+
+
     //answer question
     @PutMapping("/{id}")
-    public ApiResponse<Question> updateQuestion(@PathVariable Integer id,@RequestBody String answer) {
-        Question updatedQuestion = questionService.updateQuestion(id,answer);
+    public ApiResponse<QuestionResponseDTO> updateQuestion(@PathVariable Integer id,@RequestBody AnswerQuestionRequestDTO answer) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Question>builder()
+                .body(ApiResponse.<QuestionResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(updatedQuestion)
+                        .result(questionService.updateQuestion(id,answer))
                         .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<Question> deleteQuestion(@PathVariable Integer id) {
+    public ApiResponse<QuestionResponseDTO> deleteQuestion(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Question>builder()
+                .body(ApiResponse.<QuestionResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(  questionService.deleteQuestion(id))
+                        .result(questionService.deleteQuestion(id))
                         .build()).getBody();
     }
 }

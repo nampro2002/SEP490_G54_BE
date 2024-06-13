@@ -28,11 +28,12 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     public ActivityRecord createActivityRecord(ActivityRecordDTO activityRecordDTO)
     {
         ActivityRecord activityRecord =  ActivityRecord.builder()
-                .duration(activityRecordDTO.getDuration())
+                .planDuration(activityRecordDTO.getPlanDuration())
+                .actualDuration(activityRecordDTO.getActualDuration())
+                .planType(activityRecordDTO.getPlanType())
+                .actualType(activityRecordDTO.getActualType())
                 .weekStart(activityRecordDTO.getWeekStart())
-                .date(activityRecordDTO.getDate())
-                .type(activityRecordDTO.getType())
-                .status(activityRecordDTO.isStatus()).build();
+                .date(activityRecordDTO.getDate()).build();
         Optional<AppUser> appUser = appUserRepository.findById(activityRecordDTO.getAppUserId());
         if(appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
@@ -60,10 +61,11 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     public ActivityRecord updateActivityRecord(Integer id, ActivityRecordDTO activityRecordDTO) {
         ActivityRecord activityRecord = getActivityRecordById(id);
         activityRecord.setDate(activityRecordDTO.getDate());
-        activityRecord.setDuration(activityRecordDTO.getDuration());
         activityRecord.setWeekStart(activityRecordDTO.getWeekStart());
-        activityRecord.setType(activityRecordDTO.getType());
-        activityRecord.setStatus(activityRecordDTO.isStatus());
+        activityRecord.setPlanDuration(activityRecordDTO.getPlanDuration());
+        activityRecord.setActualDuration(activityRecordDTO.getActualDuration());
+        activityRecord.setPlanType(activityRecordDTO.getPlanType());
+        activityRecord.setActualType(activityRecordDTO.getActualType());
         return  activityRecordRepository.save(activityRecord);
     }
 

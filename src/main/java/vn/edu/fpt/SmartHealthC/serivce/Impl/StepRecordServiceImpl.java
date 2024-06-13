@@ -30,6 +30,7 @@ public class StepRecordServiceImpl implements StepRecordService {
     {
         StepRecord stepRecord =  StepRecord.builder()
                 .plannedStepPerDay(stepRecordDTO.getPlannedStepPerDay())
+                .actualValue(stepRecordDTO.getActualValue())
                 .weekStart(stepRecordDTO.getWeekStart())
                 .date(stepRecordDTO.getDate()).build();
         AppUser appUser = appUserRepository.findById(stepRecordDTO.getAppUserId())
@@ -56,6 +57,7 @@ public class StepRecordServiceImpl implements StepRecordService {
     @Override
     public StepRecord updateStepRecord( Integer id, StepRecordDTO stepRecordDTO) {
         StepRecord stepRecord =  getStepRecordById(id);
+        stepRecord.setActualValue(stepRecordDTO.getActualValue());
         stepRecord.setPlannedStepPerDay(stepRecordDTO.getPlannedStepPerDay());
         stepRecord.setWeekStart(stepRecordDTO.getWeekStart());
         stepRecord.setDate(stepRecordDTO.getDate());
