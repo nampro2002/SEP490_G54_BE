@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LessonRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.LessonResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -70,7 +72,7 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<LessonResponseDTO> getAllLessons(Integer pageNo, String search) {
+    public ResponsePaging<List<LessonResponseDTO>> getAllLessons(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
         Page<Lesson> pagedResult = lessonRepository.findAll(paging);
         List<Lesson> lessons = new ArrayList<>();
@@ -88,7 +90,13 @@ public class LessonServiceImpl implements LessonService {
                     .build();
             lessonResponseDTOList.add(lessonResponseDTO);
         }
-        return lessonResponseDTOList.stream().filter(record -> record.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
+        lessonResponseDTOList =  lessonResponseDTOList.stream().filter(record -> record.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
+        return ResponsePaging.<List<LessonResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(lessonResponseDTOList)
+                .build();
     }
 
     @Override

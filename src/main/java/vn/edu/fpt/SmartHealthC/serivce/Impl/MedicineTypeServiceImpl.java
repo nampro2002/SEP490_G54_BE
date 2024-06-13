@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypeRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineTypeResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineType;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
@@ -69,7 +70,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     }
 
     @Override
-    public List<MedicineTypeResponseDTO> getAllMedicineTypes(Integer pageNo, String search) {
+    public ResponsePaging<List<MedicineTypeResponseDTO>> getAllMedicineTypes(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
         Page<MedicineType> pagedResult = medicineTypeRepository.findAll(paging);
         List<MedicineType> medicineTypeList= new ArrayList<>();
@@ -85,7 +86,13 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
                     .isDeleted(medicineType.isDeleted())
                     .build());
         }
-        return medicineTypeResponseDTOList.stream().filter(record -> record.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
+        medicineTypeResponseDTOList = medicineTypeResponseDTOList.stream().filter(record -> record.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
+        return ResponsePaging.<List<MedicineTypeResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(medicineTypeResponseDTOList)
+                .build();
     }
 
     @Override

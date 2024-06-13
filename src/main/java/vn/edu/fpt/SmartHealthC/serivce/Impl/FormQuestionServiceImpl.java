@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
@@ -72,7 +73,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public List<FormQuestionResponseDTO> getAllFormQuestions(Integer pageNo, String search) {
+    public ResponsePaging<List<FormQuestionResponseDTO>> getAllFormQuestions(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
         Page<FormQuestion> pagedResult  = formQuestionRepository.findAll(paging);
         List<FormQuestion> formQuestions = new ArrayList<>();
@@ -90,7 +91,13 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                     .build();
             formQuestionResponseDTOS.add(formQuestionResponseDTO);
         }
-        return formQuestionResponseDTOS.stream().filter(record -> record.getQuestion().toLowerCase().contains(search.toLowerCase())).toList();
+        formQuestionResponseDTOS =  formQuestionResponseDTOS.stream().filter(record -> record.getQuestion().toLowerCase().contains(search.toLowerCase())).toList();
+        return ResponsePaging.<List<FormQuestionResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(formQuestionResponseDTOS)
+                .build();
     }
 
     @Override

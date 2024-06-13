@@ -9,6 +9,8 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalHistory;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserDetailResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
@@ -121,7 +123,7 @@ public class AppUserServiceImpl implements AppUserService {
 //    }
 
     @Override
-    public List<AppUserResponseDTO> getListAppUser(Integer pageNo, String search) {
+    public ResponsePaging<List<AppUserResponseDTO>> getListAppUser(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5);
         Page<AppUser> pagedResult = appUserRepository.findAll(paging);
         List<AppUser> appUserList = new ArrayList<>();
@@ -146,7 +148,7 @@ public class AppUserServiceImpl implements AppUserService {
 //        }
 
 
-        return appUserList.stream()
+        List<AppUserResponseDTO>  appUserResponseDTOList =  appUserList.stream()
                 .filter(record -> record.getName().toLowerCase().contains(search.toLowerCase()))
                 .map(record -> {
                     AppUserResponseDTO dto = new AppUserResponseDTO();
@@ -161,6 +163,12 @@ public class AppUserServiceImpl implements AppUserService {
                     return dto;
                 })
                 .toList();
+        return ResponsePaging.<List<AppUserResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(appUserResponseDTOList)
+                .build();
     }
 
     @Override
