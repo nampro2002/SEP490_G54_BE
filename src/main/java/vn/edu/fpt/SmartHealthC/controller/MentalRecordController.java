@@ -6,12 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/mental-records")
@@ -21,47 +20,45 @@ public class MentalRecordController {
     private MentalRecordService mentalRecordService;
 
     @PostMapping
-    public ApiResponse<MentalRecord> createMentalRecord(@RequestBody MentalRecordDTO mentalRecordDTO) {
-        MentalRecord createdMentalRecord = mentalRecordService.createMentalRecord(mentalRecordDTO);
+    public ApiResponse<MentalRecordResponseDTO> createMentalRecord(@RequestBody MentalRecordDTO mentalRecordDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.<MentalRecord>builder()
+                .body(ApiResponse.<MentalRecordResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
-                        .result(createdMentalRecord)
+                        .result( mentalRecordService.createMentalRecord(mentalRecordDTO))
                         .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<MentalRecord> getMentalRecordById(@PathVariable Integer id) {
+    public ApiResponse<MentalRecordResponseDTO> getMentalRecordById(@PathVariable Integer id) {
         return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MentalRecord>builder()
+                .body(ApiResponse.<MentalRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(mentalRecordService.getMentalRecordById(id))
                         .build()).getBody();
     }
 
-    @GetMapping
-    public ApiResponse<List<MentalRecord>> getAllMentalRecords() {
+    @GetMapping("getByAppUser/{id}")
+    public ApiResponse<List<MentalRecordListResDTO>> getAllMentalRecords(@PathVariable Integer id) {
         return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MentalRecord>>builder()
+                .body(ApiResponse.<List<MentalRecordListResDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(mentalRecordService.getAllMentalRecords())
+                        .result(mentalRecordService.getAllMentalRecords(id))
                         .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MentalRecord> updateMentalRecord(@PathVariable Integer id, @RequestBody MentalRecordDTO mentalRecordDTO) {
-        MentalRecord updatedMentalRecord = mentalRecordService.updateMentalRecord(id,mentalRecordDTO);
+    public ApiResponse<MentalRecordResponseDTO> updateMentalRecord(@PathVariable Integer id, @RequestBody MentalRecordDTO mentalRecordDTO) {
         return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MentalRecord>builder()
+                .body(ApiResponse.<MentalRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(updatedMentalRecord)
+                        .result(mentalRecordService.updateMentalRecord(id,mentalRecordDTO))
                         .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<MentalRecord> deleteMentalRecord(@PathVariable Integer id) {
+    public ApiResponse<MentalRecordResponseDTO> deleteMentalRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MentalRecord>builder()
+                .body(ApiResponse.<MentalRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result( mentalRecordService.deleteMentalRecord(id))
                         .build()).getBody();

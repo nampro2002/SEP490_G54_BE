@@ -1,8 +1,13 @@
 package vn.edu.fpt.SmartHealthC.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 
-public interface WebUserRepository extends JpaRepository<WebUser, Integer> {
+import java.util.List;
 
+public interface WebUserRepository extends JpaRepository<WebUser, Integer> {
+   //find all undeleted and account type is medical specialist
+    @Query("SELECT w FROM WebUser w WHERE w.accountId.isDeleted = false AND w.accountId.type = 'MEDICAL_SPECIALIST'")
+    List<WebUser> findAllUnDeletedMS();
 }

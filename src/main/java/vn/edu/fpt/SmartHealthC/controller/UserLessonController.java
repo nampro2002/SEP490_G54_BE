@@ -54,7 +54,7 @@ public class UserLessonController {
                         .result(userLessonService.updateUserLesson(id, userLessonDTO))
                         .build()).getBody();
     }
-
+    // not use to delete
     @DeleteMapping("/{id}")
     public ApiResponse<UserLesson> deleteUserLesson(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

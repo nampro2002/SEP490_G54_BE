@@ -3,10 +3,7 @@ package vn.edu.fpt.SmartHealthC.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
@@ -22,6 +19,8 @@ public class StepRecord {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
+    @JsonIgnore
+    @ToString.Exclude
     private AppUser appUserId;
 
     private int  plannedStepPerDay;
@@ -30,7 +29,7 @@ public class StepRecord {
 
     private Date date;
 
-    private float  actualValue;
+    private Float  actualValue;
 
 
 }

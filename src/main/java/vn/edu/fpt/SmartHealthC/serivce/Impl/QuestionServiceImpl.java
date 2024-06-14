@@ -231,4 +231,27 @@ public class QuestionServiceImpl implements QuestionService {
                 .toList();
         return responseDTOList;
     }
+
+    @Override
+    public QuestionResponseDTO removeAnswer(Integer id) {
+        Question question = getQuestionByIdEntity(id);
+        question.setWebUserId(null);
+        question.setAnswer("");
+        question.setAnswerDate(null);
+        question = questionRepository.save(question);
+        QuestionResponseDTO dto = new QuestionResponseDTO();
+        dto.setId(question.getId());
+        dto.setAppUserName(question.getAppUserId().getName());
+        if (!question.getAnswer().isBlank()) {
+            dto.setWebUserName(question.getWebUserId().getUserName());
+        }else{
+            dto.setWebUserName("");
+        }
+        dto.setTitle(question.getTitle());
+        dto.setBody(question.getBody());
+        dto.setAnswer(question.getAnswer());
+        dto.setQuestionDate(question.getQuestionDate());
+        dto.setAnswerDate(question.getAnswerDate());
+        return dto;
+    }
 }

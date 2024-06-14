@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.FAQ;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.serivce.FormQuestionService;
@@ -21,9 +23,9 @@ public class FormQuestionController {
     private FormQuestionService formQuestionService;
 
     @PostMapping
-    public ApiResponse<FormQuestion> createFormQuestion(@RequestBody FormQuestionRequestDTO formQuestion) {
+    public ApiResponse<FormQuestionResponseDTO> createFormQuestion(@RequestBody FormQuestionRequestDTO formQuestion) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.<FormQuestion>builder()
+                .body(ApiResponse.<FormQuestionResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
                         .result(formQuestionService.createFormQuestion(formQuestion))
                         .build()).getBody();
@@ -32,34 +34,34 @@ public class FormQuestionController {
     @GetMapping("/{id}")
     public ApiResponse<?> getFormQuestionById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<FormQuestion>builder()
+                .body(ApiResponse.<FormQuestionResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(formQuestionService.getFormQuestionById(id))
                         .build()).getBody();
     }
 
     @GetMapping
-    public ApiResponse<List<FormQuestion>> getAllFormQuestions() {
+    public ApiResponse<ResponsePaging<List<FormQuestionResponseDTO>>> getAllFormQuestions(@RequestParam(defaultValue = "1") Integer pageNo,  @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<FormQuestion>>builder()
+                .body(ApiResponse.<ResponsePaging<List<FormQuestionResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(formQuestionService.getAllFormQuestions())
+                        .result(formQuestionService.getAllFormQuestions(pageNo-1, search))
                         .build()).getBody();
     }
 
     @PutMapping()
-    public ApiResponse<FormQuestion> updateFormQuestion(@PathVariable Integer id, @RequestBody FormQuestionRequestDTO formQuestion) {
+    public ApiResponse<FormQuestionResponseDTO> updateFormQuestion(@PathVariable Integer id, @RequestBody FormQuestionRequestDTO formQuestion) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<FormQuestion>builder()
+                .body(ApiResponse.<FormQuestionResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(formQuestionService.updateFormQuestion(id, formQuestion))
                         .build()).getBody();
     }
 
     @DeleteMapping("/delete/{id}")
-    public ApiResponse<FormQuestion> deleteFormQuestion(@PathVariable Integer id) {
+    public ApiResponse<FormQuestionResponseDTO> deleteFormQuestion(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<FormQuestion>builder()
+                .body(ApiResponse.<FormQuestionResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result( formQuestionService.deleteFormQuestion(id))
                         .build()).getBody();

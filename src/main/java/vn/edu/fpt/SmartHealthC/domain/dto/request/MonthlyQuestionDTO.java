@@ -26,7 +26,7 @@ public class MonthlyQuestionDTO {
 
     private String question;
 
-    private String answer;
+    private int answer;
 
 
 

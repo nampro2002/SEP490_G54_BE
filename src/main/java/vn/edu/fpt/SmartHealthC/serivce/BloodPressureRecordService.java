@@ -1,12 +1,10 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureResponseDTO.BloodPressureResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BloodPressureRecordService {
     BloodPressureRecord createBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO);

@@ -37,6 +37,11 @@ public class WebUserServiceImpl implements WebUserService {
     }
 
     @Override
+    public List<WebUser> getAllUnDeletedMS() {
+        return webUserRepository.findAllUnDeletedMS();
+    }
+
+    @Override
     public WebUser updateWebUser(WebUserRequestDTO webUserRequestDTO, Integer id) {
         WebUser webUser = getWebUserById(id);
         webUser.setDob(webUserRequestDTO.getDob());

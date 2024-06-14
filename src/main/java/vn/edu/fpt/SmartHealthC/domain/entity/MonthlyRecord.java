@@ -32,6 +32,6 @@ public class MonthlyRecord {
 
     private String question;
 
-    private String answer;
+    private int answer;
 
 }

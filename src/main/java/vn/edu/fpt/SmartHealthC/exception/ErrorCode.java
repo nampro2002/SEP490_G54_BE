@@ -54,6 +54,11 @@ public enum ErrorCode {
     WEIGHT_RECORD_NOT_FOUND("Weight record not found", HttpStatus.NOT_FOUND),
     ACCOUNT_NOT_FOUND("Account not found", HttpStatus.NOT_FOUND),
     NULL_ANSWER("Answer is null", HttpStatus.BAD_REQUEST),
+    USER_CREATED("User created successfully", HttpStatus.CREATED),
+    STAFF_CREATED("Staff created successfully", HttpStatus.CREATED),
+    WRONG_OLD_PASSWORD("Wrong old password", HttpStatus.BAD_REQUEST),
+    ACCOUNT_DELETED("Account has been deleted", HttpStatus.OK),
+    ACCOUNT_ACTIVATED("Account has been activated", HttpStatus.OK),
     ;
 
     ErrorCode(String message, HttpStatusCode statusCode) {

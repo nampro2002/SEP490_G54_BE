@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FAQRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.FAQResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.FAQ;
 import vn.edu.fpt.SmartHealthC.serivce.FAQService;
 
@@ -20,9 +21,9 @@ public class FAQController {
     private FAQService faqService;
 
     @PostMapping
-    public ApiResponse<?> createFAQ(@RequestBody FAQRequestDTO faqRequestDTO) {
+    public ApiResponse<FAQResponseDTO> createFAQ(@RequestBody FAQRequestDTO faqRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.<FAQ>builder()
+                .body(ApiResponse.<FAQResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
                         .result(faqService.createFAQ(faqRequestDTO))
                         .build()).getBody();
@@ -31,7 +32,7 @@ public class FAQController {
     @GetMapping("/{id}")
     public ApiResponse<?> getFAQById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<FAQ>builder()
+                .body(ApiResponse.<FAQResponseDTO>builder()
                         .result(faqService.getFAQById(id))
                         .build()).getBody();
     }
@@ -39,7 +40,7 @@ public class FAQController {
     @GetMapping
     public ApiResponse<?> getAllFAQs() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<FAQ>>builder()
+                .body(ApiResponse.<List<FAQResponseDTO>>builder()
                         .result(faqService.getAllFAQs())
                         .build()).getBody();
     }
@@ -47,7 +48,7 @@ public class FAQController {
     @PutMapping("/{id}")
     public ApiResponse<?> updateFAQ(@PathVariable Integer id, @RequestBody FAQRequestDTO faq) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<FAQ>builder()
+                .body(ApiResponse.<FAQResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(faqService.updateFAQ(id,faq))
                         .build()).getBody();
@@ -56,7 +57,7 @@ public class FAQController {
     @DeleteMapping("/{id}")
     public ApiResponse<?> deleteFAQ(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<FAQ>builder()
+                .body(ApiResponse.<FAQResponseDTO>builder()
                         .result(faqService.deleteFAQ(id))
                         .build()).getBody();
     }
