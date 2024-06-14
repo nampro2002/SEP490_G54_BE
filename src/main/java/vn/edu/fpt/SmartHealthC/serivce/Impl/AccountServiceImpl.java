@@ -146,6 +146,37 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public ResponsePaging<List<AppUserResponseDTO>> getUserPendingAssign(Integer pageNo) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<AppUser> pagedResult = appUserRepository.findAllAccountUserNotAssign(TypeAccount.USER, paging);
+        List<AppUser> accountList = new ArrayList<>();
+        if (pagedResult.hasContent()) {
+            accountList = pagedResult.getContent();
+        }
+        List<AppUserResponseDTO> listResponse = accountList.stream()
+//                .filter(record -> (!record.getAccountId().getIsActive() && record.getAccountId().getType().equals(TypeAccount.USER)))
+                .map(record -> {
+                    AppUserResponseDTO dto = new AppUserResponseDTO();
+                    dto.setAccountId(record.getAccountId().getId());
+                    dto.setEmail(record.getAccountId().getEmail());
+                    dto.setAppUserId(record.getId());
+                    dto.setName(record.getName());
+                    dto.setCic(record.getCic());
+                    dto.setDob(record.getDob());
+                    dto.setGender(record.isGender());
+                    dto.setPhoneNumber(record.getPhoneNumber());
+                    return dto;
+                })
+                .toList();
+        return ResponsePaging.<List<AppUserResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(listResponse)
+                .build();
+    }
+
+    @Override
     public void createStaff(WebUserRequestDTO account) {
         Optional<Account> existingAccount = accountRepository.findByEmail(account.getEmail());
         if (existingAccount.isPresent()) {

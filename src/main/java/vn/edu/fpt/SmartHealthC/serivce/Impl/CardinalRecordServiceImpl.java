@@ -75,9 +75,9 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                 RecordPerDay recordPerDay = RecordPerDay.builder()
                         .date(cardinalRecord.getDate())
                         .timeMeasure(cardinalRecord.getTimeMeasure())
-                        .Cholesterol(cardinalRecord.getCholesterol())
-                        .HBA1C(cardinalRecord.getHBA1C())
-                        .BloodSugar(cardinalRecord.getBloodSugar())
+                        .Cholesterol(cardinalRecord.getCholesterol()+"mg/DL")
+                        .HBA1C(cardinalRecord.getHBA1C()+"%")
+                        .BloodSugar(cardinalRecord.getBloodSugar()+"mg/DL")
                         .build();
                 recordPerDayList.add(recordPerDay);
                 //sortby getTimeMeasure getIndex and Date date;

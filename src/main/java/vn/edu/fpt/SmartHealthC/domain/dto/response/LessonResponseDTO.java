@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class LessonResponseDTO {
+    private Integer id;
     private String title;
 
     private String video;

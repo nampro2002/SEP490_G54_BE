@@ -15,7 +15,7 @@ import java.util.Date;
 public class RecordPerDay {
     private Date date;
     private TypeTimeMeasure timeMeasure;
-    private Float Cholesterol;
-    private Float HBA1C;
-    private Float BloodSugar;
+    private String Cholesterol;
+    private String HBA1C;
+    private String BloodSugar;
 }
