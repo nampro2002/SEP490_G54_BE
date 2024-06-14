@@ -49,7 +49,7 @@ public class FormQuestionController {
                         .build()).getBody();
     }
 
-    @PutMapping()
+    @PutMapping({"/{id}"})
     public ApiResponse<FormQuestionResponseDTO> updateFormQuestion(@PathVariable Integer id, @RequestBody FormQuestionRequestDTO formQuestion) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FormQuestionResponseDTO>builder()

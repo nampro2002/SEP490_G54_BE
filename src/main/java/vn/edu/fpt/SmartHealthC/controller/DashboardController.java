@@ -4,15 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
-import vn.edu.fpt.SmartHealthC.domain.entity.Question;
 import vn.edu.fpt.SmartHealthC.serivce.AccountService;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
 import vn.edu.fpt.SmartHealthC.serivce.QuestionService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/dashboard")
@@ -52,6 +51,14 @@ public class DashboardController {
                         .result(accountService.getPendingAccount(pageNo - 1))
                         .build()).getBody();
     }
+    @GetMapping("/assign-pending")
+    public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getUserPendingAssignList(@RequestParam(defaultValue = "1") Integer pageNo) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ResponsePaging<List<AppUserResponseDTO>>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(accountService.getUserPendingAssign(pageNo - 1))
+                        .build()).getBody();
+    }
 
     @GetMapping("ms-question")
     public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListMs() {
@@ -63,12 +70,20 @@ public class DashboardController {
                         .build()).getBody();
     }
 
-    @GetMapping("/medical-appointment/{id}")
-    public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getQuestionResponseList(@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo) {
+    @GetMapping("/medical-appointment/diagnosis/{id}")
+    public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointmentsDiagnosisPending(@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<MedicalAppointmentResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicalAppointmentService.getAllMedicalAppointmentsPending(id, pageNo - 1))
+                        .result(medicalAppointmentService.getAllMedicalAppointmentsPending(id, pageNo - 1, TypeMedicalAppointment.DIAGNOSIS))
+                        .build()).getBody();
+    }
+    @GetMapping("/medical-appointment/checkup/{id}")
+    public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointmentsCheckupPending(@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ResponsePaging<List<MedicalAppointmentResponseDTO>>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalAppointmentService.getAllMedicalAppointmentsPending(id, pageNo - 1, TypeMedicalAppointment.MEDICAL_CHECKUP))
                         .build()).getBody();
     }
 

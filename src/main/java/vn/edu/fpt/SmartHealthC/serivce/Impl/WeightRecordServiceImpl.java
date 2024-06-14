@@ -70,7 +70,7 @@ public class WeightRecordServiceImpl implements WeightRecordService {
             for (WeightRecord weightRecord : weightRecordByWeek) {
                 RecordPerDay recordPerDay = RecordPerDay.builder()
                         .date(weightRecord.getDate())
-                        .weight(weightRecord.getWeight())
+                        .weight(weightRecord.getWeight()+"kg")
                         .build();
                 recordPerDayList.add(recordPerDay);
                 //sort by  Date date;

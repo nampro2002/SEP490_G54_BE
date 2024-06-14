@@ -75,8 +75,8 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
             for (BloodPressureRecord bloodPressureRecord : bloodPressureRecords) {
                 RecordPerDay recordPerDay = RecordPerDay.builder()
                         .date(bloodPressureRecord.getDate())
-                        .systole(bloodPressureRecord.getSystole())
-                        .diastole(bloodPressureRecord.getDiastole())
+                        .systole(bloodPressureRecord.getSystole()+ "mmHG")
+                        .diastole(bloodPressureRecord.getDiastole()+ "mmHG")
                         .build();
                 recordPerDayList.add(recordPerDay);
                 //sort by  Date date;

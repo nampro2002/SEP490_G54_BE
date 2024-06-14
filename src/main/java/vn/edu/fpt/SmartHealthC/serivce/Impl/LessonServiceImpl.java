@@ -83,6 +83,7 @@ public class LessonServiceImpl implements LessonService {
         for (Lesson lesson : lessons) {
             LessonResponseDTO lessonResponseDTO = LessonResponseDTO
                     .builder()
+                    .id(lesson.getId())
                     .title(lesson.getTitle())
                     .content(lesson.getContent())
                     .video(lesson.getVideo())

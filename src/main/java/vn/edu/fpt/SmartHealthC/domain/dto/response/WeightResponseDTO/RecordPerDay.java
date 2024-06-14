@@ -14,5 +14,5 @@ import java.util.Date;
 public class RecordPerDay {
     private Date date;
 
-    private Float weight;
+    private String weight;
 }

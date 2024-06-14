@@ -14,8 +14,8 @@ import java.util.Date;
 public class RecordPerDay {
     private Date date;
     //Tâm thu
-    private Float systole;
+    private String systole;
 
     //Tâm trương
-    private Float diastole;
+    private String diastole;
 }

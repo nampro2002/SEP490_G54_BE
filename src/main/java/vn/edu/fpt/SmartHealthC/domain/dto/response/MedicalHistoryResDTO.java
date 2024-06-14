@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MedicalHistoryResDTO {
+    private Integer id;
     private String name;
     private TypeMedicalHistory type;
     private boolean isDeleted ;

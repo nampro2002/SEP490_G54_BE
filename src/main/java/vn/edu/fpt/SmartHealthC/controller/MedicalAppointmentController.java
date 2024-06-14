@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
@@ -41,11 +42,11 @@ public class MedicalAppointmentController {
     }
 
     @GetMapping
-    public ApiResponse<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointments() {
+    public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointments(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MedicalAppointmentResponseDTO>>builder()
+                .body(ApiResponse.<ResponsePaging<List<MedicalAppointmentResponseDTO>>  >builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicalAppointmentService.getAllMedicalAppointments())
+                        .result(medicalAppointmentService.getAllMedicalAppointments(pageNo - 1, search))
                         .build()).getBody();
     }
 

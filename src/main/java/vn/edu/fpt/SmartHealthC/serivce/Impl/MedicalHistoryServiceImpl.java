@@ -79,6 +79,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         for (MedicalHistory medicalHistory : medicalHistories) {
             MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
                     .builder()
+                    .id(medicalHistory.getId())
                     .name(medicalHistory.getName())
                     .type(medicalHistory.getType())
                     .build();

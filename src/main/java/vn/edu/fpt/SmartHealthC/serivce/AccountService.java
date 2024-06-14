@@ -23,4 +23,6 @@ public interface AccountService {
     List<AvailableMSResponseDTO> getAvailableMS();
 
     Account changePassword(Integer id, UpdatePasswordRequestDTO updatePasswordRequestDTO);
+
+    ResponsePaging<List<AppUserResponseDTO>> getUserPendingAssign(Integer pageNo);
 }
