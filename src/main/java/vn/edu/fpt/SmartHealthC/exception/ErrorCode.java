@@ -15,7 +15,6 @@ public enum ErrorCode {
 //    UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
 
     JWT_INVALID ( ",Invalid jwt token", HttpStatus.BAD_REQUEST),
-    USER_WEEK_START_NOT_EXIST("User not have record about week start", HttpStatus.NOT_FOUND),
     CREDENTIAL_EXPIRED ( "Your login session has expired", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTED("Email existed", HttpStatus.BAD_REQUEST),
     SEND_EMAIL_FAIL("Send email fail", HttpStatus.BAD_REQUEST),
@@ -24,6 +23,7 @@ public enum ErrorCode {
     UNAUTHENTICATED("Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED("You do not have permission", HttpStatus.FORBIDDEN),
     APP_USER_NOT_FOUND("AppUser not found", HttpStatus.NOT_FOUND),
+    USER_WEEK_START_NOT_EXIST("User not have record about week start", HttpStatus.NOT_FOUND),
     WEB_USER_NOT_FOUND("WebUser not found", HttpStatus.NOT_FOUND),
     BPS_NOT_FOUND("bps not found", HttpStatus.NOT_FOUND),
     NOT_FOUND("Not found", HttpStatus.NOT_FOUND),

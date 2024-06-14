@@ -15,4 +15,6 @@ public interface MedicineTypeService {
     ResponsePaging<List<MedicineTypeResponseDTO>> getAllMedicineTypes(Integer pageNo, String search);
     MedicineTypeResponseDTO updateMedicineType(Integer id,MedicineTypeRequestDTO medicineType);
     MedicineTypeResponseDTO deleteMedicineType(Integer id);
+
+    List<MedicineTypeResponseDTO> getAllMedicineTypesMobile();
 }

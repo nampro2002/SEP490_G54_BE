@@ -47,6 +47,14 @@ public class MedicineTypeController {
                         .result(medicineTypeService.getAllMedicineTypes(pageNo-1, search))
                         .build()).getBody();
     }
+    @GetMapping("/mobile")
+    public ApiResponse<List<MedicineTypeResponseDTO>> getAllMedicineTypesMobile() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MedicineTypeResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicineTypeService.getAllMedicineTypesMobile())
+                        .build()).getBody();
+    }
 
     @PutMapping("/{id}")
     public ApiResponse<MedicineTypeResponseDTO> updateMedicineType(@PathVariable Integer id,@RequestBody MedicineTypeRequestDTO medicineType) {

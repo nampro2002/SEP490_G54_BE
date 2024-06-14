@@ -32,8 +32,6 @@ public class MedicineRecord {
     @JoinColumn(name = "medicineTypeId")
     private MedicineType medicineType;
 
-    private Float hour;
-
     private Date date;
 
     private Boolean status;

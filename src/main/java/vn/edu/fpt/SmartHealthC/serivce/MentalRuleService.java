@@ -15,4 +15,6 @@ public interface MentalRuleService {
     ResponsePaging<List<MentalRuleResponseDTO>> getAllMentalRules(Integer pageNo, String search);
     MentalRuleResponseDTO updateMentalRule(Integer id, MentalRuleRequestDTO mentalRule);
     MentalRuleResponseDTO deleteMentalRule(Integer id);
+
+    List<MentalRuleResponseDTO> getAllMentalRulesMobile();
 }

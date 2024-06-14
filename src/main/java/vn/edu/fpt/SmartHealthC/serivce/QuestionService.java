@@ -21,4 +21,6 @@ public interface QuestionService {
     List<QuestionResponseDTO> getQuestionsByType(TypeUserQuestion typeUserQuestion);
 
     QuestionResponseDTO removeAnswer(Integer id);
+
+    List<QuestionResponseDTO> getQuestionByUserId(Integer userId);
 }
