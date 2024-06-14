@@ -50,6 +50,17 @@ public class MentalRuleController {
                         .build()).getBody();
     }
 
+
+    @GetMapping("/mobile")
+    public ApiResponse<List<MentalRuleResponseDTO>> getAllMentalRulesMobile() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MentalRuleResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(mentalRuleService.getAllMentalRulesMobile())
+                        .build()).getBody();
+    }
+
+
     @PutMapping("/{id}")
     public ApiResponse<MentalRuleResponseDTO> updateMentalRule( @PathVariable Integer id,@RequestBody MentalRuleRequestDTO mentalRule) {
         return ResponseEntity.status(HttpStatus.OK)
