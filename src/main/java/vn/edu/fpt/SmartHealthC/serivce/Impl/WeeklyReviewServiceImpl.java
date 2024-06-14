@@ -13,6 +13,8 @@ import vn.edu.fpt.SmartHealthC.serivce.WeeklyReviewService;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -74,6 +76,51 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     }
 
     @Override
+    public List<Date> getListWeekStart(Integer id) throws ParseException {
+        Optional<AppUser> appUser = appUserRepository.findById(id);
+        if (appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        //trả về ngày sớm nhất của user
+        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date smallestWeekStart = formatDate.parse(findSmallestWeekStart(appUser.get()));
+        List<Date> weekStartList = new ArrayList<>();
+
+        //Chuyển smallestWeekStart từ date thành localdate để cộng thêm 7 ngày và thêm vào làm phần tử đầu tiên của mảng date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate firstWeekStart = LocalDate.parse(formatDate.format(smallestWeekStart), formatter);
+        weekStartList.add(smallestWeekStart);
+
+        //Lấy ra ngày hiện tại và gán ngày sớm nhất cho datePlus7
+        LocalDate today = LocalDate.now();
+        LocalDate datePlus7 = firstWeekStart;
+
+        //Vòng lặp cho đến ngày hiện tại
+        boolean loopStatus = true;
+        for (; loopStatus;) {
+            // Cộng thêm 7 ngày vào ngày đầu tiên của user sau 1 vòng lặp
+            datePlus7 = datePlus7.plusDays(7);
+                // Kiểm tra xem datePlus7 nhỏ hơn ngày hôm nay
+                if (datePlus7.isBefore(today) ) {
+                    //Chuyển từ localDate thành String và thành Date theo UTC để thêm vào list
+                    String formattedDate = datePlus7.format(formatter);
+                    weekStartList.add(formatDate.parse(formattedDate));
+                }else if(datePlus7.isEqual(today)){ //datePlus7 = và là thứ 2 thì thêm vào list
+                    //Ngày hôm nay  là thứ 2 thì check
+                    if (today.getDayOfWeek() == DayOfWeek.MONDAY) {
+                        //Chuyển từ localDate thành String và thành Date theo UTC để thêm vào list
+                        String formattedDate = today.format(formatter);
+                        weekStartList.add(formatDate.parse(formattedDate));
+                    }
+                }else{ // dateplus mà quá lớn hơn hiên tại thì dừng
+                    loopStatus = false;
+                }
+        }
+        return weekStartList;
+    }
+
+
+    @Override
     public WeeklyReviewResponseDTO getDataReviewForWeekDate(Integer id, String weekStart) throws ParseException {
         WeeklyReviewResponseDTO weeklyReviewResponseDTO = new WeeklyReviewResponseDTO();
 
@@ -81,7 +128,6 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
-
         //week start for filter
         formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date weekStartFilter = formatDate.parse(weekStart);

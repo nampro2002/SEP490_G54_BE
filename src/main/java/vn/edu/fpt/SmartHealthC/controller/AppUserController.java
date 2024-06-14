@@ -9,6 +9,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserDetailResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 
@@ -34,13 +35,12 @@ public class AppUserController {
 
     //getListAppUser with paging and search
     @GetMapping()
-    public ApiResponse<?> getListAppUser (@RequestParam(defaultValue = "0") Integer pageNo,
+    public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getListAppUser (@RequestParam(defaultValue = "1") Integer pageNo,
                                           @RequestParam(defaultValue = "") String search) {
-        List<AppUserResponseDTO> listAppUser =  appUserService.getListAppUser(pageNo, search);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<AppUserResponseDTO>>builder()
+                .body(ApiResponse.<ResponsePaging<List<AppUserResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(listAppUser)
+                        .result(appUserService.getListAppUser(pageNo -1, search))
                         .build()).getBody();
     }
     //getAppUserById

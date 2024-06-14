@@ -4,7 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRuleRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.LessonResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRuleResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRuleService;
@@ -19,12 +23,12 @@ public class MentalRuleController {
     private MentalRuleService mentalRuleService;
 
     @PostMapping
-    public ApiResponse<MentalRule> createMentalRule(@RequestBody MentalRule mentalRule) {
-        MentalRule createdMentalRule = mentalRuleService.createMentalRule(mentalRule);
+    public ApiResponse<MentalRuleResponseDTO> createMentalRule(@RequestBody MentalRuleRequestDTO mentalRule) {
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.<MentalRule>builder()
+                .body(ApiResponse.<MentalRuleResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
-                        .result(createdMentalRule)
+                        .result(mentalRuleService.createMentalRule(mentalRule))
                         .build()).getBody();
     }
 
@@ -33,33 +37,32 @@ public class MentalRuleController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MentalRule>builder()
                         .code(HttpStatus.OK.value())
-                        .result(mentalRuleService.getMentalRuleById(id))
+                        .result(mentalRuleService.getMentalRuleEntityById(id))
                         .build()).getBody();
     }
 
     @GetMapping
-    public ApiResponse<List<MentalRule>> getAllMentalRules() {
+    public ApiResponse<ResponsePaging<List<MentalRuleResponseDTO>>> getAllMentalRules(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MentalRule>>builder()
+                .body(ApiResponse.<ResponsePaging<List<MentalRuleResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(mentalRuleService.getAllMentalRules())
+                        .result(mentalRuleService.getAllMentalRules(pageNo-1, search))
                         .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MentalRule> updateMentalRule( @PathVariable Integer id,@RequestBody MentalRule mentalRule) {
-        MentalRule updatedMentalRule = mentalRuleService.updateMentalRule(id,mentalRule);
+    public ApiResponse<MentalRuleResponseDTO> updateMentalRule( @PathVariable Integer id,@RequestBody MentalRuleRequestDTO mentalRule) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MentalRule>builder()
+                .body(ApiResponse.<MentalRuleResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(updatedMentalRule)
+                        .result(mentalRuleService.updateMentalRule(id,mentalRule))
                         .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<MentalRule> deleteMentalRule(@PathVariable Integer id) {
+    public ApiResponse<MentalRuleResponseDTO> deleteMentalRule(@PathVariable Integer id) {
         return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MentalRule>builder()
+                .body(ApiResponse.<MentalRuleResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(  mentalRuleService.deleteMentalRule(id))
                         .build()).getBody();

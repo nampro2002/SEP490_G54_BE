@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
@@ -24,48 +26,45 @@ public class MedicineRecordController {
     private AppUserRepository appUserRepository;
 
     @PostMapping
-    public ApiResponse<MedicineRecord>  createMedicineRecord(@RequestBody MedicineRecordDTO medicineRecordDTO) {
-
-        MedicineRecord createdMedicineRecord = medicineRecordService.createMedicineRecord(medicineRecordDTO);
+    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody MedicineRecordDTO medicineRecordDTO) {
         return  ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.<MedicineRecord>builder()
+                .body(ApiResponse.<MedicineRecordResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
-                        .result(createdMedicineRecord)
+                        .result(medicineRecordService.createMedicineRecord(medicineRecordDTO))
                         .build()).getBody();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<MedicineRecord> getMedicineRecordById(@PathVariable Integer id) {
+    public ApiResponse<MedicineRecordResponseDTO> getMedicineRecordById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MedicineRecord>builder()
+                .body(ApiResponse.<MedicineRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(medicineRecordService.getMedicineRecordById(id))
                         .build()).getBody();
     }
 
-    @GetMapping
-    public  ApiResponse<List<MedicineRecord>> getAllMedicineRecords() {
+    @GetMapping("getByAppUser/{id}")
+    public  ApiResponse<List<MedicineRecordListResDTO>> getAllMedicineRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MedicineRecord>>builder()
+                .body(ApiResponse.<List<MedicineRecordListResDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicineRecordService.getAllMedicineRecords())
+                        .result(medicineRecordService.getAllMedicineRecords(id))
                         .build()).getBody();
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MedicineRecord> updateMedicineRecord(@PathVariable Integer id,@RequestBody MedicineRecordDTO medicineRecordDTO) {
-        MedicineRecord updateMedicineRecord = medicineRecordService.updateMedicineRecord(id,medicineRecordDTO);
+    public ApiResponse<MedicineRecordResponseDTO> updateMedicineRecord(@PathVariable Integer id,@RequestBody MedicineRecordDTO medicineRecordDTO) {
         return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MedicineRecord>builder()
+                .body(ApiResponse.<MedicineRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(updateMedicineRecord)
+                        .result(medicineRecordService.updateMedicineRecord(id,medicineRecordDTO))
                         .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<MedicineRecord> deleteMedicineRecord(@PathVariable Integer id) {
+    public ApiResponse<MedicineRecordResponseDTO> deleteMedicineRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MedicineRecord>builder()
+                .body(ApiResponse.<MedicineRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(medicineRecordService.deleteMedicineRecord(id))
                         .build()).getBody();
