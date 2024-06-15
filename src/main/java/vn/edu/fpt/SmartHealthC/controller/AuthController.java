@@ -51,6 +51,16 @@ public class AuthController {
                         .result(authService.login(request))
                         .build()).getBody();
     }
+//
+    @GetMapping("/email/{email}")
+    public ApiResponse<String> login(
+            @PathVariable String email) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<String>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(authService.sendEmailCode(email))
+                        .build()).getBody();
+    }
 
 //    @GetMapping("/accounts")
 //    public ResponseEntity<List<Account>> getAccountList(){

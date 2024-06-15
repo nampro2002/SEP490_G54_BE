@@ -8,6 +8,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.ForgetPasswordCode;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
+import vn.edu.fpt.SmartHealthC.repository.ForgetPasswordCodeRepository;
 import vn.edu.fpt.SmartHealthC.serivce.EmailService;
 import vn.edu.fpt.SmartHealthC.serivce.ForgetPasswordCodeService;
 
@@ -22,17 +23,8 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
     private AccountRepository accountRepository;
     @Autowired
     private EmailService emailService;
-
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    public static String generateRandomCode(int codeLength) {
-        SecureRandom random = new SecureRandom();
-        StringBuilder code = new StringBuilder(codeLength);
-        for (int i = 0; i < codeLength; i++) {
-            code.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
-        }
-        return code.toString();
-    }
+    @Autowired
+    private ForgetPasswordCodeRepository forgetPasswordCodeRepository;
 
     @Override
     public String sendEmailCode(ForgetPasswordCodeDTO forgetPasswordCodeDTO) {
@@ -40,7 +32,7 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         if (account.isEmpty()) {
             throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
         }
-        String codeVerify = generateRandomCode(6);
+        String codeVerify = emailService.generateRandomCode(6);
         String message = "Code xác thực của bạn là : " +codeVerify;
 
        boolean result =  emailService.sendMail(
@@ -51,12 +43,13 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
        if(result == false){
            throw new AppException(ErrorCode.SEND_EMAIL_FAIL);
        }
-        ForgetPasswordCodeDTO forgetPasswordCodeDTOCreate = ForgetPasswordCodeDTO.builder()
-                .code(codeVerify).build();
+//        ForgetPasswordCodeDTO forgetPasswordCodeDTOCreate = ForgetPasswordCodeDTO.builder()
+//                .code(codeVerify).build();
         ForgetPasswordCode forgetPasswordCode =ForgetPasswordCode.builder()
                 .code(codeVerify)
                 .accountId(account.get())
                 .expiredDate(forgetPasswordCodeDTO.getExpiredDate()).build();
+        forgetPasswordCodeRepository.save(forgetPasswordCode);
         return codeVerify;
     }
 }
