@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
-import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 
 import java.util.Optional;
@@ -21,5 +20,4 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
     Page<AppUser> findAllInactiveAccountUser(TypeAccount type, Pageable paging);
     @Query("SELECT u FROM AppUser u WHERE u.accountId.isActive = true AND u.accountId.type = ?1 AND u.webUser.accountId.isDeleted = true")
     Page<AppUser> findAllAccountUserNotAssign(TypeAccount type, Pageable paging);
-
 }
