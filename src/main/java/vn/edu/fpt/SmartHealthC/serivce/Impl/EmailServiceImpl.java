@@ -47,4 +47,17 @@ public class EmailServiceImpl implements EmailService {
         }
 
     }
+
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    @Override
+    public String generateRandomCode(int codeLength) {
+        SecureRandom random = new SecureRandom();
+        StringBuilder code = new StringBuilder(codeLength);
+        for (int i = 0; i < codeLength; i++) {
+            code.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
+        }
+        return code.toString();
+    }
 }
+

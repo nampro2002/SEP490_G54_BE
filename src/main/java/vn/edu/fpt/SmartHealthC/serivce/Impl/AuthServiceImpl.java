@@ -2,7 +2,6 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,8 +12,6 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.RegisterDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicalHistory;
-import vn.edu.fpt.SmartHealthC.domain.entity.UserMedicalHistory;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
@@ -22,11 +19,9 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicalHistoryRepository;
 import vn.edu.fpt.SmartHealthC.repository.UserMedicalHistoryRepository;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
-import vn.edu.fpt.SmartHealthC.serivce.AccountService;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
+import vn.edu.fpt.SmartHealthC.serivce.EmailService;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final MedicalHistoryRepository medicalHistoryRepository;
     private final UserMedicalHistoryRepository userMedicalHistoryRepository;
     private final AppUserRepository appUserRepository;
-
+    private final EmailService  emailService;
 
     @Override
     public AuthenticationResponseDto login(LoginDto request){
@@ -103,5 +98,25 @@ public class AuthServiceImpl implements AuthService {
 //                    .build();
 //            userMedicalHistoryRepository.save(userMedicalHistory);
 //        }
+    }
+
+    @Override
+    public String sendEmailCode(String email) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+        if (account.isPresent()) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+        String codeVerify = emailService.generateRandomCode(6);
+        String message = "Code xác thực email của bạn là : " +codeVerify;
+
+        boolean result =  emailService.sendMail(
+                email,
+                "MÃ XÁC THỰC EMAIL",
+                message
+        );
+        if(result == false){
+            throw new AppException(ErrorCode.SEND_EMAIL_FAIL);
+        }
+        return codeVerify;
     }
 }

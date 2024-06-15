@@ -70,7 +70,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     @Override
     public ResponsePaging<List<MedicalHistoryResDTO>> getAllMedicalHistory(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicalHistory> pagedResult = medicalHistoryRepository.findAll(paging);
+        Page<MedicalHistory> pagedResult = medicalHistoryRepository.findAllNotDeleted(paging, search);
         List<MedicalHistory> medicalHistories= new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicalHistories = pagedResult.getContent();
@@ -117,5 +117,22 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                 .type(medicalHistory.getType())
                 .build();
         return medicalHistoryResDTO;
+    }
+
+    @Override
+    public List<MedicalHistoryResDTO> getAllMedicalHistoryMobile() {
+        List<MedicalHistory> medicalHistories = medicalHistoryRepository.findAllNotDeleted();
+
+        List<MedicalHistoryResDTO> medicalHistoryResDTOList = new ArrayList<>();
+        for (MedicalHistory medicalHistory : medicalHistories) {
+            MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
+                    .builder()
+                    .id(medicalHistory.getId())
+                    .name(medicalHistory.getName())
+                    .type(medicalHistory.getType())
+                    .build();
+            medicalHistoryResDTOList.add(medicalHistoryResDTO);
+        }
+        return medicalHistoryResDTOList;
     }
 }

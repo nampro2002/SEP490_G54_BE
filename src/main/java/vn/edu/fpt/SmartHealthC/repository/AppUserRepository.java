@@ -6,16 +6,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
+import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 
 import java.util.Optional;
 
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
-    Page<AppUser> findAll(Pageable pageable);
+    //name contain search
+    @Query("SELECT u FROM AppUser u WHERE u.webUser.id = ?1 AND LOWER(u.name) LIKE %?2%")
+    Page<AppUser> findAllByUserId(Integer id, String search, Pageable pageable);
 
     @Query("SELECT u FROM AppUser u WHERE u.accountId.isActive = false AND u.accountId.type = ?1")
     Page<AppUser> findAllInactiveAccountUser(TypeAccount type, Pageable paging);
     @Query("SELECT u FROM AppUser u WHERE u.accountId.isActive = true AND u.accountId.type = ?1 AND u.webUser.accountId.isDeleted = true")
     Page<AppUser> findAllAccountUserNotAssign(TypeAccount type, Pageable paging);
+
 }

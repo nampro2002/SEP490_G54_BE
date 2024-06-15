@@ -72,7 +72,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     @Override
     public ResponsePaging<List<MedicineTypeResponseDTO>> getAllMedicineTypes(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicineType> pagedResult = medicineTypeRepository.findAll(paging);
+        Page<MedicineType> pagedResult = medicineTypeRepository.findAllNotDeleted(paging, search);
         List<MedicineType> medicineTypeList= new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicineTypeList = pagedResult.getContent();
@@ -86,7 +86,6 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
                     .isDeleted(medicineType.isDeleted())
                     .build());
         }
-        medicineTypeResponseDTOList = medicineTypeResponseDTOList.stream().filter(record -> record.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
         return ResponsePaging.<List<MedicineTypeResponseDTO>>builder()
                 .totalPages(pagedResult.getTotalPages())
                 .currentPage(pageNo + 1)
@@ -120,5 +119,20 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
                 .description(medicineType.getDescription())
                 .isDeleted(medicineType.isDeleted())
                 .build();
+    }
+
+    @Override
+    public List<MedicineTypeResponseDTO> getAllMedicineTypesMobile() {
+        List<MedicineType> medicineTypeList = medicineTypeRepository.findAllNotDeleted();
+        List<MedicineTypeResponseDTO> medicineTypeResponseDTOList = new ArrayList<>();
+        for(MedicineType medicineType:medicineTypeList){
+            medicineTypeResponseDTOList.add(MedicineTypeResponseDTO.builder()
+                    .id(medicineType.getId())
+                    .title(medicineType.getTitle())
+                    .description(medicineType.getDescription())
+                    .isDeleted(medicineType.isDeleted())
+                    .build());
+        }
+        return medicineTypeResponseDTOList;
     }
 }

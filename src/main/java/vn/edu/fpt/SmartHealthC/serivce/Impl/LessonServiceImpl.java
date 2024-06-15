@@ -74,7 +74,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public ResponsePaging<List<LessonResponseDTO>> getAllLessons(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<Lesson> pagedResult = lessonRepository.findAll(paging);
+        Page<Lesson> pagedResult = lessonRepository.findAll(paging, search);
         List<Lesson> lessons = new ArrayList<>();
         if (pagedResult.hasContent()) {
             lessons = pagedResult.getContent();
@@ -91,7 +91,6 @@ public class LessonServiceImpl implements LessonService {
                     .build();
             lessonResponseDTOList.add(lessonResponseDTO);
         }
-        lessonResponseDTOList =  lessonResponseDTOList.stream().filter(record -> record.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
         return ResponsePaging.<List<LessonResponseDTO>>builder()
                 .totalPages(pagedResult.getTotalPages())
                 .currentPage(pageNo + 1)

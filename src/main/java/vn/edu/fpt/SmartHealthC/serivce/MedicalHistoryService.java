@@ -15,4 +15,6 @@ public interface MedicalHistoryService {
     MedicalHistory getMedicalHistoryEntityById(Integer id);
     MedicalHistoryResDTO updateMedicalHistory(Integer id, MedicalHistoryRequestDTO medicalHistory);
     MedicalHistoryResDTO deleteMedicalHistory(Integer id);
+
+    List<MedicalHistoryResDTO> getAllMedicalHistoryMobile();
 }

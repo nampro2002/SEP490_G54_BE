@@ -1,7 +1,10 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import ch.qos.logback.classic.spi.LoggingEventVO;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.DashboardCountAdmin;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.DashboardCountMs;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
@@ -18,4 +21,5 @@ public interface MedicalAppointmentService {
 
     ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointmentsPending(Integer id, Integer pageNo, TypeMedicalAppointment diagnosis);
 
+    List<MedicalAppointmentResponseDTO> getMedicalAppointmentByUserId(Integer userId);
 }
