@@ -38,7 +38,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
                         .code(HttpStatus.CREATED.value())
-                        .message(ErrorCode.STAFF_CREATED.getMessage())
+                        .message(ErrorCode.USER_CREATED.getMessage())
                         .build()).getBody();
     }
 

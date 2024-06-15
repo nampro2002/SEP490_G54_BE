@@ -47,6 +47,15 @@ public class MedicalHistoryController {
                         .result(medicalHistoryService.getAllMedicalHistory(pageNo - 1, search))
                         .build()).getBody();
     }
+    @GetMapping("/mobile")
+    public ApiResponse<List<MedicalHistoryResDTO>> getAllMedicalHistoryMobile() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MedicalHistoryResDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalHistoryService.getAllMedicalHistoryMobile())
+                        .build()).getBody();
+    }
+
 
     @PutMapping("/{id}")
     public ApiResponse<MedicalHistoryResDTO> updateMedicalHistory(@PathVariable Integer id, @RequestBody MedicalHistoryRequestDTO medicalHistory) {
