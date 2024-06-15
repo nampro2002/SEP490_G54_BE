@@ -21,4 +21,5 @@ public interface MedicalAppointmentService {
 
     ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointmentsPending(Integer id, Integer pageNo, TypeMedicalAppointment diagnosis);
 
+    List<MedicalAppointmentResponseDTO> getMedicalAppointmentByUserId(Integer userId);
 }

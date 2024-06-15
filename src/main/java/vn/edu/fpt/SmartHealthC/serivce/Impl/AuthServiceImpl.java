@@ -22,6 +22,8 @@ import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
 import vn.edu.fpt.SmartHealthC.serivce.EmailService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -103,8 +105,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String sendEmailCode(String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
-        if (account.isEmpty()) {
-            throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
+        if (account.isPresent()) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
         String codeVerify = emailService.generateRandomCode(6);
         String message = "Code xác thực email của bạn là : " +codeVerify;

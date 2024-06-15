@@ -176,6 +176,24 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .build();
     }
 
+    @Override
+    public List<MedicalAppointmentResponseDTO> getMedicalAppointmentByUserId(Integer userId) {
+        List<MedicalAppointment> medicalAppointmentList  = medicalAppointmentRepository.findAllByUserId(TypeMedicalAppointmentStatus.CONFIRM, userId);
+        List<MedicalAppointmentResponseDTO> responseDTOList = new ArrayList<>();
+        for (MedicalAppointment medicalAppointment : medicalAppointmentList) {
+            MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
+                    .id(medicalAppointment.getId())
+                    .appUserName(medicalAppointment.getAppUserId().getName())
+                    .date(medicalAppointment.getDate())
+                    .hospital(medicalAppointment.getHospital())
+                    .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
+                    .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
+                    .build();
+            responseDTOList.add(medicalAppointmentResponseDTO);
+        }
+        return responseDTOList;
+    }
+
 
 
 

@@ -25,6 +25,7 @@ public enum ErrorCode {
     APP_USER_NOT_FOUND("AppUser not found", HttpStatus.NOT_FOUND),
     USER_WEEK_START_NOT_EXIST("User not have record about week start", HttpStatus.NOT_FOUND),
     WEB_USER_NOT_FOUND("WebUser not found", HttpStatus.NOT_FOUND),
+    WEB_USER_NOT_VALID("WebUser not valid", HttpStatus.BAD_REQUEST),
     BPS_NOT_FOUND("bps not found", HttpStatus.NOT_FOUND),
     NOT_FOUND("Not found", HttpStatus.NOT_FOUND),
     USER_NOT_EXISTED("User not existed", HttpStatus.NOT_FOUND),

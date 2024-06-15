@@ -75,7 +75,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     @Override
     public ResponsePaging<List<FormQuestionResponseDTO>> getAllFormQuestions(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<FormQuestion> pagedResult  = formQuestionRepository.findAll(paging);
+        Page<FormQuestion> pagedResult  = formQuestionRepository.findAll(paging, search);
         List<FormQuestion> formQuestions = new ArrayList<>();
         if (pagedResult.hasContent()) {
             formQuestions = pagedResult.getContent();
@@ -91,7 +91,6 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                     .build();
             formQuestionResponseDTOS.add(formQuestionResponseDTO);
         }
-        formQuestionResponseDTOS =  formQuestionResponseDTOS.stream().filter(record -> record.getQuestion().toLowerCase().contains(search.toLowerCase())).toList();
         return ResponsePaging.<List<FormQuestionResponseDTO>>builder()
                 .totalPages(pagedResult.getTotalPages())
                 .currentPage(pageNo + 1)

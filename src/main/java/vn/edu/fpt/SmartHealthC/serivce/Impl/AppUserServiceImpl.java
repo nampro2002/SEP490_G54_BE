@@ -5,7 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalHistory;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.AppUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserDetailResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserResponseDTO;
@@ -123,9 +125,9 @@ public class AppUserServiceImpl implements AppUserService {
 //    }
 
     @Override
-    public ResponsePaging<List<AppUserResponseDTO>> getListAppUser(Integer pageNo, String search) {
+    public ResponsePaging<List<AppUserResponseDTO>> getListAppUser(Integer pageNo, String search, Integer id) {
         Pageable paging = PageRequest.of(pageNo, 5);
-        Page<AppUser> pagedResult = appUserRepository.findAll(paging, search.toLowerCase());
+        Page<AppUser> pagedResult = appUserRepository.findAllByUserId(id, search.toLowerCase(),paging);
         List<AppUser> appUserList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             appUserList = pagedResult.getContent();
@@ -168,6 +170,22 @@ public class AppUserServiceImpl implements AppUserService {
                 .totalItems((int) pagedResult.getTotalElements())
                 .dataResponse(appUserResponseDTOList)
                 .build();
+    }
+
+    @Override
+    public AppUserDetailResponseDTO updateAppUser(Integer id, AppUserRequestDTO appUserRequestDTO) {
+        AppUser appUser = appUserRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.APP_USER_NOT_FOUND)
+        );
+        appUser.setName(appUserRequestDTO.getName());
+        appUser.setDob(appUserRequestDTO.getDob());
+        appUser.setGender(appUserRequestDTO.isGender());
+        appUser.setPhoneNumber(appUserRequestDTO.getPhoneNumber());
+        appUser.setWeight(appUserRequestDTO.getWeight());
+        appUser.setHeight(appUserRequestDTO.getHeight());
+        appUser.setCic(appUserRequestDTO.getCic());
+        appUserRepository.save(appUser);
+        return getAppUserDetailById(id);
     }
 
     @Override

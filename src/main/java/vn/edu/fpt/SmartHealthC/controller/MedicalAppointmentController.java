@@ -41,6 +41,15 @@ public class MedicalAppointmentController {
                         .build()).getBody();
     }
 
+    @GetMapping("/user")
+    public ApiResponse<List<MedicalAppointmentResponseDTO>> getMedicalAppointmentByUserId(@RequestParam(defaultValue = "0") Integer userId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MedicalAppointmentResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalAppointmentService.getMedicalAppointmentByUserId(userId))
+                        .build()).getBody();
+    }
+
     @GetMapping
     public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointments(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
