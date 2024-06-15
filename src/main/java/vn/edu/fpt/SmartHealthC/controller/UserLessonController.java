@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class UserLessonController {
     private UserLessonService userLessonService;
 
     @PostMapping
-    public ApiResponse<UserLesson> createUserLesson(@RequestBody UserLessonDTO userLessonDTO) {
+    public ApiResponse<UserLesson> createUserLesson(@RequestBody @Valid UserLessonDTO userLessonDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<UserLesson>builder()
                         .code(HttpStatus.CREATED.value())
@@ -47,7 +48,7 @@ public class UserLessonController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<UserLesson> updateUserLesson(@PathVariable Integer id, @RequestBody UserLessonDTO userLessonDTO) {
+    public ApiResponse<UserLesson> updateUserLesson(@PathVariable Integer id, @RequestBody @Valid UserLessonDTO userLessonDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<UserLesson>builder()
                         .code(HttpStatus.OK.value())

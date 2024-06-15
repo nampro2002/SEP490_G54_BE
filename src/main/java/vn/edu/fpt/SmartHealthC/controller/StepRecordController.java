@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class StepRecordController {
     private StepRecordService stepRecordService;
 
     @PostMapping
-    public ApiResponse<StepRecord> createStepRecord(@RequestBody StepRecordDTO stepRecordDTO) {
+    public ApiResponse<StepRecord> createStepRecord(@RequestBody @Valid StepRecordDTO stepRecordDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<StepRecord>builder()
                         .code(HttpStatus.CREATED.value())
@@ -47,7 +48,7 @@ public class StepRecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<StepRecord> updateStepRecord(@PathVariable Integer id, @RequestBody StepRecordDTO stepRecordDTO) {
+    public ApiResponse<StepRecord> updateStepRecord(@PathVariable Integer id, @RequestBody @Valid StepRecordDTO stepRecordDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<StepRecord>builder()
                         .code(HttpStatus.OK.value())
