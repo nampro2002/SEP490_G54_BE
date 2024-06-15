@@ -15,7 +15,6 @@ import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
 import vn.edu.fpt.SmartHealthC.serivce.QuestionService;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -254,29 +253,5 @@ public class QuestionServiceImpl implements QuestionService {
         dto.setQuestionDate(question.getQuestionDate());
         dto.setAnswerDate(question.getAnswerDate());
         return dto;
-    }
-
-    @Override
-    public List<QuestionResponseDTO> getQuestionByUserId(Integer userId) {
-        List<Question> questionList = questionRepository.findByUserId(userId);
-        List<QuestionResponseDTO> questionResponseDTOList = new ArrayList<>();
-        for (Question question : questionList) {
-            QuestionResponseDTO dto = new QuestionResponseDTO();
-            dto.setId(question.getId());
-            dto.setAppUserName(question.getAppUserId().getName());
-            if (!question.getAnswer().isBlank()) {
-                dto.setWebUserName(question.getWebUserId().getUserName());
-            }
-            dto.setTitle(question.getTitle());
-            dto.setBody(question.getBody());
-            dto.setAnswer(question.getAnswer());
-            dto.setQuestionDate(question.getQuestionDate());
-            dto.setAnswerDate(question.getAnswerDate());
-            if (!question.getAnswer().isEmpty()) {
-                dto.setAnswerDate(question.getAnswerDate());
-            }
-            questionResponseDTOList.add(dto);
-        }
-        return questionResponseDTOList;
     }
 }

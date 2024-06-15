@@ -38,12 +38,12 @@ public class MonthlyQuestionController {
                         .build()).getBody();
     }
 
-    @GetMapping("/mobile")
-    public ApiResponse<List<MonthlyRecord>> getAllMonthlyQuestionsMobile() {
+    @GetMapping
+    public ApiResponse<List<MonthlyRecord>> getAllMonthlyQuestions() {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MonthlyRecord>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.getAllMonthlyQuestionsMobile())
+                        .result(monthlyQuestionService.getAllMonthlyQuestions())
                         .build()).getBody();
     }
 

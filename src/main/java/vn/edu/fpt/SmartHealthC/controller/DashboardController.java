@@ -78,7 +78,14 @@ public class DashboardController {
                         .result(medicalAppointmentService.getAllMedicalAppointmentsPending(id, pageNo - 1, TypeMedicalAppointment.DIAGNOSIS))
                         .build()).getBody();
     }
-
+    @GetMapping("/medical-appointment/checkup/{id}")
+    public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointmentsCheckupPending(@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ResponsePaging<List<MedicalAppointmentResponseDTO>>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalAppointmentService.getAllMedicalAppointmentsPending(id, pageNo - 1, TypeMedicalAppointment.MEDICAL_CHECKUP))
+                        .build()).getBody();
+    }
 
 
 //    @GetMapping("/{id}")

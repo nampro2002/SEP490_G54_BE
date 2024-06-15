@@ -8,7 +8,7 @@ import java.util.List;
 public interface MonthlyQuestionService {
     MonthlyRecord createMonthlyQuestion(MonthlyQuestionDTO monthlyQuestionDTO);
    MonthlyRecord getMonthlyQuestionById(Integer id);
-    List<MonthlyRecord> getAllMonthlyQuestionsMobile();
+    List<MonthlyRecord> getAllMonthlyQuestions();
     MonthlyRecord updateMonthlyQuestion(Integer id, MonthlyQuestionDTO monthlyQuestionDTO);
     MonthlyRecord deleteMonthlyQuestion(Integer id);
 }

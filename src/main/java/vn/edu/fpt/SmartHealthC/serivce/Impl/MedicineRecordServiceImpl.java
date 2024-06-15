@@ -30,6 +30,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     @Override
     public MedicineRecordResponseDTO createMedicineRecord(MedicineRecordDTO medicineRecordDTO) {
         MedicineRecord medicineRecord = MedicineRecord.builder()
+                .hour(medicineRecordDTO.getHour())
                 .weekStart(medicineRecordDTO.getWeekStart())
                 .date(medicineRecordDTO.getDate())
                 .status(false)
@@ -47,6 +48,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         medicineRecord = medicineRecordRepository.save(medicineRecord);
         return MedicineRecordResponseDTO.builder()
                 .id(medicineRecord.getId())
+                .hour(medicineRecord.getHour())
                 .appUserName(medicineRecord.getAppUserId().getName())
                 .medicineType(medicineRecord.getMedicineType().getTitle())
                 .weekStart(medicineRecord.getWeekStart())
@@ -64,6 +66,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
 
         return MedicineRecordResponseDTO.builder()
                 .id(medicineRecord.get().getId())
+                .hour(medicineRecord.get().getHour())
                 .appUserName(medicineRecord.get().getAppUserId().getName())
                 .medicineType(medicineRecord.get().getMedicineType().getTitle())
                 .weekStart(medicineRecord.get().getWeekStart())
@@ -108,12 +111,14 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     @Override
     public MedicineRecordResponseDTO updateMedicineRecord(Integer id, MedicineRecordDTO medicineRecordDTO) {
         MedicineRecord medicineRecord = getMedicineRecordEntityById(id);
+        medicineRecord.setHour(medicineRecordDTO.getHour());
         medicineRecord.setWeekStart(medicineRecordDTO.getWeekStart());
         medicineRecord.setDate(medicineRecordDTO.getDate());
         medicineRecord.setStatus(medicineRecordDTO.getStatus());
         medicineRecordRepository.save(medicineRecord);
         return MedicineRecordResponseDTO.builder()
                 .id(medicineRecord.getId())
+                .hour(medicineRecord.getHour())
                 .appUserName(medicineRecord.getAppUserId().getName())
                 .medicineType(medicineRecord.getMedicineType().getTitle())
                 .weekStart(medicineRecord.getWeekStart())
@@ -128,6 +133,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         medicineRecordRepository.deleteById(id);
         return MedicineRecordResponseDTO.builder()
                 .id(medicineRecord.getId())
+                .hour(medicineRecord.getHour())
                 .weekStart(medicineRecord.getWeekStart())
                 .date(medicineRecord.getDate())
                 .status(medicineRecord.getStatus())

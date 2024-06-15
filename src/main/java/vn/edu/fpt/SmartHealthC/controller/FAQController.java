@@ -37,7 +37,7 @@ public class FAQController {
                         .build()).getBody();
     }
 
-    @GetMapping("/mobile")
+    @GetMapping
     public ApiResponse<?> getAllFAQs() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<FAQResponseDTO>>builder()

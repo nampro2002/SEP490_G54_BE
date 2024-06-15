@@ -15,7 +15,4 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     //find account by email deleted = false
     @Query("SELECT a FROM Account a WHERE a.email = ?1 AND a.isDeleted = false")
     Optional<Account> findAccountByEmail(String email);
-
-    @Query("SELECT a FROM Account a WHERE a.isDeleted = false")
-    List<Account> findAllNotDeleted();
 }

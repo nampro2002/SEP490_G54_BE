@@ -50,7 +50,7 @@ public class MonthlyQuestionServiceImpl implements MonthlyQuestionService {
     }
 
     @Override
-    public List<MonthlyRecord> getAllMonthlyQuestionsMobile() {
+    public List<MonthlyRecord> getAllMonthlyQuestions() {
         return monthlyQuestionRepository.findAll();
     }
 

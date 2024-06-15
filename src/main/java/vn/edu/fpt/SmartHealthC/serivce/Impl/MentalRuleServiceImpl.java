@@ -20,7 +20,6 @@ import vn.edu.fpt.SmartHealthC.serivce.MentalRuleService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class MentalRuleServiceImpl implements MentalRuleService {
 
@@ -48,7 +47,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
     @Override
     public MentalRule getMentalRuleEntityById(Integer id) {
         Optional<MentalRule> mentalRule = mentalRuleRepository.findById(id);
-        if (mentalRule.isEmpty()) {
+        if(mentalRule.isEmpty()) {
             throw new AppException(ErrorCode.MENTAL_RULE_NOT_FOUND);
         }
         return mentalRule.get();
@@ -58,7 +57,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
     @Override
     public MentalRuleResponseDTO getMentalRuleById(Integer id) {
         Optional<MentalRule> mentalRule = mentalRuleRepository.findById(id);
-        if (mentalRule.isEmpty()) {
+        if(mentalRule.isEmpty()) {
             throw new AppException(ErrorCode.MENTAL_RULE_NOT_FOUND);
         }
         return MentalRuleResponseDTO
@@ -69,12 +68,11 @@ public class MentalRuleServiceImpl implements MentalRuleService {
                 .isDeleted(mentalRule.get().isDeleted())
                 .build();
     }
-
     @Override
     public ResponsePaging<List<MentalRuleResponseDTO>> getAllMentalRules(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MentalRule> pagedResult = mentalRuleRepository.findAllNotDeleted(paging, search);
-        List<MentalRule> mentalRuleList = new ArrayList<>();
+        Page<MentalRule> pagedResult = mentalRuleRepository.findAll(paging);
+        List<MentalRule> mentalRuleList= new ArrayList<>();
         if (pagedResult.hasContent()) {
             mentalRuleList = pagedResult.getContent();
         }
@@ -89,6 +87,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
                     .build();
             mentalRuleResponseDTOList.add(mentalRuleResponseDTO);
         }
+        mentalRuleResponseDTOList = mentalRuleResponseDTOList.stream().filter(record -> record.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
         return ResponsePaging.<List<MentalRuleResponseDTO>>builder()
                 .totalPages(pagedResult.getTotalPages())
                 .currentPage(pageNo + 1)
@@ -104,7 +103,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
         mentalRule.setDescription(mentalRuleRequestDTO.getDescription());
         mentalRule.setTitle(mentalRuleRequestDTO.getTitle());
 
-        mentalRule = mentalRuleRepository.save(mentalRule);
+        mentalRule =  mentalRuleRepository.save(mentalRule);
         return MentalRuleResponseDTO
                 .builder()
                 .id(mentalRule.getId())
@@ -125,22 +124,5 @@ public class MentalRuleServiceImpl implements MentalRuleService {
                 .description(mentalRule.getDescription())
                 .isDeleted(mentalRule.isDeleted())
                 .build();
-    }
-
-    @Override
-    public List<MentalRuleResponseDTO> getAllMentalRulesMobile() {
-        List<MentalRule> mentalRuleList = mentalRuleRepository.findAllNotDeleted();
-        List<MentalRuleResponseDTO> mentalRuleResponseDTOList = new ArrayList<>();
-        for (MentalRule mentalRule : mentalRuleList) {
-            MentalRuleResponseDTO mentalRuleResponseDTO = MentalRuleResponseDTO
-                    .builder()
-                    .id(mentalRule.getId())
-                    .title(mentalRule.getTitle())
-                    .description(mentalRule.getDescription())
-                    .isDeleted(mentalRule.isDeleted())
-                    .build();
-            mentalRuleResponseDTOList.add(mentalRuleResponseDTO);
-        }
-        return mentalRuleResponseDTOList;
     }
 }

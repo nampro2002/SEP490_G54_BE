@@ -125,7 +125,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public ResponsePaging<List<AppUserResponseDTO>> getListAppUser(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5);
-        Page<AppUser> pagedResult = appUserRepository.findAll(paging, search.toLowerCase());
+        Page<AppUser> pagedResult = appUserRepository.findAll(paging);
         List<AppUser> appUserList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             appUserList = pagedResult.getContent();
@@ -149,6 +149,7 @@ public class AppUserServiceImpl implements AppUserService {
 
 
         List<AppUserResponseDTO>  appUserResponseDTOList =  appUserList.stream()
+                .filter(record -> record.getName().toLowerCase().contains(search.toLowerCase()))
                 .map(record -> {
                     AppUserResponseDTO dto = new AppUserResponseDTO();
                     dto.setAccountId(record.getAccountId().getId());

@@ -38,7 +38,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
                         .code(HttpStatus.CREATED.value())
-                        .message(ErrorCode.USER_CREATED.getMessage())
+                        .message(ErrorCode.STAFF_CREATED.getMessage())
                         .build()).getBody();
     }
 
@@ -49,6 +49,16 @@ public class AuthController {
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
                         .code(HttpStatus.OK.value())
                         .result(authService.login(request))
+                        .build()).getBody();
+    }
+//
+    @GetMapping("/email/{email}")
+    public ApiResponse<String> login(
+            @PathVariable String email) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<String>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(authService.sendEmailCode(email))
                         .build()).getBody();
     }
 

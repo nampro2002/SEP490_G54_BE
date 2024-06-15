@@ -43,14 +43,6 @@ public class QuestionController {
                         .build()).getBody();
     }
 
-    @GetMapping("/user")
-    public ApiResponse<List<QuestionResponseDTO>> getQuestionByUserId(@RequestParam(defaultValue = "1") Integer userId) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<QuestionResponseDTO>>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(questionService.getQuestionByUserId(userId))
-                        .build()).getBody();
-    }
     @GetMapping("/questionPAdmin")
     public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsPendingAd() {
         return ResponseEntity.status(HttpStatus.OK)

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface EmailService {
     boolean sendMail(String to, String subject, String body);
-
+    String generateRandomCode(int codeLength);
 }
