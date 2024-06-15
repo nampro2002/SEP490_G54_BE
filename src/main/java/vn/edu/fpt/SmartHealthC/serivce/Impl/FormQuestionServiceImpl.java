@@ -129,4 +129,21 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                 .build();
         return formQuestionResponseDTO;
     }
+
+    @Override
+    public List<FormQuestionResponseDTO> getAllFormQuestionsMobile() {
+        List<FormQuestion> formQuestions   = formQuestionRepository.findAll();
+        List<FormQuestionResponseDTO> formQuestionResponseDTOS = new ArrayList<>();
+        for (FormQuestion formQuestion : formQuestions) {
+            FormQuestionResponseDTO formQuestionResponseDTO = FormQuestionResponseDTO
+                    .builder()
+                    .id(formQuestion.getId())
+                    .question(formQuestion.getQuestion())
+                    .questionNumber(formQuestion.getQuestionNumber())
+                    .type(formQuestion.getType())
+                    .build();
+            formQuestionResponseDTOS.add(formQuestionResponseDTO);
+        }
+        return formQuestionResponseDTOS;
+    }
 }

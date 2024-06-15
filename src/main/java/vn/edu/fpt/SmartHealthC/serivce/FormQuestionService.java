@@ -16,4 +16,6 @@ public interface FormQuestionService {
     ResponsePaging<List<FormQuestionResponseDTO>> getAllFormQuestions(Integer pageNo, String search);
     FormQuestionResponseDTO updateFormQuestion(Integer id,FormQuestionRequestDTO formQuestion);
     FormQuestionResponseDTO deleteFormQuestion(Integer id);
+
+    List<FormQuestionResponseDTO> getAllFormQuestionsMobile();
 }

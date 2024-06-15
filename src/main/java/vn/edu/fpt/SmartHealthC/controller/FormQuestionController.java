@@ -48,6 +48,15 @@ public class FormQuestionController {
                         .result(formQuestionService.getAllFormQuestions(pageNo-1, search))
                         .build()).getBody();
     }
+    @GetMapping("/mobile")
+    public ApiResponse<List<FormQuestionResponseDTO>> getAllFormQuestionsMobile() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<FormQuestionResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(formQuestionService.getAllFormQuestionsMobile())
+                        .build()).getBody();
+    }
+
 
     @PutMapping({"/{id}"})
     public ApiResponse<FormQuestionResponseDTO> updateFormQuestion(@PathVariable Integer id, @RequestBody FormQuestionRequestDTO formQuestion) {

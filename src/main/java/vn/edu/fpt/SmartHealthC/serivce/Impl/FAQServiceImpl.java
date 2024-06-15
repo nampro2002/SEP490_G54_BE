@@ -102,4 +102,19 @@ public class FAQServiceImpl implements FAQService {
                 .build();
         return faqResponseDTO;
     }
+
+    @Override
+    public List<FAQResponseDTO> getAllFAQsMobile() {
+        List<FAQResponseDTO> responseDTOList = new ArrayList<>();
+        List<FAQ> faqList = faqRepository.findAll();
+        for (FAQ faq : faqList) {
+            FAQResponseDTO faqResponseDTO = FAQResponseDTO.builder()
+                    .id(faq.getId())
+                    .question(faq.getQuestion())
+                    .answer(faq.getAnswer())
+                    .build();
+            responseDTOList.add(faqResponseDTO);
+        }
+        return responseDTOList;
+    }
 }

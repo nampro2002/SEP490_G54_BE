@@ -12,10 +12,7 @@ public interface AccountService {
     Account getAccountById(Integer id);
     Account getAccountByEmail(String email);
     List<Account> getAllAccounts();
-    Account updateAccount(Account account);
     Account deleteAccount(Integer id);
-
-//    AuthenticationResponseDto loginStaff(LoginDto loginDto);
 
     boolean activateAccount(Integer id);
 

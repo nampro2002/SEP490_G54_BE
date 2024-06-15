@@ -4,8 +4,8 @@ ALTER TABLE `smarthealthc`.`account`
     CHANGE COLUMN `is_active` `is_active` BIT(1) NOT NULL ,
     CHANGE COLUMN `is_deleted` `is_deleted` BIT(1) NOT NULL ,
     CHANGE COLUMN `password` `password` VARCHAR(255) NOT NULL ,
-    CHANGE COLUMN `type` `type` ENUM('ADMIN', 'CUSTOMER_SUPPORT', 'MEDICAL_SPECIALIST', 'USER') NOT NULL ,
-    ADD UNIQUE INDEX `email_UNIQUE` (`email`);
+    CHANGE COLUMN `type` `type` ENUM('ADMIN', 'CUSTOMER_SUPPORT', 'MEDICAL_SPECIALIST', 'USER') NOT NULL;
+--     ADD UNIQUE INDEX `email_UNIQUE` (`email`);
 
 
 

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AnswerQuestionRequestDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
@@ -13,7 +13,6 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.QuestionRepository;
 import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
 import vn.edu.fpt.SmartHealthC.serivce.QuestionService;
-import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,16 +31,16 @@ public class QuestionServiceImpl implements QuestionService {
     private WebUserRepository webUserRepository;
 
     @Override
-    public QuestionResponseDTO createQuestion(QuestionDTO questionDTO) {
+    public QuestionResponseDTO createQuestion(QuestionRequestDTO questionRequestDTO) {
         Question question = Question.builder()
-                .title(questionDTO.getTitle())
-                .body(questionDTO.getBody())
-                .typeUserQuestion(questionDTO.getTypeUserQuestion())
-                .questionDate(questionDTO.getQuestionDate())
+                .title(questionRequestDTO.getTitle())
+                .body(questionRequestDTO.getBody())
+                .typeUserQuestion(questionRequestDTO.getTypeUserQuestion())
+                .questionDate(new Date())
                 .answer("")
-                .answerDate(questionDTO.getQuestionDate())
+                .answerDate(null)
                 .build();
-        Optional<AppUser> appUser = appUserRepository.findById(questionDTO.getAppUserId());
+        Optional<AppUser> appUser = appUserRepository.findById(questionRequestDTO.getAppUserId());
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
@@ -257,7 +256,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionResponseDTO> getQuestionByUserId(Integer userId) {
+    public List<QuestionResponseDTO> getQuestionByAppUserId(Integer userId) {
         List<Question> questionList = questionRepository.findByUserId(userId);
         List<QuestionResponseDTO> questionResponseDTOList = new ArrayList<>();
         for (Question question : questionList) {
