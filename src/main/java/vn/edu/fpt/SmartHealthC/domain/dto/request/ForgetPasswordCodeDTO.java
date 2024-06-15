@@ -19,7 +19,6 @@ public class ForgetPasswordCodeDTO {
     private String email;
     @NotNull(message = "missing code")
     private String code;
-    @NotNull(message = "missing expiredDate")
     private Date expiredDate;
 
 }

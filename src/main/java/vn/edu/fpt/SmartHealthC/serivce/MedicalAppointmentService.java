@@ -19,7 +19,7 @@ public interface MedicalAppointmentService {
     MedicalAppointmentResponseDTO updateMedicalAppointment(Integer id, MedicalAppointmentDTO medicalAppointmentDTO);
     MedicalAppointmentResponseDTO deleteMedicalAppointment(Integer id);
 
-    ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointmentsPending(Integer id, Integer pageNo, TypeMedicalAppointment diagnosis);
+    ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointmentsPending(Integer pageNo, TypeMedicalAppointment diagnosis);
 
     List<MedicalAppointmentResponseDTO> getMedicalAppointmentByUserIdMobile(Integer userId);
     ResponsePaging<List<MedicalAppointmentResponseDTO>> getMedicalAppointmentByUserId(Integer userId,  Integer pageNo);

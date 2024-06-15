@@ -9,9 +9,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
-import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
 import java.util.List;
 import java.util.Optional;

@@ -36,13 +36,13 @@ public class AppUserController {
     }
 
     //getListAppUser with paging and search
-    @GetMapping("/{id}")
-    public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getListAppUser (@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo,
+    @GetMapping()
+    public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getListAppUser (@RequestParam(defaultValue = "1") Integer pageNo,
                                           @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<AppUserResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(appUserService.getListAppUser(pageNo -1, search, id))
+                        .result(appUserService.getListAppUser(pageNo -1, search))
                         .build()).getBody();
     }
     //getAppUserById

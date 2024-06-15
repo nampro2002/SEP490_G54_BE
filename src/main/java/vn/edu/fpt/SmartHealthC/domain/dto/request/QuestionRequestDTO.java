@@ -1,8 +1,6 @@
 package vn.edu.fpt.SmartHealthC.domain.dto.request;
 
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,13 +15,13 @@ import java.util.Date;
 @Builder
 public class QuestionRequestDTO {
 
-    @NotNull(message = "missing appUserId")
+
     private int appUserId;
-    @NotNull(message = "missing typeUserQuestion")
+
     private TypeUserQuestion typeUserQuestion;
-    @NotBlank(message = "missing title")
+
     private String  title;
-    @NotBlank(message = "missing body")
+
     private String body;
 
 

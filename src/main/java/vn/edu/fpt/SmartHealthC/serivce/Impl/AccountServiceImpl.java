@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
@@ -75,9 +77,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean activateAccount(Integer id) {
-        AppUser appUser = appUserRepository.findById(id).orElseThrow(()->
+        AppUser appUser = appUserRepository.findById(id).orElseThrow(() ->
                 new AppException(ErrorCode.APP_USER_NOT_FOUND));
-        if(appUser.getAccountId().getIsActive()){
+        if (appUser.getAccountId().getIsActive()) {
             throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
         }
         if (!(appUser.getWebUser() == null)) {
@@ -136,8 +138,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account changePassword(Integer id, UpdatePasswordRequestDTO updatePasswordRequestDTO) {
-        Account account = getAccountById(id);
+    public Account changePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Account account = getAccountByEmail(email);
         if (!passwordEncoder.matches(updatePasswordRequestDTO.getOldPassword(), account.getPassword())) {
             throw new AppException(ErrorCode.WRONG_OLD_PASSWORD);
         }
@@ -231,7 +235,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account deleteAccount(Integer id) {
         Account account = getAccountById(id);
-        if(account.isDeleted()){
+        if (account.isDeleted()) {
             throw new AppException(ErrorCode.ACCOUNT_DELETED);
         }
         account.setDeleted(true);
