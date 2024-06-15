@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class DietRecordController {
     private DietRecordService dietRecordService;
 
     @PostMapping
-    public ApiResponse<DietRecord> createDietRecord(@RequestBody DietRecordDTO dietRecordDTO) {
+    public ApiResponse<DietRecord> createDietRecord(@RequestBody @Valid DietRecordDTO dietRecordDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<DietRecord>builder()
                         .code(HttpStatus.CREATED.value())
@@ -50,7 +51,7 @@ public class DietRecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<DietRecord> updateDietRecord(@PathVariable Integer id, @RequestBody DietRecordDTO dietRecordDTO) {
+    public ApiResponse<DietRecord> updateDietRecord(@PathVariable Integer id, @RequestBody @Valid DietRecordDTO dietRecordDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<DietRecord>builder()
                         .code(HttpStatus.OK.value())

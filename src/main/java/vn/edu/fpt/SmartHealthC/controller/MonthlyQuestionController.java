@@ -1,6 +1,5 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ public class MonthlyQuestionController {
     private MonthlyQuestionService monthlyQuestionService;
 
     @PostMapping
-    public ApiResponse<MonthlyRecord> createMonthlyQuestion(@RequestBody @Valid MonthlyQuestionDTO monthlyQuestionDTO) {
+    public ApiResponse<MonthlyRecord> createMonthlyQuestion(@RequestBody MonthlyQuestionDTO monthlyQuestionDTO) {
 
          MonthlyRecord createdMonthlyRecord =  monthlyQuestionService.createMonthlyQuestion(monthlyQuestionDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -49,7 +48,7 @@ public class MonthlyQuestionController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MonthlyRecord> updateMonthlyQuestion(@PathVariable Integer id, @RequestBody @Valid  MonthlyQuestionDTO monthlyQuestionDTO) {
+    public ApiResponse<MonthlyRecord> updateMonthlyQuestion(@PathVariable Integer id, @RequestBody  MonthlyQuestionDTO monthlyQuestionDTO) {
          MonthlyRecord updatedMonthlyRecord =  monthlyQuestionService.updateMonthlyQuestion(id,monthlyQuestionDTO);
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MonthlyRecord>builder()

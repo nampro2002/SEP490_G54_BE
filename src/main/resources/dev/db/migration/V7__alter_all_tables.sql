@@ -19,8 +19,6 @@ ALTER TABLE `smarthealthc`.`activity_record`
 
 ALTER TABLE `smarthealthc`.`app_user`
     CHANGE COLUMN `cic` `cic` VARCHAR(255) CHARACTER SET utf8mb4  NOT NULL ,
-    CHANGE COLUMN `dob` `dob` DATETIME(6) NOT NULL ,
-    CHANGE COLUMN `gender` `gender` BIT(1) NOT NULL,
     CHANGE COLUMN `height` `height` FLOAT NOT NULL ,
     CHANGE COLUMN`medical_specialist_note` `medical_specialist_note` VARCHAR(255) CHARACTER SET utf8mb4 ,
     CHANGE COLUMN `name` `name` VARCHAR(255) CHARACTER SET utf8mb4  NOT NULL ,
@@ -72,40 +70,33 @@ ALTER TABLE `smarthealthc`.`lesson`
 
 ALTER TABLE `smarthealthc`.`medical_appointment`
     CHANGE COLUMN `hospital` `hospital` VARCHAR(255) CHARACTER SET utf8mb4 ,
-    CHANGE COLUMN `note` `note` TEXT NOT NULL,
     CHANGE COLUMN `status_medical_appointment` `status_medical_appointment` ENUM('CONFIRM', 'DONE', 'PENDING') NOT NULL ,
     CHANGE COLUMN `type_medical_appointment` `type_medical_appointment` ENUM('DIAGNOSIS', 'MEDICAL_CHECKUP') NOT NULL ,
     CHANGE COLUMN `appuser_id` `appuser_id` INT NOT NULL ;
 --
 ALTER TABLE `smarthealthc`.`medical_history`
     CHANGE COLUMN `name` `name` VARCHAR(255) CHARACTER SET utf8mb4  NOT NULL ,
-    CHANGE COLUMN `is_deleted` `is_deleted` BIT(1) NOT NULL,
     CHANGE COLUMN `type` `type` ENUM('ARTHRITIS', 'CARDINAL', 'HABIT', 'OTHERS', 'RESPIRATORY') NOT NULL ;
 
 
 ALTER TABLE `smarthealthc`.`medicine_record`
     CHANGE COLUMN `date` `date` DATETIME(6) NOT NULL ,
-    CHANGE COLUMN `medicine_type_id` `medicine_type_id` INT NOT NULL,
-    CHANGE COLUMN `status` `status` BIT(1) NOT NULL,
     CHANGE COLUMN `week_start` `week_start` DATETIME(6) NOT NULL ,
     CHANGE COLUMN `appuser_id` `appuser_id` INT NOT NULL ;
 --
 ALTER TABLE `smarthealthc`.`medicine_type`
     CHANGE COLUMN `description` `description` VARCHAR(255) CHARACTER SET utf8mb4  ,
-    CHANGE COLUMN `is_deleted` `is_deleted` BIT(1) not NULL ,
-    CHANGE COLUMN `title` `title` VARCHAR(255) CHARACTER SET utf8mb4  NOT NULL;
+    CHANGE COLUMN `title` `title` VARCHAR(255) CHARACTER SET utf8mb4  ;
 --
 ALTER TABLE `smarthealthc`.`mental_record`
     CHANGE COLUMN `date` `date` DATETIME(6) NOT NULL ,
     CHANGE COLUMN `week_start` `week_start` DATETIME(6) NOT NULL ,
-    CHANGE COLUMN `status` `status` BIT(1) NOT NULL,
     CHANGE COLUMN `appuser_id` `appuser_id` INT NOT NULL ,
     CHANGE COLUMN `mental_rule_id` `mental_rule_id` INT NOT NULL ;
 --
 ALTER TABLE `smarthealthc`.`mental_rule`
     CHANGE COLUMN `description` `description` VARCHAR(255) CHARACTER SET utf8mb4  ,
-    CHANGE COLUMN `is_deleted` `is_deleted` BIT(1) NOT NULL,
-    CHANGE COLUMN `title` `title` VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL ;
+    CHANGE COLUMN `title` `title` VARCHAR(255) CHARACTER SET utf8mb4  ;
 
 
 ALTER TABLE `smarthealthc`.`monthly_record`

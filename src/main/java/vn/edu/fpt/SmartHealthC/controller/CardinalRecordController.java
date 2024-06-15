@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class CardinalRecordController {
     private CardinalRecordService cardinalRecordService;
 
     @PostMapping
-    public ApiResponse<CardinalRecord> createCardinalRecord(@RequestBody CardinalRecordDTO cardinalRecordDTO) {
+    public ApiResponse<CardinalRecord> createCardinalRecord(@RequestBody @Valid CardinalRecordDTO cardinalRecordDTO) {
 
         CardinalRecord createdCardinalRecord = cardinalRecordService.createCardinalRecord(cardinalRecordDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -59,7 +60,7 @@ public class CardinalRecordController {
 
 
     @PutMapping("/{id}")
-    public ApiResponse<CardinalRecord> updateCardinalRecord(@PathVariable Integer id, @RequestBody CardinalRecordDTO cardinalRecordDTO) {
+    public ApiResponse<CardinalRecord> updateCardinalRecord(@PathVariable Integer id, @RequestBody @Valid CardinalRecordDTO cardinalRecordDTO) {
         CardinalRecord updatedCardinalRecord = cardinalRecordService.updateCardinalRecord(id, cardinalRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<CardinalRecord>builder()

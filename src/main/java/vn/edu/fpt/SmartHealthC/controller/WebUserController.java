@@ -1,6 +1,5 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +46,7 @@ public class WebUserController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<WebUser> updateWebUser(@PathVariable Integer id, @RequestBody @Valid WebUserRequestDTO webUserRequestDTO) {
+    public ApiResponse<WebUser> updateWebUser(@PathVariable Integer id, @RequestBody WebUserRequestDTO webUserRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<WebUser>builder()
                         .code(HttpStatus.OK.value())

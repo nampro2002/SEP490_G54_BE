@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class MedicalAppointmentController {
     private MedicalAppointmentService medicalAppointmentService;
 
     @PostMapping
-    public ApiResponse<MedicalAppointmentResponseDTO> createMedicalAppointment(@RequestBody MedicalAppointmentDTO medicalAppointmentDTO) {
+    public ApiResponse<MedicalAppointmentResponseDTO> createMedicalAppointment(@RequestBody @Valid MedicalAppointmentDTO medicalAppointmentDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<MedicalAppointmentResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
@@ -68,7 +69,7 @@ public class MedicalAppointmentController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MedicalAppointmentResponseDTO> updateMedicalAppointment(@PathVariable Integer id, @RequestBody MedicalAppointmentDTO medicalAppointmentDTO) {
+    public ApiResponse<MedicalAppointmentResponseDTO> updateMedicalAppointment(@PathVariable Integer id, @RequestBody @Valid MedicalAppointmentDTO medicalAppointmentDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicalAppointmentResponseDTO>builder()
                         .code(HttpStatus.OK.value())

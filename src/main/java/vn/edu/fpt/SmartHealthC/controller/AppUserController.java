@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class AppUserController {
     private final AppUserService appUserService;
 
     @PutMapping
-    public ApiResponse<?> assignPatientToDoctor (@RequestBody AssignRequestDTO assignRequestDTO) {
+    public ApiResponse<?> assignPatientToDoctor (@RequestBody @Valid AssignRequestDTO assignRequestDTO) {
         appUserService.assignPatientToDoctor(assignRequestDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Account>builder()
@@ -55,7 +56,7 @@ public class AppUserController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<AppUserDetailResponseDTO> updateAppUser (@PathVariable Integer id, @RequestBody AppUserRequestDTO appUserRequestDTO) {
+    public ApiResponse<AppUserDetailResponseDTO> updateAppUser (@PathVariable Integer id, @RequestBody @Valid AppUserRequestDTO appUserRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AppUserDetailResponseDTO>builder()
                         .code(HttpStatus.OK.value())
