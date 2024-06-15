@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class ForgetPasswordCodeController {
     private ForgetPasswordCodeService forgetPasswordCodeService;
 
     @PostMapping("/send-email")
-    public ApiResponse<String> sendEmail(@RequestBody ForgetPasswordCodeDTO forgetPasswordCodeDTO) {
+    public ApiResponse<String> sendEmail(@RequestBody @Valid ForgetPasswordCodeDTO forgetPasswordCodeDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<String>builder()
                         .code(HttpStatus.OK.value())

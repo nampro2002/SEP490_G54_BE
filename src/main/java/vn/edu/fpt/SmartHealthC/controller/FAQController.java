@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class FAQController {
     private FAQService faqService;
 
     @PostMapping
-    public ApiResponse<FAQResponseDTO> createFAQ(@RequestBody FAQRequestDTO faqRequestDTO) {
+    public ApiResponse<FAQResponseDTO> createFAQ(@RequestBody @Valid FAQRequestDTO faqRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<FAQResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
@@ -53,7 +54,7 @@ public class FAQController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<?> updateFAQ(@PathVariable Integer id, @RequestBody FAQRequestDTO faq) {
+    public ApiResponse<?> updateFAQ(@PathVariable Integer id, @RequestBody @Valid FAQRequestDTO faq) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FAQResponseDTO>builder()
                         .code(HttpStatus.OK.value())

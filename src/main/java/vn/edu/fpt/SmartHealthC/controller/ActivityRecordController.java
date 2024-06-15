@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class ActivityRecordController {
     private ActivityRecordService activityRecordService;
 
     @PostMapping
-    public ApiResponse<ActivityRecord> createActivityRecord(@RequestBody ActivityRecordDTO activityRecordDTO) {
+    public ApiResponse<ActivityRecord> createActivityRecord(@RequestBody @Valid ActivityRecordDTO activityRecordDTO) {
 
         ActivityRecord createdActivityRecord= activityRecordService.createActivityRecord(activityRecordDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -49,7 +50,7 @@ public class ActivityRecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<ActivityRecord> updateActivityRecord(@PathVariable Integer id, @RequestBody ActivityRecordDTO activityRecordDTO) {
+    public ApiResponse<ActivityRecord> updateActivityRecord(@PathVariable Integer id, @RequestBody @Valid ActivityRecordDTO activityRecordDTO) {
         ActivityRecord updatedActivityRecord = activityRecordService.updateActivityRecord(id, activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ActivityRecord>builder()

@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class MedicalHistoryController {
     @Autowired
     private MedicalHistoryService medicalHistoryService;
     @PostMapping
-    public ApiResponse<MedicalHistoryResDTO> createMedicalHistory(@RequestBody MedicalHistoryRequestDTO medicalHistory) {
+    public ApiResponse<MedicalHistoryResDTO> createMedicalHistory(@RequestBody @Valid MedicalHistoryRequestDTO medicalHistory) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<MedicalHistoryResDTO>builder()
                         .code(HttpStatus.CREATED.value())
@@ -58,7 +59,7 @@ public class MedicalHistoryController {
 
 
     @PutMapping("/{id}")
-    public ApiResponse<MedicalHistoryResDTO> updateMedicalHistory(@PathVariable Integer id, @RequestBody MedicalHistoryRequestDTO medicalHistory) {
+    public ApiResponse<MedicalHistoryResDTO> updateMedicalHistory(@PathVariable Integer id, @RequestBody @Valid MedicalHistoryRequestDTO medicalHistory) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicalHistoryResDTO>builder()
                         .code(HttpStatus.OK.value())

@@ -34,12 +34,14 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                 .builder()
                 .name(medicalHistoryRequestDTO.getName())
                 .type(medicalHistoryRequestDTO.getType())
+                .isDeleted(false)
                 .build();
         medicalHistory =  medicalHistoryRepository.save(medicalHistory);
         MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
                 .builder()
                 .name(medicalHistory.getName())
                 .type(medicalHistory.getType())
+                .isDeleted(medicalHistory.isDeleted())
                 .build();
         return medicalHistoryResDTO;
     }
@@ -98,6 +100,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         MedicalHistory medicalHistory = getMedicalHistoryEntityById(id);
         medicalHistory.setName(medicalHistoryRequestDTO.getName());
         medicalHistory.setType(medicalHistoryRequestDTO.getType());
+        medicalHistory.setDeleted(medicalHistoryRequestDTO.isDeleted());
         medicalHistoryRepository.save(medicalHistory);
         MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
                 .builder()

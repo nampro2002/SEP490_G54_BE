@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.domain.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class FAQRequestDTO {
-    private Integer id;
-
+    @NotNull(message = "missing question")
     private String question;
-
+    @NotNull(message = "missing answer")
     private String answer;
 
 }
