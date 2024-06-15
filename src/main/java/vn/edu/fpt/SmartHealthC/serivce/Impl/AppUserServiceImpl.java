@@ -11,9 +11,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.AppUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserDetailResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
-import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
@@ -24,7 +22,6 @@ import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -194,6 +191,9 @@ public class AppUserServiceImpl implements AppUserService {
                 () -> new AppException(ErrorCode.APP_USER_NOT_FOUND)
         );
         WebUser webUser = webUserService.getWebUserById(assignRequestDTO.getWebUserId());
+        if(!webUser.getAccountId().getType().equals(TypeAccount.MEDICAL_SPECIALIST)){
+            throw new AppException(ErrorCode.WEB_USER_NOT_VALID);
+        }
         appUser.setWebUser(webUser);
         appUserRepository.save(appUser);
     }
