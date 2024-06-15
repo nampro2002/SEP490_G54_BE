@@ -19,7 +19,7 @@ public class WeeklyReviewController {
     @Autowired
     private WeeklyReviewService weeklyReviewService;
 
-    @GetMapping("/{appUserId}")
+    @GetMapping("/web/week-date/{appUserId}")
     public ApiResponse<WeeklyReviewResponseDTO> returnWeekDate(@PathVariable Integer appUserId) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<WeeklyReviewResponseDTO>builder()
@@ -27,7 +27,7 @@ public class WeeklyReviewController {
                         .result(weeklyReviewService.getWeekDate(appUserId))
                         .build()).getBody();
     }
-    @GetMapping("/week-starts/{appUserId}")
+    @GetMapping("/web/week-starts/{appUserId}")
     public ApiResponse<List<Date>> returnListWeekStart(@PathVariable Integer appUserId) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<Date>>builder()
@@ -36,7 +36,7 @@ public class WeeklyReviewController {
                         .build()).getBody();
     }
 
-    @GetMapping("/{appUserId}/{weekstart}")
+    @GetMapping("/web/review/{appUserId}/{weekstart}")
     public ApiResponse<WeeklyReviewResponseDTO> returnReviewForWeekDate(@PathVariable Integer appUserId,
                                                      @PathVariable String weekstart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)

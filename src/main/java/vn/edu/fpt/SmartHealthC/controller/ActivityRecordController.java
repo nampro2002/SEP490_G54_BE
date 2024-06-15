@@ -40,7 +40,7 @@ public class ActivityRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/getByAppUser/{id}")
+    @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<ActivityRecordResListDTO>> getAllActivityRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<ActivityRecordResListDTO>>builder()

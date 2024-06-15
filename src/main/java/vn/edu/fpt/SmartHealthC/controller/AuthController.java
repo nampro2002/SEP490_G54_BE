@@ -31,7 +31,7 @@ public class AuthController {
         return "Connection Established";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/mobile/register")
     public ApiResponse<?> register(
             @RequestBody @Valid RegisterDto request) {
         authService.register(request);
@@ -52,8 +52,8 @@ public class AuthController {
                         .build()).getBody();
     }
 //
-    @GetMapping("/email/{email}")
-    public ApiResponse<String> login(
+    @GetMapping("/verify-mail/{email}")
+    public ApiResponse<String> sendEmailCode(
             @PathVariable String email) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<String>builder()

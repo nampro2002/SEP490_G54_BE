@@ -1,6 +1,5 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class MentalRecordController {
     private MentalRecordService mentalRecordService;
 
     @PostMapping
-    public ApiResponse<MentalRecordResponseDTO> createMentalRecord(@RequestBody @Valid MentalRecordDTO mentalRecordDTO) {
+    public ApiResponse<MentalRecordResponseDTO> createMentalRecord(@RequestBody MentalRecordDTO mentalRecordDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<MentalRecordResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
@@ -38,7 +37,7 @@ public class MentalRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("getByAppUser/{id}")
+    @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<MentalRecordListResDTO>> getAllMentalRecords(@PathVariable Integer id) {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MentalRecordListResDTO>>builder()
@@ -48,7 +47,7 @@ public class MentalRecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MentalRecordResponseDTO> updateMentalRecord(@PathVariable Integer id, @RequestBody @Valid MentalRecordDTO mentalRecordDTO) {
+    public ApiResponse<MentalRecordResponseDTO> updateMentalRecord(@PathVariable Integer id, @RequestBody MentalRecordDTO mentalRecordDTO) {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MentalRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())

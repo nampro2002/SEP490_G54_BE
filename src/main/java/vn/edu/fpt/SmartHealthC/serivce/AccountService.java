@@ -19,7 +19,7 @@ public interface AccountService {
     ResponsePaging<List<AppUserResponseDTO>> getPendingAccount(Integer pageNo);
     List<AvailableMSResponseDTO> getAvailableMS();
 
-    Account changePassword(Integer id, UpdatePasswordRequestDTO updatePasswordRequestDTO);
+    Account changePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO);
 
     ResponsePaging<List<AppUserResponseDTO>> getUserPendingAssign(Integer pageNo);
 }

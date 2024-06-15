@@ -1,6 +1,5 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class MedicineRecordController {
     private AppUserRepository appUserRepository;
 
     @PostMapping
-    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody @Valid MedicineRecordDTO medicineRecordDTO) {
+    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody MedicineRecordDTO medicineRecordDTO) {
         return  ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<MedicineRecordResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
@@ -44,7 +43,7 @@ public class MedicineRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("getByAppUser/{id}")
+    @GetMapping("/web/weekly-record/{id}")
     public  ApiResponse<List<MedicineRecordListResDTO>> getAllMedicineRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MedicineRecordListResDTO>>builder()
@@ -54,7 +53,7 @@ public class MedicineRecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MedicineRecordResponseDTO> updateMedicineRecord(@PathVariable Integer id,@RequestBody @Valid MedicineRecordDTO medicineRecordDTO) {
+    public ApiResponse<MedicineRecordResponseDTO> updateMedicineRecord(@PathVariable Integer id,@RequestBody MedicineRecordDTO medicineRecordDTO) {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicineRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())

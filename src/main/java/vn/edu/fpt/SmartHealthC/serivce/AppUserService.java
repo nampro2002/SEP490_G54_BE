@@ -15,7 +15,7 @@ public interface AppUserService {
     void assignPatientToDoctor(AssignRequestDTO assignRequestDTO);
     AppUserDetailResponseDTO getAppUserDetailById(Integer id);
 
-    ResponsePaging<List<AppUserResponseDTO>> getListAppUser(Integer pageNo, String search, Integer id);
+    ResponsePaging<List<AppUserResponseDTO>> getListAppUser(Integer pageNo, String search);
 
     AppUserDetailResponseDTO updateAppUser(Integer id, AppUserRequestDTO appUserDTO);
 }
