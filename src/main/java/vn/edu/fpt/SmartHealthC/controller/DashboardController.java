@@ -14,7 +14,7 @@ import vn.edu.fpt.SmartHealthC.serivce.QuestionService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/dashboard")
+@RequestMapping("/api/web/dashboard")
 @RequiredArgsConstructor
 public class DashboardController {
 
@@ -23,7 +23,7 @@ public class DashboardController {
     private final AccountService accountService;
 
 
-    @GetMapping("admin-question")
+    @GetMapping("/admin-question")
     public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListAdmin() {
         List<QuestionResponseDTO> responseDTOList = questionService.getAllQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN);
         return ResponseEntity.status(HttpStatus.OK)
@@ -60,7 +60,7 @@ public class DashboardController {
                         .build()).getBody();
     }
 
-    @GetMapping("ms-question")
+    @GetMapping("/ms-question")
     public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListMs() {
         List<QuestionResponseDTO> responseDTOList = questionService.getAllPendingQuestionsByType(TypeUserQuestion.ASSIGN_MS);
         return ResponseEntity.status(HttpStatus.OK)

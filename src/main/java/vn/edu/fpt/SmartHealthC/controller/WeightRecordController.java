@@ -40,7 +40,7 @@ public class WeightRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("getByAppUser/{id}")
+    @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<WeightResponseDTO>> getAllWeightRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<WeightResponseDTO>>builder()

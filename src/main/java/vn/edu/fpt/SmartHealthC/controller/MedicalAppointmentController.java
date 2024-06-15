@@ -33,7 +33,7 @@ public class MedicalAppointmentController {
                         .build()).getBody();
     }
 
-    @GetMapping("getDetail/{id}")
+    @GetMapping("detail/{id}")
     public ApiResponse<MedicalAppointmentResponseDTO> getMedicalAppointmentById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicalAppointmentResponseDTO>builder()
@@ -50,21 +50,21 @@ public class MedicalAppointmentController {
                         .result(medicalAppointmentService.getMedicalAppointmentByUserIdMobile(id))
                         .build()).getBody();
     }
-    @GetMapping("/web/{id}")
+    @GetMapping("/web/by-app-user/{id}")
     public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getMedicalAppointmentByUserId(@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<MedicalAppointmentResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicalAppointmentService.getMedicalAppointmentByUserId(id, pageNo))
+                        .result(medicalAppointmentService.getMedicalAppointmentByUserId(id, pageNo-1))
                         .build()).getBody();
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointments(@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
+    @GetMapping("/web/all")
+    public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointments(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<MedicalAppointmentResponseDTO>>  >builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicalAppointmentService.getAllMedicalAppointments(id, pageNo - 1, search))
+                        .result(medicalAppointmentService.getAllMedicalAppointments(pageNo - 1, search))
                         .build()).getBody();
     }
 

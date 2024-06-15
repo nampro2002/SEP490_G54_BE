@@ -40,7 +40,7 @@ public class AccountController {
 //                        .build()).getBody();
 //    }
 
-    @PostMapping("/staff")
+    @PostMapping("/web/create-staff")
     public ApiResponse<?> createStaff(@RequestBody @Valid WebUserRequestDTO account) {
         accountService.createStaff(account);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -59,7 +59,7 @@ public class AccountController {
                         .build()).getBody();
     }
 
-    @GetMapping("activate/{id}")
+    @GetMapping("/web/activate-account/{id}")
     public ApiResponse<?> activateAccount(@PathVariable Integer appUserId) {
         if (accountService.activateAccount(appUserId)) {
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -74,8 +74,8 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse).getBody();
     }
 
-    @GetMapping("/email/{email}")
-    public ApiResponse<?> getAccountByEmail(@PathVariable String email) {
+    @GetMapping("/get-by-email/{email}")
+    public ApiResponse<?> getAccountByEmail(@RequestParam String email) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Account>builder()
                         .code(HttpStatus.OK.value())
@@ -83,7 +83,7 @@ public class AccountController {
                         .build()).getBody();
     }
 
-    @GetMapping
+    @GetMapping("/get-all")
     public ApiResponse<List<Account>> getAllAccounts() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<Account>>builder()
@@ -93,7 +93,7 @@ public class AccountController {
     }
 
     // active / changepass
-    @PutMapping("change-pass/{id}")
+    @PutMapping("change-password/{id}")
     public ApiResponse<Account> changePassword(@RequestBody UpdatePasswordRequestDTO updatePasswordRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Account>builder()

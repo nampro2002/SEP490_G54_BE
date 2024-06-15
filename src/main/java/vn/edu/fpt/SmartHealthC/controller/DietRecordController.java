@@ -39,7 +39,7 @@ public class DietRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/getByAppUser/{id}")
+    @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<DietRecordListResDTO>> getAllDietRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<DietRecordListResDTO>>builder()

@@ -15,7 +15,7 @@ public interface MedicalAppointmentService {
     MedicalAppointmentResponseDTO createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO);
     MedicalAppointment getMedicalAppointmentEntityById(Integer id);
     MedicalAppointmentResponseDTO getMedicalAppointmentById(Integer id);
-    ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointments(Integer id, Integer pageNo, String search);
+    ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointments(Integer pageNo, String search);
     MedicalAppointmentResponseDTO updateMedicalAppointment(Integer id, MedicalAppointmentDTO medicalAppointmentDTO);
     MedicalAppointmentResponseDTO deleteMedicalAppointment(Integer id);
 
