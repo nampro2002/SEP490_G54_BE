@@ -2,15 +2,14 @@ package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AnswerQuestionRequestDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.Question;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface QuestionService {
-    QuestionResponseDTO createQuestion(QuestionDTO questionDTO);
+    QuestionResponseDTO createQuestion(QuestionRequestDTO questionRequestDTO);
     QuestionResponseDTO getQuestionById(Integer id);
     Question getQuestionByIdEntity(Integer id);
     List<Question> getAllQuestions();
@@ -22,5 +21,5 @@ public interface QuestionService {
 
     QuestionResponseDTO removeAnswer(Integer id);
 
-    List<QuestionResponseDTO> getQuestionByUserId(Integer userId);
+    List<QuestionResponseDTO> getQuestionByAppUserId(Integer userId);
 }

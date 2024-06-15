@@ -6,16 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AnswerQuestionRequestDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.Question;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.QuestionService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/questions")
@@ -25,12 +21,12 @@ public class QuestionController {
     private QuestionService questionService;
 
     @PostMapping
-    public ApiResponse<QuestionResponseDTO> createQuestion(@RequestBody QuestionDTO questionDTO) {
+    public ApiResponse<QuestionResponseDTO> createQuestion(@RequestBody QuestionRequestDTO questionRequestDTO) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<QuestionResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
-                        .result(questionService.createQuestion(questionDTO))
+                        .result(questionService.createQuestion(questionRequestDTO))
                         .build()).getBody();
     }
 
@@ -48,7 +44,7 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(questionService.getQuestionByUserId(userId))
+                        .result(questionService.getQuestionByAppUserId(userId))
                         .build()).getBody();
     }
     @GetMapping("/questionPAdmin")

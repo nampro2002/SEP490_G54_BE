@@ -15,4 +15,6 @@ public interface FAQService {
     List<FAQResponseDTO> getAllFAQs();
     FAQResponseDTO updateFAQ(Integer id,FAQRequestDTO faq);
     FAQResponseDTO deleteFAQ(Integer id);
+
+    List<FAQResponseDTO> getAllFAQsMobile();
 }

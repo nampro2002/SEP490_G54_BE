@@ -13,12 +13,10 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionDTO {
+public class QuestionRequestDTO {
 
 
     private int appUserId;
-
-    private int webUserId;
 
     private TypeUserQuestion typeUserQuestion;
 
@@ -26,8 +24,5 @@ public class QuestionDTO {
 
     private String body;
 
-    private String answer;
-
-    private Date questionDate;
 
 }

@@ -17,7 +17,7 @@ public class MedicalAppointmentDTO {
 
     private int appUserId;
 
-    private String  location;
+    private String location;
 
     private TypeMedicalAppointment type;
 
