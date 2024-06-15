@@ -104,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
     public String sendEmailCode(String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         if (account.isEmpty()) {
-            throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
         String codeVerify = emailService.generateRandomCode(6);
         String message = "Code xác thực email của bạn là : " +codeVerify;
