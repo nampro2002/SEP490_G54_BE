@@ -93,7 +93,7 @@ public class AccountController {
     }
 
     // active / changepass
-    @PutMapping("change-password/{id}")
+    @PutMapping("/change-password")
     public ApiResponse<Account> changePassword(@RequestBody UpdatePasswordRequestDTO updatePasswordRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Account>builder()

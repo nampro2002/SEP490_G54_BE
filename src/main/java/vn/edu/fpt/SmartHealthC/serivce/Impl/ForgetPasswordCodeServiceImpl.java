@@ -54,7 +54,7 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
        }
         // Lấy thời gian hiện tại
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expiresTime = now.plusMinutes(1);
+        LocalDateTime expiresTime = now.plusMinutes(5);
 
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

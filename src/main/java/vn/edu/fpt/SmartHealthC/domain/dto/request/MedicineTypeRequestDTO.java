@@ -12,12 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MedicineTypeRequestDTO {
-    private Integer id;
     @NotBlank(message = "missing title")
     private String title;
 
     private String description;
 
-    @NotNull(message = "missing isDeleted")
     private boolean isDeleted;
 }
