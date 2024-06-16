@@ -39,6 +39,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         medicalHistory =  medicalHistoryRepository.save(medicalHistory);
         MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
                 .builder()
+                .id(medicalHistory.getId())
                 .name(medicalHistory.getName())
                 .type(medicalHistory.getType())
                 .isDeleted(medicalHistory.isDeleted())
@@ -63,6 +64,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         }
         MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
                 .builder()
+                .id(medicalHistory.get().getId())
                 .name(medicalHistory.get().getName())
                 .type(medicalHistory.get().getType())
                 .build();
@@ -104,6 +106,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         medicalHistoryRepository.save(medicalHistory);
         MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
                 .builder()
+                .id(medicalHistory.getId())
                 .name(medicalHistory.getName())
                 .type(medicalHistory.getType())
                 .build();
@@ -116,6 +119,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         medicalHistoryRepository.deleteById(id);
         MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
                 .builder()
+                .id(medicalHistory.getId())
                 .name(medicalHistory.getName())
                 .type(medicalHistory.getType())
                 .build();

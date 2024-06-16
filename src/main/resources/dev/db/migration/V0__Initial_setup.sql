@@ -254,14 +254,14 @@ CREATE TABLE `flyway_schema_history` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `flyway_schema_history`
+-- -- Dumping data for table `flyway_schema_history`
+-- --
 --
-
-LOCK TABLES `flyway_schema_history` WRITE;
-/*!40000 ALTER TABLE `flyway_schema_history` DISABLE KEYS */;
-INSERT INTO `flyway_schema_history` VALUES (1,'0','Initial setup','SQL','V0__Initial_setup.sql',-1544244090,'root','2024-06-12 04:49:53',1941,1);
-/*!40000 ALTER TABLE `flyway_schema_history` ENABLE KEYS */;
-UNLOCK TABLES;
+-- LOCK TABLES `flyway_schema_history` WRITE;
+-- /*!40000 ALTER TABLE `flyway_schema_history` DISABLE KEYS */;
+-- INSERT INTO `flyway_schema_history` VALUES (1,'0','Initial setup','SQL','V0__Initial_setup.sql',-1544244090,'root','2024-06-12 04:49:53',1941,1);
+-- /*!40000 ALTER TABLE `flyway_schema_history` ENABLE KEYS */;
+-- UNLOCK TABLES;
 
 --
 -- Table structure for table `forget_password_code`
