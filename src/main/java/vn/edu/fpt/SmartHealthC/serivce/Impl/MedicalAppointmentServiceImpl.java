@@ -42,7 +42,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .hospital(medicalAppointmentDTO.getLocation())
                 .date(medicalAppointmentDTO.getDate())
                 .statusMedicalAppointment(TypeMedicalAppointmentStatus.PENDING)
-                .note(medicalAppointmentDTO.getNote())
+                .note("")
                 .build();
 
         Optional<AppUser> appUser = appUserRepository.findById(medicalAppointmentDTO.getAppUserId());

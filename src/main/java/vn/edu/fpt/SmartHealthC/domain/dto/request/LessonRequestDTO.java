@@ -1,7 +1,6 @@
 package vn.edu.fpt.SmartHealthC.domain.dto.request;
 
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,11 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class LessonRequestDTO {
-    @NotBlank(message = "missing title")
+    @NotNull(message = "missing title")
     private String title;
-    @NotBlank(message = "missing video")
+    @NotNull(message = "missing video")
     private String video;
-    @NotBlank(message = "missing content")
+    @NotNull(message = "missing content")
     private String content;
     @NotNull(message = "missing lessonNumber")
     private Integer lessonNumber;

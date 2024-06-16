@@ -3,7 +3,6 @@ package vn.edu.fpt.SmartHealthC.domain.dto.request;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MedicalHistoryRequestDTO {
-    @NotBlank(message = "missing name")
+    @NotNull(message = "missing name")
     private String name;
     @NotNull(message = "missing typeMedicalHistory")
     private TypeMedicalHistory type;

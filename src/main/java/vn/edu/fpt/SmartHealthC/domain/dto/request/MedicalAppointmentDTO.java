@@ -1,7 +1,6 @@
 package vn.edu.fpt.SmartHealthC.domain.dto.request;
 
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +20,6 @@ public class MedicalAppointmentDTO {
     private String location;
     @NotNull(message = "missing type")
     private TypeMedicalAppointment type;
-    @NotBlank(message = "missing note")
     private String note;
     private Date date;
 
