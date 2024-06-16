@@ -9,6 +9,8 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.ForgetPasswordCodeDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.serivce.ForgetPasswordCodeService;
 
+import java.text.ParseException;
+
 @RestController
 @RequestMapping("/api/forget-password")
 public class ForgetPasswordCodeController {
@@ -16,12 +18,21 @@ public class ForgetPasswordCodeController {
     @Autowired
     private ForgetPasswordCodeService forgetPasswordCodeService;
 
-    @PostMapping("/send-email")
-    public ApiResponse<String> sendEmail(@RequestBody @Valid ForgetPasswordCodeDTO forgetPasswordCodeDTO) {
+    @GetMapping("/email/{email}")
+    public ApiResponse<String> sendEmail(@PathVariable String email) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<String>builder()
                         .code(HttpStatus.OK.value())
-                        .result(forgetPasswordCodeService.sendEmailCode(forgetPasswordCodeDTO))
+                        .result(forgetPasswordCodeService.sendEmailCode(email))
+                        .build()).getBody();
+    }
+
+    @PostMapping("/email/verify")
+    public ApiResponse<Boolean> verifyCodeAndChangePassword(@RequestBody @Valid ForgetPasswordCodeDTO forgetPasswordCodeDTO) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(forgetPasswordCodeService.verifyAndChangePassword(forgetPasswordCodeDTO))
                         .build()).getBody();
     }
 

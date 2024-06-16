@@ -14,7 +14,7 @@ import vn.edu.fpt.SmartHealthC.serivce.QuestionService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/dashboard")
+@RequestMapping("/api/web/dashboard")
 @RequiredArgsConstructor
 public class DashboardController {
 
@@ -23,7 +23,7 @@ public class DashboardController {
     private final AccountService accountService;
 
 
-    @GetMapping("admin-question")
+    @GetMapping("/admin-question")
     public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListAdmin() {
         List<QuestionResponseDTO> responseDTOList = questionService.getAllQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN);
         return ResponseEntity.status(HttpStatus.OK)
@@ -60,7 +60,7 @@ public class DashboardController {
                         .build()).getBody();
     }
 
-    @GetMapping("ms-question")
+    @GetMapping("/ms-question")
     public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListMs() {
         List<QuestionResponseDTO> responseDTOList = questionService.getAllPendingQuestionsByType(TypeUserQuestion.ASSIGN_MS);
         return ResponseEntity.status(HttpStatus.OK)
@@ -70,15 +70,23 @@ public class DashboardController {
                         .build()).getBody();
     }
 
-    @GetMapping("/medical-appointment/diagnosis/{id}")
-    public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointmentsDiagnosisPending(@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo) {
+    @GetMapping("/medical-appointment/diagnosis")
+    public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointmentsDiagnosisPending(@RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<MedicalAppointmentResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicalAppointmentService.getAllMedicalAppointmentsPending(id, pageNo - 1, TypeMedicalAppointment.DIAGNOSIS))
+                        .result(medicalAppointmentService.getAllMedicalAppointmentsPending(pageNo - 1, TypeMedicalAppointment.DIAGNOSIS))
                         .build()).getBody();
     }
 
+    @GetMapping("/medical-appointment/checkup")
+    public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointmentsCheckupPending(@RequestParam(defaultValue = "1") Integer pageNo) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ResponsePaging<List<MedicalAppointmentResponseDTO>>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalAppointmentService.getAllMedicalAppointmentsPending(pageNo - 1, TypeMedicalAppointment.MEDICAL_CHECKUP))
+                        .build()).getBody();
+    }
 
 
 //    @GetMapping("/{id}")

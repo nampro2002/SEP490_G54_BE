@@ -18,8 +18,14 @@ public enum ErrorCode {
     CREDENTIAL_EXPIRED ( "Your login session has expired", HttpStatus.BAD_REQUEST),
     EMAIL_EXISTED("Email existed", HttpStatus.BAD_REQUEST),
     SEND_EMAIL_FAIL("Send email fail", HttpStatus.BAD_REQUEST),
+    TOKEN_NOT_OWNED("Tokens are not owned ", HttpStatus.BAD_REQUEST),
+    CODE_INVALID("Code invalid", HttpStatus.BAD_REQUEST),
+    CODE_EXPIRED("Code expired", HttpStatus.BAD_REQUEST),
     EMAIL_NOT_EXISTED("Email not existed", HttpStatus.BAD_REQUEST),
     CREDENTIAL_INVALID("Wrong email or password", HttpStatus.BAD_REQUEST),
+    REFRESH_TOKEN_NOT_EXIST("Refresh token not exist", HttpStatus.BAD_REQUEST),
+    ACCESS_TOKEN_NOT_EXIST("Access token not exist", HttpStatus.BAD_REQUEST),
+    REFRESH_TOKEN_EXPIRED("Refresh token expired", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED("Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED("You do not have permission", HttpStatus.FORBIDDEN),
     APP_USER_NOT_FOUND("AppUser not found", HttpStatus.NOT_FOUND),
@@ -60,6 +66,7 @@ public enum ErrorCode {
     WRONG_OLD_PASSWORD("Wrong old password", HttpStatus.BAD_REQUEST),
     ACCOUNT_DELETED("Account has been deleted", HttpStatus.OK),
     ACCOUNT_ACTIVATED("Account has been activated", HttpStatus.OK),
+    WEB_USER_FULL("Web user is full 10 patient", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(String message, HttpStatusCode statusCode) {

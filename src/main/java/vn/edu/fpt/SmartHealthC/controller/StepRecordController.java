@@ -38,7 +38,7 @@ public class StepRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("getByAppUser/{id}")
+    @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<StepRecordResListDTO>> getAllStepRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<StepRecordResListDTO>>builder()

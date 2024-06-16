@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.domain.dto.request;
 
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,11 +16,11 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ForgetPasswordCodeDTO {
-    @NotNull(message = "missing email")
+    @NotBlank(message = "missing email")
     private String email;
-    @NotNull(message = "missing code")
+    @NotBlank(message = "missing code")
     private String code;
-    @NotNull(message = "missing expiredDate")
-    private Date expiredDate;
+    @NotBlank(message = "missing password")
+    private String password;
 
 }

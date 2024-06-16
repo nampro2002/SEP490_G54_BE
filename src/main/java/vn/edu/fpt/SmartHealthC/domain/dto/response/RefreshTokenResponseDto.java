@@ -10,9 +10,7 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationResponseDto {
-    private TypeAccount type;
+public class RefreshTokenResponseDto {
     private String accessToken;
     private String refreshToken;
-    private Integer idUser;
 }

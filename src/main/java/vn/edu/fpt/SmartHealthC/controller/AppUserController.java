@@ -25,7 +25,7 @@ public class AppUserController {
     @Autowired
     private final AppUserService appUserService;
 
-    @PutMapping
+    @PutMapping("/web/assign")
     public ApiResponse<?> assignPatientToDoctor (@RequestBody @Valid AssignRequestDTO assignRequestDTO) {
         appUserService.assignPatientToDoctor(assignRequestDTO);
         return ResponseEntity.status(HttpStatus.OK)
@@ -36,17 +36,17 @@ public class AppUserController {
     }
 
     //getListAppUser with paging and search
-    @GetMapping("/{id}")
-    public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getListAppUser (@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo,
+    @GetMapping("/web")
+    public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getListAppUser (@RequestParam(defaultValue = "1") Integer pageNo,
                                           @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<AppUserResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(appUserService.getListAppUser(pageNo -1, search, id))
+                        .result(appUserService.getListAppUser(pageNo -1, search))
                         .build()).getBody();
     }
     //getAppUserById
-    @GetMapping("user/{id}")
+    @GetMapping("/web/detail/{id}")
     public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailById (@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AppUserDetailResponseDTO>builder()
@@ -54,6 +54,14 @@ public class AppUserController {
                         .result(appUserService.getAppUserDetailById(id))
                         .build()).getBody();
     }
+//    @GetMapping("mobile/detail")
+//    public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailMobile () {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<AppUserDetailResponseDTO>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(appUserService.getAppUserDetailMobile())
+//                        .build()).getBody();
+//    }
 
     @PutMapping("/{id}")
     public ApiResponse<AppUserDetailResponseDTO> updateAppUser (@PathVariable Integer id, @RequestBody @Valid AppUserRequestDTO appUserRequestDTO) {

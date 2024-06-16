@@ -40,7 +40,7 @@ public class MedicineTypeController {
                         .build()).getBody();
     }
 
-    @GetMapping
+    @GetMapping("/web/others")
     public ApiResponse<ResponsePaging<List<MedicineTypeResponseDTO>>> getAllMedicineTypes(@RequestParam(defaultValue = "1") Integer pageNo,  @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<MedicineTypeResponseDTO>>>builder()

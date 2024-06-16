@@ -42,7 +42,7 @@ public class MentalRuleController {
                         .build()).getBody();
     }
 
-    @GetMapping
+    @GetMapping("/web/others")
     public ApiResponse<ResponsePaging<List<MentalRuleResponseDTO>>> getAllMentalRules(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<MentalRuleResponseDTO>>>builder()

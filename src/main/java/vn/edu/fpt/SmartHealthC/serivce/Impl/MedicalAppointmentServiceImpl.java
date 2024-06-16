@@ -5,19 +5,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointmentStatus;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
+import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicalAppointmentRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AccountService;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
+import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,8 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     private MedicalAppointmentRepository medicalAppointmentRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private WebUserService webUserService;
 
     @Override
     public MedicalAppointmentResponseDTO createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO) {
@@ -38,6 +42,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .hospital(medicalAppointmentDTO.getLocation())
                 .date(medicalAppointmentDTO.getDate())
                 .statusMedicalAppointment(TypeMedicalAppointmentStatus.PENDING)
+                .note("")
                 .build();
 
         Optional<AppUser> appUser = appUserRepository.findById(medicalAppointmentDTO.getAppUserId());
@@ -54,6 +59,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .hospital(medicalAppointment.getHospital())
                 .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                 .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
+                .note(medicalAppointment.getNote())
                 .build();
         return medicalAppointmentResponseDTO;
     }
@@ -80,15 +86,19 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .hospital(medicalAppointment.get().getHospital())
                 .typeMedicalAppointment(medicalAppointment.get().getTypeMedicalAppointment())
                 .statusMedicalAppointment(medicalAppointment.get().getStatusMedicalAppointment())
+                .note(medicalAppointment.get().getNote())
                 .build();
         return medicalAppointmentResponseDTO;
 
     }
 
     @Override
-    public ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointments(Integer id, Integer pageNo, String search) {
+    public ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointments(Integer pageNo, String search) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        WebUser webUser = webUserService.getWebUserByEmail(email);
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllByWebUserId(id, paging, search.toLowerCase());
+        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllByWebUserId(webUser.getId(), paging, search.toLowerCase());
         List<MedicalAppointment> medicalAppointmentList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicalAppointmentList = pagedResult.getContent();
@@ -102,6 +112,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                     .hospital(medicalAppointment.getHospital())
                     .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                     .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
+                    .note(medicalAppointment.getNote())
                     .build();
             responseDTOList.add(medicalAppointmentResponseDTO);
         }
@@ -119,6 +130,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         medicalAppointment.setTypeMedicalAppointment(medicalAppointmentDTO.getType());
         medicalAppointment.setDate(medicalAppointmentDTO.getDate());
         medicalAppointment.setHospital(medicalAppointmentDTO.getLocation());
+        medicalAppointment.setNote(medicalAppointmentDTO.getNote());
         medicalAppointment = medicalAppointmentRepository.save(medicalAppointment);
         MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
                 .id(medicalAppointment.getId())
@@ -127,6 +139,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .hospital(medicalAppointment.getHospital())
                 .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                 .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
+                .note(medicalAppointment.getNote())
                 .build();
         return medicalAppointmentResponseDTO;
     }
@@ -142,14 +155,18 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .hospital(medicalAppointment.getHospital())
                 .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                 .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
+                .note(medicalAppointment.getNote())
                 .build();
         return medicalAppointmentResponseDTO;
     }
 
     @Override
-    public ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointmentsPending(Integer id, Integer pageNo, TypeMedicalAppointment type) {
+    public ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointmentsPending(Integer pageNo, TypeMedicalAppointment type) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        WebUser webUser = webUserService.getWebUserByEmail(email);
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllPendingByUserIdAndType(TypeMedicalAppointmentStatus.PENDING, id, type, paging);
+        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllPendingByUserIdAndType(TypeMedicalAppointmentStatus.PENDING, webUser.getId(), type, paging);
         List<MedicalAppointment> medicalAppointmentList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicalAppointmentList = pagedResult.getContent();
@@ -165,6 +182,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                     dto.setHospital(record.getHospital());
                     dto.setTypeMedicalAppointment(record.getTypeMedicalAppointment());
                     dto.setStatusMedicalAppointment(record.getStatusMedicalAppointment());
+                    dto.setNote(record.getNote());
                     return dto;
                 })
                 .toList();
@@ -189,6 +207,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                     .hospital(medicalAppointment.getHospital())
                     .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                     .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
+                    .note(medicalAppointment.getNote())
                     .build();
             responseDTOList.add(medicalAppointmentResponseDTO);
         }
@@ -197,7 +216,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     @Override
     public ResponsePaging<List<MedicalAppointmentResponseDTO>> getMedicalAppointmentByUserId(Integer userId,  Integer pageNo) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllByUserId(userId, paging);
+        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllByAppUserId(userId, paging);
         List<MedicalAppointment> medicalAppointmentList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicalAppointmentList = pagedResult.getContent();
@@ -211,6 +230,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                     .hospital(medicalAppointment.getHospital())
                     .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                     .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
+                    .note(medicalAppointment.getNote())
                     .build();
             responseDTOList.add(medicalAppointmentResponseDTO);
         }
