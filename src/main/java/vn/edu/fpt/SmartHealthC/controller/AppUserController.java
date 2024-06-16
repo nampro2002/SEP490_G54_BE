@@ -25,7 +25,7 @@ public class AppUserController {
     @Autowired
     private final AppUserService appUserService;
 
-    @PutMapping("/web/assign")
+    @PutMapping
     public ApiResponse<?> assignPatientToDoctor (@RequestBody @Valid AssignRequestDTO assignRequestDTO) {
         appUserService.assignPatientToDoctor(assignRequestDTO);
         return ResponseEntity.status(HttpStatus.OK)
@@ -36,17 +36,17 @@ public class AppUserController {
     }
 
     //getListAppUser with paging and search
-    @GetMapping("/web")
-    public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getListAppUser (@RequestParam(defaultValue = "1") Integer pageNo,
+    @GetMapping("/{id}")
+    public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getListAppUser (@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer pageNo,
                                           @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<AppUserResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(appUserService.getListAppUser(pageNo -1, search))
+                        .result(appUserService.getListAppUser(pageNo -1, search, id))
                         .build()).getBody();
     }
     //getAppUserById
-    @GetMapping("/detail/{id}")
+    @GetMapping("user/{id}")
     public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailById (@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AppUserDetailResponseDTO>builder()

@@ -38,7 +38,7 @@ public class FAQController {
                         .build()).getBody();
     }
 
-    @GetMapping("/get-all")
+    @GetMapping("/all")
     public ApiResponse<?> getAllFAQs() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<FAQResponseDTO>>builder()

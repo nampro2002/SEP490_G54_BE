@@ -14,5 +14,4 @@ public interface WebUserService {
     List<WebUser> getAllWebUsers();
     WebUser updateWebUser(WebUserRequestDTO webUser, Integer id);
     List<WebUser> getAllUnDeletedMS();
-    WebUser getWebUserByEmail(String email);
 }

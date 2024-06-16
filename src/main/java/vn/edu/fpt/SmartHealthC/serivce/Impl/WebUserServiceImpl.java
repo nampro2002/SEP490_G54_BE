@@ -42,15 +42,6 @@ public class WebUserServiceImpl implements WebUserService {
     }
 
     @Override
-    public WebUser getWebUserByEmail(String email) {
-        Optional<WebUser> webUser = webUserRepository.findByEmail(email);
-        if (webUser.isEmpty()) {
-            throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
-        }
-        return webUser.get();
-    }
-
-    @Override
     public WebUser updateWebUser(WebUserRequestDTO webUserRequestDTO, Integer id) {
         WebUser webUser = getWebUserById(id);
         webUser.setDob(webUserRequestDTO.getDob());

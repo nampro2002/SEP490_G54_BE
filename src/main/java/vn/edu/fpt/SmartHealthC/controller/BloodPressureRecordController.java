@@ -38,7 +38,7 @@ public class BloodPressureRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/web/weekly-record/{id}")
+    @GetMapping("getByAppUser/{id}")
     public ApiResponse<List<BloodPressureResponseDTO>> getAllBloodPressureRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<BloodPressureResponseDTO>>builder()

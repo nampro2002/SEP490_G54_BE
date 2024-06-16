@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalHistory;
@@ -124,12 +122,9 @@ public class AppUserServiceImpl implements AppUserService {
 //    }
 
     @Override
-    public ResponsePaging<List<AppUserResponseDTO>> getListAppUser(Integer pageNo, String search) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        WebUser webUser = webUserService.getWebUserByEmail(email);
+    public ResponsePaging<List<AppUserResponseDTO>> getListAppUser(Integer pageNo, String search, Integer id) {
         Pageable paging = PageRequest.of(pageNo, 5);
-        Page<AppUser> pagedResult = appUserRepository.findAllByUserId(webUser.getId(), search.toLowerCase(),paging);
+        Page<AppUser> pagedResult = appUserRepository.findAllByUserId(id, search.toLowerCase(),paging);
         List<AppUser> appUserList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             appUserList = pagedResult.getContent();

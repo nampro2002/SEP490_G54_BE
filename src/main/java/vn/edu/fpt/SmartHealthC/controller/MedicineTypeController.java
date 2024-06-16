@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class MedicineTypeController {
     private MedicineTypeService medicineTypeService;
 
     @PostMapping
-    public ApiResponse<MedicineTypeResponseDTO> createMedicineType(@RequestBody MedicineTypeRequestDTO medicineType) {
+    public ApiResponse<MedicineTypeResponseDTO> createMedicineType(@RequestBody @Valid MedicineTypeRequestDTO medicineType) {
         return  ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<MedicineTypeResponseDTO>builder()
                         .code(HttpStatus.CREATED.value())
@@ -39,7 +40,7 @@ public class MedicineTypeController {
                         .build()).getBody();
     }
 
-    @GetMapping("/web/others")
+    @GetMapping
     public ApiResponse<ResponsePaging<List<MedicineTypeResponseDTO>>> getAllMedicineTypes(@RequestParam(defaultValue = "1") Integer pageNo,  @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<MedicineTypeResponseDTO>>>builder()
@@ -57,7 +58,7 @@ public class MedicineTypeController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MedicineTypeResponseDTO> updateMedicineType(@PathVariable Integer id,@RequestBody MedicineTypeRequestDTO medicineType) {
+    public ApiResponse<MedicineTypeResponseDTO> updateMedicineType(@PathVariable Integer id,@RequestBody @Valid MedicineTypeRequestDTO medicineType) {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicineTypeResponseDTO>builder()
                         .code(HttpStatus.OK.value())

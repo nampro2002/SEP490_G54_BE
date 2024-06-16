@@ -56,7 +56,6 @@ public class StepRecordServiceImpl implements StepRecordService {
 
         for (Date date : recordDate) {
             listResponseDTOList.add(StepRecordResListDTO.builder()
-                    .appUserId(userId)
                     .weekStart(date)
                     .build());
         }

@@ -31,7 +31,7 @@ public class QuestionController {
                         .build()).getBody();
     }
 
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}")
     public ApiResponse<QuestionResponseDTO> getQuestionById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<QuestionResponseDTO>builder()
@@ -48,7 +48,7 @@ public class QuestionController {
                         .result(questionService.getQuestionByAppUserId(userId))
                         .build()).getBody();
     }
-    @GetMapping("/web/admin/pending")
+    @GetMapping("/questionPAdmin")
     public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsPendingAd() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
@@ -56,7 +56,7 @@ public class QuestionController {
                         .result(questionService.getAllPendingQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN))
                         .build()).getBody();
     }
-    @GetMapping("/web/ms/pending")
+    @GetMapping("/questionPMs")
     public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsPendingMs() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
@@ -65,7 +65,7 @@ public class QuestionController {
                         .build()).getBody();
     }
 
-    @GetMapping("/web/admin/all")
+    @GetMapping("/questionAdmin")
     public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsAd() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
@@ -73,7 +73,7 @@ public class QuestionController {
                         .result(questionService.getQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN))
                         .build()).getBody();
     }
-    @GetMapping("/web/ms/all")
+    @GetMapping("/questionMs")
     public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsMs() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
@@ -84,7 +84,7 @@ public class QuestionController {
 
 
     //answer question
-    @PutMapping("/answer{id}")
+    @PutMapping("{id}")
     public ApiResponse<QuestionResponseDTO> answerQuestion(@PathVariable Integer id,@RequestBody @Valid AnswerQuestionRequestDTO answer) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<QuestionResponseDTO>builder()
@@ -92,7 +92,7 @@ public class QuestionController {
                         .result(questionService.updateQuestion(id,answer))
                         .build()).getBody();
     }
-    @PutMapping("/removeAnswer/{id}")
+    @PutMapping("removeAnswer/{id}")
     public ApiResponse<QuestionResponseDTO> removeAnswer(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<QuestionResponseDTO>builder()

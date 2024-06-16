@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class MentalRuleController {
     private MentalRuleService mentalRuleService;
 
     @PostMapping
-    public ApiResponse<MentalRuleResponseDTO> createMentalRule(@RequestBody MentalRuleRequestDTO mentalRule) {
+    public ApiResponse<MentalRuleResponseDTO> createMentalRule(@RequestBody @Valid MentalRuleRequestDTO mentalRule) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<MentalRuleResponseDTO>builder()
@@ -41,7 +42,7 @@ public class MentalRuleController {
                         .build()).getBody();
     }
 
-    @GetMapping("/web/others")
+    @GetMapping
     public ApiResponse<ResponsePaging<List<MentalRuleResponseDTO>>> getAllMentalRules(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<MentalRuleResponseDTO>>>builder()
@@ -62,7 +63,7 @@ public class MentalRuleController {
 
 
     @PutMapping("/{id}")
-    public ApiResponse<MentalRuleResponseDTO> updateMentalRule( @PathVariable Integer id,@RequestBody MentalRuleRequestDTO mentalRule) {
+    public ApiResponse<MentalRuleResponseDTO> updateMentalRule( @PathVariable Integer id,@RequestBody @Valid MentalRuleRequestDTO mentalRule) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MentalRuleResponseDTO>builder()
                         .code(HttpStatus.OK.value())

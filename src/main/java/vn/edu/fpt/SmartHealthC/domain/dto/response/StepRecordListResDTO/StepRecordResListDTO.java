@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StepRecordResListDTO {
-    private Integer appUserId;
+    private AppUser appUserId;
 
     private Date weekStart;
 

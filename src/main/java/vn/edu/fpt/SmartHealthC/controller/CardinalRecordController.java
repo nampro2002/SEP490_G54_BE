@@ -40,7 +40,7 @@ public class CardinalRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/web/weekly-record/{id}")
+    @GetMapping("getByAppUser/{id}")
     public ApiResponse< List<CardinalRecordResponseDTO>> getAllCardinalRecords(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.< List<CardinalRecordResponseDTO>>builder()
@@ -49,7 +49,7 @@ public class CardinalRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/get-all")
+    @GetMapping("/vip")
     public ApiResponse< List<CardinalRecord>> getAllCardinalRecordsVip() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.< List<CardinalRecord>>builder()
