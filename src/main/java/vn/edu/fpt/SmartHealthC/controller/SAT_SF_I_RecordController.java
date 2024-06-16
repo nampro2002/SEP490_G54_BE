@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class SAT_SF_I_RecordController {
     private SAT_SF_I_RecordService sat_sf_i_recordService;
 
     @PostMapping
-    public ApiResponse<SAT_SF_I_Record> createSAT_SF_I_Record(@RequestBody SAT_SF_I_RecordDTO sat_sf_i_recordDTO) {
+    public ApiResponse<SAT_SF_I_Record> createSAT_SF_I_Record(@RequestBody @Valid SAT_SF_I_RecordDTO sat_sf_i_recordDTO) {
 
         SAT_SF_I_Record createdSAT_SF_I_Record= sat_sf_i_recordService.createSAT_SF_I_Record(sat_sf_i_recordDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -51,7 +52,7 @@ public class SAT_SF_I_RecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<SAT_SF_I_Record> updateSAT_SF_I_Record( @PathVariable Integer id,@RequestBody SAT_SF_I_RecordDTO sat_sf_i_recordDTO) {
+    public ApiResponse<SAT_SF_I_Record> updateSAT_SF_I_Record( @PathVariable Integer id,@RequestBody @Valid SAT_SF_I_RecordDTO sat_sf_i_recordDTO) {
         SAT_SF_I_Record updatedSAT_SF_I_Record = sat_sf_i_recordService.updateSAT_SF_I_Record(id,sat_sf_i_recordDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<SAT_SF_I_Record>builder()

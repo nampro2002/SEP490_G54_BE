@@ -6,9 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.RefreshTokenRequestDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.RegisterDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.RefreshTokenResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.exception.BadRequestException;
 import vn.edu.fpt.SmartHealthC.exception.DataNotFoundException;
@@ -59,6 +61,16 @@ public class AuthController {
                 .body(ApiResponse.<String>builder()
                         .code(HttpStatus.OK.value())
                         .result(authService.sendEmailCode(email))
+                        .build()).getBody();
+    }
+
+    @PostMapping("/refresh-token")
+    public ApiResponse<RefreshTokenResponseDto> refreshToken(
+            @RequestBody RefreshTokenRequestDto token) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<RefreshTokenResponseDto>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(authService.refreshToken(token))
                         .build()).getBody();
     }
 

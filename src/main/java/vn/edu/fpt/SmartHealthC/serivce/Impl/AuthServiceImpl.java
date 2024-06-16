@@ -8,16 +8,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.RefreshTokenRequestDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.RegisterDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.RefreshTokenResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.RefreshToken;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
-import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
-import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
-import vn.edu.fpt.SmartHealthC.repository.MedicalHistoryRepository;
-import vn.edu.fpt.SmartHealthC.repository.UserMedicalHistoryRepository;
+import vn.edu.fpt.SmartHealthC.repository.*;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
 import vn.edu.fpt.SmartHealthC.serivce.EmailService;
@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserMedicalHistoryRepository userMedicalHistoryRepository;
     private final AppUserRepository appUserRepository;
     private final EmailService  emailService;
-
+    private final RefreshTokenRepository refreshTokenRepository;
     @Override
     public AuthenticationResponseDto login(LoginDto request){
         Optional<Account> optionalUser = accountRepository.findAccountByEmail(request.getEmail());
@@ -113,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
         String codeVerify = emailService.generateRandomCode(6);
-        String message = "Code xác thực email của bạn là : " +codeVerify;
+        String message = "Code xác thực email đăng ký của bạn là : " +codeVerify;
 
         boolean result =  emailService.sendMail(
                 email,
@@ -125,4 +125,29 @@ public class AuthServiceImpl implements AuthService {
         }
         return codeVerify;
     }
+
+    @Override
+    public RefreshTokenResponseDto refreshToken(RefreshTokenRequestDto token) {
+        Optional<Account> optionalUser = accountRepository.findAccountByEmail(token.getEmail());
+        if(optionalUser.isEmpty()) {
+            throw new AppException(ErrorCode.CREDENTIAL_INVALID);
+        }
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findRefreshTokenByToken(token.getToken());
+        if(refreshToken.isPresent()) {
+            throw new AppException(ErrorCode.REFRESH_TOKEN_EXIST);
+        }
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("userId", optionalUser.get().getId());
+        var jwt = jwtProvider.generateRefreshToken(extraClaims, optionalUser.get());
+        var expiresTime = jwtProvider.extractAllClaim(token.getToken()).getExpiration();
+        RefreshToken refreshTokenCreate = new RefreshToken().builder()
+                .Token(token.getToken()).expiryTime(expiresTime).build();
+        refreshTokenRepository.save(refreshTokenCreate);
+        return RefreshTokenResponseDto.builder()
+                .accessToken(token.getToken())
+                .refreshToken(jwt)
+                .build();
+    }
+
+
 }

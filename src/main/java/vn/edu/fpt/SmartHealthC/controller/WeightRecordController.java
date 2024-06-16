@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class WeightRecordController {
     private WeightRecordService weightRecordService;
 
     @PostMapping
-    public ApiResponse<WeightRecord> createWeightRecord(@RequestBody WeightRecordDTO weightRecordDTO) {
+    public ApiResponse<WeightRecord> createWeightRecord(@RequestBody @Valid WeightRecordDTO weightRecordDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<WeightRecord>builder()
                         .code(HttpStatus.CREATED.value())
@@ -50,7 +51,7 @@ public class WeightRecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<WeightRecord> updateWeightRecord(@PathVariable Integer id, @RequestBody WeightRecordDTO weightRecordDTO) {
+    public ApiResponse<WeightRecord> updateWeightRecord(@PathVariable Integer id, @RequestBody @Valid WeightRecordDTO weightRecordDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<WeightRecord>builder()
                         .code(HttpStatus.OK.value())
