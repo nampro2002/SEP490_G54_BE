@@ -117,8 +117,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
     @Override
     public MentalRuleResponseDTO deleteMentalRule(Integer id) {
         MentalRule mentalRule = getMentalRuleEntityById(id);
-        mentalRule.setDeleted(true);
-        mentalRuleRepository.save(mentalRule);
+        mentalRuleRepository.deleteById(id);
         return MentalRuleResponseDTO
                 .builder()
                 .id(mentalRule.getId())

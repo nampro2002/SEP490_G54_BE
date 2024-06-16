@@ -254,7 +254,8 @@ CREATE TABLE `flyway_schema_history` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `flyway_schema_history`
+-- -- Dumping data for table `flyway_schema_history`
+-- --
 --
 -- LOCK TABLES `flyway_schema_history` WRITE;
 -- /*!40000 ALTER TABLE `flyway_schema_history` DISABLE KEYS */;
