@@ -46,7 +46,7 @@ public class AppUserController {
                         .build()).getBody();
     }
     //getAppUserById
-    @GetMapping("/detail/{id}")
+    @GetMapping("/web/detail/{id}")
     public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailById (@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AppUserDetailResponseDTO>builder()
@@ -54,6 +54,14 @@ public class AppUserController {
                         .result(appUserService.getAppUserDetailById(id))
                         .build()).getBody();
     }
+//    @GetMapping("mobile/detail")
+//    public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailMobile () {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<AppUserDetailResponseDTO>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(appUserService.getAppUserDetailMobile())
+//                        .build()).getBody();
+//    }
 
     @PutMapping("/{id}")
     public ApiResponse<AppUserDetailResponseDTO> updateAppUser (@PathVariable Integer id, @RequestBody @Valid AppUserRequestDTO appUserRequestDTO) {

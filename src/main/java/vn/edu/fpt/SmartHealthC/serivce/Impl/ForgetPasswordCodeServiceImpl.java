@@ -91,6 +91,7 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
 //        System.out.println(stringFormatedDate);
         account.get().setPassword(passwordEncoder.encode(forgetPasswordCodeDTO.getPassword()));
         accountRepository.save(account.get());
+        forgetPasswordCodeRepository.delete(forgetPasswordCode.get());
         return true;
     }
 }

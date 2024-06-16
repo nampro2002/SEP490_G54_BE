@@ -1,5 +1,0 @@
--- CREATE TABLE `smarthealthc`.`refresh_token` (
---          `id` INT NOT NULL AUTO_INCREMENT,
---          `token` VARCHAR(255) NOT NULL,
---          `expiry_time` DATETIME(6) NOT NULL,
---          PRIMARY KEY (`id`));

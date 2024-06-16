@@ -141,7 +141,7 @@ public class AuthServiceImpl implements AuthService {
         var jwt = jwtProvider.generateRefreshToken(extraClaims, optionalUser.get());
         var expiresTime = jwtProvider.extractAllClaim(token.getToken()).getExpiration();
         RefreshToken refreshTokenCreate = new RefreshToken().builder()
-                .Token(token.getToken()).expiryTime(expiresTime).build();
+                .token(token.getToken()).expiryTime(expiresTime).build();
         refreshTokenRepository.save(refreshTokenCreate);
         return RefreshTokenResponseDto.builder()
                 .accessToken(token.getToken())
