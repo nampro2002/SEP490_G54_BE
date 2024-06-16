@@ -62,9 +62,9 @@ public class AccountController {
     @GetMapping("/web/activate-account/{id}")
     public ApiResponse<?> activateAccount(@PathVariable Integer appUserId) {
         if (accountService.activateAccount(appUserId)) {
-            return ResponseEntity.status(HttpStatus.CREATED)
+            return ResponseEntity.status(HttpStatus.OK)
                     .body(ApiResponse.builder()
-                            .code(HttpStatus.CREATED.value())
+                            .code(HttpStatus.OK.value())
                             .message("Activation successful")
                             .build()).getBody();
         }
@@ -93,7 +93,7 @@ public class AccountController {
     }
 
     // active / changepass
-    @PutMapping("change-password/{id}")
+    @PutMapping("change-password")
     public ApiResponse<Account> changePassword(@RequestBody UpdatePasswordRequestDTO updatePasswordRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Account>builder()

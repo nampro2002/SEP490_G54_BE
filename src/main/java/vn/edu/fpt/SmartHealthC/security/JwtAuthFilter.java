@@ -49,12 +49,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         //validate jwt
         jwt = authHeader.substring(7);
-        Optional<RefreshToken> accessToken = refreshTokenRepository.findRecordByAcToken(jwt);
-        if(accessToken.isEmpty()) {
-//            System.out.println("STATUS: TOKEN KHÔNG TỒN TẠI");
-            throw new AppException(ErrorCode.ACCESS_TOKEN_NOT_EXIST);
-        }
-
         userEmail = jwtService.extractUserName(jwt);// verify jwt
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetail = this.userDetailsService.loadUserByUsername(userEmail);
@@ -72,7 +66,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-
         }
         filterChain.doFilter(request, response);
     }
