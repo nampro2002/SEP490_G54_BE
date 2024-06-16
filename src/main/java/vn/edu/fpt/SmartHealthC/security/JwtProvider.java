@@ -43,7 +43,7 @@ public class JwtProvider {
         return generateRefreshToken(new HashMap<>(), userDetails);
     }
 
-    private String generateRefreshToken(
+    public String generateRefreshToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {

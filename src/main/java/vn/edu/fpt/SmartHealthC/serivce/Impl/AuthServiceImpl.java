@@ -132,12 +132,13 @@ public class AuthServiceImpl implements AuthService {
         if(optionalUser.isEmpty()) {
             throw new AppException(ErrorCode.CREDENTIAL_INVALID);
         }
-        Account existingUser = optionalUser.get();
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findRefreshTokenByToken(token.getToken());
         if(refreshToken.isPresent()) {
             throw new AppException(ErrorCode.REFRESH_TOKEN_EXIST);
         }
-        var jwt = jwtProvider.generateRefreshToken(optionalUser.get());
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("userId", optionalUser.get().getId());
+        var jwt = jwtProvider.generateRefreshToken(extraClaims, optionalUser.get());
         var expiresTime = jwtProvider.extractAllClaim(token.getToken()).getExpiration();
         RefreshToken refreshTokenCreate = new RefreshToken().builder()
                 .Token(token.getToken()).expiryTime(expiresTime).build();
