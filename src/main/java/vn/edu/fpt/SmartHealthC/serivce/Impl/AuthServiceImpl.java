@@ -22,6 +22,8 @@ import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
 import vn.edu.fpt.SmartHealthC.serivce.EmailService;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -54,7 +56,11 @@ public class AuthServiceImpl implements AuthService {
                         request.getPassword()
                 )
         );
-        var jwt = jwtProvider.generateToken(optionalUser.get());
+
+
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("userId", optionalUser.get().getId());
+        var jwt = jwtProvider.generateToken(extraClaims, optionalUser.get());
         return AuthenticationResponseDto.builder()
                 .type(optionalUser.get().getType())
                 .idUser(optionalUser.get().getId())

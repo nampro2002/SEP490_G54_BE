@@ -38,7 +38,7 @@ public class MentalRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("getByAppUser/{id}")
+    @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<MentalRecordListResDTO>> getAllMentalRecords(@PathVariable Integer id) {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MentalRecordListResDTO>>builder()
