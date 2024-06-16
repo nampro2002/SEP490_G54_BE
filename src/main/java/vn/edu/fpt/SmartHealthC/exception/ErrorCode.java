@@ -63,6 +63,7 @@ public enum ErrorCode {
     WRONG_OLD_PASSWORD("Wrong old password", HttpStatus.BAD_REQUEST),
     ACCOUNT_DELETED("Account has been deleted", HttpStatus.OK),
     ACCOUNT_ACTIVATED("Account has been activated", HttpStatus.OK),
+    WEB_USER_FULL("Web user is full 10 patient", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(String message, HttpStatusCode statusCode) {

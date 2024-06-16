@@ -28,4 +28,6 @@ public class MedicalAppointmentResponseDTO {
     private TypeMedicalAppointment typeMedicalAppointment;
 
     private TypeMedicalAppointmentStatus statusMedicalAppointment;
+
+    private String note;
 }

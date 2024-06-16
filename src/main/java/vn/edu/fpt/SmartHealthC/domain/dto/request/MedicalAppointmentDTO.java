@@ -20,7 +20,7 @@ public class MedicalAppointmentDTO {
     private String location;
     @NotNull(message = "missing type")
     private TypeMedicalAppointment type;
-
+    private String note;
     private Date date;
 
 

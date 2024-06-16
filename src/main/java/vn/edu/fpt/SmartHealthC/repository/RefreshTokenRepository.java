@@ -10,6 +10,6 @@ import java.util.Optional;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Integer> {
     //find account by email deleted = false
-    @Query("SELECT a FROM RefreshToken a WHERE a.Token = ?1")
+    @Query("SELECT a FROM RefreshToken a WHERE a.token = ?1")
     Optional<RefreshToken> findRefreshTokenByToken(String token);
 }

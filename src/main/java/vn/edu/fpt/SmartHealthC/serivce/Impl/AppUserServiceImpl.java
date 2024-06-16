@@ -199,6 +199,12 @@ public class AppUserServiceImpl implements AppUserService {
         if(!webUser.getAccountId().getType().equals(TypeAccount.MEDICAL_SPECIALIST)){
             throw new AppException(ErrorCode.WEB_USER_NOT_VALID);
         }
+        if(webUser.getAccountId().isDeleted()){
+            throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
+        }
+        if(webUser.getAppUserList().size() >= 10){
+            throw new AppException(ErrorCode.WEB_USER_FULL);
+        }
         appUser.setWebUser(webUser);
         appUserRepository.save(appUser);
     }
