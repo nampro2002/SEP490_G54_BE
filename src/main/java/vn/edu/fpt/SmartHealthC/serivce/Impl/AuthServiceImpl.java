@@ -180,7 +180,7 @@ public class AuthServiceImpl implements AuthService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         refreshTokenHeader = authHeader.substring(7);
-        if(refreshTokenHeader != refreshTokenFilter.get().getAccessToken()){
+        if(!refreshTokenHeader.equals(refreshTokenFilter.get().getAccessToken())){
             throw new AppException(ErrorCode.TOKEN_NOT_OWNED);
         }
 
