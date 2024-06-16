@@ -1,9 +1,6 @@
 package vn.edu.fpt.SmartHealthC.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +18,15 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String token;
+    private String accessToken;
 
-    private Date expiryTime;
+    private Date  accessExpiryTime;
+
+    private String refreshToken;
+
+    private Date refreshExpiryTime;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account accountId;
 }
