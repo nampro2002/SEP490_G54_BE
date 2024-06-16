@@ -1,5 +1,7 @@
 package vn.edu.fpt.SmartHealthC.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +49,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponseDto> login(
-            @RequestBody @Valid LoginDto request) {
+            @RequestBody @Valid LoginDto request) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
                         .code(HttpStatus.OK.value())
@@ -64,13 +67,15 @@ public class AuthController {
                         .build()).getBody();
     }
 
-    @PostMapping("/refresh-token")
+    @GetMapping("/refresh-token/{token}")
     public ApiResponse<RefreshTokenResponseDto> refreshToken(
-            @RequestBody RefreshTokenRequestDto token) {
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @PathVariable String token) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<RefreshTokenResponseDto>builder()
                         .code(HttpStatus.OK.value())
-                        .result(authService.refreshToken(token))
+                        .result(authService.refreshToken(token,request,response))
                         .build()).getBody();
     }
 

@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -30,8 +30,8 @@ CREATE TABLE `account` (
                            `password` varchar(255) NOT NULL,
                            `type` enum('ADMIN','CUSTOMER_SUPPORT','MEDICAL_SPECIALIST','USER') NOT NULL,
                            PRIMARY KEY (`id`),
-                           UNIQUE KEY `UK_q0uja26qgu1atulenwup9rxyr` (`email`),
-                           UNIQUE KEY `email_UNIQUE` (`email`)
+                           UNIQUE KEY `UK_q0uja26qgu1atulenwup9rxyr` (`email`)
+--                            UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -247,19 +247,14 @@ CREATE TABLE `flyway_schema_history` (
                                          `installed_by` varchar(100) NOT NULL,
                                          `installed_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                          `execution_time` int NOT NULL,
-                                         `success` tinyint(1) NOT NULL,
+                                         `success` tinyint NOT NULL,
                                          PRIMARY KEY (`installed_rank`),
                                          KEY `flyway_schema_history_s_idx` (`success`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `flyway_schema_history`
---
 
-
-
---
 -- Table structure for table `forget_password_code`
 --
 
@@ -587,11 +582,16 @@ DROP TABLE IF EXISTS `refresh_token`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `refresh_token` (
                                  `id` int NOT NULL AUTO_INCREMENT,
-                                 `token` varchar(255) NOT NULL,
-                                 `expiry_time` datetime(6) NOT NULL,
-                                 PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+                                 `access_token` varchar(255) NOT NULL,
+                                 `access_expiry_time` datetime(6) NOT NULL,
+                                 `account_id` int NOT NULL,
+                                 `refresh_token` varchar(45) NOT NULL,
+                                 `refresh_expiry_time` datetime(6) NOT NULL,
+                                 PRIMARY KEY (`id`),
+                                 KEY `FKiox3wo9jixvp9boxfheq7l99w` (`account_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `refresh_token`
