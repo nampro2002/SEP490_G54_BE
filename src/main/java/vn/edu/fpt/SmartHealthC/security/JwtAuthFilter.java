@@ -29,11 +29,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-   private final JwtProvider jwtService;
+    private final JwtProvider jwtService;
 
-   private final UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
-   private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final String[] allowedUrls = {"/api/auth/refresh","/api/auth/demo", "/api/auth/login"};
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
@@ -42,26 +43,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         final String userEmail;
 
         // check if there is a token
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-
+        //Bypass Security expired token
+        if (isAllowedUrl(request.getRequestURI())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         //validate jwt
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUserName(jwt);// verify jwt
-        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetail = this.userDetailsService.loadUserByUsername(userEmail);
-            if(jwtService.isTokenValid(jwt, userDetail)){
+            if (jwtService.isTokenValid(jwt, userDetail)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetail,
                         null,
                         userDetail.getAuthorities()
                 );
                 authToken.setDetails(
-                        // WebAuthenticationDetailsSource bridge between servlet classes and Spring classes, convert
-                        // an instance of HttpServletRequest class into an instance of the WebAuthenticationDetails class
-                        // so that spring bôt can handle the request, build an buildDetails for spring security to authorize the request.
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
@@ -69,4 +71,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+
+    private boolean isAllowedUrl(String requestUri) {
+        for (String allowedUrl : allowedUrls) {
+            if (requestUri.startsWith(allowedUrl)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
