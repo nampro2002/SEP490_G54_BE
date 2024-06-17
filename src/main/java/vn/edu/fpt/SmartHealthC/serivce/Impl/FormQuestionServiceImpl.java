@@ -30,6 +30,10 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 
     @Override
     public FormQuestionResponseDTO createFormQuestion(FormQuestionRequestDTO formQuestionRequestDTO) {
+            Optional<FormQuestion> formQuestionDuplicate = formQuestionRepository.findRecordByQuestionNumber(formQuestionRequestDTO.getQuestionNumber());
+        if(formQuestionDuplicate.isPresent()){
+            throw new AppException(ErrorCode.FORM_QUESTION_NUMBER_DUPLICATE);
+        }
         FormQuestion formQuestion = FormQuestion
                 .builder()
                 .question(formQuestionRequestDTO.getQuestion())
@@ -103,7 +107,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     public FormQuestionResponseDTO updateFormQuestion(Integer id,FormQuestionRequestDTO formQuestionRequestDTO) {
         FormQuestion formQuestion = getFormQuestionEntityById(id);
         formQuestion.setQuestion(formQuestionRequestDTO.getQuestion());
-        formQuestion.setQuestionNumber(formQuestionRequestDTO.getQuestionNumber());
+//        formQuestion.setQuestionNumber(formQuestionRequestDTO.getQuestionNumber());
         formQuestion.setType(formQuestionRequestDTO.getType());
         formQuestion = formQuestionRepository.save(formQuestion);
         FormQuestionResponseDTO formQuestionResponseDTO = FormQuestionResponseDTO

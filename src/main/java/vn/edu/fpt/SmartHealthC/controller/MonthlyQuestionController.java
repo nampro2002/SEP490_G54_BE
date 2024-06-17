@@ -60,7 +60,7 @@ public class MonthlyQuestionController {
 
     @DeleteMapping("/{id}")
     public ApiResponse<MonthlyRecord> deleteMonthlyQuestion(@PathVariable Integer id) {
-         monthlyQuestionService.deleteMonthlyQuestion(id);
+//         monthlyQuestionService.deleteMonthlyQuestion(id);
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MonthlyRecord>builder()
                         .code(HttpStatus.OK.value())

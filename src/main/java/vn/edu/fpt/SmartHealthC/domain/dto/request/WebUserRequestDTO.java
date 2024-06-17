@@ -31,7 +31,7 @@ public class WebUserRequestDTO {
     @NotNull(message = "missing dob")
     private Date dob;
     @NotNull(message = "missing gender")
-    private boolean gender;
+    private Boolean gender;
     @NotBlank(message = "missing phoneNumber")
     private String phoneNumber;
     @NotNull(message = "missing typeAccount")
