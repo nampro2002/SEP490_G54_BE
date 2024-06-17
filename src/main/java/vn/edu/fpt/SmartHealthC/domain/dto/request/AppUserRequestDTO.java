@@ -22,7 +22,7 @@ public class AppUserRequestDTO {
     @NotNull(message = "missing dob")
     private Date dob;
     @NotNull(message = "missing gender")
-    private boolean gender;
+    private Boolean gender;
     @NotNull(message = "missing height")
     private Float height;
     @NotNull(message = "missing weight")

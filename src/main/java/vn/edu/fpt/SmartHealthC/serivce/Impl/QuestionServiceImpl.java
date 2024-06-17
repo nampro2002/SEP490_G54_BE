@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AnswerQuestionRequestDTO;
@@ -9,9 +11,12 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
+import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.QuestionRepository;
 import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AccountService;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.QuestionService;
 
 import java.util.ArrayList;
@@ -25,10 +30,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
     @Autowired
-    private AppUserRepository appUserRepository;
+    private AppUserService appUserService;
 
     @Autowired
     private WebUserRepository webUserRepository;
+
 
     @Override
     public QuestionResponseDTO createQuestion(QuestionRequestDTO questionRequestDTO) {
@@ -40,11 +46,11 @@ public class QuestionServiceImpl implements QuestionService {
                 .answer("")
                 .answerDate(null)
                 .build();
-        Optional<AppUser> appUser = appUserRepository.findById(questionRequestDTO.getAppUserId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        question.setAppUserId(appUser.get());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        question.setAppUserId(appUser);
         question = questionRepository.save(question);
         QuestionResponseDTO dto = new QuestionResponseDTO();
         dto.setId(question.getId());

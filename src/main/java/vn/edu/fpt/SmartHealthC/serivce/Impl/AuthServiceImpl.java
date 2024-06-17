@@ -111,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
                 .accountId(newAccount)
                 .name(request.getName())
                 .dob(request.getDob())
-                .gender(request.isGender())
+                .gender(request.getGender())
                 .height(request.getHeight())
                 .weight(request.getWeight())
                 .phoneNumber(request.getPhoneNumber())

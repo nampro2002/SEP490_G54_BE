@@ -2,6 +2,7 @@ package vn.edu.fpt.SmartHealthC.domain.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RegisterDto {
     @NotBlank(message = "Email is mandatory")
-    @Pattern(regexp = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", message = "Email should be valid")
+    @Pattern(regexp = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$", message = "Email should be valid")
     private String email;
     @NotBlank(message = "Password is mandatory")
     @Pattern(
@@ -25,19 +26,19 @@ public class RegisterDto {
             message = "Password must be minimum 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
     )
     private String password;
-
+    @NotBlank(message = "missing name")
     private String name;
-
+    @NotBlank(message = "missing cic")
     private String cic;
-
+    @NotNull(message = "missing dob")
     private Date dob;
-
-    private boolean gender;
-
+    @NotNull(message = "missing gender")
+    private Boolean gender;
+    @NotNull(message = "missing height")
     private Float height;
-
+    @NotNull(message = "missing weight")
     private Float weight;
-    @NotBlank(message = "Phone number is mandatory")
+    @NotBlank(message = "missing phone number")
     @Pattern(
             regexp = "^((010-\\d{4}-\\d{4})|(0\\d{1,2}-\\d{3,4}-\\d{4}))$",
             message = "Invalid Korean phone number"
