@@ -18,6 +18,7 @@ import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicalAppointmentRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AccountService;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
 import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
 
@@ -31,7 +32,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     @Autowired
     private MedicalAppointmentRepository medicalAppointmentRepository;
     @Autowired
-    private AppUserRepository appUserRepository;
+    private AppUserService appUserService;
     @Autowired
     private WebUserService webUserService;
 
@@ -45,12 +46,11 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .note(medicalAppointmentDTO.getNote())
                 .build();
 
-        Optional<AppUser> appUser = appUserRepository.findById(medicalAppointmentDTO.getAppUserId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
 
-        medicalAppointment.setAppUserId(appUser.get());
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        medicalAppointment.setAppUserId(appUser);
         medicalAppointment = medicalAppointmentRepository.save(medicalAppointment);
         MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
                 .id(medicalAppointment.getId())
