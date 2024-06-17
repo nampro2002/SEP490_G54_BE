@@ -8,10 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AppUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserDetailResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 
@@ -26,12 +23,11 @@ public class AppUserController {
     private final AppUserService appUserService;
 
     @PutMapping("/web/assign")
-    public ApiResponse<?> assignPatientToDoctor (@RequestBody @Valid AssignRequestDTO assignRequestDTO) {
-        appUserService.assignPatientToDoctor(assignRequestDTO);
+    public ApiResponse<AppUserAssignResponseDTO> assignPatientToDoctor (@RequestBody @Valid AssignRequestDTO assignRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Account>builder()
+                .body(ApiResponse.<AppUserAssignResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .message("Assign success")
+                        .result(appUserService.assignPatientToDoctor(assignRequestDTO))
                         .build()).getBody();
     }
 

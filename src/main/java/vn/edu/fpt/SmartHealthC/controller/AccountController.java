@@ -59,9 +59,9 @@ public class AccountController {
                         .build()).getBody();
     }
 
-    @GetMapping("/web/activate-account/{id}")
-    public ApiResponse<?> activateAccount(@PathVariable Integer appUserId) {
-        if (accountService.activateAccount(appUserId)) {
+    @PutMapping("/web/activate-account/{id}")
+    public ApiResponse<?> activateAccount(@PathVariable Integer id) {
+        if (accountService.activateAccount(id)) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(ApiResponse.builder()
                             .code(HttpStatus.OK.value())
@@ -75,7 +75,7 @@ public class AccountController {
     }
 
     @GetMapping("/get-by-email/{email}")
-    public ApiResponse<?> getAccountByEmail(@RequestParam String email) {
+    public ApiResponse<?> getAccountByEmail(@PathVariable String email) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Account>builder()
                         .code(HttpStatus.OK.value())
@@ -94,7 +94,7 @@ public class AccountController {
 
     // active / changepass
     @PutMapping("/change-password")
-    public ApiResponse<Account> changePassword(@RequestBody UpdatePasswordRequestDTO updatePasswordRequestDTO) {
+    public ApiResponse<Account> changePassword(@RequestBody @Valid UpdatePasswordRequestDTO updatePasswordRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<Account>builder()
                         .code(HttpStatus.OK.value())

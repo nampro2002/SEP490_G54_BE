@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AssignRequestDTO {
     @NotNull(message = "missing appUserId")
-    private int appUserId;
+    private Integer appUserId;
     @NotNull(message = "missing webUserId")
-    private int webUserId;
+    private Integer webUserId;
 }

@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -180,27 +181,29 @@ public class AccountServiceImpl implements AccountService {
                 .build();
     }
 
+    @Transactional
     @Override
-    public void createStaff(WebUserRequestDTO account) {
-        Optional<Account> existingAccount = accountRepository.findByEmail(account.getEmail());
+    public void createStaff(WebUserRequestDTO requestDTO) {
+        Optional<Account> existingAccount = accountRepository.findByEmail(requestDTO.getEmail());
         if (existingAccount.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
-        String encodedPassword = passwordEncoder.encode(account.getPassword());
+        String encodedPassword = passwordEncoder.encode(requestDTO.getPassword());
         Account newAccount = Account.builder()
-                .email(account.getEmail())
+                .email(requestDTO.getEmail())
                 .password(encodedPassword)
-                .type(account.getTypeAccount())
+                .type(requestDTO.getTypeAccount())
                 .isActive(true)
                 .build();
         newAccount = accountRepository.save(newAccount);
         WebUser newAppUserInfo = WebUser.builder()
                 .accountId(newAccount)
-                .userName(account.getUsername())
-                .phoneNumber(account.getPhoneNumber())
+                .userName(requestDTO.getUsername())
+                .dob(requestDTO.getDob())
+                .gender(requestDTO.getGender())
+                .phoneNumber(requestDTO.getPhoneNumber())
                 .build();
         webUserRepository.save(newAppUserInfo);
-        var jwt = jwtProvider.generateToken(newAccount);
     }
 
     @Override

@@ -11,6 +11,7 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalHistory;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AppUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserAssignResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserDetailResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AppUserResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
@@ -24,6 +25,7 @@ import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +60,7 @@ public class AppUserServiceImpl implements AppUserService {
         StringBuilder chronicDiseases = new StringBuilder();
         appUser.getUserMedicalHistoryList().forEach(userMedicalHistory -> {
             if (!userMedicalHistory.getConditionId().getType().equals(TypeMedicalHistory.OTHERS)
-                   || !userMedicalHistory.getConditionId().getType().equals(TypeMedicalHistory.HABIT)) {
+                    || !userMedicalHistory.getConditionId().getType().equals(TypeMedicalHistory.HABIT)) {
                 if (!chronicDiseases.isEmpty()) {
                     chronicDiseases.append("/");
                 }
@@ -129,7 +131,7 @@ public class AppUserServiceImpl implements AppUserService {
         String email = authentication.getName();
         WebUser webUser = webUserService.getWebUserByEmail(email);
         Pageable paging = PageRequest.of(pageNo, 5);
-        Page<AppUser> pagedResult = appUserRepository.findAllByUserId(webUser.getId(), search.toLowerCase(),paging);
+        Page<AppUser> pagedResult = appUserRepository.findAllByUserId(webUser.getId(), search.toLowerCase(), paging);
         List<AppUser> appUserList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             appUserList = pagedResult.getContent();
@@ -152,7 +154,7 @@ public class AppUserServiceImpl implements AppUserService {
 //        }
 
 
-        List<AppUserResponseDTO>  appUserResponseDTOList =  appUserList.stream()
+        List<AppUserResponseDTO> appUserResponseDTOList = appUserList.stream()
                 .map(record -> {
                     AppUserResponseDTO dto = new AppUserResponseDTO();
                     dto.setAccountId(record.getAccountId().getId());
@@ -181,7 +183,7 @@ public class AppUserServiceImpl implements AppUserService {
         );
         appUser.setName(appUserRequestDTO.getName());
         appUser.setDob(appUserRequestDTO.getDob());
-        appUser.setGender(appUserRequestDTO.isGender());
+        appUser.setGender(appUserRequestDTO.getGender());
         appUser.setPhoneNumber(appUserRequestDTO.getPhoneNumber());
         appUser.setWeight(appUserRequestDTO.getWeight());
         appUser.setHeight(appUserRequestDTO.getHeight());
@@ -191,21 +193,43 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public void assignPatientToDoctor(AssignRequestDTO assignRequestDTO) {
+    public AppUser findAppUserByEmail(String email) {
+        AppUser appUser = appUserRepository.findByAccountEmail(email).orElseThrow(
+                () -> new AppException(ErrorCode.APP_USER_NOT_FOUND)
+        );
+        return appUser;
+    }
+
+    @Override
+    public AppUserAssignResponseDTO assignPatientToDoctor(AssignRequestDTO assignRequestDTO) {
         AppUser appUser = appUserRepository.findById(assignRequestDTO.getAppUserId()).orElseThrow(
                 () -> new AppException(ErrorCode.APP_USER_NOT_FOUND)
         );
         WebUser webUser = webUserService.getWebUserById(assignRequestDTO.getWebUserId());
-        if(!webUser.getAccountId().getType().equals(TypeAccount.MEDICAL_SPECIALIST)){
+        if (!webUser.getAccountId().getType().equals(TypeAccount.MEDICAL_SPECIALIST)) {
             throw new AppException(ErrorCode.WEB_USER_NOT_VALID);
         }
-        if(webUser.getAccountId().isDeleted()){
+        if (webUser.getAccountId().isDeleted()) {
             throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
         }
-        if(webUser.getAppUserList().size() >= 10){
+        List<AppUser> appUserList = webUser.getAppUserList();
+        //filter appUserlist AppUser.accountId.deleted = false
+        appUserList = appUserList.stream().filter(appU -> !appU.getAccountId().isDeleted()).toList();
+        if (appUserList.size() >= 10) {
             throw new AppException(ErrorCode.WEB_USER_FULL);
         }
         appUser.setWebUser(webUser);
         appUserRepository.save(appUser);
+        return AppUserAssignResponseDTO.builder()
+                .appUserId(appUser.getId())
+                .accountId(appUser.getAccountId().getId())
+                .email(appUser.getAccountId().getEmail())
+                .name(appUser.getName())
+                .cic(appUser.getCic())
+                .dob(appUser.getDob())
+                .gender(appUser.isGender())
+                .phoneNumber(appUser.getPhoneNumber())
+                .msName(webUser.getUserName())
+                .build();
     }
 }

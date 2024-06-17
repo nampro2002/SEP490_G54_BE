@@ -16,9 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class QuestionRequestDTO {
-
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
     @NotNull(message = "missing typeUserQuestion")
     private TypeUserQuestion typeUserQuestion;
     @NotBlank(message = "missing title")

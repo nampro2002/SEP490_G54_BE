@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginDto {
     @NotBlank(message = "Email is mandatory")
+    @Pattern(regexp = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$", message = "Email should be valid")
     private String email;
     @NotBlank(message = "Password is mandatory")
     private String password;
