@@ -16,8 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class MedicalAppointmentDTO {
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
     private String location;
     @NotNull(message = "missing type")
     private TypeMedicalAppointment type;
