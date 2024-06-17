@@ -24,11 +24,11 @@ public class MonthlyQuestionDTO {
     @NotNull(message = "missing monthlyRecordType")
     private MonthlyRecordType monthlyRecordType;
     @NotNull(message = "missing questionNumber")
-    private int questionNumber;
+    private Integer questionNumber;
     @NotBlank(message = "missing question")
     private String question;
     @NotNull(message = "missing answer")
-    private int answer;
+    private Integer answer;
 
 
 

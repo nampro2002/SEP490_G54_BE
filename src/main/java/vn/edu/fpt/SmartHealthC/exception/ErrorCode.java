@@ -39,6 +39,7 @@ public enum ErrorCode {
     DIET_RECORD_NOT_FOUND("Diet record not found", HttpStatus.NOT_FOUND),
     ACTIVITY_RECORD_NOT_FOUND("Activity record not found", HttpStatus.NOT_FOUND),
     FORM_QUESTION_NOT_FOUND("Form question not found", HttpStatus.NOT_FOUND),
+    FORM_QUESTION_NUMBER_DUPLICATE("Form question number duplicate", HttpStatus.NOT_FOUND),
     LESSON_NOT_FOUND("Lesson not found", HttpStatus.NOT_FOUND),
     USER_LESSON_NOT_FOUND("User lesson not found", HttpStatus.NOT_FOUND),
     MEDICINE_NOT_FOUND("Medicine not found", HttpStatus.NOT_FOUND),

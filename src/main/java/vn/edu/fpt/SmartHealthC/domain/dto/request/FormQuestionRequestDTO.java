@@ -19,5 +19,5 @@ public class FormQuestionRequestDTO {
     @NotNull(message = "missing type")
     private TypeQuestion type;
     @NotNull(message = "missing questionNumber")
-    private int questionNumber;
+    private Integer questionNumber;
 }

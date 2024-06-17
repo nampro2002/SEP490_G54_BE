@@ -84,7 +84,7 @@ public class QuestionController {
 
 
     //answer question
-    @PutMapping("/answer{id}")
+    @PutMapping("/answer/{id}")
     public ApiResponse<QuestionResponseDTO> answerQuestion(@PathVariable Integer id,@RequestBody @Valid AnswerQuestionRequestDTO answer) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<QuestionResponseDTO>builder()
