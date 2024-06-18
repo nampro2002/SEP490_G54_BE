@@ -262,8 +262,11 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionResponseDTO> getQuestionByAppUserId(Integer userId) {
-        List<Question> questionList = questionRepository.findByUserId(userId);
+    public List<QuestionResponseDTO> getQuestionByAppUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        List<Question> questionList = questionRepository.findByUserId(appUser.getId());
         List<QuestionResponseDTO> questionResponseDTOList = new ArrayList<>();
         for (Question question : questionList) {
             QuestionResponseDTO dto = new QuestionResponseDTO();

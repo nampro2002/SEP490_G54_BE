@@ -41,11 +41,11 @@ public class QuestionController {
     }
 
     @GetMapping("/user")
-    public ApiResponse<List<QuestionResponseDTO>> getQuestionByUserId(@RequestParam(defaultValue = "1") Integer userId) {
+    public ApiResponse<List<QuestionResponseDTO>> getQuestionByUserId() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(questionService.getQuestionByAppUserId(userId))
+                        .result(questionService.getQuestionByAppUserId())
                         .build()).getBody();
     }
     @GetMapping("/web/admin/pending")

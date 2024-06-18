@@ -21,6 +21,7 @@ import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.*;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
 import vn.edu.fpt.SmartHealthC.serivce.EmailService;
 
@@ -46,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
     private final AppUserRepository appUserRepository;
     private final EmailService  emailService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final AppUserService appUserService;
     @Override
     public AuthenticationResponseDto login(LoginDto request) throws ParseException {
         Optional<Account> optionalUser = accountRepository.findAccountByEmail(request.getEmail());
@@ -63,10 +65,11 @@ public class AuthServiceImpl implements AuthService {
                         request.getPassword()
                 )
         );
-
+        AppUser appUser = appUserService.findAppUserByEmail(request.getEmail());
         //AccessToken
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("userId", optionalUser.get().getId());
+        extraClaims.put("userId", appUser.getId());
+
         var jwt = jwtProvider.generateToken(extraClaims, optionalUser.get());
         //RefreshToken
         String refreshToken = UUID.randomUUID().toString();
