@@ -42,12 +42,12 @@ public class MedicalAppointmentController {
                         .build()).getBody();
     }
 
-    @GetMapping("/mobile/{id}")
-    public ApiResponse<List<MedicalAppointmentResponseDTO>> getMedicalAppointmentByUserIdMobile(@PathVariable Integer id) {
+    @GetMapping("/mobile")
+    public ApiResponse<List<MedicalAppointmentResponseDTO>> getMedicalAppointmentByUserIdMobile() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MedicalAppointmentResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicalAppointmentService.getMedicalAppointmentByUserIdMobile(id))
+                        .result(medicalAppointmentService.getMedicalAppointmentByUserIdMobile())
                         .build()).getBody();
     }
     @GetMapping("/web/by-app-user/{id}")

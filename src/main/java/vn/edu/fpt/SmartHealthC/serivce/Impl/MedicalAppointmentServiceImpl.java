@@ -196,8 +196,12 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
 
 
     @Override
-    public List<MedicalAppointmentResponseDTO> getMedicalAppointmentByUserIdMobile(Integer userId) {
-        List<MedicalAppointment> medicalAppointmentList  = medicalAppointmentRepository.findAllByUserIdAndType(TypeMedicalAppointmentStatus.DONE, userId);
+    public List<MedicalAppointmentResponseDTO> getMedicalAppointmentByUserIdMobile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        List<MedicalAppointment> medicalAppointmentList  = medicalAppointmentRepository.findAllByUserIdAndType(TypeMedicalAppointmentStatus.DONE, appUser.getId());
         List<MedicalAppointmentResponseDTO> responseDTOList = new ArrayList<>();
         for (MedicalAppointment medicalAppointment : medicalAppointmentList) {
             MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()

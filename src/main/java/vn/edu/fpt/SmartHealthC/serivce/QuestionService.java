@@ -21,5 +21,5 @@ public interface QuestionService {
 
     QuestionResponseDTO removeAnswer(Integer id);
 
-    List<QuestionResponseDTO> getQuestionByAppUserId(Integer userId);
+    List<QuestionResponseDTO> getQuestionByAppUserId();
 }
