@@ -21,7 +21,7 @@ public interface MedicalAppointmentRepository extends JpaRepository<MedicalAppoi
     Page<MedicalAppointment> findAllPendingByUserIdAndType(TypeMedicalAppointmentStatus typeMedicalAppointmentStatus, Integer id, TypeMedicalAppointment type, Pageable paging);
 
     // m.typeMedicalAppointment != ?3
-    @Query("SELECT m FROM MedicalAppointment m WHERE m.statusMedicalAppointment = ?1 AND m.appUserId.id <> ?2")
+    @Query("SELECT m FROM MedicalAppointment m WHERE m.statusMedicalAppointment <> ?1 AND m.appUserId.id = ?2")
     List<MedicalAppointment> findAllByUserIdAndType(TypeMedicalAppointmentStatus type, Integer userId);
     @Query("SELECT m FROM MedicalAppointment m WHERE m.appUserId.webUser.id = ?1 AND LOWER(m.appUserId.name) LIKE  %?2% ")
     Page<MedicalAppointment> findAllByWebUserId(Integer id, Pageable paging, String search);

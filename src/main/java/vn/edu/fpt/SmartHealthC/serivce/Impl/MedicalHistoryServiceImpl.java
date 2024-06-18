@@ -117,7 +117,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     public MedicalHistoryResDTO deleteMedicalHistory(Integer id) {
         MedicalHistory medicalHistory = getMedicalHistoryEntityById(id);
         medicalHistory.setDeleted(true);
-        medicalHistoryRepository.save(medicalHistory);
+        medicalHistory = medicalHistoryRepository.save(medicalHistory);
         MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
                 .builder()
                 .id(medicalHistory.getId())

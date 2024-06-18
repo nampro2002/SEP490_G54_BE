@@ -113,7 +113,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     public MedicineTypeResponseDTO deleteMedicineType(Integer id) {
         MedicineType medicineType = getMedicineTypeEntityById(id);
         medicineType.setDeleted(true);
-        medicineTypeRepository.save(medicineType);
+        medicineType =  medicineTypeRepository.save(medicineType);
         return MedicineTypeResponseDTO.builder()
                 .id(medicineType.getId())
                 .title(medicineType.getTitle())
