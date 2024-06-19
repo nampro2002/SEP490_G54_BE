@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.RecordPerDay;
@@ -11,6 +13,7 @@ import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.StepRecordRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
 import java.util.ArrayList;
@@ -25,6 +28,8 @@ public class StepRecordServiceImpl implements StepRecordService {
     private StepRecordRepository stepRecordRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public StepRecord createStepRecord(StepRecordDTO stepRecordDTO) {
@@ -33,9 +38,10 @@ public class StepRecordServiceImpl implements StepRecordService {
                 .actualValue(0f)
                 .weekStart(stepRecordDTO.getWeekStart())
                 .date(stepRecordDTO.getDate()).build();
-        AppUser appUser = appUserRepository.findById(stepRecordDTO.getAppUserId())
-                .orElseThrow(() -> new IllegalArgumentException("AppUser not found"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
 
+        AppUser appUser = appUserService.findAppUserByEmail(email);
         stepRecord.setAppUserId(appUser);
         return stepRecordRepository.save(stepRecord);
     }

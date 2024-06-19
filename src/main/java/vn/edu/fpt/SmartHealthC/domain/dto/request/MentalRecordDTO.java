@@ -14,9 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class MentalRecordDTO {
-
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
     @NotNull(message = "missing status")
     private boolean status;
     @NotNull(message = "missing weekStart")

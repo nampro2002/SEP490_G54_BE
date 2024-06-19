@@ -15,9 +15,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class MedicineRecordDTO {
-
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
     @NotNull(message = "missing weekStart")
     private Date weekStart;
     @NotNull(message = "missing medicineTypeId")

@@ -17,8 +17,6 @@ import java.util.Date;
 @Builder
 public class MonthlyQuestionDTO {
 
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
     @NotNull(message = "missing monthStart")
     private Date monthStart;
     @NotNull(message = "missing monthlyRecordType")

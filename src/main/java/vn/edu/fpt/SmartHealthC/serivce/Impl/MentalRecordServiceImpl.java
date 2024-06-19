@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
@@ -13,6 +15,7 @@ import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MentalRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.MentalRuleRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 
 import java.util.ArrayList;
@@ -29,6 +32,8 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     private AppUserRepository appUserRepository;
     @Autowired
     private MentalRuleRepository mentalRuleRepository;
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public MentalRecordResponseDTO createMentalRecord(MentalRecordDTO mentalRecordDTO) {
@@ -37,11 +42,11 @@ public class MentalRecordServiceImpl implements MentalRecordService {
                 .weekStart(mentalRecordDTO.getWeekStart())
                 .date(mentalRecordDTO.getDate())
                 .build();
-        Optional<AppUser> appUser = appUserRepository.findById(mentalRecordDTO.getAppUserId());
-        if(appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        mentalRecord.setAppUserId(appUser.get());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        mentalRecord.setAppUserId(appUser);
         Optional<MentalRule> mentalRule = mentalRuleRepository.findById(mentalRecordDTO.getMentalRuleId());
         if(mentalRule.isEmpty()) {
             throw new AppException(ErrorCode.MENTAL_RULE_NOT_FOUND);

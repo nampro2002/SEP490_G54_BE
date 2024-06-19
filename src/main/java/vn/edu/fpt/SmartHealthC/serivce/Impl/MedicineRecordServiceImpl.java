@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
@@ -11,6 +13,7 @@ import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicineRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicineTypeRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineRecordService;
 
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     private AppUserRepository appUserRepository;
     @Autowired
     private MedicineTypeRepository medicineTypeRepository;
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public MedicineRecordResponseDTO createMedicineRecord(MedicineRecordDTO medicineRecordDTO) {
@@ -34,11 +39,11 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                 .date(medicineRecordDTO.getDate())
                 .status(false)
                 .build();
-        Optional<AppUser> appUser = appUserRepository.findById(medicineRecordDTO.getAppUserId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        medicineRecord.setAppUserId(appUser.get());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        medicineRecord.setAppUserId(appUser);
         Optional<MedicineType> medicineType = medicineTypeRepository.findById(medicineRecordDTO.getMedicineTypeId());
         if (medicineType.isEmpty()) {
             throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);

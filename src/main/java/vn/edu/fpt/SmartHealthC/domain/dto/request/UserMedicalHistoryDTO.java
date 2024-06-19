@@ -14,10 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class UserMedicalHistoryDTO {
-
-    private int id;
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
     @NotNull(message = "missing conditionId")
     private int  conditionId;
 

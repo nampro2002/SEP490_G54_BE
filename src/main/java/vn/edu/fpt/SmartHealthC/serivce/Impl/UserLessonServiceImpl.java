@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserLessonDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
@@ -12,6 +14,7 @@ import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.LessonRepository;
 import vn.edu.fpt.SmartHealthC.repository.UserLessonRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.UserLessonService;
 
 import java.util.List;
@@ -26,6 +29,8 @@ public class UserLessonServiceImpl implements UserLessonService {
     private AppUserRepository appUserRepository;
     @Autowired
     private LessonRepository lessonRepository;
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public UserLesson createUserLesson(UserLessonDTO userLessonDTO) {
@@ -33,15 +38,15 @@ public class UserLessonServiceImpl implements UserLessonService {
         UserLesson userLesson = UserLesson.builder()
                 .lessonDate(userLessonDTO.getLessonDate())
                 .build();
-        Optional<AppUser> appUser = appUserRepository.findById(userLessonDTO.getAppUserId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        AppUser appUser = appUserService.findAppUserByEmail(email);
         Optional<Lesson> lesson = lessonRepository.findById(userLessonDTO.getLessonId());
         if (lesson.isEmpty()) {
             throw new AppException(ErrorCode.LESSON_NOT_FOUND);
         }
-        userLesson.setAppUserId(appUser.get());
+        userLesson.setAppUserId(appUser);
         userLesson.setLessonId(lesson.get());
         return userLessonRepository.save(userLesson);
     }

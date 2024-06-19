@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WeightRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.RecordPerDay;
@@ -11,6 +13,7 @@ import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.WeightRecordRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.WeightRecordService;
 
 import java.util.*;
@@ -22,6 +25,8 @@ public class WeightRecordServiceImpl implements WeightRecordService {
     private WeightRecordRepository weightRecordRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public WeightRecord createWeightRecord(WeightRecordDTO weightRecordDTO)
@@ -30,8 +35,10 @@ public class WeightRecordServiceImpl implements WeightRecordService {
                 .weekStart(weightRecordDTO.getWeekStart())
                 .weight(weightRecordDTO.getWeight())
                 .date(weightRecordDTO.getDate()).build();
-        AppUser appUser = appUserRepository.findById(weightRecordDTO.getAppUserId())
-                .orElseThrow(() -> new AppException(ErrorCode.APP_USER_NOT_FOUND));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        AppUser appUser = appUserService.findAppUserByEmail(email);
         weightRecord.setAppUserId(appUser);
         return  weightRecordRepository.save(weightRecord);
     }

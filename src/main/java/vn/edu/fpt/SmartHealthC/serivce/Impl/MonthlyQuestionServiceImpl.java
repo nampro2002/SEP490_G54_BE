@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
@@ -9,6 +11,7 @@ import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MonthlyQuestionRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MonthlyQuestionService;
 
 import java.util.List;
@@ -21,6 +24,8 @@ public class MonthlyQuestionServiceImpl implements MonthlyQuestionService {
     private MonthlyQuestionRepository monthlyQuestionRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public MonthlyRecord createMonthlyQuestion(MonthlyQuestionDTO monthlyQuestionDTO) {
@@ -31,11 +36,11 @@ public class MonthlyQuestionServiceImpl implements MonthlyQuestionService {
                 .question(monthlyQuestionDTO.getQuestion())
                 .answer(monthlyQuestionDTO.getAnswer())
                 .build();
-        Optional<AppUser> appUser = appUserRepository.findById(monthlyQuestionDTO.getAppUserId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        monthlyRecord.setAppUserId(appUser.get());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        monthlyRecord.setAppUserId(appUser);
         return monthlyQuestionRepository.save(monthlyRecord);
     }
 
