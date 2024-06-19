@@ -15,8 +15,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class WeightRecordDTO {
-    @NotNull(message = "missing appUserId")
-    private Integer appUserId;
     @NotNull(message = "missing weekStart")
     private Date weekStart;
     @NotNull(message = "missing date")

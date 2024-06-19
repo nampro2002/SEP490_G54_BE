@@ -14,10 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class UserLessonDTO {
-
-    private int id;
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
     @NotNull(message = "missing lessonId")
     private int  lessonId;
     @NotNull(message = "missing lessonDate")

@@ -16,9 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class CardinalRecordDTO {
-
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
     @NotNull(message = "missing typeTimeMeasure")
     private TypeTimeMeasure timeMeasure;
     @NotNull(message = "missing weekStart")

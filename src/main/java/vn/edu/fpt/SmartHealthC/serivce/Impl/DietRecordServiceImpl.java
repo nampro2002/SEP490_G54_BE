@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietRecordListResDTO;
@@ -11,6 +13,7 @@ import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.DietRecordRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
 
 import java.util.*;
@@ -22,7 +25,8 @@ public class DietRecordServiceImpl implements DietRecordService {
     private DietRecordRepository dietRecordRepository;
     @Autowired
     private AppUserRepository appUserRepository;
-
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public DietRecord createDietRecord(DietRecordDTO dietRecordDTO) {
@@ -31,11 +35,10 @@ public class DietRecordServiceImpl implements DietRecordService {
                 .weekStart(dietRecordDTO.getWeekStart())
                 .actualValue(dietRecordDTO.getActualValue())
                 .date(dietRecordDTO.getDate()).build();
-        Optional<AppUser> appUser = appUserRepository.findById(dietRecordDTO.getAppUserId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        dietRecord.setAppUserId(appUser.get());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        dietRecord.setAppUserId(appUser);
         return  dietRecordRepository.save(dietRecord);
     }
 

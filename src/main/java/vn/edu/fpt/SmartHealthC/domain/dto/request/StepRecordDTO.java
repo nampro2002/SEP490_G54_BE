@@ -16,10 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class StepRecordDTO {
-
-    private int id;
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
     @NotNull(message = "missing plannedStepPerDay")
     private int  plannedStepPerDay;
     @NotNull(message = "missing weekStart")

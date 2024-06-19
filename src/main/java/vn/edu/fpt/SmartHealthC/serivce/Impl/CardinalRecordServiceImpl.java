@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.CardinalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CardinalRecordResponseDTO;
@@ -11,6 +13,7 @@ import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.CardinalRecordRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
 
 import java.util.*;
@@ -22,6 +25,8 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
     private CardinalRecordRepository cardinalRecordRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public CardinalRecord createCardinalRecord(CardinalRecordDTO CardinalRecordDTO) {
@@ -32,11 +37,11 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                 .weekStart(CardinalRecordDTO.getWeekStart())
                 .date(CardinalRecordDTO.getDate())
                 .timeMeasure(CardinalRecordDTO.getTimeMeasure()).build();
-        Optional<AppUser> appUser = appUserRepository.findById(CardinalRecordDTO.getAppUserId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        cardinalRecord.setAppUserId(appUser.get());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        cardinalRecord.setAppUserId(appUser);
         return cardinalRecordRepository.save(cardinalRecord);
     }
 

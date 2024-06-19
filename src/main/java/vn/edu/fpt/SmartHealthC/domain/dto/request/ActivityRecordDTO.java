@@ -16,8 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ActivityRecordDTO {
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
     @NotNull(message = "missing planType")
     private TypeActivity planType;
     private TypeActivity actualType;

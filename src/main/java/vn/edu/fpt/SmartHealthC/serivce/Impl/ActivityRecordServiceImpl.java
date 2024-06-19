@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.ActivityRecordResListDTO;
@@ -11,6 +13,7 @@ import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.ActivityRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.serivce.ActivityRecordService;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 
 import java.util.*;
 
@@ -21,6 +24,8 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     private ActivityRecordRepository activityRecordRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public ActivityRecord createActivityRecord(ActivityRecordDTO activityRecordDTO)
@@ -31,11 +36,11 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
                 .planType(activityRecordDTO.getPlanType())
                 .weekStart(activityRecordDTO.getWeekStart())
                 .date(activityRecordDTO.getDate()).build();
-        Optional<AppUser> appUser = appUserRepository.findById(activityRecordDTO.getAppUserId());
-        if(appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        activityRecord.setAppUserId(appUser.get());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        activityRecord.setAppUserId(appUser);
         return  activityRecordRepository.save(activityRecord);
     }
 

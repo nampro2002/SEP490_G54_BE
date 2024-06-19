@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseDTO;
@@ -11,6 +13,7 @@ import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.BloodPressureRecordRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.BloodPressureRecordService;
 
 import java.util.*;
@@ -22,6 +25,8 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
     private BloodPressureRecordRepository bloodPressureRecordRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public BloodPressureRecord createBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO) {
@@ -30,12 +35,12 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
                 .systole(bloodPressureRecordDTO.getSystole())
                 .weekStart(bloodPressureRecordDTO.getWeekStart())
                 .date(bloodPressureRecordDTO.getDate()).build();
-        Optional<AppUser> appUser = appUserRepository.findById(bloodPressureRecordDTO.getAppUserId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
 
-        bloodPressureRecord.setAppUserId(appUser.get());
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+
+        bloodPressureRecord.setAppUserId(appUser);
         return bloodPressureRecordRepository.save(bloodPressureRecord);
     }
 

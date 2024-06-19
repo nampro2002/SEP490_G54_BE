@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserMedicalHistoryDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
@@ -9,6 +11,7 @@ import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicalHistoryRepository;
 import vn.edu.fpt.SmartHealthC.repository.UserMedicalHistoryRepository;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.UserMedicalHistoryService;
 
 import java.util.List;
@@ -23,20 +26,22 @@ public class UserMedicalHistoryServiceImpl implements UserMedicalHistoryService 
     private AppUserRepository appUserRepository;
     @Autowired
     private MedicalHistoryRepository medicalHistoryRepository;
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public UserMedicalHistory createUserMedicalHistory(UserMedicalHistoryDTO userMedicalHistoryDTO) {
         UserMedicalHistory userMedicalHistory =  UserMedicalHistory.builder()
                 .build();
-        Optional<AppUser> appUser = appUserRepository.findById(userMedicalHistoryDTO.getAppUserId());
-        if(appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        AppUser appUser = appUserService.findAppUserByEmail(email);
         Optional<MedicalHistory> medicalHistory = medicalHistoryRepository.findById(userMedicalHistoryDTO.getConditionId());
         if(medicalHistory.isEmpty()) {
             throw new AppException(ErrorCode.NOT_FOUND);
         }
-        userMedicalHistory.setAppUserId(appUser.get());
+        userMedicalHistory.setAppUserId(appUser);
         userMedicalHistory.setConditionId(medicalHistory.get());
         return userMedicalHistoryRepository.save(userMedicalHistory);
     }

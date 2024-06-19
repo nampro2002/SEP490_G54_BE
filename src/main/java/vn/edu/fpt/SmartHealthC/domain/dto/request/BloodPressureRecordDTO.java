@@ -15,8 +15,6 @@ import java.util.Date;
 @Builder
 public class BloodPressureRecordDTO {
 
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
     @NotNull(message = "missing weekStart")
     private Date weekStart;
     @NotNull(message = "missing date")
