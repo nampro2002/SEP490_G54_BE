@@ -65,11 +65,8 @@ public class AuthServiceImpl implements AuthService {
                         request.getPassword()
                 )
         );
-        AppUser appUser = appUserService.findAppUserByEmail(request.getEmail());
         //AccessToken
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("userId", appUser.getId());
-
         var jwt = jwtProvider.generateToken(extraClaims, optionalUser.get());
         //RefreshToken
         String refreshToken = UUID.randomUUID().toString();

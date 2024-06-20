@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -31,8 +31,7 @@ CREATE TABLE `account` (
                            `type` enum('ADMIN','CUSTOMER_SUPPORT','MEDICAL_SPECIALIST','USER') NOT NULL,
                            PRIMARY KEY (`id`),
                            UNIQUE KEY `UK_q0uja26qgu1atulenwup9rxyr` (`email`)
---                            UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +40,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'nam2@example.com',_binary '',_binary '\0','$2a$10$VxP4das/0ncnmrbGlnNiuOwWeoCKkBpKh3UcxtyNXrta1rXZApsbe','ADMIN'),(2,'nam1@example.com',_binary '',_binary '\0','$2a$10$VxP4das/0ncnmrbGlnNiuOwWeoCKkBpKh3UcxtyNXrta1rXZApsbe','ADMIN'),(3,'nam3@example.com',_binary '',_binary '\0','$2a$10$Lsbdks04D5.AtGVrdf8iNOt84wCYxTYCL3hmJYCKowuOQfqiRMBjm','ADMIN'),(4,'user1@gmail.com',_binary '\0',_binary '\0','$2a$10$URZD3Nj/x55TTH3SOgPMWeSjvX/cEnYl4.w69ze8F46Bzwk65QnEy','USER'),(5,'user2@gmail.com',_binary '',_binary '\0','$2a$10$b/.uJ38ZoxQdPV2cWasMleiHYaMakdG5pPHjhDuIwi3XG64iPt7iq','USER'),(6,'user3@gmail.com',_binary '',_binary '\0','$2a$10$/bc4MfW68AdDedKVhbw8P.tW6vr3z6P44lzG38CNiEL4TyQMRDKiq','USER'),(7,'nam123@gmail.com',_binary '',_binary '\0','$2a$10$xQBMSCAcA1vCkvE5rp4MXuqLgzitEFk9G3mp9/JiJKSpfYXB58Q8K','USER'),(8,'nam124@gmail.com',_binary '',_binary '\0','$2a$10$FDN6j5uDSIhLZ6HEcC2.7OUBSVsJ8NcnayaY2Z6NyfpcpAa82rmXi','USER'),(9,'nam125@gmail.com',_binary '',_binary '\0','$2a$10$Xz0URXaZyraylLiLYUBb4.TuHt35NNi00e2OcDPz63rA3PqKtqMP2','USER'),(10,'nam126@gmail.com',_binary '',_binary '\0','$2a$10$LcVVpjP33Dp9XUv9yD8xwe3eDW7c4lX4XbpT58wqh2xk9jvzpAkm6','USER'),(11,'nam127@gmail.com',_binary '\0',_binary '\0','$2a$10$6LmG.yELpjG4VwHOpNGS0uoBbVwqdvV5n7.HwfiJ8h7Nu6nPWQR2m','USER'),(12,'nam128@gmail.com',_binary '\0',_binary '\0','$2a$10$dSHxbgOQndY6vcdzoiqLtOBco/4L99zDhFaaQn0KQCMqul/1rA9LK','USER'),(13,'nam129@gmail.com',_binary '\0',_binary '','$2a$10$.v1vHDtZ6959monnMzQ0wOrP1BqwvrHSbuO4YoqPzpeYsEymwbzGa','USER'),(14,'nam139@gmail.com',_binary '\0',_binary '','$2a$10$lLYs3xadQaJD28P8jEOf/u1PNu9iZ1c1rvd2dFc2dTeqbLX8mRSNy','USER'),(15,'nam132@gmail.com',_binary '\0',_binary '','$2a$10$zjNqxA.ZfGG7JHcgwyms9u/Z0SLWSOfg9JCLrSlQ2c6tZTX14U9ty','USER'),(16,'nam4@example.com',_binary '',_binary '\0','$2a$10$DBjZz2HN47Bp7387/ltdqeQek4PLLsAefHx2D3US4tJuIz3vmmI8a','ADMIN'),(17,'staffmedical@example.com',_binary '',_binary '\0','$2a$10$9So4ioxgyCi2NtQIMA8IOOqPdZzayajEFo41iB6nuMgxDblGCycuu','MEDICAL_SPECIALIST'),(18,'quang@gmail.com',_binary '\0',_binary '\0','$2a$10$48vhfcw7h0.YgizuV6isieNe7MVR4xm5cFTWFGoa6a9/wK9X/yhMW','USER');
+INSERT INTO `account` VALUES (1,'nam2@example.com',_binary '',_binary '\0','$2a$10$VxP4das/0ncnmrbGlnNiuOwWeoCKkBpKh3UcxtyNXrta1rXZApsbe','ADMIN'),(2,'nam1@example.com',_binary '',_binary '\0','$2a$10$VxP4das/0ncnmrbGlnNiuOwWeoCKkBpKh3UcxtyNXrta1rXZApsbe','ADMIN'),(3,'nam3@example.com',_binary '',_binary '\0','$2a$10$Lsbdks04D5.AtGVrdf8iNOt84wCYxTYCL3hmJYCKowuOQfqiRMBjm','ADMIN'),(4,'user1@gmail.com',_binary '\0',_binary '\0','$2a$10$Lo8cMYKeC/RQhEYI.NDh6u81Lbov334hPcHOK6YVQzke/Rui8tyMe','USER'),(5,'user2@gmail.com',_binary '',_binary '\0','$2a$10$b/.uJ38ZoxQdPV2cWasMleiHYaMakdG5pPHjhDuIwi3XG64iPt7iq','USER'),(6,'user3@gmail.com',_binary '',_binary '\0','$2a$10$/bc4MfW68AdDedKVhbw8P.tW6vr3z6P44lzG38CNiEL4TyQMRDKiq','USER'),(7,'nam123@gmail.com',_binary '',_binary '\0','$2a$10$xQBMSCAcA1vCkvE5rp4MXuqLgzitEFk9G3mp9/JiJKSpfYXB58Q8K','USER'),(8,'nam124@gmail.com',_binary '',_binary '\0','$2a$10$FDN6j5uDSIhLZ6HEcC2.7OUBSVsJ8NcnayaY2Z6NyfpcpAa82rmXi','USER'),(9,'nam125@gmail.com',_binary '',_binary '\0','$2a$10$Xz0URXaZyraylLiLYUBb4.TuHt35NNi00e2OcDPz63rA3PqKtqMP2','USER'),(10,'nam126@gmail.com',_binary '',_binary '\0','$2a$10$LcVVpjP33Dp9XUv9yD8xwe3eDW7c4lX4XbpT58wqh2xk9jvzpAkm6','USER'),(11,'nam127@gmail.com',_binary '\0',_binary '\0','$2a$10$6LmG.yELpjG4VwHOpNGS0uoBbVwqdvV5n7.HwfiJ8h7Nu6nPWQR2m','USER'),(12,'nam128@gmail.com',_binary '\0',_binary '\0','$2a$10$dSHxbgOQndY6vcdzoiqLtOBco/4L99zDhFaaQn0KQCMqul/1rA9LK','USER'),(13,'nam129@gmail.com',_binary '\0',_binary '','$2a$10$.v1vHDtZ6959monnMzQ0wOrP1BqwvrHSbuO4YoqPzpeYsEymwbzGa','USER'),(14,'nam139@gmail.com',_binary '\0',_binary '','$2a$10$lLYs3xadQaJD28P8jEOf/u1PNu9iZ1c1rvd2dFc2dTeqbLX8mRSNy','USER'),(15,'nam132@gmail.com',_binary '\0',_binary '','$2a$10$zjNqxA.ZfGG7JHcgwyms9u/Z0SLWSOfg9JCLrSlQ2c6tZTX14U9ty','USER'),(16,'nam4@example.com',_binary '',_binary '\0','$2a$10$DBjZz2HN47Bp7387/ltdqeQek4PLLsAefHx2D3US4tJuIz3vmmI8a','ADMIN'),(17,'staffmedical@example.com',_binary '',_binary '\0','$2a$10$9So4ioxgyCi2NtQIMA8IOOqPdZzayajEFo41iB6nuMgxDblGCycuu','MEDICAL_SPECIALIST'),(18,'quang@gmail.com',_binary '\0',_binary '\0','$2a$10$48vhfcw7h0.YgizuV6isieNe7MVR4xm5cFTWFGoa6a9/wK9X/yhMW','USER'),(19,'medicalvip@example.com',_binary '',_binary '\0','$2a$10$Lo8cMYKeC/RQhEYI.NDh6u81Lbov334hPcHOK6YVQzke/Rui8tyMe','MEDICAL_SPECIALIST'),(20,'usernam@gmail.com',_binary '\0',_binary '\0','$2a$10$XQAbhW8V/PfAZyscJeXwGewH7fjia4KfIZeYRh5q.H57soNP09sgW','USER');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,7 +100,7 @@ CREATE TABLE `app_user` (
                             KEY `FKrk1k6ks3fmxvjyhm4qwsj5x43` (`web_user_id`),
                             CONSTRAINT `FKngs581vugannc8it964ohg2pt` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
                             CONSTRAINT `FKrk1k6ks3fmxvjyhm4qwsj5x43` FOREIGN KEY (`web_user_id`) REFERENCES `web_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +109,7 @@ CREATE TABLE `app_user` (
 
 LOCK TABLES `app_user` WRITE;
 /*!40000 ALTER TABLE `app_user` DISABLE KEYS */;
-INSERT INTO `app_user` VALUES (1,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'Y12312312','010-1234-5678',75,4,5,'0123567125673218'),(2,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'Y12312312','010-1234-5678',75,5,1,'0123567125673218'),(3,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'Y12312312','010-1234-5678',75,6,1,'0123567125673218'),(4,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'Your Generated Name','010-1234-5678',75,7,1,'0123567125673218'),(5,'1990-01-01 07:00:00.000000',_binary '',19,NULL,'Y12312312','010-1234-5678',18,8,1,'0123567125673218'),(6,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam125 Name','010-1234-5678',75,9,1,'0123567125673218'),(7,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam126 Name','010-1234-5678',75,10,1,'0123567125673218'),(8,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam127 Name','010-1234-5678',75,11,5,'0123567125673218'),(9,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam128 Name','010-1234-5678',75,12,5,'0123567125673218'),(10,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam129 Name','010-1234-5678',75,13,5,'0123567125673218'),(11,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam139 Name','010-1234-5678',75,14,5,'0123567125673218'),(12,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam132 Name','010-1234-5678',75,15,5,'0123567125673218'),(13,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'Your Generated Name','010-1234-5678',75,18,NULL,'0123567125673218');
+INSERT INTO `app_user` VALUES (1,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'Y12312312','010-1234-5678',75,4,5,'0123567125673218'),(2,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'Y12312312','010-1234-5678',75,5,1,'0123567125673218'),(3,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'Y12312312','010-1234-5678',75,6,1,'0123567125673218'),(4,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'Your Generated Name','010-1234-5678',75,7,1,'0123567125673218'),(5,'1990-01-01 07:00:00.000000',_binary '',19,NULL,'Y12312312','010-1234-5678',18,8,1,'0123567125673218'),(6,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam125 Name','010-1234-5678',75,9,1,'0123567125673218'),(7,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam126 Name','010-1234-5678',75,10,5,'0123567125673218'),(8,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam127 Name','010-1234-5678',75,11,5,'0123567125673218'),(9,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam128 Name','010-1234-5678',75,12,5,'0123567125673218'),(10,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam129 Name','010-1234-5678',75,13,5,'0123567125673218'),(11,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam139 Name','010-1234-5678',75,14,5,'0123567125673218'),(12,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'nam132 Name','010-1234-5678',75,15,5,'0123567125673218'),(13,'1990-01-01 07:00:00.000000',_binary '',180.5,NULL,'Your Generated Name','010-1234-5678',75,18,NULL,'0123567125673218'),(14,'2022-10-11 07:00:00.000000',_binary '\0',170,NULL,'Nam','02-312-3456',50,20,NULL,'123456789');
 /*!40000 ALTER TABLE `app_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -256,11 +255,12 @@ CREATE TABLE `flyway_schema_history` (
 --
 -- Dumping data for table `flyway_schema_history`
 --
--- LOCK TABLES `flyway_schema_history` WRITE;
--- /*!40000 ALTER TABLE `flyway_schema_history` DISABLE KEYS */;
--- INSERT INTO `flyway_schema_history` VALUES (1,'0','Initial setup','SQL','V0__Initial_setup.sql',-1544244090,'root','2024-06-12 04:49:53',1941,1);
--- /*!40000 ALTER TABLE `flyway_schema_history` ENABLE KEYS */;
--- UNLOCK TABLES;
+
+LOCK TABLES `flyway_schema_history` WRITE;
+/*!40000 ALTER TABLE `flyway_schema_history` DISABLE KEYS */;
+INSERT INTO `flyway_schema_history` VALUES (1,'0','Initial setup','SQL','V0__Initial_setup.sql',1352263579,'root','2024-06-15 02:51:09',1910,1);
+/*!40000 ALTER TABLE `flyway_schema_history` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `forget_password_code`
@@ -361,7 +361,7 @@ CREATE TABLE `medical_appointment` (
                                        PRIMARY KEY (`id`),
                                        KEY `FK69h8dnll1rty4bswhf21xb1mu` (`appuser_id`),
                                        CONSTRAINT `FK69h8dnll1rty4bswhf21xb1mu` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -370,7 +370,7 @@ CREATE TABLE `medical_appointment` (
 
 LOCK TABLES `medical_appointment` WRITE;
 /*!40000 ALTER TABLE `medical_appointment` DISABLE KEYS */;
-INSERT INTO `medical_appointment` VALUES (1,'2024-05-28 19:34:56.789000','Hanoi','PENDING','DIAGNOSIS',1,'abcdef'),(2,'2024-05-02 18:30:00.000000','Location A','CONFIRM','DIAGNOSIS',1,'abcdef'),(3,'2024-05-02 18:30:00.000000','Location A','PENDING','DIAGNOSIS',2,'abcdef'),(4,'2024-05-02 18:30:00.000000','Location A','CONFIRM','DIAGNOSIS',1,'abcdef'),(5,'2024-05-02 18:30:00.000000','Location C','PENDING','DIAGNOSIS',4,'abcdef'),(6,'2024-05-02 18:30:00.000000','Location D','PENDING','MEDICAL_CHECKUP',1,'abcdef'),(7,'2024-05-02 18:30:00.000000','Location E','PENDING','MEDICAL_CHECKUP',2,'abcdef'),(8,'2024-05-02 18:30:00.000000','Location Z','PENDING','MEDICAL_CHECKUP',3,'abcdef'),(9,'2024-05-02 18:30:00.000000','Location N','PENDING','MEDICAL_CHECKUP',4,'abcdef'),(10,'2024-05-02 18:30:00.000000','Location N','PENDING','MEDICAL_CHECKUP',5,'abcdef'),(11,'2024-05-02 18:30:00.000000','Location M','PENDING','MEDICAL_CHECKUP',6,'abcdef'),(12,'2024-05-02 18:30:00.000000','LocationZ','PENDING','MEDICAL_CHECKUP',6,'abcdef'),(13,'2024-05-02 18:30:00.000000','LocationD','PENDING','MEDICAL_CHECKUP',6,'abcdef'),(14,'2024-05-02 18:30:00.000000','Location G','PENDING','DIAGNOSIS',4,'abcdef'),(15,'2024-05-02 18:30:00.000000','Location S','PENDING','DIAGNOSIS',4,'abcdef'),(16,'2024-05-02 18:30:00.000000','Location J','PENDING','DIAGNOSIS',4,'abcdef'),(17,'2024-05-02 18:30:00.000000','Location M','PENDING','DIAGNOSIS',4,'abcdef');
+INSERT INTO `medical_appointment` VALUES (1,'2024-05-28 19:34:56.789000','Hanoi','PENDING','DIAGNOSIS',1,'abcdef'),(3,'2024-05-02 18:30:00.000000','Location A','PENDING','DIAGNOSIS',2,'abc'),(4,'2024-05-02 18:30:00.000000','Location A','CONFIRM','DIAGNOSIS',1,'abcdef'),(5,'2024-05-02 18:30:00.000000','Location C','PENDING','DIAGNOSIS',4,'abcdef'),(6,'2024-05-02 18:30:00.000000','Location D','PENDING','MEDICAL_CHECKUP',1,'abcdef'),(7,'2024-05-02 18:30:00.000000','Location E','PENDING','MEDICAL_CHECKUP',2,'abcdef'),(8,'2024-05-02 18:30:00.000000','Location Z','PENDING','MEDICAL_CHECKUP',3,'abcdef'),(9,'2024-05-02 18:30:00.000000','Location N','PENDING','MEDICAL_CHECKUP',4,'abcdef'),(10,'2024-05-02 18:30:00.000000','Location N','PENDING','MEDICAL_CHECKUP',5,'abcdef'),(11,'2024-05-02 18:30:00.000000','Location M','PENDING','MEDICAL_CHECKUP',6,'abcdef'),(12,'2024-05-02 18:30:00.000000','LocationZ','PENDING','MEDICAL_CHECKUP',6,'abcdef'),(13,'2024-05-02 18:30:00.000000','LocationD','PENDING','MEDICAL_CHECKUP',6,'abcdef'),(14,'2024-05-02 18:30:00.000000','Location G','PENDING','DIAGNOSIS',4,'abcdef'),(15,'2024-05-02 18:30:00.000000','Location S','PENDING','DIAGNOSIS',4,'abcdef'),(16,'2024-05-02 18:30:00.000000','Location J','PENDING','DIAGNOSIS',4,'abcdef'),(17,'2024-05-02 18:30:00.000000','Location M','PENDING','DIAGNOSIS',4,'abcdef'),(18,'2024-05-02 18:30:00.000000','Location M','PENDING','DIAGNOSIS',14,'abc'),(19,'2024-05-02 18:30:00.000000',NULL,'PENDING','DIAGNOSIS',14,'abc');
 /*!40000 ALTER TABLE `medical_appointment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -396,7 +396,7 @@ CREATE TABLE `medical_history` (
 
 LOCK TABLES `medical_history` WRITE;
 /*!40000 ALTER TABLE `medical_history` DISABLE KEYS */;
-INSERT INTO `medical_history` VALUES (1,_binary '\0','Bệnh thận mãn tính','CARDINAL'),(2,_binary '\0','Cao huyết áp','CARDINAL'),(3,_binary '\0','Bệnh xơ phổi vô căn','RESPIRATORY'),(4,_binary '\0','Bệnh hen phế quản/ hen suyễn','RESPIRATORY'),(5,_binary '\0','Tổn thương phổi sau bệnh lao','RESPIRATORY'),(6,_binary '\0','Viêm khớp dạng thấp','ARTHRITIS'),(7,_binary '\0','Thoái hoá khớp (Hông, đầu gối, khuỷu tay)','ARTHRITIS'),(8,_binary '\0','Bệnh Tim','OTHERS'),(9,_binary '\0','Bệnh Gan','OTHERS'),(10,_binary '\0','Hút thuốc 1','HABIT'),(11,_binary '\0','Uống rượu','HABIT');
+INSERT INTO `medical_history` VALUES (1,_binary '','Bệnh thận mãn tính','CARDINAL'),(2,_binary '\0','Cao huyết áp','CARDINAL'),(3,_binary '\0','Bệnh xơ phổi vô căn','RESPIRATORY'),(4,_binary '\0','Bệnh hen phế quản/ hen suyễn','RESPIRATORY'),(5,_binary '\0','Tổn thương phổi sau bệnh lao','RESPIRATORY'),(6,_binary '\0','Viêm khớp dạng thấp','ARTHRITIS'),(7,_binary '\0','Thoái hoá khớp (Hông, đầu gối, khuỷu tay)','ARTHRITIS'),(8,_binary '\0','Bệnh Tim','OTHERS'),(9,_binary '\0','Bệnh Gan','OTHERS'),(10,_binary '\0','Hút thuốc 1','HABIT'),(11,_binary '\0','Uống rượu','HABIT');
 /*!40000 ALTER TABLE `medical_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -442,7 +442,7 @@ DROP TABLE IF EXISTS `medicine_type`;
 CREATE TABLE `medicine_type` (
                                  `id` int NOT NULL AUTO_INCREMENT,
                                  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-                                 `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                                 `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
                                  `is_deleted` bit(1) NOT NULL,
                                  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -486,7 +486,7 @@ CREATE TABLE `mental_record` (
 
 LOCK TABLES `mental_record` WRITE;
 /*!40000 ALTER TABLE `mental_record` DISABLE KEYS */;
-INSERT INTO `mental_record` VALUES (1,'2024-05-20 07:00:00.000000','2024-05-20 07:00:00.000000',1,1,_binary ''),(2,'2024-05-21 14:30:00.000000','2024-05-20 07:00:00.000000',1,2,_binary ''),(3,'2024-05-22 14:30:00.000000','2024-05-20 07:00:00.000000',1,3,_binary ''),(4,'2024-05-23 14:30:00.000000','2024-05-20 07:00:00.000000',1,1,_binary ''),(5,'2024-05-24 14:30:00.000000','2024-05-20 07:00:00.000000',1,3,_binary ''),(6,'2024-05-25 14:30:00.000000','2024-05-20 07:00:00.000000',1,5,_binary ''),(7,'2024-05-26 14:30:00.000000','2024-05-20 07:00:00.000000',1,1,_binary ''),(8,'2024-05-27 07:00:00.000000','2024-05-27 07:00:00.000000',1,4,_binary ''),(9,'2024-05-28 07:00:00.000000','2024-05-27 07:00:00.000000',1,5,_binary ''),(10,'2024-05-29 07:00:00.000000','2024-05-27 07:00:00.000000',1,1,_binary ''),(11,'2024-05-30 07:00:00.000000','2024-05-27 07:00:00.000000',1,1,_binary ''),(12,'2024-05-31 07:00:00.000000','2024-05-27 07:00:00.000000',1,4,_binary ''),(13,'2024-06-01 14:30:00.000000','2024-05-27 07:00:00.000000',1,5,_binary '\0'),(14,'2024-05-21 14:30:00.000000','2024-05-20 07:00:00.000000',1,2,_binary ''),(15,'2024-05-22 14:30:00.000000','2024-05-20 07:00:00.000000',1,3,_binary ''),(16,'2024-05-23 14:30:00.000000','2024-05-20 07:00:00.000000',1,1,_binary ''),(17,'2024-05-22 14:30:00.000000','2024-05-20 07:00:00.000000',1,3,_binary ''),(18,'2024-05-23 14:30:00.000000','2024-05-20 07:00:00.000000',1,1,_binary ''),(19,'2024-05-24 14:30:00.000000','2024-05-20 07:00:00.000000',1,3,_binary ''),(20,'2024-05-25 14:30:00.000000','2024-05-20 07:00:00.000000',1,5,_binary '');
+INSERT INTO `mental_record` VALUES (1,'2024-05-20 07:00:00.000000','2024-05-20 07:00:00.000000',1,1,_binary ''),(2,'2024-05-21 14:30:00.000000','2024-05-20 07:00:00.000000',1,2,_binary ''),(3,'2024-05-22 14:30:00.000000','2024-05-20 07:00:00.000000',1,3,_binary ''),(4,'2024-05-23 14:30:00.000000','2024-05-20 07:00:00.000000',1,1,_binary ''),(5,'2024-05-24 14:30:00.000000','2024-05-20 07:00:00.000000',1,3,_binary ''),(6,'2024-05-25 14:30:00.000000','2024-05-20 07:00:00.000000',1,5,_binary ''),(7,'2024-05-26 14:30:00.000000','2024-05-20 07:00:00.000000',1,1,_binary ''),(8,'2024-05-27 07:00:00.000000','2024-05-27 07:00:00.000000',1,4,_binary ''),(9,'2024-05-28 07:00:00.000000','2024-05-27 07:00:00.000000',1,5,_binary ''),(10,'2024-05-29 07:00:00.000000','2024-05-27 07:00:00.000000',1,1,_binary ''),(11,'2024-05-30 07:00:00.000000','2024-05-27 07:00:00.000000',1,1,_binary ''),(12,'2024-05-31 07:00:00.000000','2024-05-27 07:00:00.000000',1,4,_binary ''),(13,'2024-06-01 14:30:00.000000','2024-05-27 07:00:00.000000',1,5,_binary '\0'),(14,'2024-05-21 14:30:00.000000','2024-05-20 07:00:00.000000',1,3,_binary ''),(15,'2024-05-22 14:30:00.000000','2024-05-20 07:00:00.000000',1,2,_binary ''),(16,'2024-05-23 14:30:00.000000','2024-05-20 07:00:00.000000',1,4,_binary ''),(17,'2024-05-22 14:30:00.000000','2024-05-20 07:00:00.000000',1,1,_binary ''),(18,'2024-05-23 14:30:00.000000','2024-05-20 07:00:00.000000',1,1,_binary ''),(19,'2024-05-24 14:30:00.000000','2024-05-20 07:00:00.000000',1,5,_binary ''),(20,'2024-05-25 14:30:00.000000','2024-05-20 07:00:00.000000',1,1,_binary '');
 /*!40000 ALTER TABLE `mental_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -500,7 +500,7 @@ DROP TABLE IF EXISTS `mental_rule`;
 CREATE TABLE `mental_rule` (
                                `id` int NOT NULL AUTO_INCREMENT,
                                `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-                               `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                               `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
                                `is_deleted` bit(1) NOT NULL,
                                PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -568,7 +568,7 @@ CREATE TABLE `question` (
                             KEY `FK8wk86m3lwpbonn91355qmymjx` (`webuser_id`),
                             CONSTRAINT `FK8jju1d5enwfvxbfi3veg5rcak` FOREIGN KEY (`appuser_id`) REFERENCES `app_user` (`id`),
                             CONSTRAINT `FK8wk86m3lwpbonn91355qmymjx` FOREIGN KEY (`webuser_id`) REFERENCES `web_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -577,7 +577,7 @@ CREATE TABLE `question` (
 
 LOCK TABLES `question` WRITE;
 /*!40000 ALTER TABLE `question` DISABLE KEYS */;
-INSERT INTO `question` VALUES (1,'This is the answer vip pro 2','How do I assign a Microsoft license to a user?','2024-05-02 18:30:00.000000','Microsoft Assignment Query','ASSIGN_MS',1,1,'2024-05-07 18:30:00.000000'),(2,'This is the answer vip pro 2','How do I assign a Microsoft license to a user?','2024-05-02 18:30:00.000000','Microsoft Assignment Query','ASSIGN_ADMIN',1,1,'2024-05-07 18:30:00.000000'),(3,'This is the answer vip pro 2','How do I assign a Microsoft license to a user?','2024-05-02 18:30:00.000000','siuuuuuuu123','ASSIGN_ADMIN',2,1,'2024-05-07 18:30:00.000000'),(4,'','How do I assign a Microsoft license to a user?','2024-05-02 18:30:00.000000','siuuuuuuu123123','ASSIGN_ADMIN',2,NULL,'2024-05-02 18:30:00.000000'),(5,'tra loi cau hoi','How do I assign a Microsoft license to a user?','2024-05-02 18:30:00.000000','siuuuuuuu123123','ASSIGN_ADMIN',2,1,'2024-06-02 16:23:25.519000'),(8,'','How do I assign a Microsoft license to a user?','2024-06-11 02:57:14.885000','sssssss','ASSIGN_ADMIN',2,NULL,NULL);
+INSERT INTO `question` VALUES (1,'This is the answer vip pro 2','How do I assign a Microsoft license to a user?','2024-05-02 18:30:00.000000','Microsoft Assignment Query','ASSIGN_MS',1,1,'2024-05-07 18:30:00.000000'),(2,'This is the answer vip pro 2','How do I assign a Microsoft license to a user?','2024-05-02 18:30:00.000000','Microsoft Assignment Query','ASSIGN_ADMIN',1,1,'2024-05-07 18:30:00.000000'),(3,'This is the answer vip pro 2','How do I assign a Microsoft license to a user?','2024-05-02 18:30:00.000000','siuuuuuuu123','ASSIGN_ADMIN',2,1,'2024-05-07 18:30:00.000000'),(4,'','How do I assign a Microsoft license to a user?','2024-05-02 18:30:00.000000','siuuuuuuu123123','ASSIGN_ADMIN',2,NULL,'2024-05-02 18:30:00.000000'),(5,'tra loi cau hoi','How do I assign a Microsoft license to a user?','2024-05-02 18:30:00.000000','siuuuuuuu123123','ASSIGN_ADMIN',2,1,'2024-06-02 16:23:25.519000'),(8,'','How do I assign a Microsoft license to a user?','2024-06-11 02:57:14.885000','sssssss','ASSIGN_ADMIN',2,NULL,NULL),(9,'','How tf can i sleep at the time that i want','2024-06-16 20:45:30.557000','test question again','ASSIGN_ADMIN',14,NULL,NULL);
 /*!40000 ALTER TABLE `question` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -597,9 +597,8 @@ CREATE TABLE `refresh_token` (
                                  `refresh_expiry_time` datetime(6) NOT NULL,
                                  PRIMARY KEY (`id`),
                                  KEY `FKiox3wo9jixvp9boxfheq7l99w` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 
 --
 -- Dumping data for table `refresh_token`
@@ -607,6 +606,7 @@ CREATE TABLE `refresh_token` (
 
 LOCK TABLES `refresh_token` WRITE;
 /*!40000 ALTER TABLE `refresh_token` DISABLE KEYS */;
+INSERT INTO `refresh_token` VALUES (8,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInN1YiI6Im5hbTJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTg0MjAxNDksImV4cCI6MTcxODQyMzc0OX0.LglwYzZGbJP2_ddSAQaaJwx2hM9fi-TD2dSEWTPK94I','2024-06-15 10:55:49.000000',1,'20d13366-4a3c-430e-911a-0dcf632b19c4','2024-06-15 10:00:49.000000'),(9,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInN1YiI6Im5hbTJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTg1NDEwNTEsImV4cCI6MTcxODU0MTY1MX0.EZupuuNKFH7BZxQR_JtTMWyuiwCaqu5Zx9IkoJ1f3_A','2024-06-16 19:40:51.000000',1,'6de6f8b5-93f1-4ee7-a945-75581b2f4942','2024-06-16 19:40:51.000000'),(10,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInN1YiI6Im5hbTJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTg1NDEwODYsImV4cCI6MTcxODU0MTY4Nn0.RJzxwxYUS30M2zNTLRDKVB5p0QFiajKyM52Sk-XI8y8','2024-06-16 19:41:26.000000',1,'5db3b0bd-884c-4058-bf73-518e505268d3','2024-06-16 19:41:26.000000'),(11,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjIwLCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODU0NDk0NiwiZXhwIjoxNzE4NTQ1NTQ2fQ.cszc-PjkQZQDEAahQqBbiQ6NGqiMuxztvf6OjF94zAk','2024-06-16 20:45:46.000000',20,'4bfc6a49-f2e3-47db-9ce1-e0fbb99f6d59','2024-06-16 20:45:46.000000'),(12,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjIwLCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODU0NTEzMSwiZXhwIjoxNzE4NTQ1NzMxfQ.Ze-CHqO68duAgHSBRuDdoq3MTjBA-LPBXu81irlwWhg','2024-06-16 20:48:51.000000',20,'6f665f2a-6293-4821-9a3f-ef72cfd2e1b6','2024-06-16 20:48:51.000000'),(13,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjIwLCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODU0NTIzMiwiZXhwIjoxNzE4NTQ1ODMyfQ.ZLVjkXe_xFBWC7yWF-rt9BPHG1YVCT1-F_LZjE3RUb8','2024-06-16 20:50:32.000000',20,'4f7e16a0-09e8-4140-897f-80d0afc5232e','2024-06-16 20:50:32.000000'),(14,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjIwLCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODU0NTI3MCwiZXhwIjoxNzE4NTQ1ODcwfQ.oL7zcGi3XDyc6zLU86hJhEx4AmrumYbddIuSGusjJ38','2024-06-16 20:51:10.000000',20,'09c3f26e-7920-4333-95d7-35fd9f1f293a','2024-06-16 20:51:10.000000'),(15,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjIwLCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODU0NTUyOCwiZXhwIjoxNzE4NTQ2MTI4fQ.BMl5itSxlroRU_lu5OVn1z9UMfcgcexY6sJrEsOaiyE','2024-06-16 20:55:28.000000',20,'29bbfce8-6aec-4122-a430-3e78cd4c7cf6','2024-06-16 20:55:28.000000'),(16,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE0LCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODY5NjAzMCwiZXhwIjoxNzE4Njk2NjMwfQ.fdxFbVmg7-nw_5nz2kP52_bROdwSGr0sVkccg-VX6XA','2024-06-18 14:43:50.000000',20,'0c87b609-2c08-4e59-a557-1e29b610bcc1','2024-06-18 14:43:50.000000'),(17,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE0LCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODY5NzU1OCwiZXhwIjoxNzE4Njk4MTU4fQ.V6GpKxkTzNsKZl49i1443gONeTZhwULtRoJBm4jQGEc','2024-06-18 15:09:18.000000',20,'e38255c8-6d40-416c-9f96-aea1656b5cb4','2024-06-18 15:09:18.000000'),(18,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE0LCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODY5ODMxMCwiZXhwIjoxNzE4Njk4OTEwfQ.keb4LB15BjwwA4dLbtot8uiyTUdhcFLZDRBCv2dGMYU','2024-06-18 15:21:50.000000',20,'12889ff2-68b4-4a0e-a992-69879a342b4e','2024-06-18 15:21:50.000000'),(19,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE0LCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODcwMDM5MywiZXhwIjoxNzE4NzAwOTkzfQ.5JhswKrY9QhtRIxjJVNgGWSoH3JNSOtGaJWfNdy_FKA','2024-06-18 15:56:33.000000',20,'1253cff1-a4b7-4125-9e5b-ff069f49a513','2024-06-18 15:56:33.000000'),(20,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE0LCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODcwMDU0NywiZXhwIjoxNzE4NzAxMTQ3fQ.3uXiLA06qwiBPSi4cRpAiZFF68Cw8x_O_A_8kW0yVEc','2024-06-18 15:59:07.000000',20,'8a57df04-b5a7-42a9-9fdf-156ac459cbfe','2024-06-18 15:59:07.000000'),(21,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE0LCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODcwMDYzNSwiZXhwIjoxNzE4NzAxMjM1fQ.87VKI2rWz7ddGYL5l-ZqlOENXOy5dwV-BSMQc96nRfE','2024-06-18 16:00:35.000000',20,'90ff7bd4-3a85-4d8e-a924-f5c48d07c66b','2024-06-18 16:00:35.000000'),(22,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE0LCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODcwMjE3NiwiZXhwIjoxNzE4NzAyNzc2fQ.KsZcxztZUp2a-M4vE9P9hqRLlh2J2NVrupDL1CbDwgM','2024-06-18 16:26:16.000000',20,'708bbcdb-8a06-43a5-a330-212b5f570bd1','2024-06-18 16:26:16.000000'),(23,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE0LCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODcwMzY1NCwiZXhwIjoxNzE4NzA0MjU0fQ.wKVRncOqA9hoKd-R1_2tER9EXBvqToZycIFYAg4iFSI','2024-06-18 16:50:54.000000',20,'695fdbf8-f791-48c0-ad2c-909fef18ea9d','2024-06-18 16:50:54.000000'),(24,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE0LCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODcwMzY4NSwiZXhwIjoxNzE4NzA0Mjg1fQ.x6GiwhX8ZqnfsiU4rxlU2X2L5sQ1tzXLahQm1uJUPgs','2024-06-18 16:51:25.000000',20,'5e9c39cf-97f9-4bdd-8430-1a121e6bd254','2024-06-18 16:51:25.000000'),(25,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE0LCJzdWIiOiJ1c2VybmFtQGdtYWlsLmNvbSIsImlhdCI6MTcxODcwNDQyOCwiZXhwIjoxNzE4NzA1MDI4fQ.jViNowLmZiZIgFz4jMOpbZOhLN3yX5zbkqksXGUh3M8','2024-06-18 17:03:48.000000',20,'8379c184-437c-4895-9fd9-71e3554f71ee','2024-06-18 17:03:48.000000'),(26,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInN1YiI6InVzZXIxQGdtYWlsLmNvbSIsImlhdCI6MTcxODcwNDgzNiwiZXhwIjoxNzE4NzA1NDM2fQ.dH9KheMi56Vj8yx0vcByBScm5y0HzsAgXoN0dStwJlQ','2024-06-18 17:10:36.000000',4,'4a4200c7-0e0e-47a8-88a9-97da61f3c9bb','2024-06-18 17:10:36.000000'),(27,'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInN1YiI6InVzZXIxQGdtYWlsLmNvbSIsImlhdCI6MTcxODcwNTQ5OCwiZXhwIjoxNzE4NzA2MDk4fQ.eeZ0gvW_MfGsU9tdjvNh2pfSw2_iIe-64L1ogYrIzZ8','2024-06-18 17:21:38.000000',4,'ff544483-f591-4975-84be-f52b8a91735e','2024-06-18 17:21:38.000000'),(28,'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFmZm1lZGljYWxAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTg4MTQ3MTUsImV4cCI6MTcxODgxNTMxNX0.-SAxPvvP8qMUMkTuJ0ReCY8-dSYVNcmszKb3GMgTLho','2024-06-19 23:41:55.000000',17,'ba815854-6d92-46db-a422-ed37edf22af9','2024-06-19 23:41:55.000000');
 /*!40000 ALTER TABLE `refresh_token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -849,7 +849,7 @@ CREATE TABLE `web_user` (
                             PRIMARY KEY (`id`),
                             UNIQUE KEY `UK_30lhb0i5t6m3037ytkpswsxcu` (`account_id`),
                             CONSTRAINT `FKh1i9vc0mjqu60o2cgv0rq4ds1` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -858,7 +858,7 @@ CREATE TABLE `web_user` (
 
 LOCK TABLES `web_user` WRITE;
 /*!40000 ALTER TABLE `web_user` DISABLE KEYS */;
-INSERT INTO `web_user` VALUES (1,'1234567890','john_doe',1,'2024-06-10 19:29:18.000000',_binary '\0'),(2,'1234567890','john_doe',2,'2024-06-10 19:29:18.000000',_binary '\0'),(3,'1234567890','john_doe',3,'2024-06-10 19:29:18.000000',_binary '\0'),(4,'1234567890','nam',16,'2024-06-10 19:29:18.000000',_binary '\0'),(5,'1234567890','staffmedic',17,'2024-06-10 19:29:18.000000',_binary '\0');
+INSERT INTO `web_user` VALUES (1,'1234567890','john_doe',1,'2024-06-10 19:29:18.000000',_binary '\0'),(2,'1234567890','john_doe',2,'2024-06-10 19:29:18.000000',_binary '\0'),(3,'1234567890','john_doe',3,'2024-06-10 19:29:18.000000',_binary '\0'),(4,'1234567890','nam',16,'2024-06-10 19:29:18.000000',_binary '\0'),(5,'1234567890','staffmedic',17,'2024-06-10 19:29:18.000000',_binary '\0'),(6,'1234567890','vipmedic',19,'2002-12-02 07:00:00.000000',_binary '');
 /*!40000 ALTER TABLE `web_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -900,4 +900,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-12 12:19:18
+-- Dump completed on 2024-06-20  9:12:28
