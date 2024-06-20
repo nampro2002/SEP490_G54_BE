@@ -22,9 +22,9 @@ public class StepRecordController {
 
     @PostMapping
     public ApiResponse<StepRecord> createStepRecord(@RequestBody @Valid StepRecordDTO stepRecordDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<StepRecord>builder()
-                        .code(HttpStatus.CREATED.value())
+                        .code(HttpStatus.OK.value())
                         .result(stepRecordService.createStepRecord(stepRecordDTO))
                         .build()).getBody();
     }

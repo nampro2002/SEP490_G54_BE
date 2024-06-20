@@ -8,6 +8,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -43,6 +44,13 @@ public class StepRecordServiceImpl implements StepRecordService {
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
         stepRecord.setAppUserId(appUser);
+        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserIdAndWeekStartAndDate(
+                appUser.getId(),stepRecordDTO.getWeekStart(),stepRecordDTO.getDate()
+        );
+        if(!stepPlanExist.isEmpty()){
+            throw new AppException(ErrorCode.STEP_DAY_EXIST);
+        }
+
         return stepRecordRepository.save(stepRecord);
     }
 

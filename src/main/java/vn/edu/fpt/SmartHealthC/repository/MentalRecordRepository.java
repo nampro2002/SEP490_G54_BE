@@ -12,4 +12,7 @@ public interface MentalRecordRepository extends JpaRepository<MentalRecord, Inte
     List<Date> findDistinctDate(Integer userId);
     @Query("SELECT m FROM MentalRecord m WHERE m.appUserId.id = ?1 AND m.date = ?2")
     List<MentalRecord> findByAppUserIdAndDate(Integer userId, Date date);
+
+    @Query("SELECT m FROM MentalRecord m WHERE m.weekStart = ?1 AND m.date = ?2")
+    List<MentalRecord> findByWeekStartAndDate(Date weekStart, Date date);
 }

@@ -39,6 +39,13 @@ public class DietRecordServiceImpl implements DietRecordService {
         String email = authentication.getName();
         AppUser appUser = appUserService.findAppUserByEmail(email);
         dietRecord.setAppUserId(appUser);
+        List<DietRecord> dietPlanExist = dietRecordRepository.findByWeekStartAndDate(
+                dietRecordDTO.getWeekStart(),appUser.getId(),dietRecordDTO.getDate()
+        );
+        if(!dietPlanExist.isEmpty()){
+            throw new AppException(ErrorCode.DIET_DAY_EXIST);
+        }
+
         return  dietRecordRepository.save(dietRecord);
     }
 

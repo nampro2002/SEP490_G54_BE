@@ -23,9 +23,9 @@ public class DietRecordController {
 
     @PostMapping
     public ApiResponse<DietRecord> createDietRecord(@RequestBody @Valid DietRecordDTO dietRecordDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<DietRecord>builder()
-                        .code(HttpStatus.CREATED.value())
+                        .code(HttpStatus.OK.value())
                         .result(dietRecordService.createDietRecord(dietRecordDTO))
                         .build()).getBody();
     }

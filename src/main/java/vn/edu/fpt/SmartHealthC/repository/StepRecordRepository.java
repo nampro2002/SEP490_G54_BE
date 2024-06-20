@@ -14,4 +14,7 @@ public interface StepRecordRepository extends JpaRepository<StepRecord, Integer>
 
     @Query("SELECT s FROM StepRecord s WHERE s.appUserId.id = ?1 AND s.weekStart = ?2")
     List<StepRecord> findByAppUserIdAndWeekStart(Integer userId, Date date);
+
+    @Query("SELECT s FROM StepRecord s WHERE s.appUserId.id = ?1 AND s.weekStart = ?2 AND s.date= ?3")
+    List<StepRecord> findByAppUserIdAndWeekStartAndDate(Integer userId, Date weekStart, Date date);
 }

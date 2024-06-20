@@ -37,29 +37,41 @@ public class MentalRecordServiceImpl implements MentalRecordService {
 
     @Override
     public MentalRecordResponseDTO createMentalRecord(MentalRecordDTO mentalRecordDTO) {
-        MentalRecord mentalRecord =  MentalRecord.builder()
-                .status(false)
-                .weekStart(mentalRecordDTO.getWeekStart())
-                .date(mentalRecordDTO.getDate())
-                .build();
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-
         AppUser appUser = appUserService.findAppUserByEmail(email);
-        mentalRecord.setAppUserId(appUser);
-        Optional<MentalRule> mentalRule = mentalRuleRepository.findById(mentalRecordDTO.getMentalRuleId());
-        if(mentalRule.isEmpty()) {
-            throw new AppException(ErrorCode.MENTAL_RULE_NOT_FOUND);
+
+        List<MentalRecord> mentalRecordExist = mentalRecordRepository.findByWeekStartAndDate(
+                mentalRecordDTO.getWeekStart(),mentalRecordDTO.getDate()
+        );
+        if(!mentalRecordExist.isEmpty()){
+            throw new AppException(ErrorCode.MENTAL_PLAN_EXIST);
         }
-        mentalRecord.setMentalRule(mentalRule.get());
-        mentalRecord =  mentalRecordRepository.save(mentalRecord);
-        return MentalRecordResponseDTO.builder()
-                .appUserId(mentalRecord.getAppUserId().getId())
-                .status(mentalRecord.isStatus())
-                .weekStart(mentalRecord.getWeekStart())
-                .date(mentalRecord.getDate())
-                .mentalRuleId(mentalRecord.getMentalRule().getId())
-                .build();
+
+        for (Integer id : mentalRecordDTO.getMentalRuleId()) {
+            MentalRecord mentalRecord =  MentalRecord.builder()
+                    .status(false)
+                    .weekStart(mentalRecordDTO.getWeekStart())
+                    .date(mentalRecordDTO.getDate())
+                    .build();
+            mentalRecord.setAppUserId(appUser);
+            Optional<MentalRule> mentalRule = mentalRuleRepository.findById(id);
+            if(mentalRule.isEmpty()) {
+                throw new AppException(ErrorCode.MENTAL_RULE_NOT_FOUND);
+            }
+            mentalRecord.setMentalRule(mentalRule.get());
+            mentalRecordRepository.save(mentalRecord);
+        }
+
+//        return MentalRecordResponseDTO.builder()
+//                .appUserId(mentalRecord.getAppUserId().getId())
+//                .status(mentalRecord.isStatus())
+//                .weekStart(mentalRecord.getWeekStart())
+//                .date(mentalRecord.getDate())
+//                .mentalRuleId(mentalRecord.getMentalRule().getId())
+//                .build();
+        return null;
     }
 
     @Override

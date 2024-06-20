@@ -16,10 +16,11 @@ import vn.edu.fpt.SmartHealthC.repository.MedicineTypeRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineRecordService;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class MedicineRecordServiceImpl implements MedicineRecordService {
@@ -33,33 +34,61 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     private AppUserService appUserService;
 
     @Override
-    public MedicineRecordResponseDTO createMedicineRecord(MedicineRecordDTO medicineRecordDTO) {
-        MedicineRecord medicineRecord = MedicineRecord.builder()
-                .weekStart(medicineRecordDTO.getWeekStart())
-                .date(medicineRecordDTO.getDate())
-                .status(false)
-                .build();
+    public MedicineRecordResponseDTO createMedicineRecord(MedicineRecordDTO medicineRecordDTO) throws ParseException {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
-        medicineRecord.setAppUserId(appUser);
         Optional<MedicineType> medicineType = medicineTypeRepository.findById(medicineRecordDTO.getMedicineTypeId());
         if (medicineType.isEmpty()) {
             throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
         }
-        medicineRecord.setMedicineType(medicineType.get());
-        medicineRecord = medicineRecordRepository.save(medicineRecord);
-        return MedicineRecordResponseDTO.builder()
-                .id(medicineRecord.getId())
-                .appUserName(medicineRecord.getAppUserId().getName())
-                .medicineType(medicineRecord.getMedicineType().getTitle())
-                .weekStart(medicineRecord.getWeekStart())
-                .date(medicineRecord.getDate())
-                .status(medicineRecord.getStatus())
-                .build();
-    }
+        List<MedicineRecord> medicinePlanExist = medicineRecordRepository.
+        findByWeekStartMedicineAppUser(
+                medicineRecordDTO.getWeekStart(),
+                appUser.getId(),
+                medicineType.get().getId()
+                );
+        if (!medicinePlanExist.isEmpty()) {
+            throw new AppException(ErrorCode.MEDICINE_PLAN_EXIST);
+        }
+        Date dateCalculate;
+        Map<String , Integer> dayIndexMap = new HashMap<>();
+        dayIndexMap.put("MONDAY", 0);
+        dayIndexMap.put("TUESDAY", 1);
+        dayIndexMap.put("WEDNESDAY", 2);
+        dayIndexMap.put("THURSDAY", 3);
+        dayIndexMap.put("FRIDAY", 4);
+        dayIndexMap.put("SATURDAY", 5);
+        dayIndexMap.put("SUNDAY", 6);
+        int count = 0;
+        //Check schedule
+        for(String date : medicineRecordDTO.getSchedule()){
 
+            MedicineRecord medicineRecord = MedicineRecord.builder()
+                    .weekStart(medicineRecordDTO.getWeekStart())
+                    .status(false)
+                    .build();
+            medicineRecord.setAppUserId(appUser);
+            medicineRecord.setMedicineType(medicineType.get());
+            if (dayIndexMap.containsKey(date)) {
+                dateCalculate = calculateDate(medicineRecord.getWeekStart(), dayIndexMap.get(date));
+                medicineRecord.setDate(dateCalculate);
+                medicineRecordRepository.save(medicineRecord);
+            }
+        }
+        return null;
+    }
+    public Date calculateDate(Date date , int plus) throws ParseException {
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
+        firstWeekStart = firstWeekStart.plusDays(plus);
+
+        String formattedDate = firstWeekStart.format(formatter);
+        return formatDate.parse(formattedDate);
+    }
     @Override
     public MedicineRecordResponseDTO getMedicineRecordById(Integer id) {
         Optional<MedicineRecord> medicineRecord = medicineRecordRepository.findById(id);

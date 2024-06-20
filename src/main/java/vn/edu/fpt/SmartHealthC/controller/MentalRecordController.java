@@ -22,9 +22,9 @@ public class MentalRecordController {
 
     @PostMapping
     public ApiResponse<MentalRecordResponseDTO> createMentalRecord(@RequestBody @Valid MentalRecordDTO mentalRecordDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MentalRecordResponseDTO>builder()
-                        .code(HttpStatus.CREATED.value())
+                        .code(HttpStatus.OK.value())
                         .result( mentalRecordService.createMentalRecord(mentalRecordDTO))
                         .build()).getBody();
     }

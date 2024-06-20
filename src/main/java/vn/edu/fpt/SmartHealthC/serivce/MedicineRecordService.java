@@ -6,11 +6,12 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
 public interface MedicineRecordService {
-    MedicineRecordResponseDTO createMedicineRecord(MedicineRecordDTO medicineRecordDTO);
+    MedicineRecordResponseDTO createMedicineRecord(MedicineRecordDTO medicineRecordDTO) throws ParseException;
     MedicineRecordResponseDTO getMedicineRecordById(Integer id);
     MedicineRecord getMedicineRecordEntityById(Integer id);
     List<MedicineRecordListResDTO> getAllMedicineRecords(Integer userId);
