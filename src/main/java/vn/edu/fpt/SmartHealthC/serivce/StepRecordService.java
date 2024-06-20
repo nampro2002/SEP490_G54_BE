@@ -4,10 +4,11 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface StepRecordService {
-    StepRecord createStepRecord(StepRecordDTO stepRecordDTO);
+    StepRecord createStepRecord(StepRecordDTO stepRecordDTO) throws ParseException;
     StepRecord getStepRecordById(Integer id);
     List<StepRecordResListDTO> getAllStepRecords(Integer id);
     StepRecord updateStepRecord( Integer id, StepRecordDTO stepRecordDTO);

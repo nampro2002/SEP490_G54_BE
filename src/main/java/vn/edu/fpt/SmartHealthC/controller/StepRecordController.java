@@ -11,6 +11,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepReco
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class StepRecordController {
     private StepRecordService stepRecordService;
 
     @PostMapping
-    public ApiResponse<StepRecord> createStepRecord(@RequestBody @Valid StepRecordDTO stepRecordDTO) {
+    public ApiResponse<StepRecord> createStepRecord(@RequestBody @Valid StepRecordDTO stepRecordDTO) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<StepRecord>builder()
                         .code(HttpStatus.OK.value())

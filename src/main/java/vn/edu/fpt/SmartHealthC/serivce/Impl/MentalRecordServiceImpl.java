@@ -8,6 +8,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
@@ -18,6 +19,10 @@ import vn.edu.fpt.SmartHealthC.repository.MentalRuleRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,34 +40,54 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     @Autowired
     private AppUserService appUserService;
 
+    public Date calculateDate(Date date , int plus) throws ParseException {
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
+        firstWeekStart = firstWeekStart.plusDays(plus);
+
+        String formattedDate = firstWeekStart.format(formatter);
+        return formatDate.parse(formattedDate);
+    }
+
     @Override
-    public MentalRecordResponseDTO createMentalRecord(MentalRecordDTO mentalRecordDTO) {
+    public MentalRecordResponseDTO createMentalRecord(MentalRecordDTO mentalRecordDTO) throws ParseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         AppUser appUser = appUserService.findAppUserByEmail(email);
 
-        List<MentalRecord> mentalRecordExist = mentalRecordRepository.findByWeekStartAndDate(
-                mentalRecordDTO.getWeekStart(),mentalRecordDTO.getDate()
+        List<MentalRecord> mentalRecordExist = mentalRecordRepository.findByWeekStart(
+                mentalRecordDTO.getWeekStart()
         );
         if(!mentalRecordExist.isEmpty()){
             throw new AppException(ErrorCode.MENTAL_PLAN_EXIST);
         }
-
-        for (Integer id : mentalRecordDTO.getMentalRuleId()) {
-            MentalRecord mentalRecord =  MentalRecord.builder()
-                    .status(false)
-                    .weekStart(mentalRecordDTO.getWeekStart())
-                    .date(mentalRecordDTO.getDate())
-                    .build();
-            mentalRecord.setAppUserId(appUser);
-            Optional<MentalRule> mentalRule = mentalRuleRepository.findById(id);
-            if(mentalRule.isEmpty()) {
-                throw new AppException(ErrorCode.MENTAL_RULE_NOT_FOUND);
+        int count=0;
+        Date dateCalculate;
+        while(true){
+            if(count >= 7 ){
+                break;
             }
-            mentalRecord.setMentalRule(mentalRule.get());
-            mentalRecordRepository.save(mentalRecord);
+            dateCalculate = calculateDate(mentalRecordDTO.getWeekStart(), count);
+            for (Integer id : mentalRecordDTO.getMentalRuleId()) {
+                MentalRecord mentalRecord =  MentalRecord.builder()
+                        .status(false)
+                        .weekStart(mentalRecordDTO.getWeekStart())
+                        .date(dateCalculate)
+                        .build();
+                mentalRecord.setAppUserId(appUser);
+
+                Optional<MentalRule> mentalRule = mentalRuleRepository.findById(id);
+                if(mentalRule.isEmpty()) {
+                    throw new AppException(ErrorCode.MENTAL_RULE_NOT_FOUND);
+                }
+                mentalRecord.setMentalRule(mentalRule.get());
+                mentalRecordRepository.save(mentalRecord);
+            }
+            count++;
         }
+
 
 //        return MentalRecordResponseDTO.builder()
 //                .appUserId(mentalRecord.getAppUserId().getId())

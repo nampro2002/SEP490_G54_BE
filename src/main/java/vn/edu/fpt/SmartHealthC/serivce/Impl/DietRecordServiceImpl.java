@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.RecordPerDay;
+import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
@@ -16,6 +17,10 @@ import vn.edu.fpt.SmartHealthC.repository.DietRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -28,25 +33,48 @@ public class DietRecordServiceImpl implements DietRecordService {
     @Autowired
     private AppUserService appUserService;
 
+    public Date calculateDate(Date date , int plus) throws ParseException {
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
+        firstWeekStart = firstWeekStart.plusDays(plus);
+
+        String formattedDate = firstWeekStart.format(formatter);
+        return formatDate.parse(formattedDate);
+    }
+
     @Override
-    public DietRecord createDietRecord(DietRecordDTO dietRecordDTO) {
-        DietRecord dietRecord =  DietRecord.builder()
-                .dishPerDay(dietRecordDTO.getDishPerDay())
-                .weekStart(dietRecordDTO.getWeekStart())
-                .actualValue(dietRecordDTO.getActualValue())
-                .date(dietRecordDTO.getDate()).build();
+    public DietRecord createDietRecord(DietRecordDTO dietRecordDTO) throws ParseException {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         AppUser appUser = appUserService.findAppUserByEmail(email);
-        dietRecord.setAppUserId(appUser);
-        List<DietRecord> dietPlanExist = dietRecordRepository.findByWeekStartAndDate(
-                dietRecordDTO.getWeekStart(),appUser.getId(),dietRecordDTO.getDate()
+
+        List<DietRecord> dietPlanExist = dietRecordRepository.findByWeekStart(
+                dietRecordDTO.getWeekStart(),appUser.getId()
         );
         if(!dietPlanExist.isEmpty()){
             throw new AppException(ErrorCode.DIET_DAY_EXIST);
         }
+        int count = 0;
+        Date dateCalculate;
+        //Check schedule
+        while(true){
+            if(count >= 7 ){
+                break;
+            }
+            dateCalculate = calculateDate(dietRecordDTO.getWeekStart(), count);
+            DietRecord dietRecord =  DietRecord.builder()
+                    .dishPerDay(dietRecordDTO.getDishPerDay())
+                    .weekStart(dietRecordDTO.getWeekStart())
+                    .actualValue(dietRecordDTO.getActualValue())
+                    .date(dateCalculate).build();
 
-        return  dietRecordRepository.save(dietRecord);
+            dietRecord.setAppUserId(appUser);
+            dietRecordRepository.save(dietRecord);
+            count++;
+        }
+        return null;
     }
 
     @Override
