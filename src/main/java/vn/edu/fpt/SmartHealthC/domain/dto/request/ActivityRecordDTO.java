@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeActivity;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,8 +26,10 @@ public class ActivityRecordDTO {
     private Float planDuration;
 
     private Float actualDuration = (float) 0;
-    @NotNull(message = "missing date")
+//    @NotNull(message = "missing date")
     private Date date;
+
+    private List<String> schedule;
 
 
 }

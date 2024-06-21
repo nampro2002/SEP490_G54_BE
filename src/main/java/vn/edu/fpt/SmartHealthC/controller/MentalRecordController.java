@@ -11,6 +11,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -21,10 +22,10 @@ public class MentalRecordController {
     private MentalRecordService mentalRecordService;
 
     @PostMapping
-    public ApiResponse<MentalRecordResponseDTO> createMentalRecord(@RequestBody @Valid MentalRecordDTO mentalRecordDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+    public ApiResponse<MentalRecordResponseDTO> createMentalRecord(@RequestBody @Valid MentalRecordDTO mentalRecordDTO) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MentalRecordResponseDTO>builder()
-                        .code(HttpStatus.CREATED.value())
+                        .code(HttpStatus.OK.value())
                         .result( mentalRecordService.createMentalRecord(mentalRecordDTO))
                         .build()).getBody();
     }

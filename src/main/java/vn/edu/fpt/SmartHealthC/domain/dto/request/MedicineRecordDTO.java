@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineType;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,5 +24,5 @@ public class MedicineRecordDTO {
     private Date date;
     @NotNull(message = "missing status")
     private Boolean status;
-
+    private List<String> schedule;
 }

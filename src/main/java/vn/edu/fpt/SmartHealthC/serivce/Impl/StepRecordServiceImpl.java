@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
@@ -16,6 +15,10 @@ import vn.edu.fpt.SmartHealthC.repository.StepRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,19 +34,47 @@ public class StepRecordServiceImpl implements StepRecordService {
     @Autowired
     private AppUserService appUserService;
 
+    public Date calculateDate(Date date , int plus) throws ParseException {
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
+        firstWeekStart = firstWeekStart.plusDays(plus);
+
+        String formattedDate = firstWeekStart.format(formatter);
+        return formatDate.parse(formattedDate);
+    }
+
     @Override
-    public StepRecord createStepRecord(StepRecordDTO stepRecordDTO) {
-        StepRecord stepRecord = StepRecord.builder()
-                .plannedStepPerDay(stepRecordDTO.getPlannedStepPerDay())
-                .actualValue(0f)
-                .weekStart(stepRecordDTO.getWeekStart())
-                .date(stepRecordDTO.getDate()).build();
+    public StepRecord createStepRecord(StepRecordDTO stepRecordDTO) throws ParseException {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
-        stepRecord.setAppUserId(appUser);
-        return stepRecordRepository.save(stepRecord);
+
+        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserIdAndWeekStart(
+                appUser.getId(),stepRecordDTO.getWeekStart()
+        );
+        if(!stepPlanExist.isEmpty()){
+            throw new AppException(ErrorCode.STEP_DAY_EXIST);
+        }
+        int count=0;
+        Date dateCalculate;
+        while(true){
+            if(count >= 7 ){
+                break;
+            }
+            dateCalculate = calculateDate(stepRecordDTO.getWeekStart(), count);
+            StepRecord stepRecord = StepRecord.builder()
+                    .plannedStepPerDay(stepRecordDTO.getPlannedStepPerDay())
+                    .actualValue(0f)
+                    .weekStart(stepRecordDTO.getWeekStart())
+                    .date(dateCalculate).build();
+            stepRecord.setAppUserId(appUser);
+            stepRecordRepository.save(stepRecord);
+            count++;
+        }
+        return null;
     }
 
     @Override

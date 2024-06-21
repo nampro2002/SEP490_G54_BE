@@ -14,6 +14,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineRecordService;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,10 +28,10 @@ public class MedicineRecordController {
     private AppUserRepository appUserRepository;
 
     @PostMapping
-    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody @Valid MedicineRecordDTO medicineRecordDTO) {
-        return  ResponseEntity.status(HttpStatus.CREATED)
+    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody @Valid MedicineRecordDTO medicineRecordDTO) throws ParseException {
+        return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicineRecordResponseDTO>builder()
-                        .code(HttpStatus.CREATED.value())
+                        .code(HttpStatus.OK.value())
                         .result(medicineRecordService.createMedicineRecord(medicineRecordDTO))
                         .build()).getBody();
     }

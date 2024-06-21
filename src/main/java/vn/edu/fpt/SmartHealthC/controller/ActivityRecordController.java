@@ -11,6 +11,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.serivce.ActivityRecordService;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -21,12 +22,12 @@ public class ActivityRecordController {
     private ActivityRecordService activityRecordService;
 
     @PostMapping
-    public ApiResponse<ActivityRecord> createActivityRecord(@RequestBody @Valid ActivityRecordDTO activityRecordDTO) {
+    public ApiResponse<ActivityRecord> createActivityRecord(@RequestBody @Valid ActivityRecordDTO activityRecordDTO) throws ParseException {
 
         ActivityRecord createdActivityRecord= activityRecordService.createActivityRecord(activityRecordDTO);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ActivityRecord>builder()
-                        .code(HttpStatus.CREATED.value())
+                        .code(HttpStatus.OK.value())
                         .result(createdActivityRecord)
                         .build()).getBody();
     }

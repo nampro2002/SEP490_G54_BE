@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,8 +19,8 @@ public class MentalRecordDTO {
     private boolean status;
     @NotNull(message = "missing weekStart")
     private Date weekStart;
-    @NotNull(message = "missing mentalRuleId")
-    private int mentalRuleId;
+//    @NotNull(message = "missing mentalRuleId")
+    private List<Integer> mentalRuleId;
     @NotNull(message = "missing date")
     private Date date;
 

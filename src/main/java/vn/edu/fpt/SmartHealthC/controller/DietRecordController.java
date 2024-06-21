@@ -11,6 +11,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietReco
 import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
 import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +23,10 @@ public class DietRecordController {
     private DietRecordService dietRecordService;
 
     @PostMapping
-    public ApiResponse<DietRecord> createDietRecord(@RequestBody @Valid DietRecordDTO dietRecordDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+    public ApiResponse<DietRecord> createDietRecord(@RequestBody @Valid DietRecordDTO dietRecordDTO) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<DietRecord>builder()
-                        .code(HttpStatus.CREATED.value())
+                        .code(HttpStatus.OK.value())
                         .result(dietRecordService.createDietRecord(dietRecordDTO))
                         .build()).getBody();
     }
