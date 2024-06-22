@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface MentalRecordRepository extends JpaRepository<MentalRecord, Integer> {
     @Query("SELECT DISTINCT m.date FROM MentalRecord m WHERE m.appUserId.id = ?1")
@@ -13,6 +14,9 @@ public interface MentalRecordRepository extends JpaRepository<MentalRecord, Inte
     @Query("SELECT m FROM MentalRecord m WHERE m.appUserId.id = ?1 AND m.date = ?2")
     List<MentalRecord> findByAppUserIdAndDate(Integer userId, Date date);
 
-    @Query("SELECT m FROM MentalRecord m WHERE m.weekStart = ?1")
-    List<MentalRecord> findByWeekStart(Date weekStart);
+    @Query("SELECT m FROM MentalRecord m WHERE m.weekStart = ?1 AND m.appUserId.id = ?2")
+    List<MentalRecord> findByWeekStartAndAppUserId(Date weekStart,Integer userId);
+
+    @Query("SELECT m FROM MentalRecord m WHERE m.date = ?1 AND m.appUserId.id = ?2 AND m.mentalRule.id= ?3")
+    Optional<MentalRecord> findByDateAndMentalRule(Date date, Integer userId, Integer mentalRuleId);
 }

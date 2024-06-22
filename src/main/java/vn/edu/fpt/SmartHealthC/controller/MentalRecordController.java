@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordCreateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
@@ -22,7 +23,7 @@ public class MentalRecordController {
     private MentalRecordService mentalRecordService;
 
     @PostMapping
-    public ApiResponse<MentalRecordResponseDTO> createMentalRecord(@RequestBody @Valid MentalRecordDTO mentalRecordDTO) throws ParseException {
+    public ApiResponse<MentalRecordResponseDTO> createMentalRecord(@RequestBody @Valid MentalRecordCreateDTO mentalRecordDTO) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MentalRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
@@ -48,12 +49,12 @@ public class MentalRecordController {
                         .build()).getBody();
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<MentalRecordResponseDTO> updateMentalRecord(@PathVariable Integer id, @RequestBody @Valid MentalRecordDTO mentalRecordDTO) {
+    @PutMapping("")
+    public ApiResponse<MentalRecordResponseDTO> updateMentalRecord(@RequestBody @Valid MentalRecordUpdateDTO mentalRecordDTO) {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MentalRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(mentalRecordService.updateMentalRecord(id,mentalRecordDTO))
+                        .result(mentalRecordService.updateMentalRecord(mentalRecordDTO))
                         .build()).getBody();
     }
 

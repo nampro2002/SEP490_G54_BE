@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineType;
 
 import java.util.Date;
 import java.util.List;
@@ -15,14 +14,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MedicineRecordDTO {
+public class MentalRecordCreateDTO {
+
     @NotNull(message = "missing weekStart")
     private Date weekStart;
-    @NotNull(message = "missing medicineTypeId")
-    private int medicineTypeId;
-    @NotNull(message = "missing date")
-    private Date date;
-    @NotNull(message = "missing status")
-    private Boolean status;
-    private List<String> schedule;
+    @NotNull(message = "missing mentalRuleId")
+    private List<Integer> mentalRuleId;
+
+
 }

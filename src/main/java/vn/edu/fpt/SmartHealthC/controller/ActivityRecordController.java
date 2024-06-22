@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordCreateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.ActivityRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
@@ -22,7 +23,7 @@ public class ActivityRecordController {
     private ActivityRecordService activityRecordService;
 
     @PostMapping
-    public ApiResponse<ActivityRecord> createActivityRecord(@RequestBody @Valid ActivityRecordDTO activityRecordDTO) throws ParseException {
+    public ApiResponse<ActivityRecord> createActivityRecord(@RequestBody @Valid ActivityRecordCreateDTO activityRecordDTO) throws ParseException {
 
         ActivityRecord createdActivityRecord= activityRecordService.createActivityRecord(activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
@@ -50,9 +51,9 @@ public class ActivityRecordController {
                         .build()).getBody();
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<ActivityRecord> updateActivityRecord(@PathVariable Integer id, @RequestBody @Valid ActivityRecordDTO activityRecordDTO) {
-        ActivityRecord updatedActivityRecord = activityRecordService.updateActivityRecord(id, activityRecordDTO);
+    @PutMapping("")
+    public ApiResponse<ActivityRecord> updateActivityRecord(@RequestBody @Valid ActivityRecordUpdateDTO activityRecordDTO) {
+        ActivityRecord updatedActivityRecord = activityRecordService.updateActivityRecord(activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ActivityRecord>builder()
                         .code(HttpStatus.OK.value())

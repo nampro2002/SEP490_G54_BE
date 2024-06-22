@@ -6,24 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DietRecordDTO {
-    @NotNull(message = "missing appUserId")
-    private int appUserId;
-    @NotNull(message = "missing dishPerDay")
-    private int  dishPerDay;
-    @NotNull(message = "missing weekStart")
-    private Date weekStart;
+public class MedicineRecordUpdateDTO {
+    @NotNull(message = "missing status")
+    private Boolean status;
     @NotNull(message = "missing date")
     private Date date;
-
-    private float  actualValue = 0;
-
+    @NotNull(message = "missing medicineTypeId")
+    private List<Integer> medicineTypeId;
 }

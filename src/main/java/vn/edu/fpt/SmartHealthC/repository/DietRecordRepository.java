@@ -8,6 +8,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface DietRecordRepository extends JpaRepository<DietRecord, Integer> {
     @Query("SELECT DISTINCT weekStart FROM DietRecord WHERE appUserId.id = ?1")
@@ -15,6 +16,6 @@ public interface DietRecordRepository extends JpaRepository<DietRecord, Integer>
     @Query("SELECT d FROM DietRecord d WHERE d.weekStart = ?1 AND d.appUserId.id = ?2")
     List<DietRecord> findByWeekStart(Date weekStart, Integer userId);
 
-    @Query("SELECT d FROM DietRecord d WHERE d.weekStart = ?1 AND d.appUserId.id = ?2 AND d.date = ?3 ")
-    List<DietRecord> findByWeekStartAndDate(Date weekStart, Integer userId,Date date);
+    @Query("SELECT d FROM DietRecord d WHERE d.date = ?1 AND d.appUserId.id = ?2  ")
+    Optional<DietRecord> findByDate(Date date, Integer userId);
 }

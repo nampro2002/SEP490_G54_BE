@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordCreateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
@@ -23,10 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class MentalRecordServiceImpl implements MentalRecordService {
@@ -43,6 +41,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     public Date calculateDate(Date date , int plus) throws ParseException {
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
         LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
         firstWeekStart = firstWeekStart.plusDays(plus);
 
@@ -51,14 +50,14 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     }
 
     @Override
-    public MentalRecordResponseDTO createMentalRecord(MentalRecordDTO mentalRecordDTO) throws ParseException {
+    public MentalRecordResponseDTO createMentalRecord(MentalRecordCreateDTO mentalRecordDTO) throws ParseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         AppUser appUser = appUserService.findAppUserByEmail(email);
 
-        List<MentalRecord> mentalRecordExist = mentalRecordRepository.findByWeekStart(
-                mentalRecordDTO.getWeekStart()
+        List<MentalRecord> mentalRecordExist = mentalRecordRepository.findByWeekStartAndAppUserId(
+                mentalRecordDTO.getWeekStart(),appUser.getId()
         );
         if(!mentalRecordExist.isEmpty()){
             throw new AppException(ErrorCode.MENTAL_PLAN_EXIST);
@@ -148,19 +147,22 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     }
 
     @Override
-    public MentalRecordResponseDTO updateMentalRecord(Integer id,MentalRecordDTO mentalRecordDTO) {
-        MentalRecord mentalRecord =  getMentalRecordEntityById(id);
-        mentalRecord.setStatus(mentalRecordDTO.isStatus());
-        mentalRecord.setWeekStart(mentalRecordDTO.getWeekStart());
-        mentalRecord.setDate(mentalRecordDTO.getDate());
-        mentalRecord = mentalRecordRepository.save(mentalRecord);
-        return MentalRecordResponseDTO.builder()
-                .appUserId(mentalRecord.getAppUserId().getId())
-                .status(mentalRecord.isStatus())
-                .weekStart(mentalRecord.getWeekStart())
-                .date(mentalRecord.getDate())
-                .mentalRuleId(mentalRecord.getMentalRule().getId())
-                .build();
+    public MentalRecordResponseDTO updateMentalRecord(MentalRecordUpdateDTO mentalRecordDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        for (Integer rule : mentalRecordDTO.getMentalRuleId()){
+            Optional<MentalRecord> mentalRecord = mentalRecordRepository.findByDateAndMentalRule(
+                    mentalRecordDTO.getDate(),appUser.getId(),rule);
+            if (mentalRecord.isEmpty()) {
+                throw new AppException(ErrorCode.MENTAL_RULE_IN_PLAN_NOT_FOUND);
+            }
+            MentalRecord mentalRecordUpdate =getMentalRecordEntityById(mentalRecord.get().getId());
+            mentalRecordUpdate.setDate(mentalRecordDTO.getDate());
+            mentalRecordUpdate.setStatus(mentalRecordDTO.getStatus());
+            mentalRecordRepository.save(mentalRecordUpdate);
+        }
+        return null;
     }
 
     @Override
