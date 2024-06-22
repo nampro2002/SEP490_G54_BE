@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordCreateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.ActivityRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
@@ -32,7 +33,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     private AppUserService appUserService;
 
     @Override
-    public ActivityRecord createActivityRecord(ActivityRecordDTO activityRecordDTO) throws ParseException {
+    public ActivityRecord createActivityRecord(ActivityRecordCreateDTO activityRecordDTO) throws ParseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -79,6 +80,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     public Date calculateDate(Date date , int plus) throws ParseException {
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
         LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
         firstWeekStart = firstWeekStart.plusDays(plus);
 
@@ -139,16 +141,21 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     }
 
     @Override
-    public ActivityRecord updateActivityRecord(Integer id, ActivityRecordDTO activityRecordDTO) {
+    public ActivityRecord updateActivityRecord( ActivityRecordUpdateDTO activityRecordDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
 
-        ActivityRecord activityRecord = getActivityRecordById(id);
-        activityRecord.setDate(activityRecordDTO.getDate());
-        activityRecord.setWeekStart(activityRecordDTO.getWeekStart());
-        activityRecord.setPlanDuration(activityRecordDTO.getPlanDuration());
-        activityRecord.setActualDuration(activityRecordDTO.getActualDuration());
-        activityRecord.setPlanType(activityRecordDTO.getPlanType());
-        activityRecord.setActualType(activityRecordDTO.getActualType());
-        return  activityRecordRepository.save(activityRecord);
+        Optional<ActivityRecord> activityRecord = activityRecordRepository.findByDate(activityRecordDTO.getDate(),appUser.getId());
+        if(activityRecord.isEmpty()) {
+            throw new AppException(ErrorCode.ACTIVITY_DAY_NOT_FOUND);
+        }
+
+        ActivityRecord activityRecordUpdate =getActivityRecordById(activityRecord.get().getId());
+        activityRecordUpdate.setDate(activityRecordDTO.getDate());
+        activityRecordUpdate.setActualDuration(activityRecordDTO.getActualDuration());
+        activityRecordUpdate.setActualType(activityRecordDTO.getActualType());
+        return  activityRecordRepository.save(activityRecordUpdate);
     }
 
     @Override

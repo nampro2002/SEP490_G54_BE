@@ -15,4 +15,7 @@ public interface BloodPressureRecordRepository extends JpaRepository<BloodPressu
     List<Date> findDistinctWeek(Integer id);
     @Query("SELECT b FROM BloodPressureRecord b WHERE b.weekStart = ?1 AND b.appUserId.id = ?2")
     List<BloodPressureRecord> findByWeekStart(Date weekStart, Integer userId);
+
+    @Query("SELECT b FROM BloodPressureRecord b WHERE b.date = ?1 AND b.appUserId.id = ?2")
+    List<BloodPressureRecord> findByDate(Date weekStart, Integer userId);
 }

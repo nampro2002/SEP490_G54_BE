@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordCreateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
@@ -19,10 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class StepRecordServiceImpl implements StepRecordService {
@@ -37,6 +35,7 @@ public class StepRecordServiceImpl implements StepRecordService {
     public Date calculateDate(Date date , int plus) throws ParseException {
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
         LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
         firstWeekStart = firstWeekStart.plusDays(plus);
 
@@ -45,7 +44,7 @@ public class StepRecordServiceImpl implements StepRecordService {
     }
 
     @Override
-    public StepRecord createStepRecord(StepRecordDTO stepRecordDTO) throws ParseException {
+    public StepRecord createStepRecord(StepRecordCreateDTO stepRecordDTO) throws ParseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -56,7 +55,7 @@ public class StepRecordServiceImpl implements StepRecordService {
                 appUser.getId(),stepRecordDTO.getWeekStart()
         );
         if(!stepPlanExist.isEmpty()){
-            throw new AppException(ErrorCode.STEP_DAY_EXIST);
+            throw new AppException(ErrorCode.STEP_PLAN_EXIST);
         }
         int count=0;
         Date dateCalculate;
@@ -124,13 +123,23 @@ public class StepRecordServiceImpl implements StepRecordService {
     }
 
     @Override
-    public StepRecord updateStepRecord(Integer id, StepRecordDTO stepRecordDTO) {
-        StepRecord stepRecord = getStepRecordById(id);
-        stepRecord.setActualValue(stepRecordDTO.getActualValue());
-        stepRecord.setPlannedStepPerDay(stepRecordDTO.getPlannedStepPerDay());
-        stepRecord.setWeekStart(stepRecordDTO.getWeekStart());
-        stepRecord.setDate(stepRecordDTO.getDate());
-        return stepRecordRepository.save(stepRecord);
+    public StepRecord updateStepRecord(StepRecordUpdateDTO stepRecordDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+
+        Optional<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserIdAndDate(
+                appUser.getId(),stepRecordDTO.getDate()
+        );
+        if(stepPlanExist.isEmpty()){
+            throw new AppException(ErrorCode.STEP_DAY_NOT_FOUND);
+        }
+        StepRecord stepRecordUpdate = getStepRecordById(stepPlanExist.get().getId());
+        stepRecordUpdate.setActualValue(stepRecordDTO.getActualValue());
+        stepRecordUpdate.setDate(stepRecordDTO.getDate());
+        stepRecordRepository.save(stepRecordUpdate);
+        return null;
     }
 
     @Override

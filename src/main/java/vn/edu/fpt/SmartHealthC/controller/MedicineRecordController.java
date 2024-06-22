@@ -5,18 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineRecordService;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/medicine-records")
@@ -28,7 +26,7 @@ public class MedicineRecordController {
     private AppUserRepository appUserRepository;
 
     @PostMapping
-    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody @Valid MedicineRecordDTO medicineRecordDTO) throws ParseException {
+    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody @Valid MedicineRecordCreateDTO medicineRecordDTO) throws ParseException {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicineRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
@@ -54,12 +52,12 @@ public class MedicineRecordController {
                         .build()).getBody();
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<MedicineRecordResponseDTO> updateMedicineRecord(@PathVariable Integer id,@RequestBody @Valid MedicineRecordDTO medicineRecordDTO) {
+    @PutMapping("")
+    public ApiResponse<MedicineRecordResponseDTO> updateMedicineRecord(@RequestBody @Valid MedicineRecordUpdateDTO medicineRecordDTO) {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicineRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicineRecordService.updateMedicineRecord(id,medicineRecordDTO))
+                        .result(medicineRecordService.updateMedicineRecord(medicineRecordDTO))
                         .build()).getBody();
     }
 

@@ -9,6 +9,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.Blood
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
@@ -39,6 +40,13 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         String email = authentication.getName();
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
+        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findByDate(
+                bloodPressureRecordDTO.getDate(),appUser.getId()
+        );
+        if(!bloodPressureRecordListExits.isEmpty()){
+            throw new AppException(ErrorCode.BLOOD_PRESSURE_DAY_EXIST);
+        }
+
 
         bloodPressureRecord.setAppUserId(appUser);
         return bloodPressureRecordRepository.save(bloodPressureRecord);

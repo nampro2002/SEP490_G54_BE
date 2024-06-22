@@ -8,6 +8,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.WeightRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -39,6 +40,12 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         String email = authentication.getName();
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
+        List<WeightRecord> weightRecordListExits = weightRecordRepository.findByDate(
+                weightRecordDTO.getDate(),appUser.getId()
+        );
+        if(!weightRecordListExits.isEmpty()){
+            throw new AppException(ErrorCode.WEIGHT_RECORD_DAY_EXIST);
+        }
         weightRecord.setAppUserId(appUser);
         return  weightRecordRepository.save(weightRecord);
     }

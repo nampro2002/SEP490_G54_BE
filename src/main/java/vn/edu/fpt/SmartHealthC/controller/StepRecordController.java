@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordCreateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
@@ -22,7 +23,7 @@ public class StepRecordController {
     private StepRecordService stepRecordService;
 
     @PostMapping
-    public ApiResponse<StepRecord> createStepRecord(@RequestBody @Valid StepRecordDTO stepRecordDTO) throws ParseException {
+    public ApiResponse<StepRecord> createStepRecord(@RequestBody @Valid StepRecordCreateDTO stepRecordDTO) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<StepRecord>builder()
                         .code(HttpStatus.OK.value())
@@ -48,12 +49,12 @@ public class StepRecordController {
                         .build()).getBody();
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<StepRecord> updateStepRecord(@PathVariable Integer id, @RequestBody @Valid StepRecordDTO stepRecordDTO) {
+    @PutMapping("")
+    public ApiResponse<StepRecord> updateStepRecord( @RequestBody @Valid StepRecordUpdateDTO stepRecordDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<StepRecord>builder()
                         .code(HttpStatus.OK.value())
-                        .result(stepRecordService.updateStepRecord(id, stepRecordDTO))
+                        .result(stepRecordService.updateStepRecord(stepRecordDTO))
                         .build()).getBody();
     }
 

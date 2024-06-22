@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordCreateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
@@ -13,7 +14,6 @@ import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/diet-records")
@@ -23,7 +23,7 @@ public class DietRecordController {
     private DietRecordService dietRecordService;
 
     @PostMapping
-    public ApiResponse<DietRecord> createDietRecord(@RequestBody @Valid DietRecordDTO dietRecordDTO) throws ParseException {
+    public ApiResponse<DietRecord> createDietRecord(@RequestBody @Valid DietRecordCreateDTO dietRecordDTO) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<DietRecord>builder()
                         .code(HttpStatus.OK.value())
@@ -49,12 +49,12 @@ public class DietRecordController {
                         .build()).getBody();
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<DietRecord> updateDietRecord(@PathVariable Integer id, @RequestBody @Valid DietRecordDTO dietRecordDTO) {
+    @PutMapping("")
+    public ApiResponse<DietRecord> updateDietRecord(@RequestBody @Valid DietRecordUpdateDTO dietRecordDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<DietRecord>builder()
                         .code(HttpStatus.OK.value())
-                        .result(dietRecordService.updateDietRecord(id, dietRecordDTO))
+                        .result(dietRecordService.updateDietRecord(dietRecordDTO))
                         .build()).getBody();
     }
 

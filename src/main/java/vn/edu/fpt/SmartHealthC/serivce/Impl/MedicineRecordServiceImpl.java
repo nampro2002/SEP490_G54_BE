@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
@@ -34,7 +35,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     private AppUserService appUserService;
 
     @Override
-    public MedicineRecordResponseDTO createMedicineRecord(MedicineRecordDTO medicineRecordDTO) throws ParseException {
+    public MedicineRecordResponseDTO createMedicineRecord(MedicineRecordCreateDTO medicineRecordDTO) throws ParseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -83,6 +84,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     public Date calculateDate(Date date , int plus) throws ParseException {
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
         LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
         firstWeekStart = firstWeekStart.plusDays(plus);
 
@@ -140,20 +142,23 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     }
 
     @Override
-    public MedicineRecordResponseDTO updateMedicineRecord(Integer id, MedicineRecordDTO medicineRecordDTO) {
-        MedicineRecord medicineRecord = getMedicineRecordEntityById(id);
-        medicineRecord.setWeekStart(medicineRecordDTO.getWeekStart());
-        medicineRecord.setDate(medicineRecordDTO.getDate());
-        medicineRecord.setStatus(medicineRecordDTO.getStatus());
-        medicineRecordRepository.save(medicineRecord);
-        return MedicineRecordResponseDTO.builder()
-                .id(medicineRecord.getId())
-                .appUserName(medicineRecord.getAppUserId().getName())
-                .medicineType(medicineRecord.getMedicineType().getTitle())
-                .weekStart(medicineRecord.getWeekStart())
-                .date(medicineRecord.getDate())
-                .status(medicineRecord.getStatus())
-                .build();
+    public MedicineRecordResponseDTO updateMedicineRecord(MedicineRecordUpdateDTO medicineRecordDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        for (Integer type : medicineRecordDTO.getMedicineTypeId()){
+            Optional<MedicineRecord> medicineRecord = medicineRecordRepository.findByDateAndMedicine(
+                    medicineRecordDTO.getDate(),appUser.getId(),type);
+            if (medicineRecord.isEmpty()) {
+                throw new AppException(ErrorCode.MEDICINE_DAY_NOT_FOUND);
+            }
+           MedicineRecord medicineRecordUpdate =getMedicineRecordEntityById(medicineRecord.get().getId());
+            medicineRecordUpdate.setDate(medicineRecordDTO.getDate());
+            medicineRecordUpdate.setStatus(medicineRecordDTO.getStatus());
+            medicineRecordRepository.save(medicineRecordUpdate);
+        }
+
+        return null;
     }
 
     @Override

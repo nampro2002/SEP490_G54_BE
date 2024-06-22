@@ -7,6 +7,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface StepRecordRepository extends JpaRepository<StepRecord, Integer> {
     @Query("SELECT DISTINCT s.weekStart FROM StepRecord s WHERE s.appUserId.id = ?1")
@@ -14,4 +15,7 @@ public interface StepRecordRepository extends JpaRepository<StepRecord, Integer>
 
     @Query("SELECT s FROM StepRecord s WHERE s.appUserId.id = ?1 AND s.weekStart = ?2")
     List<StepRecord> findByAppUserIdAndWeekStart(Integer userId, Date date);
+
+    @Query("SELECT s FROM StepRecord s WHERE s.appUserId.id = ?1 AND s.date = ?2")
+    Optional<StepRecord> findByAppUserIdAndDate(Integer userId, Date date);
 }

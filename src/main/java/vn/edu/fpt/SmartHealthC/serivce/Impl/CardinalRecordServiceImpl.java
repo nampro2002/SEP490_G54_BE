@@ -30,6 +30,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
 
     @Override
     public CardinalRecord createCardinalRecord(CardinalRecordDTO CardinalRecordDTO) {
+
         CardinalRecord cardinalRecord = CardinalRecord.builder()
                 .Cholesterol(CardinalRecordDTO.getCholesterol())
                 .BloodSugar(CardinalRecordDTO.getBloodSugar())
@@ -42,6 +43,14 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
         cardinalRecord.setAppUserId(appUser);
+
+        List<CardinalRecord> cardinalRecordListExits = cardinalRecordRepository.findByDateAndTimeMeasure(
+            CardinalRecordDTO.getDate(),appUser.getId(),CardinalRecordDTO.getTimeMeasure()
+        );
+        if(!cardinalRecordListExits.isEmpty()){
+            throw new AppException(ErrorCode.CARDINAL_TYPE_DAY_EXIST);
+        }
+
         return cardinalRecordRepository.save(cardinalRecord);
     }
 
