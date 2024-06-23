@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UpdatePasswordRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
@@ -16,7 +17,7 @@ public interface AccountService {
 
     boolean activateAccount(Integer id);
 
-    ResponsePaging<List<AppUserResponseDTO>> getPendingAccount(Integer pageNo);
+    ResponsePaging<List<AppUserResponseDTO>> getPendingAccount(Integer pageNo, TypeAccount type);
     List<AvailableMSResponseDTO> getAvailableMS();
 
     Account changePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO);

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
@@ -43,12 +44,20 @@ public class DashboardController {
                         .build()).getBody();
     }
 
-    @GetMapping("/register-request")
+    @GetMapping("/register-request/app-user")
     public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getUserPendingList(@RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ResponsePaging<List<AppUserResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(accountService.getPendingAccount(pageNo - 1))
+                        .result(accountService.getPendingAccount(pageNo - 1, TypeAccount.USER))
+                        .build()).getBody();
+    }
+    @GetMapping("/register-request/doctor")
+    public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getDoctorPendingList(@RequestParam(defaultValue = "1") Integer pageNo) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ResponsePaging<List<AppUserResponseDTO>>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(accountService.getPendingAccount(pageNo - 1, TypeAccount.DOCTOR))
                         .build()).getBody();
     }
     @GetMapping("/assign-pending")
