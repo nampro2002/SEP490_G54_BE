@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicinePLanResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
@@ -17,4 +18,5 @@ public interface MedicineRecordService {
     List<MedicineRecordListResDTO> getAllMedicineRecords(Integer userId);
     MedicineRecordResponseDTO updateMedicineRecord(MedicineRecordUpdateDTO medicineRecordDTO) throws ParseException;
     MedicineRecordResponseDTO deleteMedicineRecord(Integer id);
+    List<MedicinePLanResponseDTO> getAllMedicinePlans(String weekStart) throws ParseException;
 }

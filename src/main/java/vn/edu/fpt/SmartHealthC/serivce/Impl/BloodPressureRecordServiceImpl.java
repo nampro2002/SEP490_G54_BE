@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
@@ -148,6 +149,58 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         BloodPressureRecord bloodPressureRecord = getBloodPressureRecordById(id);
         bloodPressureRecordRepository.deleteById(id);
         return bloodPressureRecord;
+    }
+
+    @Override
+    public List<BloodPressureResponseChartDTO> getDataChart() throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        int count = 5;
+        List<BloodPressureResponseChartDTO> bloodPressureResponseChartDTOList = new ArrayList<>();
+        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.getId());
+        bloodPressureRecordListExits.sort(new Comparator<BloodPressureRecord>() {
+            @Override
+            public int compare(BloodPressureRecord recordDateSmaller, BloodPressureRecord recordDateBigger) {
+                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
+            }
+        });
+
+            for (BloodPressureRecord bloodPressureRecord : bloodPressureRecordListExits) {
+                String smallerDateStr= formatDate.format(bloodPressureRecord.getDate());
+                Date smallerDate = formatDate.parse(smallerDateStr);
+                BloodPressureResponseChartDTO bloodPressureResponseChartDTO = new BloodPressureResponseChartDTO();
+                if(smallerDate.before(date)){
+                    bloodPressureResponseChartDTO.setDate(bloodPressureRecord.getDate());
+                    bloodPressureResponseChartDTO.setSystoleToday(bloodPressureRecord.getSystole());
+                    bloodPressureResponseChartDTO.setDiastoleToday(bloodPressureRecord.getDiastole());
+                    bloodPressureResponseChartDTOList.add(bloodPressureResponseChartDTO);
+                    count--;
+                }
+                today = calculateDate(today,1);
+                if(count < 1){
+                    break;
+                }
+            }
+        bloodPressureResponseChartDTOList.sort(new Comparator<BloodPressureResponseChartDTO>() {
+            @Override
+            public int compare(BloodPressureResponseChartDTO recordDateSmaller, BloodPressureResponseChartDTO recordDateBigger) {
+                return recordDateSmaller.getDate().compareTo(recordDateBigger.getDate());
+            }
+        });
+        return bloodPressureResponseChartDTOList;
+    }
+    public Date calculateDate(Date sourceDate , int minus) throws ParseException {
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sourceDate);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, -minus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
     }
 
 

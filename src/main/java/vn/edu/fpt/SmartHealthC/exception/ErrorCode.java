@@ -60,7 +60,6 @@ public enum ErrorCode {
     CARDINAL_NOT_FOUND("Numeral not found", HttpStatus.NOT_FOUND),
     CARDINAL_TYPE_DAY_EXIST("Numeral type day exists", HttpStatus.BAD_REQUEST),
     BLOOD_PRESSURE_DAY_EXIST("Blood pressure day exists", HttpStatus.BAD_REQUEST),
-
     MONTHLY_QUESTION_NOTFOUND("Monthly Question not found", HttpStatus.NOT_FOUND),
     RULE_FOR_PLAN_NOTFOUND("Rule For Plan not found", HttpStatus.NOT_FOUND),
     MENTAL_RULE_NOT_FOUND("Mental Rule not found", HttpStatus.NOT_FOUND),
