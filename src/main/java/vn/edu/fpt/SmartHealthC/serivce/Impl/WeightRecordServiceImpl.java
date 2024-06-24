@@ -17,6 +17,8 @@ import vn.edu.fpt.SmartHealthC.repository.WeightRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.WeightRecordService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -28,10 +30,12 @@ public class WeightRecordServiceImpl implements WeightRecordService {
     private AppUserRepository appUserRepository;
     @Autowired
     private AppUserService appUserService;
+    @Autowired
+    private SimpleDateFormat formatDate;
+
 
     @Override
-    public WeightRecord createWeightRecord(WeightRecordDTO weightRecordDTO)
-    {
+    public WeightRecord createWeightRecord(WeightRecordDTO weightRecordDTO) throws ParseException {
         WeightRecord weightRecord =  WeightRecord.builder()
                 .weekStart(weightRecordDTO.getWeekStart())
                 .weight(weightRecordDTO.getWeight())
@@ -40,10 +44,22 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         String email = authentication.getName();
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
-        List<WeightRecord> weightRecordListExits = weightRecordRepository.findByDate(
-                weightRecordDTO.getDate(),appUser.getId()
-        );
-        if(!weightRecordListExits.isEmpty()){
+
+        String dateStr= formatDate.format(weightRecordDTO.getDate());
+        Date date = formatDate.parse(dateStr);
+        List<WeightRecord> weightRecordListExits = weightRecordRepository.findAppUser(appUser.getId());
+        boolean dateExists = weightRecordListExits.stream()
+                .anyMatch(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                });
+        if (dateExists) {
             throw new AppException(ErrorCode.WEIGHT_RECORD_DAY_EXIST);
         }
         weightRecord.setAppUserId(appUser);

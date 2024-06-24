@@ -33,16 +33,18 @@ public class DietRecordServiceImpl implements DietRecordService {
     private AppUserRepository appUserRepository;
     @Autowired
     private AppUserService appUserService;
+    @Autowired
+    private SimpleDateFormat formatDate;
+
 
     public Date calculateDate(Date date , int plus) throws ParseException {
-        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
-        LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
-        firstWeekStart = firstWeekStart.plusDays(plus);
-
-        String formattedDate = firstWeekStart.format(formatter);
-        return formatDate.parse(formattedDate);
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, plus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
     }
 
     @Override
@@ -52,12 +54,26 @@ public class DietRecordServiceImpl implements DietRecordService {
         String email = authentication.getName();
         AppUser appUser = appUserService.findAppUserByEmail(email);
 
-        List<DietRecord> dietPlanExist = dietRecordRepository.findByWeekStart(
-                dietRecordDTO.getWeekStart(),appUser.getId()
-        );
-        if(!dietPlanExist.isEmpty()){
+
+        String weekStartStr= formatDate.format(dietRecordDTO.getWeekStart());
+        Date weekStart = formatDate.parse(weekStartStr);
+        List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.getId());
+        boolean dateExists = dietPlanExist.stream()
+                .anyMatch(record -> {
+                    String recordDateStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(weekStart);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                });
+        if (dateExists) {
             throw new AppException(ErrorCode.DIET_PLAN_EXIST);
         }
+
+
         int count = 0;
         Date dateCalculate;
         //Check schedule
@@ -131,15 +147,29 @@ public class DietRecordServiceImpl implements DietRecordService {
     }
 
     @Override
-    public DietRecord updateDietRecord(DietRecordUpdateDTO dietRecordDTO) {
+    public DietRecord updateDietRecord(DietRecordUpdateDTO dietRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         AppUser appUser = appUserService.findAppUserByEmail(email);
 
-        Optional<DietRecord> dietRecord = dietRecordRepository.findByDate(dietRecordDTO.getDate(),appUser.getId());
-        if(dietRecord.isEmpty()) {
+        String dateStr= formatDate.format(dietRecordDTO.getDate());
+        Date date = formatDate.parse(dateStr);
+        List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.getId());
+        Optional<DietRecord> dietRecord = dietPlanExist.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(date);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (dietRecord.isEmpty()) {
             throw new AppException(ErrorCode.DIET_DAY_NOT_FOUND);
         }
+
 
         DietRecord dietRecordUpdate =getDietRecordById(dietRecord.get().getId());
         dietRecordUpdate.setDate(dietRecordDTO.getDate());

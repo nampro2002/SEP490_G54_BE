@@ -50,7 +50,7 @@ public class MentalRecordController {
     }
 
     @PutMapping("")
-    public ApiResponse<MentalRecordResponseDTO> updateMentalRecord(@RequestBody @Valid MentalRecordUpdateDTO mentalRecordDTO) {
+    public ApiResponse<MentalRecordResponseDTO> updateMentalRecord(@RequestBody @Valid MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MentalRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())

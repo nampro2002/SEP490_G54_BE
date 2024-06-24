@@ -31,16 +31,16 @@ public class StepRecordServiceImpl implements StepRecordService {
     private AppUserRepository appUserRepository;
     @Autowired
     private AppUserService appUserService;
-
+    @Autowired
+    private SimpleDateFormat formatDate;
     public Date calculateDate(Date date , int plus) throws ParseException {
-        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
-        LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
-        firstWeekStart = firstWeekStart.plusDays(plus);
-
-        String formattedDate = firstWeekStart.format(formatter);
-        return formatDate.parse(formattedDate);
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, plus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
     }
 
     @Override
@@ -51,12 +51,25 @@ public class StepRecordServiceImpl implements StepRecordService {
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
 
-        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserIdAndWeekStart(
-                appUser.getId(),stepRecordDTO.getWeekStart()
-        );
-        if(!stepPlanExist.isEmpty()){
+
+        String weekStartStr= formatDate.format(stepRecordDTO.getWeekStart());
+        Date weekStart = formatDate.parse(weekStartStr);
+        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserIdAndDate(appUser.getId());
+        boolean dateExists = stepPlanExist.stream()
+                .anyMatch(record -> {
+                    String recordDateStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(weekStart);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                });
+        if (dateExists) {
             throw new AppException(ErrorCode.STEP_PLAN_EXIST);
         }
+
         int count=0;
         Date dateCalculate;
         while(true){
@@ -123,19 +136,32 @@ public class StepRecordServiceImpl implements StepRecordService {
     }
 
     @Override
-    public StepRecord updateStepRecord(StepRecordUpdateDTO stepRecordDTO) {
+    public StepRecord updateStepRecord(StepRecordUpdateDTO stepRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
 
-        Optional<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserIdAndDate(
-                appUser.getId(),stepRecordDTO.getDate()
-        );
-        if(stepPlanExist.isEmpty()){
+
+        String dateStr= formatDate.format(stepRecordDTO.getDate());
+        Date date = formatDate.parse(dateStr);
+        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserIdAndDate(appUser.getId());
+        Optional<StepRecord> stepRecord = stepPlanExist.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(date);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (stepRecord.isEmpty()) {
             throw new AppException(ErrorCode.STEP_DAY_NOT_FOUND);
         }
-        StepRecord stepRecordUpdate = getStepRecordById(stepPlanExist.get().getId());
+
+        StepRecord stepRecordUpdate = getStepRecordById(stepRecord.get().getId());
         stepRecordUpdate.setActualValue(stepRecordDTO.getActualValue());
         stepRecordUpdate.setDate(stepRecordDTO.getDate());
         stepRecordRepository.save(stepRecordUpdate);

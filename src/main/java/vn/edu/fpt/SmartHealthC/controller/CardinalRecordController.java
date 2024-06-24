@@ -11,6 +11,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.Card
 import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class CardinalRecordController {
     private CardinalRecordService cardinalRecordService;
 
     @PostMapping
-    public ApiResponse<CardinalRecord> createCardinalRecord(@RequestBody @Valid CardinalRecordDTO cardinalRecordDTO) {
+    public ApiResponse<CardinalRecord> createCardinalRecord(@RequestBody @Valid CardinalRecordDTO cardinalRecordDTO) throws ParseException {
 
         CardinalRecord createdCardinalRecord = cardinalRecordService.createCardinalRecord(cardinalRecordDTO);
         return ResponseEntity.status(HttpStatus.CREATED)

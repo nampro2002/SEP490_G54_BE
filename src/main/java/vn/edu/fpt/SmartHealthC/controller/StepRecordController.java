@@ -50,7 +50,7 @@ public class StepRecordController {
     }
 
     @PutMapping("")
-    public ApiResponse<StepRecord> updateStepRecord( @RequestBody @Valid StepRecordUpdateDTO stepRecordDTO) {
+    public ApiResponse<StepRecord> updateStepRecord( @RequestBody @Valid StepRecordUpdateDTO stepRecordDTO) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<StepRecord>builder()
                         .code(HttpStatus.OK.value())

@@ -8,10 +8,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
+import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
@@ -37,16 +34,16 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     private MentalRuleRepository mentalRuleRepository;
     @Autowired
     private AppUserService appUserService;
-
+    @Autowired
+    private SimpleDateFormat formatDate;
     public Date calculateDate(Date date , int plus) throws ParseException {
-        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
-        LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
-        firstWeekStart = firstWeekStart.plusDays(plus);
-
-        String formattedDate = firstWeekStart.format(formatter);
-        return formatDate.parse(formattedDate);
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, plus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
     }
 
     @Override
@@ -56,12 +53,25 @@ public class MentalRecordServiceImpl implements MentalRecordService {
         String email = authentication.getName();
         AppUser appUser = appUserService.findAppUserByEmail(email);
 
-        List<MentalRecord> mentalRecordExist = mentalRecordRepository.findByWeekStartAndAppUserId(
-                mentalRecordDTO.getWeekStart(),appUser.getId()
-        );
-        if(!mentalRecordExist.isEmpty()){
+
+        String weekStartStr= formatDate.format(mentalRecordDTO.getWeekStart());
+        Date weekStart = formatDate.parse(weekStartStr);
+        List<MentalRecord> mentalRecordExist = mentalRecordRepository.findByAppUserId(appUser.getId());
+        boolean dateExists = mentalRecordExist.stream()
+                .anyMatch(record -> {
+                    String recordDateStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(weekStart);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                });
+        if (dateExists) {
             throw new AppException(ErrorCode.MENTAL_PLAN_EXIST);
         }
+
         int count=0;
         Date dateCalculate;
         while(true){
@@ -147,13 +157,36 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     }
 
     @Override
-    public MentalRecordResponseDTO updateMentalRecord(MentalRecordUpdateDTO mentalRecordDTO) {
+    public MentalRecordResponseDTO updateMentalRecord(MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         AppUser appUser = appUserService.findAppUserByEmail(email);
+
+        String dateStr= formatDate.format(mentalRecordDTO.getDate());
+        Date date = formatDate.parse(dateStr);
+        boolean ruleExists = false;
+        List<MentalRecord> planExist = mentalRecordRepository.findByAppUserId(appUser.getId());
         for (Integer rule : mentalRecordDTO.getMentalRuleId()){
-            Optional<MentalRecord> mentalRecord = mentalRecordRepository.findByDateAndMentalRule(
-                    mentalRecordDTO.getDate(),appUser.getId(),rule);
+            ruleExists = planExist.stream()
+                    .anyMatch(record -> record.getMentalRule().getId().equals(rule));
+        }
+        if (!ruleExists) {
+            throw new AppException(ErrorCode.MENTAL_RULE_NOT_FOUND);
+        }
+
+        for (Integer rule : mentalRecordDTO.getMentalRuleId()){
+            Optional<MentalRecord> mentalRecord = planExist.stream()
+                    .filter(record -> {
+                        String recordDateStr = formatDate.format(record.getDate());
+                        try {
+                            Date recordDate = formatDate.parse(recordDateStr);
+                            return recordDate.equals(date)
+                                    && record.getMentalRule().getId().equals(rule);
+                        } catch (ParseException e) {
+                            return false;
+                        }
+                    })
+                    .findFirst();
             if (mentalRecord.isEmpty()) {
                 throw new AppException(ErrorCode.MENTAL_RULE_IN_PLAN_NOT_FOUND);
             }

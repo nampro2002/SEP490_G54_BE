@@ -18,4 +18,5 @@ public interface BloodPressureRecordRepository extends JpaRepository<BloodPressu
 
     @Query("SELECT b FROM BloodPressureRecord b WHERE b.date = ?1 AND b.appUserId.id = ?2")
     List<BloodPressureRecord> findByDate(Date weekStart, Integer userId);
+
 }

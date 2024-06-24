@@ -2,6 +2,7 @@ package vn.edu.fpt.SmartHealthC.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
@@ -15,8 +16,11 @@ public interface ActivityRecordRepository extends JpaRepository<ActivityRecord, 
     List<Date> findDistinctWeek(Integer userId);
 
     @Query("SELECT a FROM ActivityRecord a WHERE a.weekStart = ?1 AND a.appUserId.id = ?2")
-    List<ActivityRecord> findByWeekStart(Date weekStart, Integer userId);
+    List<ActivityRecord> findByWeekStart( Date weekStart, Integer userId);
 
     @Query("SELECT a FROM ActivityRecord a WHERE a.date = ?1 AND a.appUserId.id = ?2")
     Optional<ActivityRecord> findByDate(Date date, Integer userId);
+
+    @Query("SELECT a FROM ActivityRecord a WHERE a.appUserId.id = ?1")
+    List<ActivityRecord> findRecordByIdUser( Integer userId);
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.RecordPerDay;
+import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
@@ -17,6 +18,8 @@ import vn.edu.fpt.SmartHealthC.repository.BloodPressureRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.BloodPressureRecordService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -28,9 +31,11 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
     private AppUserRepository appUserRepository;
     @Autowired
     private AppUserService appUserService;
+    @Autowired
+    private SimpleDateFormat formatDate;
 
     @Override
-    public BloodPressureRecord createBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO) {
+    public BloodPressureRecord createBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO) throws ParseException {
         BloodPressureRecord bloodPressureRecord = BloodPressureRecord.builder()
                 .diastole(bloodPressureRecordDTO.getDiastole())
                 .systole(bloodPressureRecordDTO.getSystole())
@@ -40,13 +45,24 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         String email = authentication.getName();
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
-        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findByDate(
-                bloodPressureRecordDTO.getDate(),appUser.getId()
-        );
-        if(!bloodPressureRecordListExits.isEmpty()){
+
+        String dateStr= formatDate.format(bloodPressureRecordDTO.getDate());
+        Date date = formatDate.parse(dateStr);
+        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.getId());
+        boolean dateExists = bloodPressureRecordListExits.stream()
+                .anyMatch(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                });
+        if (dateExists) {
             throw new AppException(ErrorCode.BLOOD_PRESSURE_DAY_EXIST);
         }
-
 
         bloodPressureRecord.setAppUserId(appUser);
         return bloodPressureRecordRepository.save(bloodPressureRecord);

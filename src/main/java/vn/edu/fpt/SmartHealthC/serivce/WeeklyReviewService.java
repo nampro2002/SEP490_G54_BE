@@ -7,9 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 public interface WeeklyReviewService {
-    WeeklyReviewResponseDTO getWeekDate(Integer id) throws ParseException;
+    WeeklyReviewResponseDTO getWeek(Integer id) throws ParseException;
 
     List<Date> getListWeekStart(Integer id) throws ParseException;
 
-    WeeklyReviewResponseDTO getDataReviewForWeekDate(Integer id,String weekstart) throws ParseException;
+    WeeklyReviewResponseDTO getDataReviewForWeek(Integer id,String weekstart) throws ParseException;
 }

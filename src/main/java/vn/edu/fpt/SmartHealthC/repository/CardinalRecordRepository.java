@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface CardinalRecordRepository extends JpaRepository<CardinalRecord, Integer> {
 
-    @Query("SELECT c FROM CardinalRecord c WHERE c.appUserId = ?1")
-    List<CardinalRecord> findByAppUserId();
+    @Query("SELECT c FROM CardinalRecord c WHERE c.appUserId.id = ?1")
+    List<CardinalRecord> findByAppUserId(Integer appUserId);
     @Query("SELECT DISTINCT c.weekStart FROM CardinalRecord c WHERE c.appUserId.id = ?1")
     List<Date> findDistinctWeek(Integer id);
 

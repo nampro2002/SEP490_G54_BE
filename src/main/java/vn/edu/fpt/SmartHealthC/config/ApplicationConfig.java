@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.config;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
+
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 @Configuration
 @RequiredArgsConstructor
@@ -43,4 +47,15 @@ public class ApplicationConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public SimpleDateFormat utcFormatter() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return formatter;
+    }
+    @PostConstruct
+    public void init(){
+        // Thiết lập múi giờ mặc định
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
 }

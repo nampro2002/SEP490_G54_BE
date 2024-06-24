@@ -18,7 +18,10 @@ import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -31,17 +34,31 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     private AppUserRepository appUserRepository;
     @Autowired
     private AppUserService appUserService;
+    @Autowired
+    private SimpleDateFormat formatDate;
 
     @Override
     public ActivityRecord createActivityRecord(ActivityRecordCreateDTO activityRecordDTO) throws ParseException {
-
+        activityRecordDTO.getWeekStart();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         AppUser appUser = appUserService.findAppUserByEmail(email);
 
-        List<ActivityRecord> planExist = activityRecordRepository.findByWeekStart(activityRecordDTO.getWeekStart(),
-                appUser.getId());
-        if(!planExist.isEmpty()){
+        String weekStartStr= formatDate.format(activityRecordDTO.getWeekStart());
+        Date weekStart = formatDate.parse(weekStartStr);
+        List<ActivityRecord> planExist = activityRecordRepository.findRecordByIdUser(appUser.getId());
+        boolean dateExists = planExist.stream()
+                .anyMatch(record -> {
+                    String recordDateStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(weekStart);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                });
+        if (dateExists) {
             throw new AppException(ErrorCode.ACTIVITY_PLAN_EXIST);
         }
 
@@ -77,15 +94,14 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
         }
         return null;
     }
-    public Date calculateDate(Date date , int plus) throws ParseException {
-        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
-        LocalDate firstWeekStart = LocalDate.parse(formatDate.format(date), formatter);
-        firstWeekStart = firstWeekStart.plusDays(plus);
-
-        String formattedDate = firstWeekStart.format(formatter);
-        return formatDate.parse(formattedDate);
+    public Date calculateDate(Date sourceDate , int plus) throws ParseException {
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sourceDate);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, plus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
     }
 
     @Override
@@ -94,7 +110,6 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
         if(activityRecord.isEmpty()) {
             throw new AppException(ErrorCode.ACTIVITY_RECORD_NOT_FOUND);
         }
-
         return activityRecord.get();
     }
 
@@ -141,13 +156,26 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     }
 
     @Override
-    public ActivityRecord updateActivityRecord( ActivityRecordUpdateDTO activityRecordDTO) {
+    public ActivityRecord updateActivityRecord( ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         AppUser appUser = appUserService.findAppUserByEmail(email);
 
-        Optional<ActivityRecord> activityRecord = activityRecordRepository.findByDate(activityRecordDTO.getDate(),appUser.getId());
-        if(activityRecord.isEmpty()) {
+        String dateStr= formatDate.format(activityRecordDTO.getDate());
+        Date date = formatDate.parse(dateStr);
+        List<ActivityRecord> planExist = activityRecordRepository.findRecordByIdUser(appUser.getId());
+        Optional<ActivityRecord> activityRecord = planExist.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(date);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (activityRecord.isEmpty()) {
             throw new AppException(ErrorCode.ACTIVITY_DAY_NOT_FOUND);
         }
 

@@ -12,6 +12,6 @@ public interface DietRecordService {
     DietRecord createDietRecord(DietRecordCreateDTO dietRecordDTO) throws ParseException;
     DietRecord getDietRecordById(Integer id);
     List<DietRecordListResDTO> getAllDietRecords(Integer id);
-    DietRecord updateDietRecord(DietRecordUpdateDTO dietRecordDTO);
+    DietRecord updateDietRecord(DietRecordUpdateDTO dietRecordDTO) throws ParseException;
     DietRecord deleteDietRecord(Integer id);
 }

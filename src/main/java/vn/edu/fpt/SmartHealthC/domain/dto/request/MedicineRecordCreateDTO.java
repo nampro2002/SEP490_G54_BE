@@ -20,5 +20,5 @@ public class MedicineRecordCreateDTO {
     @NotNull(message = "missing medicineTypeId")
     private int medicineTypeId;
     @NotNull(message = "missing schedule")
-    private List<String> schedule;
+    private List<Date> schedule;
 }

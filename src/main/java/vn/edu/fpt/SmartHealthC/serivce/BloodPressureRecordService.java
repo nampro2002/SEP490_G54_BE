@@ -4,10 +4,11 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface BloodPressureRecordService {
-    BloodPressureRecord createBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO);
+    BloodPressureRecord createBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO) throws ParseException;
     BloodPressureRecord getBloodPressureRecordById(Integer id);
     List<BloodPressureRecord> getAllBloodPressureRecords();
     List<BloodPressureResponseDTO> getListBloodPressureRecordsByUser(Integer id);

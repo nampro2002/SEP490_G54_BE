@@ -50,7 +50,7 @@ public class DietRecordController {
     }
 
     @PutMapping("")
-    public ApiResponse<DietRecord> updateDietRecord(@RequestBody @Valid DietRecordUpdateDTO dietRecordDTO) {
+    public ApiResponse<DietRecord> updateDietRecord(@RequestBody @Valid DietRecordUpdateDTO dietRecordDTO) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<DietRecord>builder()
                         .code(HttpStatus.OK.value())
