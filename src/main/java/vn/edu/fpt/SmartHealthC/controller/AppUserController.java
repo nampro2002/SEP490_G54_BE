@@ -22,14 +22,6 @@ public class AppUserController {
     @Autowired
     private final AppUserService appUserService;
 
-    @PutMapping("/web/assign")
-    public ApiResponse<AppUserAssignResponseDTO> assignPatientToDoctor (@RequestBody @Valid AssignRequestDTO assignRequestDTO) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<AppUserAssignResponseDTO>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(appUserService.assignPatientToDoctor(assignRequestDTO))
-                        .build()).getBody();
-    }
 
     //getListAppUser with paging and search
     @GetMapping("/web")
@@ -42,14 +34,14 @@ public class AppUserController {
                         .build()).getBody();
     }
     //getAppUserById
-    @GetMapping("/web/detail/{id}")
-    public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailById (@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<AppUserDetailResponseDTO>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(appUserService.getAppUserDetailById(id))
-                        .build()).getBody();
-    }
+//    @GetMapping("/web/detail/{id}")
+//    public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailById (@PathVariable Integer id) {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<AppUserDetailResponseDTO>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(appUserService.getAppUserDetailById(id))
+//                        .build()).getBody();
+//    }
 //    @GetMapping("mobile/detail")
 //    public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailMobile () {
 //        return ResponseEntity.status(HttpStatus.OK)

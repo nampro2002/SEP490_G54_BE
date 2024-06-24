@@ -34,15 +34,7 @@ public class DashboardController {
                         .build()).getBody();
     }
 
-    @GetMapping("/availablems")
-    public ApiResponse<List<AvailableMSResponseDTO>> getAvailableMSList() {
-        List<AvailableMSResponseDTO> availableMSResponseDTOList = accountService.getAvailableMS();
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<AvailableMSResponseDTO>>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(availableMSResponseDTOList)
-                        .build()).getBody();
-    }
+
 
     @GetMapping("/register-request/app-user")
     public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getUserPendingList(@RequestParam(defaultValue = "1") Integer pageNo) {
