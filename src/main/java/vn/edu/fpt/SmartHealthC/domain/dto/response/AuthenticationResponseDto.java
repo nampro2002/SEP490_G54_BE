@@ -15,4 +15,5 @@ public class AuthenticationResponseDto {
     private String accessToken;
     private String refreshToken;
     private Integer idUser;
+    private TypeAccount role;
 }

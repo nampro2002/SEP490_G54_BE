@@ -67,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
         );
         //AccessToken
         Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("UniqueIdentifier", UUID.randomUUID().toString());
         var jwt = jwtProvider.generateToken(extraClaims, optionalUser.get());
         //RefreshToken
         String refreshToken = UUID.randomUUID().toString();
@@ -87,6 +88,7 @@ public class AuthServiceImpl implements AuthService {
         return AuthenticationResponseDto.builder()
                 .type(optionalUser.get().getType())
                 .idUser(optionalUser.get().getId())
+                .role(optionalUser.get().getType())
                 .accessToken(jwt)
                 .refreshToken(refreshToken)
                 .build();
@@ -182,7 +184,8 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("userId", optionalUser.get().getId());
+        extraClaims.put("UniqueIdentifier", UUID.randomUUID().toString());
+        extraClaims.put("role", optionalUser.get().getType().name());
         var jwt = jwtProvider.generateToken(extraClaims, optionalUser.get());
         String refreshTokenNewString = UUID.randomUUID().toString();
         // Lấy thời gian hiện tại

@@ -83,19 +83,16 @@ public class AccountServiceImpl implements AccountService {
         if (appUser.getAccountId().getIsActive()) {
             throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
         }
-        if (!(appUser.getWebUser() == null)) {
-            Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
-            account.setIsActive(true);
-            accountRepository.save(account);
-            return true;
-        }
-        return false;
+        Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
+        account.setIsActive(true);
+        accountRepository.save(account);
+        return true;
     }
 
     @Override
-    public ResponsePaging<List<AppUserResponseDTO>> getPendingAccount(Integer pageNo) {
+    public ResponsePaging<List<AppUserResponseDTO>> getPendingAccount(Integer pageNo, TypeAccount type) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<AppUser> pagedResult = appUserRepository.findAllInactiveAccountUser(TypeAccount.USER, paging);
+        Page<AppUser> pagedResult = appUserRepository.findAllInactiveAccountUser(type, paging);
         List<AppUser> accountList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             accountList = pagedResult.getContent();

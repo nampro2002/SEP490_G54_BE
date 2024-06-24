@@ -202,8 +202,8 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUserAssignResponseDTO assignPatientToDoctor(AssignRequestDTO assignRequestDTO) {
-        AppUser appUser = appUserRepository.findById(assignRequestDTO.getAppUserId()).orElseThrow(
-                () -> new AppException(ErrorCode.APP_USER_NOT_FOUND)
+        AppUser appUser = appUserRepository.findByIdActivated(assignRequestDTO.getAppUserId()).orElseThrow(
+                () -> new AppException(ErrorCode.APP_USER_NOT_FOUND_OR_NOT_ACTIVATED)
         );
         WebUser webUser = webUserService.getWebUserById(assignRequestDTO.getWebUserId());
         if (!webUser.getAccountId().getType().equals(TypeAccount.MEDICAL_SPECIALIST)) {
@@ -211,12 +211,6 @@ public class AppUserServiceImpl implements AppUserService {
         }
         if (webUser.getAccountId().isDeleted()) {
             throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
-        }
-        List<AppUser> appUserList = webUser.getAppUserList();
-        //filter appUserlist AppUser.accountId.deleted = false
-        appUserList = appUserList.stream().filter(appU -> !appU.getAccountId().isDeleted()).toList();
-        if (appUserList.size() >= 10) {
-            throw new AppException(ErrorCode.WEB_USER_FULL);
         }
         appUser.setWebUser(webUser);
         appUserRepository.save(appUser);
