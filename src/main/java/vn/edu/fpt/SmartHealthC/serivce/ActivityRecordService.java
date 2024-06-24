@@ -12,6 +12,6 @@ public interface ActivityRecordService {
     ActivityRecord createActivityRecord(ActivityRecordCreateDTO activityRecordDTO) throws ParseException;
     ActivityRecord getActivityRecordById(Integer id);
     List<ActivityRecordResListDTO> getAllActivityRecords(Integer userId);
-    ActivityRecord updateActivityRecord(ActivityRecordUpdateDTO activityRecordDTO);
+    ActivityRecord updateActivityRecord(ActivityRecordUpdateDTO activityRecordDTO) throws ParseException;
     ActivityRecord deleteActivityRecord(Integer id);
 }

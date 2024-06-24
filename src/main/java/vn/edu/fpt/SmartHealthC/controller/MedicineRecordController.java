@@ -53,7 +53,7 @@ public class MedicineRecordController {
     }
 
     @PutMapping("")
-    public ApiResponse<MedicineRecordResponseDTO> updateMedicineRecord(@RequestBody @Valid MedicineRecordUpdateDTO medicineRecordDTO) {
+    public ApiResponse<MedicineRecordResponseDTO> updateMedicineRecord(@RequestBody @Valid MedicineRecordUpdateDTO medicineRecordDTO) throws ParseException {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicineRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())

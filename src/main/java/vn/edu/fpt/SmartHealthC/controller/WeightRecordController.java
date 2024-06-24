@@ -13,6 +13,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
 import vn.edu.fpt.SmartHealthC.serivce.WeightRecordService;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ public class WeightRecordController {
     private WeightRecordService weightRecordService;
 
     @PostMapping
-    public ApiResponse<WeightRecord> createWeightRecord(@RequestBody @Valid WeightRecordDTO weightRecordDTO) {
+    public ApiResponse<WeightRecord> createWeightRecord(@RequestBody @Valid WeightRecordDTO weightRecordDTO) throws ParseException {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<WeightRecord>builder()
                         .code(HttpStatus.CREATED.value())

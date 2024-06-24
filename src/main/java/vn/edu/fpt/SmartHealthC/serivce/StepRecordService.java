@@ -12,6 +12,6 @@ public interface StepRecordService {
     StepRecord createStepRecord(StepRecordCreateDTO stepRecordDTO) throws ParseException;
     StepRecord getStepRecordById(Integer id);
     List<StepRecordResListDTO> getAllStepRecords(Integer id);
-    StepRecord updateStepRecord(StepRecordUpdateDTO stepRecordDTO);
+    StepRecord updateStepRecord(StepRecordUpdateDTO stepRecordDTO) throws ParseException;
     StepRecord deleteStepRecord(Integer id);
 }

@@ -11,6 +11,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.Blood
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 import vn.edu.fpt.SmartHealthC.serivce.BloodPressureRecordService;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class BloodPressureRecordController {
     private BloodPressureRecordService bloodPressureRecordService;
 
     @PostMapping
-    public ApiResponse<BloodPressureRecord> createBloodPressureRecord(@RequestBody @Valid BloodPressureRecordDTO bloodPressureRecordDTO) {
+    public ApiResponse<BloodPressureRecord> createBloodPressureRecord(@RequestBody @Valid BloodPressureRecordDTO bloodPressureRecordDTO) throws ParseException {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<BloodPressureRecord>builder()
                         .code(HttpStatus.CREATED.value())

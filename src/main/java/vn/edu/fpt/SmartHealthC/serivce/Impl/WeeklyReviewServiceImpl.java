@@ -41,11 +41,12 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     private MedicineRecordRepository medicineRecordRepository;
     @Autowired
     private StepRecordRepository stepRecordRepository;
+    @Autowired
+    private  SimpleDateFormat formatDate;
 
-   private SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
-    public WeeklyReviewResponseDTO getWeekDate(Integer id) throws ParseException {
+    public WeeklyReviewResponseDTO getWeek(Integer id) throws ParseException {
         WeeklyReviewResponseDTO weeklyReviewResponseDTO = new WeeklyReviewResponseDTO();
 
         Optional<AppUser> appUser = appUserRepository.findById(id);
@@ -53,8 +54,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         //trả về ngày sớm nhất của user
-        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date smallestWeekStart = formatDate.parse(findSmallestWeekStart(appUser.get()));
+        Date smallestWeekStart = findSmallestWeekStart(appUser.get());
         weeklyReviewResponseDTO.setWeekStart(smallestWeekStart);
         //Average cardinal per week
         weeklyReviewResponseDTO.setCardinalPerWeek(getAverageCardinalPerWeek(appUser.get(), smallestWeekStart));
@@ -82,46 +82,41 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         //trả về ngày sớm nhất của user
-        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date smallestWeekStart = formatDate.parse(findSmallestWeekStart(appUser.get()));
+        Date smallestWeekStart = findSmallestWeekStart(appUser.get());
         List<Date> weekStartList = new ArrayList<>();
 
-        //Chuyển smallestWeekStart từ date thành localdate để cộng thêm 7 ngày và thêm vào làm phần tử đầu tiên của mảng date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate firstWeekStart = LocalDate.parse(formatDate.format(smallestWeekStart), formatter);
         weekStartList.add(smallestWeekStart);
 
         //Lấy ra ngày hiện tại và gán ngày sớm nhất cho datePlus7
-        LocalDate today = LocalDate.now();
-        LocalDate datePlus7 = firstWeekStart;
+        Date today = new Date();
+        Date datePlus7 = smallestWeekStart;
 
         //Vòng lặp cho đến ngày hiện tại
         boolean loopStatus = true;
         for (; loopStatus;) {
-            // Cộng thêm 7 ngày vào ngày đầu tiên của user sau 1 vòng lặp
-            datePlus7 = datePlus7.plusDays(7);
+            datePlus7 = calculateDate(datePlus7,7);
                 // Kiểm tra xem datePlus7 nhỏ hơn ngày hôm nay
-                if (datePlus7.isBefore(today) ) {
-                    //Chuyển từ localDate thành String và thành Date theo UTC để thêm vào list
-                    String formattedDate = datePlus7.format(formatter);
-                    weekStartList.add(formatDate.parse(formattedDate));
-                }else if(datePlus7.isEqual(today)){ //datePlus7 = và là thứ 2 thì thêm vào list
-                    //Ngày hôm nay  là thứ 2 thì check
-                    if (today.getDayOfWeek() == DayOfWeek.MONDAY) {
-                        //Chuyển từ localDate thành String và thành Date theo UTC để thêm vào list
-                        String formattedDate = today.format(formatter);
-                        weekStartList.add(formatDate.parse(formattedDate));
-                    }
+                if (datePlus7.before(today) ) {
+                        weekStartList.add(datePlus7);
                 }else{ // dateplus mà quá lớn hơn hiên tại thì dừng
                     loopStatus = false;
                 }
         }
         return weekStartList;
     }
+    public Date calculateDate(Date sourceDate , int plus) throws ParseException {
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sourceDate);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, plus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
+    }
 
 
     @Override
-    public WeeklyReviewResponseDTO getDataReviewForWeekDate(Integer id, String weekStart) throws ParseException {
+    public WeeklyReviewResponseDTO getDataReviewForWeek(Integer id, String weekStart) throws ParseException {
         WeeklyReviewResponseDTO weeklyReviewResponseDTO = new WeeklyReviewResponseDTO();
 
         Optional<AppUser> appUser = appUserRepository.findById(id);
@@ -129,7 +124,6 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         //week start for filter
-        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date weekStartFilter = formatDate.parse(weekStart);
         weeklyReviewResponseDTO.setWeekStart(weekStartFilter);
         //Average cardinal per week
@@ -357,13 +351,13 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
        return smallestDateList;
     }
 
-    private String findSmallestWeekStart(AppUser appUser) {
+    private Date findSmallestWeekStart(AppUser appUser) {
         List<Date> smallestDateList = getArraySmallestWeekStartByUser(appUser);
         if (smallestDateList.isEmpty()) {
             throw new AppException(ErrorCode.USER_WEEK_START_NOT_EXIST);
         }
         return smallestDateList.stream()
                 .min(Date::compareTo)
-                .orElse(null).toString();
+                .orElse(null);
     }
 }

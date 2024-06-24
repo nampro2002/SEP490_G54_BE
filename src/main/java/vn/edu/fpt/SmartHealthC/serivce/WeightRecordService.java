@@ -4,11 +4,12 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.WeightRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
 public interface WeightRecordService {
-    WeightRecord createWeightRecord(WeightRecordDTO weightRecordDTO);
+    WeightRecord createWeightRecord(WeightRecordDTO weightRecordDTO) throws ParseException;
     WeightRecord getWeightRecordById(Integer id);
     List<WeightRecord> getAllWeightRecords();
     WeightRecord updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO);

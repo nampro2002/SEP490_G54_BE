@@ -4,10 +4,11 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.CardinalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CardinalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface CardinalRecordService {
-    CardinalRecord createCardinalRecord(CardinalRecordDTO cardinalRecordDTO);
+    CardinalRecord createCardinalRecord(CardinalRecordDTO cardinalRecordDTO) throws ParseException;
 
     CardinalRecord getCardinalRecordById(Integer id);
 

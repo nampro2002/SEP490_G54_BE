@@ -52,7 +52,7 @@ public class ActivityRecordController {
     }
 
     @PutMapping("")
-    public ApiResponse<ActivityRecord> updateActivityRecord(@RequestBody @Valid ActivityRecordUpdateDTO activityRecordDTO) {
+    public ApiResponse<ActivityRecord> updateActivityRecord(@RequestBody @Valid ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {
         ActivityRecord updatedActivityRecord = activityRecordService.updateActivityRecord(activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<ActivityRecord>builder()

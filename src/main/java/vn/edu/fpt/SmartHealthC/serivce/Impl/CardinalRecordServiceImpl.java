@@ -8,6 +8,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.CardinalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CardinalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -16,6 +17,8 @@ import vn.edu.fpt.SmartHealthC.repository.CardinalRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -27,9 +30,10 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
     private AppUserRepository appUserRepository;
     @Autowired
     private AppUserService appUserService;
-
+    @Autowired
+    private SimpleDateFormat formatDate;
     @Override
-    public CardinalRecord createCardinalRecord(CardinalRecordDTO CardinalRecordDTO) {
+    public CardinalRecord createCardinalRecord(CardinalRecordDTO CardinalRecordDTO) throws ParseException {
 
         CardinalRecord cardinalRecord = CardinalRecord.builder()
                 .Cholesterol(CardinalRecordDTO.getCholesterol())
@@ -44,12 +48,27 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         AppUser appUser = appUserService.findAppUserByEmail(email);
         cardinalRecord.setAppUserId(appUser);
 
-        List<CardinalRecord> cardinalRecordListExits = cardinalRecordRepository.findByDateAndTimeMeasure(
-            CardinalRecordDTO.getDate(),appUser.getId(),CardinalRecordDTO.getTimeMeasure()
-        );
-        if(!cardinalRecordListExits.isEmpty()){
+        String dateStr= formatDate.format(cardinalRecord.getDate());
+        Date date = formatDate.parse(dateStr);
+        List<CardinalRecord> cardinalRecordListExits = cardinalRecordRepository.findByAppUserId(appUser.getId());
+        boolean dateExists = cardinalRecordListExits.stream()
+                .anyMatch(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(date)
+                                &&  record .getTimeMeasure().equals(CardinalRecordDTO.getTimeMeasure());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+
+                });
+        if (dateExists) {
             throw new AppException(ErrorCode.CARDINAL_TYPE_DAY_EXIST);
         }
+
+
 
         return cardinalRecordRepository.save(cardinalRecord);
     }
