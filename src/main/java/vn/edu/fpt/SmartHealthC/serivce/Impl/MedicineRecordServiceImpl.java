@@ -6,6 +6,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseChartDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicinePLanResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
@@ -19,9 +21,8 @@ import vn.edu.fpt.SmartHealthC.serivce.MedicineRecordService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MedicineRecordServiceImpl implements MedicineRecordService {
@@ -199,5 +200,76 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                 .date(medicineRecord.getDate())
                 .status(medicineRecord.getStatus())
                 .build();
+    }
+
+    @Override
+    public List<MedicinePLanResponseDTO> getAllMedicinePlans(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+
+        //Ngày hôm nay
+        Date today = new Date();
+        String dateTodayStr= formatDate.format(today);
+        Date dateToday = formatDate.parse(dateTodayStr);
+
+        Date weekStartPlan = formatDate.parse(weekStart);
+        List<MedicineRecord> planExist = medicineRecordRepository.findByAppUser(appUser.getId());
+        // Lọc các bản ghi theo weekStart và lấy các ID loại thuốc không bị trùng
+        Set<MedicineType> uniqueMedicineTypeIds = planExist
+                .stream()
+                .filter(record -> {
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordWeekStart.equals(weekStartPlan);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                })
+                .map(MedicineRecord::getMedicineType)
+                .collect(Collectors.toSet());
+
+        List<MedicinePLanResponseDTO> medicinePLanResponseDTOList = new ArrayList<>();
+
+        for (MedicineType type : uniqueMedicineTypeIds) {
+            List<MedicineRecord> planPerMedicine = medicineRecordRepository.findByAppUser(appUser.getId())
+                    .stream()
+                    .filter(record -> {
+                        String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                        try {
+                            Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                            return recordWeekStart.equals(weekStartPlan)
+                                    && record.getMedicineType().getId().equals(type.getId());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+                    }).collect(Collectors.toList());
+            MedicinePLanResponseDTO medicinePLanResponseDTO = new MedicinePLanResponseDTO();
+            medicinePLanResponseDTO.setMedicineId(type.getId());
+            medicinePLanResponseDTO.setMedicineTitle(type.getTitle());
+            for (MedicineRecord record : planPerMedicine) {
+                medicinePLanResponseDTO.setTime(getTime(record.getDate()));
+                medicinePLanResponseDTO.getWeekday().add(getDayOfWeek(record.getDate()));
+            }
+            medicinePLanResponseDTOList.add(medicinePLanResponseDTO);
+        }
+        return medicinePLanResponseDTOList.stream()
+                .sorted((record1, record2) -> record1.getMedicineId().compareTo(record2.getMedicineId()))
+                .collect(Collectors.toList());
+
+    }
+    // Hàm xác định thứ trong tuần từ Date
+    public static String getDayOfWeek(Date date) {
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+        return dayFormat.format(date);
+    }
+
+    // Hàm xác định thời gian (giờ, phút, giây) từ Date
+    public static String getTime(Date date) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        return timeFormat.format(date);
     }
 }
