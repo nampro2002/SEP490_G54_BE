@@ -19,6 +19,8 @@ import vn.edu.fpt.SmartHealthC.repository.MentalRuleRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -265,13 +267,17 @@ public class MentalRecordServiceImpl implements MentalRecordService {
                     })
                     .count();
             mentalResponseChartDTO.getMentalResponseList().add(
-                    new MentalResponse().builder().point((float) point).date(sortedDate).build()
+                    new MentalResponse().builder().point((int) point).date(sortedDate).build()
             );
         }
+        // Tính trung bình và lấy 2 chữ số sau dấu phẩy
         mentalResponseChartDTO.setAvgPoint(
-                mentalResponseChartDTO.getMentalResponseList().stream().toList()
-                .stream().mapToDouble(MentalResponse::getPoint)
-                .average().getAsDouble()
+                BigDecimal.valueOf(
+                        mentalResponseChartDTO.getMentalResponseList().stream()
+                                .mapToDouble(MentalResponse::getPoint)
+                                .average()
+                                .orElse(0.0) // Giả sử nếu không có giá trị nào thì trả về 0.0
+                ).setScale(1, RoundingMode.HALF_UP).doubleValue()
         );
         return  mentalResponseChartDTO;
     }

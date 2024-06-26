@@ -5,10 +5,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WeightRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseChartDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.RecordPerDay;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -118,6 +124,76 @@ public class WeightRecordServiceImpl implements WeightRecordService {
             record.setRecordPerDayList(recordPerDayList);
         }
         return responseDTOList;
+    }
+
+    @Override
+    public WeightResponseChartDTO getDataChart() throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+
+
+        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUser(appUser.getId());
+        //Sắp xếp giảm dần theo date
+        weightRecordList.sort(new Comparator<WeightRecord>() {
+            @Override
+            public int compare(WeightRecord recordDateSmaller, WeightRecord recordDateBigger) {
+                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
+            }
+        });
+        int count = 5;
+        double sumValue = 0;
+        WeightResponseChartDTO weightResponseChartDTO = new WeightResponseChartDTO();
+        List<WeightResponse> weightResponseList = new ArrayList<>();
+        for (WeightRecord weightRecord : weightRecordList) {
+            String smallerDateStr= formatDate.format(weightRecord.getDate());
+            Date smallerDate = formatDate.parse(smallerDateStr);
+
+            if(smallerDate.before(date)){
+                Integer value = (int) Math.round(weightRecord.getWeight());
+                WeightResponse weightResponse = new WeightResponse().builder()
+                        .date(weightRecord.getDate()).value(value+"kg").build();
+                count--;
+                sumValue+=weightRecord.getWeight();
+                weightResponseList.add(weightResponse);
+            }
+            if(smallerDate.equals(date)){
+                Integer value = (int) Math.round(weightRecord.getWeight());
+                WeightResponse weightResponse = new WeightResponse().builder()
+                        .date(weightRecord.getDate()).value(value+"kg").build();
+                count--;
+                sumValue+=weightRecord.getWeight();
+                weightResponseChartDTO.setValueToday(value+"kg");
+                weightResponseList.add(weightResponse);
+            }
+            today = calculateDate(today,1);
+            if(count < 1){
+                break;
+            }
+        }
+        //sắp xếp tăng dần theo date
+        weightResponseList.sort(new Comparator<WeightResponse>() {
+            @Override
+            public int compare(WeightResponse recordDateSmaller, WeightResponse recordDateBigger) {
+                return recordDateSmaller.getDate().compareTo(recordDateBigger.getDate());
+            }
+        });
+        weightResponseChartDTO.setWeightResponseList(weightResponseList);
+        weightResponseChartDTO.setAvgValue((int)sumValue/weightResponseChartDTO.getWeightResponseList().stream().count()+"kg");
+        return  weightResponseChartDTO;
+    }
+    public Date calculateDate(Date sourceDate , int minus) throws ParseException {
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sourceDate);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, -minus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
     }
 
     @Override

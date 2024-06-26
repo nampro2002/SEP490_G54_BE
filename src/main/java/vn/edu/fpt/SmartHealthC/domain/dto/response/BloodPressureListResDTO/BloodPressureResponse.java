@@ -5,22 +5,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BloodPressureResponseChartDTO {
+public class BloodPressureResponse {
 
     //Tâm thu
-    private Float systoleToday;
+    private Float systole;
     //Tâm trương
-    private Float diastoleToday;
+    private Float diastole;
 
-    private List<BloodPressureResponse> bloodPressureResponseList = new ArrayList<>();
+    private Date date;
 
 
 

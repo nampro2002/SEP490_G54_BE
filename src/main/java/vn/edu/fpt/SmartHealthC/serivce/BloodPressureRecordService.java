@@ -16,5 +16,5 @@ public interface BloodPressureRecordService {
     BloodPressureRecord updateBloodPressureRecord( Integer id,BloodPressureRecordDTO bloodPressureRecordDTO);
     BloodPressureRecord deleteBloodPressureRecord(Integer id);
 
-    List<BloodPressureResponseChartDTO> getDataChart() throws ParseException;
+    BloodPressureResponseChartDTO getDataChart() throws ParseException;
 }

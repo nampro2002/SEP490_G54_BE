@@ -9,6 +9,8 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietRecordListResDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponseChartDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
 import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
 
@@ -39,6 +41,15 @@ public class DietRecordController {
                         .result(dietRecordService.getDietRecordById(id))
                         .build()).getBody();
     }
+    @GetMapping("/mobile/chart")
+    public ApiResponse<DietResponseChartDTO> getDataChart() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<DietResponseChartDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(dietRecordService.getDataChart())
+                        .build()).getBody();
+    }
+
 
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<DietRecordListResDTO>> getAllDietRecords(@PathVariable Integer id) {

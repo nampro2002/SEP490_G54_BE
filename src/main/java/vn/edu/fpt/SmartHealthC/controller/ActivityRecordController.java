@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.ActivityRecordResListDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.ActivityResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.serivce.ActivityRecordService;
 
@@ -39,6 +41,14 @@ public class ActivityRecordController {
                 .body(ApiResponse.<ActivityRecord>builder()
                         .code(HttpStatus.OK.value())
                         .result(activityRecordService.getActivityRecordById(id))
+                        .build()).getBody();
+    }
+    @GetMapping("/mobile/chart")
+    public ApiResponse<ActivityResponseChartDTO> getDataChart() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ActivityResponseChartDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(activityRecordService.getDataChart())
                         .build()).getBody();
     }
 

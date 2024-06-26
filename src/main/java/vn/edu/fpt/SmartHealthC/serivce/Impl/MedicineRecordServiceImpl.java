@@ -7,7 +7,11 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseChartDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicinePLanResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
@@ -279,6 +283,115 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                 .collect(Collectors.toList());
 
     }
+
+    @Override
+    public MedicineResponseChartDTO getDataChart() throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+
+
+        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.getId());
+        //Sắp xếp giảm dần theo date
+        medicineRecordList.sort(new Comparator<MedicineRecord>() {
+            @Override
+            public int compare(MedicineRecord recordDateSmaller, MedicineRecord recordDateBigger) {
+                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
+            }
+        });
+        MedicineResponseChartDTO medicineResponseChartDTO = new MedicineResponseChartDTO();
+        List<MedicineResponse> medicineResponseList = new ArrayList<>();
+        //Lấy ra 5 date gần nhất
+        Set<Date> uniqueDates = new HashSet<>();
+        for (MedicineRecord record : medicineRecordList) {
+            String recordDateStr = formatDate.format(record.getDate());
+            Date recordDate = formatDate.parse(recordDateStr);
+            if(recordDate.before(date) || recordDate.equals(date)) {
+                if(!uniqueDates.contains(recordDate)){
+                    uniqueDates.add(recordDate);
+                }
+            }
+            if(uniqueDates.size() == 5){
+                break;
+            }
+        }
+        //Sắp xếp date tăng dần
+        Set<Date> sortedDates = new TreeSet<>(uniqueDates);
+        //Tìm danh sách theo date
+        for (Date sortedDate : sortedDates) {
+
+            if(sortedDate.equals(date)){
+                List<MedicineRecord> listByDate = medicineRecordList.stream()
+                        .filter(record -> {
+                            String recordDateStr = formatDate.format(record.getDate());
+                            try {
+                                Date recordDate = formatDate.parse(recordDateStr);
+                                String sortedDateStr = formatDate.format(sortedDate);
+                                Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                                return recordDate.equals(parsedSortedDate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                return false;
+                            }
+                        })
+                        .toList();
+                int total = listByDate.size();
+                int done = Math.toIntExact(listByDate.stream()
+                        .filter(MedicineRecord::getStatus)
+                        .count());
+                double valuePercent = ((double) done / total) * 100;
+                medicineResponseChartDTO.setDoneToday(done);
+                medicineResponseChartDTO.setTotalToday(total);
+
+                MedicineResponse medicineResponse = new MedicineResponse();
+                medicineResponse.setDate(sortedDate);
+                Integer value = (int) Math.round(valuePercent);
+                medicineResponse.setValuePercent(value);
+                medicineResponseList.add(medicineResponse);
+            }else{
+                List<MedicineRecord> listByDate = medicineRecordList.stream()
+                        .filter(record -> {
+                            String recordDateStr = formatDate.format(record.getDate());
+                            try {
+                                Date recordDate = formatDate.parse(recordDateStr);
+                                String sortedDateStr = formatDate.format(sortedDate);
+                                Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                                return recordDate.equals(parsedSortedDate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                return false;
+                            }
+                        })
+                        .toList();
+                int total = listByDate.size();
+                int done = Math.toIntExact(listByDate.stream()
+                        .filter(MedicineRecord::getStatus)
+                        .count());
+                double valuePercent = ((double) done / total) * 100;
+                MedicineResponse medicineResponse = new MedicineResponse();
+                medicineResponse.setDate(sortedDate);
+                Integer value = (int) Math.round(valuePercent);
+                medicineResponse.setValuePercent(value);
+                medicineResponseList.add(medicineResponse);
+            }
+        }
+        medicineResponseChartDTO.setMedicineResponseList(medicineResponseList);
+        return  medicineResponseChartDTO;
+    }
+    public Date calculateDateMinus(Date sourceDate , int minus) throws ParseException {
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sourceDate);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, -minus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
+    }
+
     // Hàm xác định thứ trong tuần từ Date
     public static String getDayOfWeek(Date date) {
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.ENGLISH);

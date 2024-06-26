@@ -250,6 +250,22 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         planResponseDTO.setHba1cList(hba1CResponseDTOList);
         planResponseDTO.setCholesterolList(cholesterolResponseDTOList);
         planResponseDTO.setBloodSugarList(bloodSugarResponseDTOList);
+        Optional<CardinalRecord> cardinalRecord = cardinalRecordList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        String sortedDateStr = formatDate.format(date);
+                        Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                        return recordDate.equals(parsedSortedDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }).findFirst();
+
+       planResponseDTO.setHba1cDataToday(cardinalRecord.map(CardinalRecord::getHBA1C).orElse((float) 0));
+       planResponseDTO.setCholesterolDataToday(cardinalRecord.map(CardinalRecord::getCholesterol).orElse((float) 0));
 
         //Thông số chi tiết của blood sugar
         List<DetailBloodSugarResponseDTO> listDetailBloodSugarMorningResponseDTOList = new ArrayList<>();
@@ -277,8 +293,6 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                         DetailBloodSugarResponseDTO.builder()
                                 .data(record.getBloodSugar()).typeTimeMeasure(record.getTimeMeasure().toString()).build()
                 );
-
-
             }
             if(record.getTimeMeasure().equals(TypeTimeMeasure.BEFORE_LUNCH)
                     || record.getTimeMeasure().equals(TypeTimeMeasure.AFTER_LUNCH)){
@@ -286,8 +300,6 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                         DetailBloodSugarResponseDTO.builder()
                                 .data(record.getBloodSugar()).typeTimeMeasure(record.getTimeMeasure().toString()).build()
                 );
-
-
             }
 
             if(record.getTimeMeasure().equals(TypeTimeMeasure.BEFORE_DINNER)
@@ -296,8 +308,6 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                         DetailBloodSugarResponseDTO.builder()
                                 .data(record.getBloodSugar()).typeTimeMeasure(record.getTimeMeasure().toString()).build()
                 );
-
-
             }
         }
         planResponseDTO.getDetailDataBloodSugar().put("MORNING",listDetailBloodSugarMorningResponseDTOList);
