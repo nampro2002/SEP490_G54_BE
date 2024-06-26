@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CardinalChartResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
@@ -46,6 +49,15 @@ public class MentalRecordController {
                 .body(ApiResponse.<List<MentalRecordListResDTO>>builder()
                         .code(HttpStatus.OK.value())
                         .result(mentalRecordService.getAllMentalRecords(id))
+                        .build()).getBody();
+    }
+
+    @GetMapping("/mobile/chart")
+    public ApiResponse<MentalResponseChartDTO> getDataChart() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MentalResponseChartDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(mentalRecordService.getDataChart())
                         .build()).getBody();
     }
 

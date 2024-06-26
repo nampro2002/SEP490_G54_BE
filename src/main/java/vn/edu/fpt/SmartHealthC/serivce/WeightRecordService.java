@@ -15,4 +15,5 @@ public interface WeightRecordService {
     WeightRecord updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO);
     WeightRecord deleteWeightRecord(Integer id);
     List<WeightResponseDTO> getWeightRecordList(Integer userId);
+
 }

@@ -6,6 +6,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordUpdateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseChartDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.BloodSugarResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CholesterolResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.HBA1CResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
@@ -22,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MentalRecordServiceImpl implements MentalRecordService {
@@ -209,5 +216,70 @@ public class MentalRecordServiceImpl implements MentalRecordService {
                 .date(mentalRecord.getDate())
                 .mentalRuleId(mentalRecord.getMentalRule().getId())
                 .build();
+    }
+
+    @Override
+    public MentalResponseChartDTO getDataChart() throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+
+
+        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserId(appUser.getId());
+        //Sắp xếp giảm dần theo date
+        mentalRecordList.sort(new Comparator<MentalRecord>() {
+            @Override
+            public int compare(MentalRecord recordDateSmaller, MentalRecord recordDateBigger) {
+                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
+            }
+        });
+        Set<Date> uniqueDates = new HashSet<>();
+        for (MentalRecord record : mentalRecordList) {
+            String recordDateStr = formatDate.format(record.getDate());
+            Date recordDate = formatDate.parse(recordDateStr);
+            if(recordDate.before(date) || recordDate.equals(date)) {
+                if(!uniqueDates.contains(recordDate)){
+                    uniqueDates.add(recordDate);
+                }
+            }
+            if(uniqueDates.size() == 6){
+                break;
+            }
+        }
+        //Sắp xếp date tăng dần
+        Set<Date> sortedDates = new TreeSet<>(uniqueDates);
+
+        //Đếm status bằng true của tưừng date
+        MentalResponseChartDTO mentalResponseChartDTO = new MentalResponseChartDTO();
+        for (Date sortedDate : sortedDates) {
+            long point = mentalRecordList.stream()
+                    .filter(record -> {
+                        String recordDateStr = formatDate.format(record.getDate());
+                        try {
+                            Date recordDate = formatDate.parse(recordDateStr);
+                            String sortedDateStr = formatDate.format(sortedDate);
+                            Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                            return recordDate.equals(parsedSortedDate)
+                                    && record.isStatus() == true;
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+                    })
+                    .count();
+            mentalResponseChartDTO.getMentalResponseList().add(
+                    new MentalResponse().builder().point((float) point).date(sortedDate).build()
+            );
+        }
+        mentalResponseChartDTO.setAvgPoint(
+                mentalResponseChartDTO.getMentalResponseList().stream().toList()
+                .stream().mapToDouble(MentalResponse::getPoint)
+                .average().getAsDouble()
+        );
+        return  mentalResponseChartDTO;
     }
 }

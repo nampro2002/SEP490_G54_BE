@@ -2,6 +2,8 @@ package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordUpdateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
@@ -16,4 +18,6 @@ public interface MentalRecordService {
     List<MentalRecordListResDTO> getAllMentalRecords(Integer userId);
     MentalRecordResponseDTO updateMentalRecord( MentalRecordUpdateDTO mentalRecordDTO) throws ParseException;
     MentalRecordResponseDTO deleteMentalRecord(Integer id);
+
+    MentalResponseChartDTO getDataChart() throws ParseException;
 }
