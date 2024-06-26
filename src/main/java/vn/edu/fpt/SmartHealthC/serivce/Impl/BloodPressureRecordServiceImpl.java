@@ -162,6 +162,7 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         int count = 5;
         List<BloodPressureResponseChartDTO> bloodPressureResponseChartDTOList = new ArrayList<>();
         List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.getId());
+        //Sắp xếp giảm dần theo date
         bloodPressureRecordListExits.sort(new Comparator<BloodPressureRecord>() {
             @Override
             public int compare(BloodPressureRecord recordDateSmaller, BloodPressureRecord recordDateBigger) {
@@ -173,10 +174,10 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
                 String smallerDateStr= formatDate.format(bloodPressureRecord.getDate());
                 Date smallerDate = formatDate.parse(smallerDateStr);
                 BloodPressureResponseChartDTO bloodPressureResponseChartDTO = new BloodPressureResponseChartDTO();
-                if(smallerDate.before(date)){
+                if(smallerDate.before(date) || smallerDate.equals(date)){
                     bloodPressureResponseChartDTO.setDate(bloodPressureRecord.getDate());
-                    bloodPressureResponseChartDTO.setSystoleToday(bloodPressureRecord.getSystole());
-                    bloodPressureResponseChartDTO.setDiastoleToday(bloodPressureRecord.getDiastole());
+                    bloodPressureResponseChartDTO.setSystole(bloodPressureRecord.getSystole());
+                    bloodPressureResponseChartDTO.setDiastole(bloodPressureRecord.getDiastole());
                     bloodPressureResponseChartDTOList.add(bloodPressureResponseChartDTO);
                     count--;
                 }
@@ -185,6 +186,7 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
                     break;
                 }
             }
+            //sắp xếp tăng dần theo date
         bloodPressureResponseChartDTOList.sort(new Comparator<BloodPressureResponseChartDTO>() {
             @Override
             public int compare(BloodPressureResponseChartDTO recordDateSmaller, BloodPressureResponseChartDTO recordDateBigger) {

@@ -1,4 +1,4 @@
-package vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO;
+package vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,13 +13,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BloodPressureResponseChartDTO {
+public class MentalResponse {
 
-    //Tâm thu
-    private Float systole;
-    //Tâm trương
-    private Float diastole;
-
+    private Float point;
     private Date date;
 
 
