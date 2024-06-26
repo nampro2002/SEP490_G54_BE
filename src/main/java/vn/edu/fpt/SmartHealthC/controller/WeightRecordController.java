@@ -33,17 +33,8 @@ public class WeightRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<WeightRecord> getWeightRecordById(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<WeightRecord>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(weightRecordService.getWeightRecordById(id))
-                        .build()).getBody();
-    }
-
     @GetMapping("/web/weekly-record/{id}")
-    public ApiResponse<List<WeightResponseDTO>> getAllWeightRecords(@PathVariable Integer id) {
+    public ApiResponse<List<WeightResponseDTO>> getAllWeightRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<WeightResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
@@ -59,7 +50,16 @@ public class WeightRecordController {
                         .result( weightRecordService.updateWeightRecord(id, weightRecordDTO))
                         .build()).getBody();
     }
-
+    //Test only
+    @GetMapping("/{id}")
+    public ApiResponse<WeightRecord> getWeightRecordById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<WeightRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(weightRecordService.getWeightRecordById(id))
+                        .build()).getBody();
+    }
+    //Test only
     @DeleteMapping("/{id}")
     public ApiResponse<WeightRecord> deleteWeightRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

@@ -31,17 +31,8 @@ public class DietRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<DietRecord> getDietRecordById(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<DietRecord>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(dietRecordService.getDietRecordById(id))
-                        .build()).getBody();
-    }
-
     @GetMapping("/web/weekly-record/{id}")
-    public ApiResponse<List<DietRecordListResDTO>> getAllDietRecords(@PathVariable Integer id) {
+    public ApiResponse<List<DietRecordListResDTO>> getAllDietRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<DietRecordListResDTO>>builder()
                         .code(HttpStatus.OK.value())
@@ -57,7 +48,16 @@ public class DietRecordController {
                         .result(dietRecordService.updateDietRecord(dietRecordDTO))
                         .build()).getBody();
     }
-
+    //Test only
+    @GetMapping("/{id}")
+    public ApiResponse<DietRecord> getDietRecordById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<DietRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(dietRecordService.getDietRecordById(id))
+                        .build()).getBody();
+    }
+    //Test only
     @DeleteMapping("/{id}")
     public ApiResponse<DietRecord> deleteDietRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

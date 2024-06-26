@@ -34,17 +34,9 @@ public class MedicineRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<MedicineRecordResponseDTO> getMedicineRecordById(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MedicineRecordResponseDTO>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(medicineRecordService.getMedicineRecordById(id))
-                        .build()).getBody();
-    }
 
     @GetMapping("/web/weekly-record/{id}")
-    public  ApiResponse<List<MedicineRecordListResDTO>> getAllMedicineRecords(@PathVariable Integer id) {
+    public  ApiResponse<List<MedicineRecordListResDTO>> getAllMedicineRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MedicineRecordListResDTO>>builder()
                         .code(HttpStatus.OK.value())
@@ -60,7 +52,16 @@ public class MedicineRecordController {
                         .result(medicineRecordService.updateMedicineRecord(medicineRecordDTO))
                         .build()).getBody();
     }
-
+    //Test only
+    @GetMapping("/{id}")
+    public ApiResponse<MedicineRecordResponseDTO> getMedicineRecordById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicineRecordResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicineRecordService.getMedicineRecordById(id))
+                        .build()).getBody();
+    }
+    //Test only
     @DeleteMapping("/{id}")
     public ApiResponse<MedicineRecordResponseDTO> deleteMedicineRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

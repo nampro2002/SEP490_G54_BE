@@ -31,23 +31,16 @@ public class MentalRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<MentalRecordResponseDTO> getMentalRecordById(@PathVariable Integer id) {
-        return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MentalRecordResponseDTO>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(mentalRecordService.getMentalRecordById(id))
-                        .build()).getBody();
-    }
 
     @GetMapping("/web/weekly-record/{id}")
-    public ApiResponse<List<MentalRecordListResDTO>> getAllMentalRecords(@PathVariable Integer id) {
+    public ApiResponse<List<MentalRecordListResDTO>> getAllMentalRecordsByAppUserId(@PathVariable Integer id) {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MentalRecordListResDTO>>builder()
                         .code(HttpStatus.OK.value())
                         .result(mentalRecordService.getAllMentalRecords(id))
                         .build()).getBody();
     }
+
 
     @PutMapping("")
     public ApiResponse<MentalRecordResponseDTO> updateMentalRecord(@RequestBody @Valid MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
@@ -57,7 +50,16 @@ public class MentalRecordController {
                         .result(mentalRecordService.updateMentalRecord(mentalRecordDTO))
                         .build()).getBody();
     }
-
+    //Test only
+    @GetMapping("/{id}")
+    public ApiResponse<MentalRecordResponseDTO> getMentalRecordById(@PathVariable Integer id) {
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MentalRecordResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(mentalRecordService.getMentalRecordById(id))
+                        .build()).getBody();
+    }
+    //Test only
     @DeleteMapping("/{id}")
     public ApiResponse<MentalRecordResponseDTO> deleteMentalRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
