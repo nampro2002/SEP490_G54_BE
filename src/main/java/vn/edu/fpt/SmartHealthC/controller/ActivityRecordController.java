@@ -35,14 +35,7 @@ public class ActivityRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<ActivityRecord> getActivityRecordById(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<ActivityRecord>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(activityRecordService.getActivityRecordById(id))
-                        .build()).getBody();
-    }
+
     @GetMapping("/mobile/chart")
     public ApiResponse<ActivityResponseChartDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -53,7 +46,7 @@ public class ActivityRecordController {
     }
 
     @GetMapping("/web/weekly-record/{id}")
-    public ApiResponse<List<ActivityRecordResListDTO>> getAllActivityRecords(@PathVariable Integer id) {
+    public ApiResponse<List<ActivityRecordResListDTO>> getAllActivityRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<ActivityRecordResListDTO>>builder()
                         .code(HttpStatus.OK.value())
@@ -70,7 +63,16 @@ public class ActivityRecordController {
                         .result(updatedActivityRecord)
                         .build()).getBody();
     }
-
+    //Test only
+    @GetMapping("/{id}")
+    public ApiResponse<ActivityRecord> getActivityRecordById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ActivityRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(activityRecordService.getActivityRecordById(id))
+                        .build()).getBody();
+    }
+    //Test only
     @DeleteMapping("/{id}")
     public ApiResponse<ActivityRecord> deleteActivityRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

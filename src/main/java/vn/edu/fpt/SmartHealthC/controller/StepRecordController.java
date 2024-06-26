@@ -33,17 +33,9 @@ public class StepRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<StepRecord> getStepRecordById(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<StepRecord>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(stepRecordService.getStepRecordById(id))
-                        .build()).getBody();
-    }
 
     @GetMapping("/web/weekly-record/{id}")
-    public ApiResponse<List<StepRecordResListDTO>> getAllStepRecords(@PathVariable Integer id) {
+    public ApiResponse<List<StepRecordResListDTO>> getAllStepRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<StepRecordResListDTO>>builder()
                         .code(HttpStatus.OK.value())
@@ -68,7 +60,16 @@ public class StepRecordController {
                         .result(stepRecordService.updateStepRecord(stepRecordDTO))
                         .build()).getBody();
     }
-
+    //Test only
+    @GetMapping("/{id}")
+    public ApiResponse<StepRecord> getStepRecordById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<StepRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(stepRecordService.getStepRecordById(id))
+                        .build()).getBody();
+    }
+    //Test only
     @DeleteMapping("/{id}")
     public ApiResponse<StepRecord> deleteStepRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

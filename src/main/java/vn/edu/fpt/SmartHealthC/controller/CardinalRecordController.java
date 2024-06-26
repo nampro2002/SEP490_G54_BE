@@ -34,14 +34,6 @@ public class CardinalRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<CardinalRecord> getCardinalRecordById(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<CardinalRecord>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(cardinalRecordService.getCardinalRecordById(id))
-                        .build()).getBody();
-    }
 
     @GetMapping("/mobile/chart")
     public ApiResponse<CardinalChartResponseDTO> getDataChart() throws ParseException {
@@ -53,24 +45,13 @@ public class CardinalRecordController {
     }
 
     @GetMapping("/web/weekly-record/{id}")
-    public ApiResponse< List<CardinalRecordResponseDTO>> getAllCardinalRecords(@PathVariable Integer id) {
+    public ApiResponse< List<CardinalRecordResponseDTO>> getAllCardinalRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.< List<CardinalRecordResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
                         .result(cardinalRecordService.getAllCardinalRecords(id))
                         .build()).getBody();
     }
-
-    @GetMapping("/get-all")
-    public ApiResponse< List<CardinalRecord>> getAllCardinalRecordsVip() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.< List<CardinalRecord>>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(cardinalRecordService.getAllCardinalRecordsVip())
-                        .build()).getBody();
-    }
-
-
     @PutMapping("/{id}")
     public ApiResponse<CardinalRecord> updateCardinalRecord(@PathVariable Integer id, @RequestBody @Valid CardinalRecordDTO cardinalRecordDTO) {
         CardinalRecord updatedCardinalRecord = cardinalRecordService.updateCardinalRecord(id, cardinalRecordDTO);
@@ -81,6 +62,26 @@ public class CardinalRecordController {
                         .build()).getBody();
     }
 
+    //Test only
+
+    @GetMapping("/{id}")
+    public ApiResponse<CardinalRecord> getCardinalRecordById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<CardinalRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(cardinalRecordService.getCardinalRecordById(id))
+                        .build()).getBody();
+    }
+    //Test only
+    @GetMapping("/get-all")
+    public ApiResponse< List<CardinalRecord>> getAllCardinalRecordsVip() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.< List<CardinalRecord>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(cardinalRecordService.getAllCardinalRecordsVip())
+                        .build()).getBody();
+    }
+    //Test only
     @DeleteMapping("/{id}")
     public ApiResponse<CardinalRecord> deleteCardinalRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

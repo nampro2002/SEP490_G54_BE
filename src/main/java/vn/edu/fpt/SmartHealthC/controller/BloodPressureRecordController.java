@@ -31,14 +31,7 @@ public class BloodPressureRecordController {
                         .build()).getBody();
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<BloodPressureRecord> getBloodPressureRecordById(@PathVariable Integer id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<BloodPressureRecord>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(bloodPressureRecordService.getBloodPressureRecordById(id))
-                        .build()).getBody();
-    }
+
     @GetMapping("/mobile/chart")
     public ApiResponse<BloodPressureResponseChartDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -49,7 +42,7 @@ public class BloodPressureRecordController {
     }
 
     @GetMapping("/web/weekly-record/{id}")
-    public ApiResponse<List<BloodPressureResponseDTO>> getAllBloodPressureRecords(@PathVariable Integer id) {
+    public ApiResponse<List<BloodPressureResponseDTO>> getAllBloodPressureRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<BloodPressureResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
@@ -65,7 +58,16 @@ public class BloodPressureRecordController {
                         .result(bloodPressureRecordService.updateBloodPressureRecord(id, bloodPressureRecordDTO))
                         .build()).getBody();
     }
-
+    //Test only
+    @GetMapping("/{id}")
+    public ApiResponse<BloodPressureRecord> getBloodPressureRecordById(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<BloodPressureRecord>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(bloodPressureRecordService.getBloodPressureRecordById(id))
+                        .build()).getBody();
+    }
+    //Test only
     @DeleteMapping("/{id}")
     public ApiResponse<BloodPressureRecord> deleteBloodPressureRecord(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

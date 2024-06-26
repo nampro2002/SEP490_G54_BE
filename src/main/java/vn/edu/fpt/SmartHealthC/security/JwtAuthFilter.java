@@ -1,5 +1,7 @@
 package vn.edu.fpt.SmartHealthC.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -54,21 +56,36 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
         //validate jwt
         jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUserName(jwt);// verify jwt
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetail = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(jwt, userDetail)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetail,
-                        null,
-                        userDetail.getAuthorities()
-                );
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+        try {
+            userEmail = jwtService.extractUserName(jwt);// verify jwt
+            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetail = this.userDetailsService.loadUserByUsername(userEmail);
+                if (jwtService.isTokenValid(jwt, userDetail)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetail,
+                            null,
+                            userDetail.getAuthorities()
+                    );
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+        }catch (JwtException e){
+            ErrorCode errorCode = ErrorCode.CREDENTIAL_EXPIRED;
+            response.setStatus(errorCode.getStatusCode().value());
+            ApiResponse<?> apiResponse = ApiResponse.builder()
+                    .code(errorCode.getStatusCode().value())
+                    .message(errorCode.getMessage())
+                    .build();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
+            response.flushBuffer();
+            return;
         }
+
         filterChain.doFilter(request, response);
     }
 
