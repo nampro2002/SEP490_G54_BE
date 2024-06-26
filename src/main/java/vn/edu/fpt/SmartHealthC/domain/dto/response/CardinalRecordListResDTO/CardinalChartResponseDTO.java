@@ -12,6 +12,8 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CardinalChartResponseDTO {
+    private Float hba1cDataToday;
+    private Float cholesterolDataToday;
     private List<HBA1CResponseDTO> hba1cList = new ArrayList<>();
     private List<CholesterolResponseDTO>  cholesterolList = new ArrayList<>();
     private List<BloodSugarResponseDTO>  bloodSugarList = new ArrayList<>();

@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicinePLanResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
@@ -52,6 +54,16 @@ public class MedicineRecordController {
                         .result(medicineRecordService.getAllMedicineRecords(id))
                         .build()).getBody();
     }
+
+    @GetMapping("/mobile/chart")
+    public ApiResponse<MedicineResponseChartDTO> getDataChart() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicineResponseChartDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicineRecordService.getDataChart())
+                        .build()).getBody();
+    }
+
     @GetMapping("/mobile/plan-medicine/{weekStart}")
     public  ApiResponse<List<MedicinePLanResponseDTO> > getAllMedicinePlanRecord(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)

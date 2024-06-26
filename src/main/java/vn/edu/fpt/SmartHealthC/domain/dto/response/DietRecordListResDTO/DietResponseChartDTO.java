@@ -1,4 +1,4 @@
-package vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO;
+package vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,18 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MentalResponse {
+public class DietResponseChartDTO {
 
-    private Integer point;
-    private Date date;
-
+    private int avgValue;
+    private List<DietResponse> dietResponseList = new ArrayList<>();
 
 
 }

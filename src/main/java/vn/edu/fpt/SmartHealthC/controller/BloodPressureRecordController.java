@@ -40,9 +40,9 @@ public class BloodPressureRecordController {
                         .build()).getBody();
     }
     @GetMapping("/mobile/chart")
-    public ApiResponse<List<BloodPressureResponseChartDTO>> getDataChart() throws ParseException {
+    public ApiResponse<BloodPressureResponseChartDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<BloodPressureResponseChartDTO>>builder()
+                .body(ApiResponse.<BloodPressureResponseChartDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(bloodPressureRecordService.getDataChart())
                         .build()).getBody();

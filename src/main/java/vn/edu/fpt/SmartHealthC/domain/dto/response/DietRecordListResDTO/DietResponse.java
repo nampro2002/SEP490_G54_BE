@@ -1,23 +1,20 @@
-package vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO;
+package vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeActivity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MentalResponse {
+public class DietResponse {
 
-    private Integer point;
+    private int value;
     private Date date;
-
-
 
 }

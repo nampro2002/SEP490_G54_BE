@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 
@@ -46,6 +48,15 @@ public class StepRecordController {
                 .body(ApiResponse.<List<StepRecordResListDTO>>builder()
                         .code(HttpStatus.OK.value())
                         .result(stepRecordService.getAllStepRecords(id))
+                        .build()).getBody();
+    }
+
+    @GetMapping("/mobile/chart")
+    public ApiResponse<StepResponseChartDTO> getDataChart() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<StepResponseChartDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(stepRecordService.getDataChart())
                         .build()).getBody();
     }
 
