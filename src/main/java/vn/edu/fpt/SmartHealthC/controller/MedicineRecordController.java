@@ -27,7 +27,7 @@ public class MedicineRecordController {
     private AppUserRepository appUserRepository;
 
     @PostMapping
-    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody @Valid MedicineRecordCreateDTO medicineRecordDTO) throws ParseException {
+    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody @Valid List<MedicineRecordCreateDTO> medicineRecordDTO) throws ParseException {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicineRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())

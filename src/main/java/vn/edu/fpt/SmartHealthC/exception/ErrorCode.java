@@ -67,6 +67,7 @@ public enum ErrorCode {
     MENTAL_PLAN_EXIST("Mental plan exist", HttpStatus.BAD_REQUEST),
     MEDICINE_TYPE_PLAN_NOT_FOUND("Medicine Type Plan not found", HttpStatus.NOT_FOUND),
     MEDICINE_TYPE_NOT_FOUND("Medicine type not found", HttpStatus.NOT_FOUND),
+    MEDICINE_TYPE_EXIST("Medicine type exist", HttpStatus.BAD_REQUEST),
     MEDICINE_PLAN_EXIST("Medicine plan exist", HttpStatus.BAD_REQUEST),
     MEDICAL_APPOINTMENT_NOT_FOUND("Medical appointment not found", HttpStatus.NOT_FOUND),
     MEDICAL_HISTORY_NOT_FOUND("Medical history not found", HttpStatus.NOT_FOUND),

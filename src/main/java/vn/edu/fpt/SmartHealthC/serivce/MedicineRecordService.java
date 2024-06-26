@@ -12,7 +12,7 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface MedicineRecordService {
-    MedicineRecordResponseDTO createMedicineRecord(MedicineRecordCreateDTO medicineRecordDTO) throws ParseException;
+    MedicineRecordResponseDTO createMedicineRecord(List<MedicineRecordCreateDTO> medicineRecordDTO) throws ParseException;
     MedicineRecordResponseDTO getMedicineRecordById(Integer id);
     MedicineRecord getMedicineRecordEntityById(Integer id);
     List<MedicineRecordListResDTO> getAllMedicineRecords(Integer userId);

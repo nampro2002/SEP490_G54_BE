@@ -6,10 +6,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordUpdateDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseChartDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.BloodSugarResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CholesterolResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.HBA1CResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
@@ -25,10 +21,7 @@ import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class MentalRecordServiceImpl implements MentalRecordService {
@@ -281,5 +274,28 @@ public class MentalRecordServiceImpl implements MentalRecordService {
                 .average().getAsDouble()
         );
         return  mentalResponseChartDTO;
+    }
+
+    @Override
+    public List<MentalRule> getListMentalPerWeek(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+
+        Date weekStartFind = formatDate.parse(weekStart);
+
+        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserId(appUser.getId());
+        Set<MentalRule> uniqueRule = new TreeSet<>(Comparator.comparingInt(MentalRule::getId));
+        for (MentalRecord record : mentalRecordList) {
+            String recordDateStr = formatDate.format(record.getWeekStart());
+            Date recordDate = formatDate.parse(recordDateStr);
+            if(recordDate.equals(weekStartFind)) {
+                if(!uniqueRule.contains(record.getMentalRule())){
+                    uniqueRule.add(record.getMentalRule());
+                }
+            }
+        }
+
+        return uniqueRule.stream().toList();
     }
 }

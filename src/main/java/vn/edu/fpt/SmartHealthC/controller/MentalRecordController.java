@@ -13,6 +13,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRecordResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
 
 import java.text.ParseException;
@@ -40,6 +41,15 @@ public class MentalRecordController {
                 .body(ApiResponse.<MentalRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(mentalRecordService.getMentalRecordById(id))
+                        .build()).getBody();
+    }
+
+    @GetMapping("/mobile/mental-rule/{weekStart}")
+    public ApiResponse<List<MentalRule>> getMentalRecordById(@PathVariable String weekStart) throws ParseException {
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MentalRule>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(mentalRecordService.getListMentalPerWeek(weekStart))
                         .build()).getBody();
     }
 
