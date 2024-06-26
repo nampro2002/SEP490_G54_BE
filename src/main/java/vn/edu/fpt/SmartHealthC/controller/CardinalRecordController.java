@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.CardinalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseChartDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CardinalChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CardinalRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
@@ -31,6 +33,17 @@ public class CardinalRecordController {
                         .result(createdCardinalRecord)
                         .build()).getBody();
     }
+
+
+    @GetMapping("/mobile/chart")
+    public ApiResponse<CardinalChartResponseDTO> getDataChart() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<CardinalChartResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(cardinalRecordService.getDataChart())
+                        .build()).getBody();
+    }
+
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse< List<CardinalRecordResponseDTO>> getAllCardinalRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

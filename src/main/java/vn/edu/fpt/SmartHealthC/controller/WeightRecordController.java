@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WeightRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponseChartDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
@@ -30,6 +32,15 @@ public class WeightRecordController {
                 .body(ApiResponse.<WeightRecord>builder()
                         .code(HttpStatus.CREATED.value())
                         .result(weightRecordService.createWeightRecord(weightRecordDTO))
+                        .build()).getBody();
+    }
+
+    @GetMapping("/mobile/chart")
+    public ApiResponse<WeightResponseChartDTO> getDataChart() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<WeightResponseChartDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(weightRecordService.getDataChart())
                         .build()).getBody();
     }
 

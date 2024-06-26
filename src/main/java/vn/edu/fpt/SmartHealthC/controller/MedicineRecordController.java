@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponseChartDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicinePLanResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
@@ -26,7 +29,7 @@ public class MedicineRecordController {
     private AppUserRepository appUserRepository;
 
     @PostMapping
-    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody @Valid MedicineRecordCreateDTO medicineRecordDTO) throws ParseException {
+    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody @Valid List<MedicineRecordCreateDTO> medicineRecordDTO) throws ParseException {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicineRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
@@ -41,6 +44,24 @@ public class MedicineRecordController {
                 .body(ApiResponse.<List<MedicineRecordListResDTO>>builder()
                         .code(HttpStatus.OK.value())
                         .result(medicineRecordService.getAllMedicineRecords(id))
+                        .build()).getBody();
+    }
+
+    @GetMapping("/mobile/chart")
+    public ApiResponse<MedicineResponseChartDTO> getDataChart() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<MedicineResponseChartDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicineRecordService.getDataChart())
+                        .build()).getBody();
+    }
+
+    @GetMapping("/mobile/plan-medicine/{weekStart}")
+    public  ApiResponse<List<MedicinePLanResponseDTO> > getAllMedicinePlanRecord(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MedicinePLanResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicineRecordService.getAllMedicinePlans(weekStart))
                         .build()).getBody();
     }
 

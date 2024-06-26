@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WeightRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
 
@@ -15,4 +16,6 @@ public interface WeightRecordService {
     WeightRecord updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO);
     WeightRecord deleteWeightRecord(Integer id);
     List<WeightResponseDTO> getWeightRecordList(Integer userId);
+
+    WeightResponseChartDTO getDataChart() throws ParseException;
 }

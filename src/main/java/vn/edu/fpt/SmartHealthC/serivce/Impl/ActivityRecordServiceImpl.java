@@ -7,7 +7,11 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.ActivityRecordResListDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.ActivityResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.ActivityResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.RecordPerDay;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -192,5 +196,77 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
         activityRecordRepository.deleteById(id);
         return activityRecord;
     }
+    public Date calculateDateMinus(Date sourceDate , int minus) throws ParseException {
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sourceDate);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, -minus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
+    }
+
+    @Override
+    public ActivityResponseChartDTO getDataChart() throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+
+        List<ActivityRecord> activityRecordList = activityRecordRepository.findRecordByIdUser(appUser.getId());
+        //Sắp xếp giảm dần theo date
+        activityRecordList.sort(new Comparator<ActivityRecord>() {
+            @Override
+            public int compare(ActivityRecord recordDateSmaller, ActivityRecord recordDateBigger) {
+                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
+            }
+        });
+        int count = 5;
+        ActivityResponseChartDTO activityResponseChartDTO = new ActivityResponseChartDTO();
+        List<ActivityResponse> activityResponseList = new ArrayList<>();
+        for (ActivityRecord activityRecord : activityRecordList) {
+            String smallerDateStr= formatDate.format(activityRecord.getDate());
+            Date smallerDate = formatDate.parse(smallerDateStr);
+
+            if(smallerDate.before(date)){
+                Integer value = (int) Math.round(activityRecord.getActualDuration());
+                ActivityResponse activityResponse = new ActivityResponse()
+                        .builder().date(activityRecord.getDate())
+                        .duration(value)
+                        .type(activityRecord.getActualType()).build();
+                count--;
+                activityResponseList.add(activityResponse);
+            }
+            if(smallerDate.equals(date)){
+                Integer value = (int) Math.round(activityRecord.getActualDuration());
+                activityResponseChartDTO.setDurationToday(value);
+                activityResponseChartDTO.setTypeToDay(activityRecord.getActualType());
+                ActivityResponse activityResponse = new ActivityResponse()
+                        .builder().date(activityRecord.getDate())
+                        .duration(value)
+                        .type(activityRecord.getActualType()).build();
+                activityResponseList.add(activityResponse);
+                count--;
+            }
+            today = calculateDateMinus(today,1);
+            if(count < 1){
+                break;
+            }
+        }
+        //sắp xếp tăng dần theo date
+        activityResponseList.sort(new Comparator<ActivityResponse>() {
+            @Override
+            public int compare(ActivityResponse recordDateSmaller, ActivityResponse recordDateBigger) {
+                return recordDateSmaller.getDate().compareTo(recordDateBigger.getDate());
+            }
+        });
+        activityResponseChartDTO.setActivityResponseList(activityResponseList);
+
+        return activityResponseChartDTO;
+    }
+
 
 }

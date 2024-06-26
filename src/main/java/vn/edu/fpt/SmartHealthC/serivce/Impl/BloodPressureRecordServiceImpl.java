@@ -5,6 +5,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
@@ -148,6 +150,85 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         BloodPressureRecord bloodPressureRecord = getBloodPressureRecordById(id);
         bloodPressureRecordRepository.deleteById(id);
         return bloodPressureRecord;
+    }
+
+    @Override
+    public BloodPressureResponseChartDTO getDataChart() throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+
+        int count = 5;
+        BloodPressureResponseChartDTO bloodPressureResponseChartDTO = new BloodPressureResponseChartDTO();
+        List<BloodPressureResponse> bloodPressureResponseList = new ArrayList<>();
+        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.getId());
+
+        //Sắp xếp giảm dần theo date
+        bloodPressureRecordListExits.sort(new Comparator<BloodPressureRecord>() {
+            @Override
+            public int compare(BloodPressureRecord recordDateSmaller, BloodPressureRecord recordDateBigger) {
+                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
+            }
+        });
+
+        Optional<BloodPressureRecord> bloodPressureRecordByDate = bloodPressureRecordListExits.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        String sortedDateStr = formatDate.format(date);
+                        Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                        return recordDate.equals(parsedSortedDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }).findFirst();
+        bloodPressureResponseChartDTO.setSystoleToday(
+                bloodPressureRecordByDate.map(BloodPressureRecord::getSystole).orElse((float) 0)
+        );
+        bloodPressureResponseChartDTO.setDiastoleToday(
+                bloodPressureRecordByDate.map(BloodPressureRecord::getDiastole).orElse((float) 0)
+        );
+
+            for (BloodPressureRecord bloodPressureRecord : bloodPressureRecordListExits) {
+                String smallerDateStr= formatDate.format(bloodPressureRecord.getDate());
+                Date smallerDate = formatDate.parse(smallerDateStr);
+                BloodPressureResponse bloodPressureResponse = new BloodPressureResponse();
+                if(smallerDate.before(date) || smallerDate.equals(date)){
+                    bloodPressureResponse.setDate(bloodPressureRecord.getDate());
+                    bloodPressureResponse.setSystole(bloodPressureRecord.getSystole());
+                    bloodPressureResponse.setDiastole(bloodPressureRecord.getDiastole());
+                    bloodPressureResponseList.add(bloodPressureResponse);
+                    count--;
+                }
+                today = calculateDate(today,1);
+                if(count < 1){
+                    break;
+                }
+            }
+
+            //sắp xếp tăng dần theo date
+        bloodPressureResponseList.sort(new Comparator<BloodPressureResponse>() {
+            @Override
+            public int compare(BloodPressureResponse recordDateSmaller, BloodPressureResponse recordDateBigger) {
+                return recordDateSmaller.getDate().compareTo(recordDateBigger.getDate());
+            }
+        });
+        bloodPressureResponseChartDTO.setBloodPressureResponseList(bloodPressureResponseList);
+        return bloodPressureResponseChartDTO;
+    }
+    public Date calculateDate(Date sourceDate , int minus) throws ParseException {
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sourceDate);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, -minus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
     }
 
 

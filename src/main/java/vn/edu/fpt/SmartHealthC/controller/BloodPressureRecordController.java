@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
 import vn.edu.fpt.SmartHealthC.serivce.BloodPressureRecordService;
@@ -31,6 +32,14 @@ public class BloodPressureRecordController {
     }
 
 
+    @GetMapping("/mobile/chart")
+    public ApiResponse<BloodPressureResponseChartDTO> getDataChart() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<BloodPressureResponseChartDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(bloodPressureRecordService.getDataChart())
+                        .build()).getBody();
+    }
 
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<BloodPressureResponseDTO>> getAllBloodPressureRecordsByAppUserId(@PathVariable Integer id) {

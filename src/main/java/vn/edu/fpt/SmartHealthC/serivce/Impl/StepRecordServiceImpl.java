@@ -6,8 +6,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepResponseChartDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -54,7 +59,7 @@ public class StepRecordServiceImpl implements StepRecordService {
 
         String weekStartStr= formatDate.format(stepRecordDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
-        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserIdAndDate(appUser.getId());
+        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.getId());
         boolean dateExists = stepPlanExist.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getWeekStart());
@@ -145,7 +150,7 @@ public class StepRecordServiceImpl implements StepRecordService {
 
         String dateStr= formatDate.format(stepRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
-        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserIdAndDate(appUser.getId());
+        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.getId());
         Optional<StepRecord> stepRecord = stepPlanExist.stream()
                 .filter(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
@@ -173,6 +178,71 @@ public class StepRecordServiceImpl implements StepRecordService {
         StepRecord stepRecord = getStepRecordById(id);
         stepRecordRepository.deleteById(id);
         return stepRecord;
+    }
+
+    @Override
+    public StepResponseChartDTO getDataChart() throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+
+
+        List<StepRecord> stepRecordList = stepRecordRepository.findByAppUserId(appUser.getId());
+        //Sắp xếp giảm dần theo date
+        stepRecordList.sort(new Comparator<StepRecord>() {
+            @Override
+            public int compare(StepRecord recordDateSmaller, StepRecord recordDateBigger) {
+                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
+            }
+        });
+
+        StepResponseChartDTO stepResponseChartDTO = new StepResponseChartDTO();
+        List<StepResponse> stepResponseList = new ArrayList<>();
+        int count = 5;
+        for (StepRecord stepRecord : stepRecordList) {
+            String smallerDateStr= formatDate.format(stepRecord.getDate());
+            Date smallerDate = formatDate.parse(smallerDateStr);
+
+            if(smallerDate.before(date)){
+
+                double valuePercent = ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100;
+                StepResponse stepResponse = new StepResponse();
+                stepResponse.setValuePercent((int) valuePercent);
+                stepResponse.setDate(stepRecord.getDate());
+                stepResponseList.add(stepResponse);
+                count--;
+
+            }
+            if(smallerDate.equals(date)){
+                double valuePercent = ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100;
+                StepResponse stepResponse = new StepResponse();
+                stepResponse.setValuePercent((int) valuePercent);
+                stepResponse.setDate(stepRecord.getDate());
+                stepResponseList.add(stepResponse);
+                Integer value = (int) Math.round(stepRecord.getActualValue());
+                stepResponseChartDTO.setValueToday(value);
+                count--;
+            }
+            today = calculateDate(today,1);
+            if(count < 1){
+                break;
+            }
+        }
+        //Sắp xếp giảm dần theo date
+        stepResponseList.sort(new Comparator<StepResponse>() {
+            @Override
+            public int compare(StepResponse recordDateSmaller, StepResponse recordDateBigger) {
+                return recordDateSmaller.getDate().compareTo(recordDateBigger.getDate());
+            }
+        });
+
+
+        stepResponseChartDTO.setStepResponseList(stepResponseList);
+            return stepResponseChartDTO;
     }
 
 

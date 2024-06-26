@@ -61,7 +61,6 @@ public enum ErrorCode {
     CARDINAL_NOT_FOUND("Numeral not found", HttpStatus.NOT_FOUND),
     CARDINAL_TYPE_DAY_EXIST("Numeral type day exists", HttpStatus.BAD_REQUEST),
     BLOOD_PRESSURE_DAY_EXIST("Blood pressure day exists", HttpStatus.BAD_REQUEST),
-
     MONTHLY_QUESTION_NOTFOUND("Monthly Question not found", HttpStatus.NOT_FOUND),
     RULE_FOR_PLAN_NOTFOUND("Rule For Plan not found", HttpStatus.NOT_FOUND),
     MENTAL_RULE_NOT_FOUND("Mental Rule not found", HttpStatus.NOT_FOUND),
@@ -69,6 +68,7 @@ public enum ErrorCode {
     MENTAL_PLAN_EXIST("Mental plan exist", HttpStatus.BAD_REQUEST),
     MEDICINE_TYPE_PLAN_NOT_FOUND("Medicine Type Plan not found", HttpStatus.NOT_FOUND),
     MEDICINE_TYPE_NOT_FOUND("Medicine type not found", HttpStatus.NOT_FOUND),
+    MEDICINE_TYPE_EXIST("Medicine type exist", HttpStatus.BAD_REQUEST),
     MEDICINE_PLAN_EXIST("Medicine plan exist", HttpStatus.BAD_REQUEST),
     MEDICAL_APPOINTMENT_NOT_FOUND("Medical appointment not found", HttpStatus.NOT_FOUND),
     MEDICAL_HISTORY_NOT_FOUND("Medical history not found", HttpStatus.NOT_FOUND),

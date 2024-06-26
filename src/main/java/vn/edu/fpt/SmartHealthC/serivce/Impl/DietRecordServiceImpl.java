@@ -7,10 +7,15 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietRecordListResDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.RecordPerDay;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
@@ -182,5 +187,75 @@ public class DietRecordServiceImpl implements DietRecordService {
         DietRecord dietRecord = getDietRecordById(id);
         dietRecordRepository.deleteById(id);
         return dietRecord;
+    }
+
+    @Override
+    public DietResponseChartDTO getDataChart() throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        AppUser appUser = appUserService.findAppUserByEmail(email);
+
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+
+
+        List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.getId());
+        //Sắp xếp giảm dần theo date
+        dietRecordList.sort(new Comparator<DietRecord>() {
+            @Override
+            public int compare(DietRecord recordDateSmaller, DietRecord recordDateBigger) {
+                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
+            }
+        });
+        int count = 5;
+        double sumValue = 0;
+        DietResponseChartDTO dietResponseChartDTO = new DietResponseChartDTO();
+        List<DietResponse> dietResponseList = new ArrayList<>();
+        for (DietRecord dietRecord : dietRecordList) {
+            String smallerDateStr= formatDate.format(dietRecord.getDate());
+            Date smallerDate = formatDate.parse(smallerDateStr);
+
+            if(smallerDate.before(date)){
+                Integer value = (int) Math.round(dietRecord.getActualValue());
+                DietResponse dietResponse = new DietResponse().builder()
+                        .date(dietRecord.getDate()).value(value).build();
+                count--;
+                sumValue+=dietRecord.getActualValue();
+                dietResponseList.add(dietResponse);
+            }
+            if(smallerDate.equals(date)){
+                Integer value = (int) Math.round(dietRecord.getActualValue());
+                DietResponse dietResponse = new DietResponse().builder()
+                        .date(dietRecord.getDate()).value(value).build();
+                count--;
+                sumValue+=dietRecord.getActualValue();
+                dietResponseList.add(dietResponse);
+            }
+
+            today = calculateDateMinus(today,1);
+            if(count < 1){
+                break;
+            }
+        }
+        //sắp xếp tăng dần theo date
+        dietResponseList.sort(new Comparator<DietResponse>() {
+            @Override
+            public int compare(DietResponse recordDateSmaller, DietResponse recordDateBigger) {
+                return recordDateSmaller.getDate().compareTo(recordDateBigger.getDate());
+            }
+        });
+        dietResponseChartDTO.setDietResponseList(dietResponseList);
+        dietResponseChartDTO.setAvgValue((int) (sumValue/dietResponseChartDTO.getDietResponseList().stream().count()));
+        return  dietResponseChartDTO;
+    }
+    public Date calculateDateMinus(Date sourceDate , int minus) throws ParseException {
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sourceDate);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, -minus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
     }
 }
