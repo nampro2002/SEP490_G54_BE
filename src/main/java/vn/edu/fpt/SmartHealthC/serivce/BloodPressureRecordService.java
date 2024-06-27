@@ -13,7 +13,7 @@ public interface BloodPressureRecordService {
     BloodPressureRecord getBloodPressureRecordById(Integer id);
     List<BloodPressureRecord> getAllBloodPressureRecords();
     List<BloodPressureResponseDTO> getListBloodPressureRecordsByUser(Integer id);
-    BloodPressureRecord updateBloodPressureRecord( Integer id,BloodPressureRecordDTO bloodPressureRecordDTO);
+    void updateBloodPressureRecord( Integer id,BloodPressureRecordDTO bloodPressureRecordDTO);
     BloodPressureRecord deleteBloodPressureRecord(Integer id);
 
     BloodPressureResponseChartDTO getDataChart() throws ParseException;

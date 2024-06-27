@@ -70,11 +70,12 @@ public class DietRecordController {
     }
 
     @PutMapping("")
-    public ApiResponse<DietRecord> updateDietRecord(@RequestBody @Valid DietRecordUpdateDTO dietRecordDTO) throws ParseException {
+    public ApiResponse<Void> updateDietRecord(@RequestBody @Valid DietRecordUpdateDTO dietRecordDTO) throws ParseException {
+        dietRecordService.updateDietRecord(dietRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<DietRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(dietRecordService.updateDietRecord(dietRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
     //Test only

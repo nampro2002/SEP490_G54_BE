@@ -138,13 +138,13 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
     }
     @Transactional
     @Override
-    public BloodPressureRecord updateBloodPressureRecord(Integer id, BloodPressureRecordDTO bloodPressureRecordDTO) {
+    public void updateBloodPressureRecord(Integer id, BloodPressureRecordDTO bloodPressureRecordDTO) {
         BloodPressureRecord bloodPressureRecord = getBloodPressureRecordById(id);
         bloodPressureRecord.setDiastole(bloodPressureRecordDTO.getDiastole());
         bloodPressureRecord.setSystole(bloodPressureRecordDTO.getSystole());
         bloodPressureRecord.setWeekStart(bloodPressureRecordDTO.getWeekStart());
         bloodPressureRecord.setDate(bloodPressureRecordDTO.getDate());
-        return bloodPressureRecordRepository.save(bloodPressureRecord);
+        bloodPressureRecordRepository.save(bloodPressureRecord);
     }
 
     @Override

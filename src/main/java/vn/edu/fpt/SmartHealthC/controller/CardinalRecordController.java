@@ -61,12 +61,12 @@ public class CardinalRecordController {
                         .build()).getBody();
     }
     @PutMapping("/{id}")
-    public ApiResponse<CardinalRecord> updateCardinalRecord(@PathVariable Integer id, @RequestBody @Valid CardinalRecordDTO cardinalRecordDTO) {
-        CardinalRecord updatedCardinalRecord = cardinalRecordService.updateCardinalRecord(id, cardinalRecordDTO);
+    public ApiResponse<Void> updateCardinalRecord(@PathVariable Integer id, @RequestBody @Valid CardinalRecordDTO cardinalRecordDTO) {
+        cardinalRecordService.updateCardinalRecord(id, cardinalRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<CardinalRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(updatedCardinalRecord)
+                        .result(null)
                         .build()).getBody();
     }
 

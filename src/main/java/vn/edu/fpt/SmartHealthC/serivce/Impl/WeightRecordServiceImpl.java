@@ -239,11 +239,11 @@ public class WeightRecordServiceImpl implements WeightRecordService {
 
     @Transactional
     @Override
-    public WeightRecord updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO) {
+    public void updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO) {
 
         WeightRecord weightRecord = getWeightRecordById(id);
         weightRecord.setWeight(weightRecordDTO.getWeight());
-        return  weightRecordRepository.save(weightRecord);
+        weightRecordRepository.save(weightRecord);
     }
 
     @Override

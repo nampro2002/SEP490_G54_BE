@@ -18,7 +18,7 @@ public interface MedicineRecordService {
     MedicineRecordResponseDTO getMedicineRecordById(Integer id);
     MedicineRecord getMedicineRecordEntityById(Integer id);
     List<MedicineRecordListResDTO> getAllMedicineRecords(Integer userId);
-    MedicineRecordResponseDTO updateMedicineRecord(MedicineRecordUpdateDTO medicineRecordDTO) throws ParseException;
+    void updateMedicineRecord(MedicineRecordUpdateDTO medicineRecordDTO) throws ParseException;
     MedicineRecordResponseDTO deleteMedicineRecord(Integer id);
     List<MedicinePLanResponseDTO> getAllMedicinePlans(String weekStart) throws ParseException;
 

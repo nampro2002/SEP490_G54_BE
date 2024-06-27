@@ -362,7 +362,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
 
     @Transactional
     @Override
-    public CardinalRecord updateCardinalRecord(Integer id, CardinalRecordDTO CardinalRecordDTO) {
+    public void updateCardinalRecord(Integer id, CardinalRecordDTO CardinalRecordDTO) {
         CardinalRecord cardinalRecord = getCardinalRecordById(id);
         cardinalRecord.setCholesterol(CardinalRecordDTO.getCholesterol());
         cardinalRecord.setBloodSugar(CardinalRecordDTO.getBloodSugar());
@@ -370,7 +370,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         cardinalRecord.setWeekStart(CardinalRecordDTO.getWeekStart());
         cardinalRecord.setDate(CardinalRecordDTO.getDate());
         cardinalRecord.setTimeMeasure(CardinalRecordDTO.getTimeMeasure());
-        return cardinalRecordRepository.save(cardinalRecord);
+        cardinalRecordRepository.save(cardinalRecord);
     }
 
     @Override

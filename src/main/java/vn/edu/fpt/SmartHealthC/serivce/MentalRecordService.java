@@ -16,7 +16,7 @@ public interface MentalRecordService {
     MentalRecord getMentalRecordEntityById(Integer id);
     MentalRecordResponseDTO getMentalRecordById(Integer id);
     List<MentalRecordListResDTO> getAllMentalRecords(Integer userId);
-    MentalRecordResponseDTO updateMentalRecord( MentalRecordUpdateDTO mentalRecordDTO) throws ParseException;
+    void updateMentalRecord( MentalRecordUpdateDTO mentalRecordDTO) throws ParseException;
     MentalRecordResponseDTO deleteMentalRecord(Integer id);
 
     MentalResponseChartDTO getDataChart() throws ParseException;

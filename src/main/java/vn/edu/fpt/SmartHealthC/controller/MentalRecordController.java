@@ -74,11 +74,12 @@ public class MentalRecordController {
 
 
     @PutMapping("")
-    public ApiResponse<MentalRecordResponseDTO> updateMentalRecord(@RequestBody @Valid MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
+    public ApiResponse<Void> updateMentalRecord(@RequestBody @Valid MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
+        mentalRecordService.updateMentalRecord(mentalRecordDTO);
         return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MentalRecordResponseDTO>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(mentalRecordService.updateMentalRecord(mentalRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
     //Test only

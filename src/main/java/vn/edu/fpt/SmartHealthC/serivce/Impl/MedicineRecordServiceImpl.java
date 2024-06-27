@@ -166,7 +166,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     }
     @Transactional
     @Override
-    public MedicineRecordResponseDTO updateMedicineRecord(MedicineRecordUpdateDTO medicineRecordDTO) throws ParseException {
+    public void updateMedicineRecord(MedicineRecordUpdateDTO medicineRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
@@ -223,8 +223,6 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             medicineRecordUpdate.setStatus(medicineRecordDTO.getStatus());
             medicineRecordRepository.save(medicineRecordUpdate);
         }
-
-        return null;
     }
 
     @Override

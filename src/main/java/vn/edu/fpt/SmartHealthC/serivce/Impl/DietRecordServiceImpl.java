@@ -153,7 +153,7 @@ public class DietRecordServiceImpl implements DietRecordService {
 
     @Transactional
     @Override
-    public DietRecord updateDietRecord(DietRecordUpdateDTO dietRecordDTO) throws ParseException {
+    public void updateDietRecord(DietRecordUpdateDTO dietRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
@@ -182,7 +182,7 @@ public class DietRecordServiceImpl implements DietRecordService {
         DietRecord dietRecordUpdate =getDietRecordById(dietRecord.get().getId());
         dietRecordUpdate.setDate(dietRecordDTO.getDate());
         dietRecordUpdate.setActualValue(dietRecordDTO.getActualValue());
-        return dietRecordRepository.save(dietRecordUpdate);
+        dietRecordRepository.save(dietRecordUpdate);
     }
 
     @Override

@@ -154,7 +154,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     }
     @Transactional
     @Override
-    public MentalRecordResponseDTO updateMentalRecord(MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
+    public void updateMentalRecord(MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
@@ -194,7 +194,6 @@ public class MentalRecordServiceImpl implements MentalRecordService {
             mentalRecordUpdate.setStatus(mentalRecordDTO.getStatus());
             mentalRecordRepository.save(mentalRecordUpdate);
         }
-        return null;
     }
 
     @Override

@@ -62,12 +62,12 @@ public class ActivityRecordController {
     }
 
     @PutMapping("")
-    public ApiResponse<ActivityRecord> updateActivityRecord(@RequestBody @Valid ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {
-        ActivityRecord updatedActivityRecord = activityRecordService.updateActivityRecord(activityRecordDTO);
+    public ApiResponse<Void> updateActivityRecord(@RequestBody @Valid ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {
+        activityRecordService.updateActivityRecord(activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<ActivityRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(updatedActivityRecord)
+                        .result(null)
                         .build()).getBody();
     }
     //Test only

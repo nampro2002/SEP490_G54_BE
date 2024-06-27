@@ -62,11 +62,12 @@ public class StepRecordController {
     }
 
     @PutMapping("")
-    public ApiResponse<StepRecord> updateStepRecord( @RequestBody @Valid StepRecordUpdateDTO stepRecordDTO) throws ParseException {
+    public ApiResponse<Void> updateStepRecord( @RequestBody @Valid StepRecordUpdateDTO stepRecordDTO) throws ParseException {
+        stepRecordService.updateStepRecord(stepRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<StepRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(stepRecordService.updateStepRecord(stepRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
     //Test only

@@ -51,11 +51,12 @@ public class BloodPressureRecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<BloodPressureRecord> updateBloodPressureRecord(@PathVariable Integer id, @RequestBody @Valid BloodPressureRecordDTO bloodPressureRecordDTO) {
+    public ApiResponse<Void> updateBloodPressureRecord(@PathVariable Integer id, @RequestBody @Valid BloodPressureRecordDTO bloodPressureRecordDTO) {
+        bloodPressureRecordService.updateBloodPressureRecord(id, bloodPressureRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<BloodPressureRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(bloodPressureRecordService.updateBloodPressureRecord(id, bloodPressureRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
     @GetMapping("/mobile/check-plan/{weekStart}")

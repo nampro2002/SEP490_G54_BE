@@ -146,7 +146,7 @@ public class StepRecordServiceImpl implements StepRecordService {
 
     @Transactional
     @Override
-    public StepRecord updateStepRecord(StepRecordUpdateDTO stepRecordDTO) throws ParseException {
+    public void updateStepRecord(StepRecordUpdateDTO stepRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
@@ -177,7 +177,6 @@ public class StepRecordServiceImpl implements StepRecordService {
         stepRecordUpdate.setActualValue(stepRecordDTO.getActualValue());
         stepRecordUpdate.setDate(stepRecordDTO.getDate());
         stepRecordRepository.save(stepRecordUpdate);
-        return null;
     }
 
     @Override

@@ -13,7 +13,7 @@ public interface StepRecordService {
     void createStepRecord(StepRecordCreateDTO stepRecordDTO) throws ParseException;
     StepRecord getStepRecordById(Integer id);
     List<StepRecordResListDTO> getAllStepRecords(Integer id);
-    StepRecord updateStepRecord(StepRecordUpdateDTO stepRecordDTO) throws ParseException;
+    void updateStepRecord(StepRecordUpdateDTO stepRecordDTO) throws ParseException;
     StepRecord deleteStepRecord(Integer id);
 
     StepResponseChartDTO getDataChart() throws ParseException;

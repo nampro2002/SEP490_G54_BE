@@ -157,7 +157,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
 
     @Transactional
     @Override
-    public ActivityRecord updateActivityRecord( ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {
+    public void updateActivityRecord(ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
@@ -186,7 +186,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
         activityRecordUpdate.setDate(activityRecordDTO.getDate());
         activityRecordUpdate.setActualDuration(activityRecordDTO.getActualDuration());
         activityRecordUpdate.setActualType(activityRecordDTO.getActualType());
-        return  activityRecordRepository.save(activityRecordUpdate);
+       activityRecordRepository.save(activityRecordUpdate);
     }
 
     @Override

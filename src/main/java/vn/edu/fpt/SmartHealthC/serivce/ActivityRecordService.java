@@ -13,7 +13,7 @@ public interface ActivityRecordService {
     void createActivityRecord(ActivityRecordCreateDTO activityRecordDTO) throws ParseException;
     ActivityRecord getActivityRecordById(Integer id);
     List<ActivityRecordResListDTO> getAllActivityRecords(Integer userId);
-    ActivityRecord updateActivityRecord(ActivityRecordUpdateDTO activityRecordDTO) throws ParseException;
+    void updateActivityRecord(ActivityRecordUpdateDTO activityRecordDTO) throws ParseException;
     ActivityRecord deleteActivityRecord(Integer id);
 
     ActivityResponseChartDTO getDataChart() throws ParseException;

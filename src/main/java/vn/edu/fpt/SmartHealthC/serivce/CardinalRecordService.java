@@ -15,7 +15,7 @@ public interface CardinalRecordService {
 
     List<CardinalRecordResponseDTO> getAllCardinalRecords(Integer userId);
 
-    CardinalRecord updateCardinalRecord(Integer id, CardinalRecordDTO cardinalRecordDTO);
+    void updateCardinalRecord(Integer id, CardinalRecordDTO cardinalRecordDTO);
 
     CardinalRecord deleteCardinalRecord(Integer id);
 

@@ -85,11 +85,12 @@ public class MedicineRecordController {
     }
 
     @PutMapping("")
-    public ApiResponse<MedicineRecordResponseDTO> updateMedicineRecord(@RequestBody @Valid MedicineRecordUpdateDTO medicineRecordDTO) throws ParseException {
+    public ApiResponse<Void> updateMedicineRecord(@RequestBody @Valid MedicineRecordUpdateDTO medicineRecordDTO) throws ParseException {
+        medicineRecordService.updateMedicineRecord(medicineRecordDTO);
         return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MedicineRecordResponseDTO>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicineRecordService.updateMedicineRecord(medicineRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
     //Test only

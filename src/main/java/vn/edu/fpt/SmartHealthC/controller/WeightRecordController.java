@@ -62,11 +62,12 @@ public class WeightRecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<WeightRecord> updateWeightRecord(@PathVariable Integer id, @RequestBody @Valid WeightRecordDTO weightRecordDTO) {
+    public ApiResponse<Void> updateWeightRecord(@PathVariable Integer id, @RequestBody @Valid WeightRecordDTO weightRecordDTO) {
+        weightRecordService.updateWeightRecord(id, weightRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<WeightRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result( weightRecordService.updateWeightRecord(id, weightRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
     //Test only
