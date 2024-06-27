@@ -10,6 +10,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicinePLanResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicinePlanPerDayResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordResponseDTO;
@@ -54,6 +55,14 @@ public class MedicineRecordController {
                 .body(ApiResponse.<MedicineResponseChartDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(medicineRecordService.getDataChart())
+                        .build()).getBody();
+    }
+    @GetMapping("/mobile/medicine-day/{weekStart}")
+    public ApiResponse<List<MedicinePlanPerDayResponse>> getMedicinePerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MedicinePlanPerDayResponse>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicineRecordService.getMedicinePerDay(weekStart))
                         .build()).getBody();
     }
 

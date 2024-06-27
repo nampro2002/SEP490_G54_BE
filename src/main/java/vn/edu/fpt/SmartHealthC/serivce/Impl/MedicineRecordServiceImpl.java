@@ -10,6 +10,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.Blood
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicinePLanResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicinePlanPerDayResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordListResDTO;
@@ -392,6 +393,40 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         medicineResponseChartDTO.setMedicineResponseList(medicineResponseList);
         return  medicineResponseChartDTO;
     }
+
+    @Override
+    public List<MedicinePlanPerDayResponse> getMedicinePerDay(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        List<MedicinePlanPerDayResponse> medicinePlanPerDayResponseList = new ArrayList<>();
+        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.get().getId());
+        List<MedicineRecord> medicineRecordDayList = medicineRecordList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(date);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                }).toList();
+        for(MedicineRecord record : medicineRecordDayList){
+            medicinePlanPerDayResponseList.add( new MedicinePlanPerDayResponse().builder()
+                    .medicineName(record.getMedicineType().getTitle())
+                    .medicineId(record.getMedicineType().getId())
+                    .date(record.getDate()).build());
+        }
+        return medicinePlanPerDayResponseList;
+    }
+
     public Date calculateDateMinus(Date sourceDate , int minus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
         Calendar calendar = Calendar.getInstance();

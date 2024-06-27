@@ -42,6 +42,14 @@ public class DietRecordController {
                         .result(dietRecordService.getDataChart())
                         .build()).getBody();
     }
+    @GetMapping("/mobile/dish-plan/{weekStart}")
+    public ApiResponse<Integer> getDishPlan(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Integer>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(dietRecordService.getDishPlan(weekStart))
+                        .build()).getBody();
+    }
 
 
     @GetMapping("/web/weekly-record/{id}")

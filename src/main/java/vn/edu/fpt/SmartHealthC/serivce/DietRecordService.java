@@ -17,4 +17,6 @@ public interface DietRecordService {
     DietRecord deleteDietRecord(Integer id);
 
     DietResponseChartDTO getDataChart() throws ParseException;
+
+    Integer getDishPlan(String weekStart) throws ParseException;
 }

@@ -256,6 +256,36 @@ public class DietRecordServiceImpl implements DietRecordService {
         dietResponseChartDTO.setAvgValue((int) (sumValue/dietResponseChartDTO.getDietResponseList().stream().count()));
         return  dietResponseChartDTO;
     }
+
+    @Override
+    public Integer getDishPlan(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.get().getId());
+        Optional<DietRecord> dietRecord = dietRecordList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(date);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (dietRecord.isEmpty()) {
+            throw new AppException(ErrorCode.DIET_DAY_NOT_FOUND);
+        }
+        return dietRecord.get().getDishPerDay();
+    }
+
     public Date calculateDateMinus(Date sourceDate , int minus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
         Calendar calendar = Calendar.getInstance();
