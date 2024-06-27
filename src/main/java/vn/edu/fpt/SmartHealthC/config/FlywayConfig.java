@@ -25,7 +25,7 @@ public class FlywayConfig {
                 .dataSource(dataSource())
                 .locations(location)
                 .baselineOnMigrate(true)
-                .baselineVersion("6")
+                .baselineVersion("0")
                 .load();
         flyway.repair();
         flyway.migrate();

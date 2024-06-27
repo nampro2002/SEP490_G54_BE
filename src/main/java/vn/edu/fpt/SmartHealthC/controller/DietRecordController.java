@@ -25,11 +25,12 @@ public class DietRecordController {
     private DietRecordService dietRecordService;
 
     @PostMapping
-    public ApiResponse<DietRecord> createDietRecord(@RequestBody @Valid DietRecordCreateDTO dietRecordDTO) throws ParseException {
+    public ApiResponse<Void> createDietRecord(@RequestBody @Valid DietRecordCreateDTO dietRecordDTO) throws ParseException {
+       dietRecordService.createDietRecord(dietRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<DietRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(dietRecordService.createDietRecord(dietRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
 
@@ -39,6 +40,22 @@ public class DietRecordController {
                 .body(ApiResponse.<DietResponseChartDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(dietRecordService.getDataChart())
+                        .build()).getBody();
+    }
+    @GetMapping("/mobile/dish-plan/{weekStart}")
+    public ApiResponse<Integer> getDishPlan(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Integer>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(dietRecordService.getDishPlan(weekStart))
+                        .build()).getBody();
+    }
+    @GetMapping("/mobile/check-plan/{weekStart}")
+    public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(dietRecordService.checkPlanPerDay(weekStart))
                         .build()).getBody();
     }
 
@@ -53,11 +70,12 @@ public class DietRecordController {
     }
 
     @PutMapping("")
-    public ApiResponse<DietRecord> updateDietRecord(@RequestBody @Valid DietRecordUpdateDTO dietRecordDTO) throws ParseException {
+    public ApiResponse<Void> updateDietRecord(@RequestBody @Valid DietRecordUpdateDTO dietRecordDTO) throws ParseException {
+        dietRecordService.updateDietRecord(dietRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<DietRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(dietRecordService.updateDietRecord(dietRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
     //Test only

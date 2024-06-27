@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +13,6 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.Recor
 import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
@@ -35,7 +35,7 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
     private AppUserService appUserService;
     @Autowired
     private SimpleDateFormat formatDate;
-
+    @Transactional
     @Override
     public BloodPressureRecord createBloodPressureRecord(BloodPressureRecordDTO bloodPressureRecordDTO) throws ParseException {
         BloodPressureRecord bloodPressureRecord = BloodPressureRecord.builder()
@@ -46,11 +46,13 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        AppUser appUser = appUserService.findAppUserByEmail(email);
-
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
         String dateStr= formatDate.format(bloodPressureRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
-        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.getId());
+        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.get().getId());
         boolean dateExists = bloodPressureRecordListExits.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
@@ -66,7 +68,7 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
             throw new AppException(ErrorCode.BLOOD_PRESSURE_DAY_EXIST);
         }
 
-        bloodPressureRecord.setAppUserId(appUser);
+        bloodPressureRecord.setAppUserId(appUser.get());
         return bloodPressureRecordRepository.save(bloodPressureRecord);
     }
 
@@ -134,15 +136,15 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         }
         return responseDTOList;
     }
-
+    @Transactional
     @Override
-    public BloodPressureRecord updateBloodPressureRecord(Integer id, BloodPressureRecordDTO bloodPressureRecordDTO) {
+    public void updateBloodPressureRecord(Integer id, BloodPressureRecordDTO bloodPressureRecordDTO) {
         BloodPressureRecord bloodPressureRecord = getBloodPressureRecordById(id);
         bloodPressureRecord.setDiastole(bloodPressureRecordDTO.getDiastole());
         bloodPressureRecord.setSystole(bloodPressureRecordDTO.getSystole());
         bloodPressureRecord.setWeekStart(bloodPressureRecordDTO.getWeekStart());
         bloodPressureRecord.setDate(bloodPressureRecordDTO.getDate());
-        return bloodPressureRecordRepository.save(bloodPressureRecord);
+        bloodPressureRecordRepository.save(bloodPressureRecord);
     }
 
     @Override
@@ -156,7 +158,11 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
     public BloodPressureResponseChartDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
@@ -164,7 +170,7 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         int count = 5;
         BloodPressureResponseChartDTO bloodPressureResponseChartDTO = new BloodPressureResponseChartDTO();
         List<BloodPressureResponse> bloodPressureResponseList = new ArrayList<>();
-        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.getId());
+        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.get().getId());
 
         //Sắp xếp giảm dần theo date
         bloodPressureRecordListExits.sort(new Comparator<BloodPressureRecord>() {
@@ -221,6 +227,40 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         bloodPressureResponseChartDTO.setBloodPressureResponseList(bloodPressureResponseList);
         return bloodPressureResponseChartDTO;
     }
+
+    @Override
+    public Boolean checkPlanPerDay(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        Date weekStartNow = formatDate.parse(weekStart);
+        List<BloodPressureRecord> bloodPressureRecordList = bloodPressureRecordRepository.findAllByUserId(appUser.get().getId());
+        Optional<BloodPressureRecord> bloodPressureRecord = bloodPressureRecordList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordDate.equals(date)
+                                && recordWeekStart.equals(weekStartNow);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (bloodPressureRecord.isEmpty()) {
+            throw new AppException(ErrorCode.BLOOD_PRESSURE_DATA_DAY_EMPTY);
+        }
+        return true;
+    }
+
     public Date calculateDate(Date sourceDate , int minus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
         Calendar calendar = Calendar.getInstance();

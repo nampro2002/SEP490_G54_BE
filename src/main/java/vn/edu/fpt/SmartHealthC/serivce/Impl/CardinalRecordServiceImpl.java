@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import vn.edu.fpt.SmartHealthC.repository.CardinalRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -34,6 +36,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
     private AppUserService appUserService;
     @Autowired
     private SimpleDateFormat formatDate;
+    @Transactional
     @Override
     public CardinalRecord createCardinalRecord(CardinalRecordDTO CardinalRecordDTO) throws ParseException {
 
@@ -47,12 +50,15 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        AppUser appUser = appUserService.findAppUserByEmail(email);
-        cardinalRecord.setAppUserId(appUser);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        cardinalRecord.setAppUserId(appUser.get());
 
         String dateStr= formatDate.format(cardinalRecord.getDate());
         Date date = formatDate.parse(dateStr);
-        List<CardinalRecord> cardinalRecordListExits = cardinalRecordRepository.findByAppUserId(appUser.getId());
+        List<CardinalRecord> cardinalRecordListExits = cardinalRecordRepository.findByAppUserId(appUser.get().getId());
         boolean dateExists = cardinalRecordListExits.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
@@ -178,12 +184,15 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
     public CardinalChartResponseDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
-        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByAppUserId(appUser.getId());
+        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByAppUserId(appUser.get().getId());
         cardinalRecordList.sort((recordDateSmaller, recordDateBigger) -> recordDateBigger.getDate().compareTo(recordDateSmaller.getDate()));
         // Lấy 5 bản ghi có ngày gần với ngày hiện tại nhất
         // Tạo một Set để theo dõi các ngày đã được thêm
@@ -316,9 +325,44 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         return planResponseDTO;
     }
 
-
     @Override
-    public CardinalRecord updateCardinalRecord(Integer id, CardinalRecordDTO CardinalRecordDTO) {
+    public Boolean checkPlanPerDay(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        Date weekStartNow = formatDate.parse(weekStart);
+        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByAppUserId(appUser.get().getId());
+        Optional<CardinalRecord> cardinalRecord = cardinalRecordList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordDate.equals(date)
+                                && recordWeekStart.equals(weekStartNow);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (cardinalRecord.isEmpty()) {
+            throw new AppException(ErrorCode.CARDINAL_DATA_DAY_EMPTY);
+        }
+
+        return true;
+
+    }
+
+    @Transactional
+    @Override
+    public void updateCardinalRecord(Integer id, CardinalRecordDTO CardinalRecordDTO) {
         CardinalRecord cardinalRecord = getCardinalRecordById(id);
         cardinalRecord.setCholesterol(CardinalRecordDTO.getCholesterol());
         cardinalRecord.setBloodSugar(CardinalRecordDTO.getBloodSugar());
@@ -326,7 +370,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         cardinalRecord.setWeekStart(CardinalRecordDTO.getWeekStart());
         cardinalRecord.setDate(CardinalRecordDTO.getDate());
         cardinalRecord.setTimeMeasure(CardinalRecordDTO.getTimeMeasure());
-        return cardinalRecordRepository.save(cardinalRecord);
+        cardinalRecordRepository.save(cardinalRecord);
     }
 
     @Override

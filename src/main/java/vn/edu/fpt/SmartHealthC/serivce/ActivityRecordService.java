@@ -10,11 +10,13 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface ActivityRecordService {
-    ActivityRecord createActivityRecord(ActivityRecordCreateDTO activityRecordDTO) throws ParseException;
+    void createActivityRecord(ActivityRecordCreateDTO activityRecordDTO) throws ParseException;
     ActivityRecord getActivityRecordById(Integer id);
     List<ActivityRecordResListDTO> getAllActivityRecords(Integer userId);
-    ActivityRecord updateActivityRecord(ActivityRecordUpdateDTO activityRecordDTO) throws ParseException;
+    void updateActivityRecord(ActivityRecordUpdateDTO activityRecordDTO) throws ParseException;
     ActivityRecord deleteActivityRecord(Integer id);
 
     ActivityResponseChartDTO getDataChart() throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }

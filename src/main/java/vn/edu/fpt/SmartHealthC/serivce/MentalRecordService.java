@@ -12,14 +12,16 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface MentalRecordService {
-    MentalRecordResponseDTO createMentalRecord(MentalRecordCreateDTO mentalRecordDTO) throws ParseException;
+    void createMentalRecord(MentalRecordCreateDTO mentalRecordDTO) throws ParseException;
     MentalRecord getMentalRecordEntityById(Integer id);
     MentalRecordResponseDTO getMentalRecordById(Integer id);
     List<MentalRecordListResDTO> getAllMentalRecords(Integer userId);
-    MentalRecordResponseDTO updateMentalRecord( MentalRecordUpdateDTO mentalRecordDTO) throws ParseException;
+    void updateMentalRecord( MentalRecordUpdateDTO mentalRecordDTO) throws ParseException;
     MentalRecordResponseDTO deleteMentalRecord(Integer id);
 
     MentalResponseChartDTO getDataChart() throws ParseException;
 
     List<MentalRule> getListMentalPerWeek(String weekStart) throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }

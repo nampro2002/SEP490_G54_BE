@@ -25,11 +25,12 @@ public class StepRecordController {
     private StepRecordService stepRecordService;
 
     @PostMapping
-    public ApiResponse<StepRecord> createStepRecord(@RequestBody @Valid StepRecordCreateDTO stepRecordDTO) throws ParseException {
+    public ApiResponse<Void> createStepRecord(@RequestBody @Valid StepRecordCreateDTO stepRecordDTO) throws ParseException {
+       stepRecordService.createStepRecord(stepRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<StepRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(stepRecordService.createStepRecord(stepRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
 
@@ -51,13 +52,22 @@ public class StepRecordController {
                         .result(stepRecordService.getDataChart())
                         .build()).getBody();
     }
+    @GetMapping("/mobile/check-plan/{weekStart}")
+    public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(stepRecordService.checkPlanPerDay(weekStart))
+                        .build()).getBody();
+    }
 
     @PutMapping("")
-    public ApiResponse<StepRecord> updateStepRecord( @RequestBody @Valid StepRecordUpdateDTO stepRecordDTO) throws ParseException {
+    public ApiResponse<Void> updateStepRecord( @RequestBody @Valid StepRecordUpdateDTO stepRecordDTO) throws ParseException {
+        stepRecordService.updateStepRecord(stepRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<StepRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(stepRecordService.updateStepRecord(stepRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
     //Test only

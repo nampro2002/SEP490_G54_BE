@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,10 +13,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResp
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseChartDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.DietRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
@@ -51,18 +49,21 @@ public class DietRecordServiceImpl implements DietRecordService {
         // Trả về Date sau khi cộng thêm ngày
         return calendar.getTime();
     }
-
+    @Transactional
     @Override
-    public DietRecord createDietRecord(DietRecordCreateDTO dietRecordDTO) throws ParseException {
+    public void createDietRecord(DietRecordCreateDTO dietRecordDTO) throws ParseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
 
         String weekStartStr= formatDate.format(dietRecordDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
-        List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.getId());
+        List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.get().getId());
         boolean dateExists = dietPlanExist.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getWeekStart());
@@ -93,11 +94,10 @@ public class DietRecordServiceImpl implements DietRecordService {
                     .weekStart(dietRecordDTO.getWeekStart())
                     .date(dateCalculate).build();
 
-            dietRecord.setAppUserId(appUser);
+            dietRecord.setAppUserId(appUser.get());
             dietRecordRepository.save(dietRecord);
             count++;
         }
-        return null;
     }
 
     @Override
@@ -151,15 +151,18 @@ public class DietRecordServiceImpl implements DietRecordService {
         return responseDTOList;
     }
 
+    @Transactional
     @Override
-    public DietRecord updateDietRecord(DietRecordUpdateDTO dietRecordDTO) throws ParseException {
+    public void updateDietRecord(DietRecordUpdateDTO dietRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
-
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
         String dateStr= formatDate.format(dietRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
-        List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.getId());
+        List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.get().getId());
         Optional<DietRecord> dietRecord = dietPlanExist.stream()
                 .filter(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
@@ -179,7 +182,7 @@ public class DietRecordServiceImpl implements DietRecordService {
         DietRecord dietRecordUpdate =getDietRecordById(dietRecord.get().getId());
         dietRecordUpdate.setDate(dietRecordDTO.getDate());
         dietRecordUpdate.setActualValue(dietRecordDTO.getActualValue());
-        return dietRecordRepository.save(dietRecordUpdate);
+        dietRecordRepository.save(dietRecordUpdate);
     }
 
     @Override
@@ -193,14 +196,17 @@ public class DietRecordServiceImpl implements DietRecordService {
     public DietResponseChartDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
 
-        List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.getId());
+        List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.get().getId());
         //Sắp xếp giảm dần theo date
         dietRecordList.sort(new Comparator<DietRecord>() {
             @Override
@@ -249,6 +255,73 @@ public class DietRecordServiceImpl implements DietRecordService {
         dietResponseChartDTO.setAvgValue((int) (sumValue/dietResponseChartDTO.getDietResponseList().stream().count()));
         return  dietResponseChartDTO;
     }
+
+    @Override
+    public Integer getDishPlan(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.get().getId());
+        Optional<DietRecord> dietRecord = dietRecordList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(date);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (dietRecord.isEmpty()) {
+            throw new AppException(ErrorCode.DIET_DAY_NOT_FOUND);
+        }
+        return dietRecord.get().getDishPerDay();
+    }
+
+    @Override
+    public Boolean checkPlanPerDay(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        Date weekStartNow = formatDate.parse(weekStart);
+        List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.get().getId());
+        Optional<DietRecord> dietRecord = dietRecordList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordDate.equals(date)
+                                && recordWeekStart.equals(weekStartNow);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (dietRecord.isEmpty()) {
+            throw new AppException(ErrorCode.DIET_PLAN_NOT_FOUND);
+        }
+        if (dietRecord.get().getActualValue() == 0) {
+            throw new AppException(ErrorCode.DIET_DAY_DATA_EMPTY);
+        }
+
+        return true;
+    }
+
     public Date calculateDateMinus(Date sourceDate , int minus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
         Calendar calendar = Calendar.getInstance();

@@ -13,9 +13,11 @@ public interface WeightRecordService {
     WeightRecord createWeightRecord(WeightRecordDTO weightRecordDTO) throws ParseException;
     WeightRecord getWeightRecordById(Integer id);
     List<WeightRecord> getAllWeightRecords();
-    WeightRecord updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO);
+    void updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO);
     WeightRecord deleteWeightRecord(Integer id);
     List<WeightResponseDTO> getWeightRecordList(Integer userId);
 
     WeightResponseChartDTO getDataChart() throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }

@@ -10,11 +10,15 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface DietRecordService {
-    DietRecord createDietRecord(DietRecordCreateDTO dietRecordDTO) throws ParseException;
+    void createDietRecord(DietRecordCreateDTO dietRecordDTO) throws ParseException;
     DietRecord getDietRecordById(Integer id);
     List<DietRecordListResDTO> getAllDietRecords(Integer id);
-    DietRecord updateDietRecord(DietRecordUpdateDTO dietRecordDTO) throws ParseException;
+    void updateDietRecord(DietRecordUpdateDTO dietRecordDTO) throws ParseException;
     DietRecord deleteDietRecord(Integer id);
 
     DietResponseChartDTO getDataChart() throws ParseException;
+
+    Integer getDishPlan(String weekStart) throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }
