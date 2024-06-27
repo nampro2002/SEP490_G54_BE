@@ -58,6 +58,14 @@ public class BloodPressureRecordController {
                         .result(bloodPressureRecordService.updateBloodPressureRecord(id, bloodPressureRecordDTO))
                         .build()).getBody();
     }
+    @GetMapping("/mobile/check-plan/{weekStart}")
+    public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(bloodPressureRecordService.checkPlanPerDay(weekStart))
+                        .build()).getBody();
+    }
     //Test only
     @GetMapping("/{id}")
     public ApiResponse<BloodPressureRecord> getBloodPressureRecordById(@PathVariable Integer id) {

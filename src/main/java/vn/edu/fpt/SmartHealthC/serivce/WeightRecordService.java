@@ -18,4 +18,6 @@ public interface WeightRecordService {
     List<WeightResponseDTO> getWeightRecordList(Integer userId);
 
     WeightResponseChartDTO getDataChart() throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }

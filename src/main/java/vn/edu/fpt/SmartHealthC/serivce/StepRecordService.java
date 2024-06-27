@@ -17,4 +17,6 @@ public interface StepRecordService {
     StepRecord deleteStepRecord(Integer id);
 
     StepResponseChartDTO getDataChart() throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }

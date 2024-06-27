@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import vn.edu.fpt.SmartHealthC.repository.CardinalRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -34,6 +36,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
     private AppUserService appUserService;
     @Autowired
     private SimpleDateFormat formatDate;
+    @Transactional
     @Override
     public CardinalRecord createCardinalRecord(CardinalRecordDTO CardinalRecordDTO) throws ParseException {
 
@@ -322,7 +325,42 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         return planResponseDTO;
     }
 
+    @Override
+    public Boolean checkPlanPerDay(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        Date weekStartNow = formatDate.parse(weekStart);
+        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByAppUserId(appUser.get().getId());
+        Optional<CardinalRecord> cardinalRecord = cardinalRecordList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordDate.equals(date)
+                                && recordWeekStart.equals(weekStartNow);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (cardinalRecord.isEmpty()) {
+            throw new AppException(ErrorCode.CARDINAL_DATA_DAY_EMPTY);
+        }
 
+        return true;
+
+    }
+
+    @Transactional
     @Override
     public CardinalRecord updateCardinalRecord(Integer id, CardinalRecordDTO CardinalRecordDTO) {
         CardinalRecord cardinalRecord = getCardinalRecordById(id);

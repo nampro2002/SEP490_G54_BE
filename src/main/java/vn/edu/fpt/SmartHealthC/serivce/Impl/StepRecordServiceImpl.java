@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,6 +49,7 @@ public class StepRecordServiceImpl implements StepRecordService {
         return calendar.getTime();
     }
 
+    @Transactional
     @Override
     public void createStepRecord(StepRecordCreateDTO stepRecordDTO) throws ParseException {
 
@@ -142,6 +144,7 @@ public class StepRecordServiceImpl implements StepRecordService {
         return listResponseDTOList;
     }
 
+    @Transactional
     @Override
     public StepRecord updateStepRecord(StepRecordUpdateDTO stepRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -250,6 +253,42 @@ public class StepRecordServiceImpl implements StepRecordService {
 
         stepResponseChartDTO.setStepResponseList(stepResponseList);
             return stepResponseChartDTO;
+    }
+
+    @Override
+    public Boolean checkPlanPerDay(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        Date weekStartNow = formatDate.parse(weekStart);
+        List<StepRecord> stepRecordsList = stepRecordRepository.findByAppUserId(appUser.get().getId());
+        Optional<StepRecord> stepRecords = stepRecordsList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordDate.equals(date)
+                                && recordWeekStart.equals(weekStartNow);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (stepRecords.isEmpty()) {
+            throw new AppException(ErrorCode.STEP_PLAN_NOT_FOUND);
+        }
+        if(stepRecords.get().getActualValue() == 0 ){
+            throw new AppException(ErrorCode.STEP_DAY_DATA_EMPTY);
+        }
+        return true;
     }
 
 

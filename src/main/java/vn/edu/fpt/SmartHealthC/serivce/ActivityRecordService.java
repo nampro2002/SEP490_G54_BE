@@ -17,4 +17,6 @@ public interface ActivityRecordService {
     ActivityRecord deleteActivityRecord(Integer id);
 
     ActivityResponseChartDTO getDataChart() throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }

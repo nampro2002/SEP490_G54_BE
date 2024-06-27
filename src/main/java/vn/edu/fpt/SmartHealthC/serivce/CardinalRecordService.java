@@ -24,4 +24,7 @@ public interface CardinalRecordService {
     List<CardinalRecord> getAllCardinalRecordsVip();
 
     CardinalChartResponseDTO getDataChart() throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
+
 }

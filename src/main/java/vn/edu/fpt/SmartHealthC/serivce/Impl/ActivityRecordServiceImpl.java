@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +35,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     @Autowired
     private SimpleDateFormat formatDate;
 
+    @Transactional
     @Override
     public void createActivityRecord(ActivityRecordCreateDTO activityRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -153,6 +155,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
         return responseDTOList;
     }
 
+    @Transactional
     @Override
     public ActivityRecord updateActivityRecord( ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -176,7 +179,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
                 })
                 .findFirst();
         if (activityRecord.isEmpty()) {
-            throw new AppException(ErrorCode.ACTIVITY_DAY_NOT_FOUND);
+            throw new AppException(ErrorCode.ACTIVITY_PLAN_NOT_FOUND);
         }
 
         ActivityRecord activityRecordUpdate =getActivityRecordById(activityRecord.get().getId());
@@ -264,6 +267,45 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
         activityResponseChartDTO.setActivityResponseList(activityResponseList);
 
         return activityResponseChartDTO;
+    }
+
+    @Override
+    public Boolean checkPlanPerDay(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        Date weekStartNow = formatDate.parse(weekStart);
+        List<ActivityRecord> activityRecordList = activityRecordRepository.findRecordByIdUser(appUser.get().getId());
+        Optional<ActivityRecord> activityRecord = activityRecordList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordDate.equals(date)
+                                && recordWeekStart.equals(weekStartNow);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        //Không có kế hoạch
+        if (activityRecord.isEmpty()) {
+            throw new AppException(ErrorCode.ACTIVITY_PLAN_NOT_FOUND);
+        }
+        //Có kế hoạch mà chưa nhập liệu
+        if (activityRecord.get().getActualDuration() == 0 &&
+        activityRecord.get().getActualType() == null) {
+            throw new AppException(ErrorCode.ACTIVITY_DAY_DATA_EMPTY);
+        }
+        return true;
     }
 
 

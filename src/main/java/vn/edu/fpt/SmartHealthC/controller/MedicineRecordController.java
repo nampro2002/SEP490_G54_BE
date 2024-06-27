@@ -49,6 +49,15 @@ public class MedicineRecordController {
                         .build()).getBody();
     }
 
+    @GetMapping("/mobile/check-plan/{weekStart}")
+    public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicineRecordService.checkPlanPerDay(weekStart))
+                        .build()).getBody();
+    }
+
     @GetMapping("/mobile/chart")
     public ApiResponse<MedicineResponseChartDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)

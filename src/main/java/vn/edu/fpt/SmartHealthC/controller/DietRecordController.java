@@ -50,6 +50,14 @@ public class DietRecordController {
                         .result(dietRecordService.getDishPlan(weekStart))
                         .build()).getBody();
     }
+    @GetMapping("/mobile/check-plan/{weekStart}")
+    public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(dietRecordService.checkPlanPerDay(weekStart))
+                        .build()).getBody();
+    }
 
 
     @GetMapping("/web/weekly-record/{id}")

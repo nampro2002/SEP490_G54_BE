@@ -52,6 +52,14 @@ public class ActivityRecordController {
                         .result(activityRecordService.getAllActivityRecords(id))
                         .build()).getBody();
     }
+    @GetMapping("/mobile/check-plan/{weekStart}")
+    public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(activityRecordService.checkPlanPerDay(weekStart))
+                        .build()).getBody();
+    }
 
     @PutMapping("")
     public ApiResponse<ActivityRecord> updateActivityRecord(@RequestBody @Valid ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {

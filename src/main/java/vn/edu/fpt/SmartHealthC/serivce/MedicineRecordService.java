@@ -25,4 +25,6 @@ public interface MedicineRecordService {
     MedicineResponseChartDTO getDataChart() throws ParseException;
 
     List<MedicinePlanPerDayResponse> getMedicinePerDay(String weekStart) throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }

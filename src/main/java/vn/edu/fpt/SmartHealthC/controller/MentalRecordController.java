@@ -38,11 +38,19 @@ public class MentalRecordController {
 
 
     @GetMapping("/mobile/mental-rule/{weekStart}")
-    public ApiResponse<List<MentalRule>> getMentalRecordById(@PathVariable String weekStart) throws ParseException {
+    public ApiResponse<List<MentalRule>> getMentalRuleByWeek(@PathVariable String weekStart) throws ParseException {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MentalRule>>builder()
                         .code(HttpStatus.OK.value())
                         .result(mentalRecordService.getListMentalPerWeek(weekStart))
+                        .build()).getBody();
+    }
+    @GetMapping("/mobile/check-plan/{weekStart}")
+    public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(mentalRecordService.checkPlanPerDay(weekStart))
                         .build()).getBody();
     }
 

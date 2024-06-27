@@ -22,4 +22,6 @@ public interface MentalRecordService {
     MentalResponseChartDTO getDataChart() throws ParseException;
 
     List<MentalRule> getListMentalPerWeek(String weekStart) throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }

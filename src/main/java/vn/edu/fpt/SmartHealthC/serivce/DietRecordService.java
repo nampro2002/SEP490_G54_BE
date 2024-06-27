@@ -19,4 +19,6 @@ public interface DietRecordService {
     DietResponseChartDTO getDataChart() throws ParseException;
 
     Integer getDishPlan(String weekStart) throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }

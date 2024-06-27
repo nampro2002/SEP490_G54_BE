@@ -17,4 +17,6 @@ public interface BloodPressureRecordService {
     BloodPressureRecord deleteBloodPressureRecord(Integer id);
 
     BloodPressureResponseChartDTO getDataChart() throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }

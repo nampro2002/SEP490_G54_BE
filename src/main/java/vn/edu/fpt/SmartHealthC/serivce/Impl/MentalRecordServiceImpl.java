@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,6 +49,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
         return calendar.getTime();
     }
 
+    @Transactional
     @Override
     public void createMentalRecord(MentalRecordCreateDTO mentalRecordDTO) throws ParseException {
 
@@ -150,7 +152,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
         }
         return listResponseDTOList;
     }
-
+    @Transactional
     @Override
     public MentalRecordResponseDTO updateMentalRecord(MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -303,5 +305,47 @@ public class MentalRecordServiceImpl implements MentalRecordService {
         }
 
         return uniqueRule.stream().toList();
+    }
+
+    @Override
+    public Boolean checkPlanPerDay(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        Date weekStartNow = formatDate.parse(weekStart);
+        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserId(appUser.get().getId());
+        List<MentalRecord> mentalRecords = mentalRecordList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordDate.equals(date)
+                                && recordWeekStart.equals(weekStartNow);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .toList();
+        if (mentalRecords.isEmpty()) {
+            throw new AppException(ErrorCode.MENTAL_PLAN_NOT_FOUND);
+        }
+        int count =0;
+        for(MentalRecord mentalRecord : mentalRecords){
+            if(mentalRecord.isStatus() == true){
+                count ++;
+            }
+        }
+        if(count < 1 ){
+            throw new AppException(ErrorCode.MENTAL_DAY_DATA_EMPTY);
+        }
+        return true;
     }
 }
