@@ -153,12 +153,11 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     public MentalRecordResponseDTO updateMentalRecord(MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
-
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
         String dateStr= formatDate.format(mentalRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
         boolean ruleExists = false;
-        List<MentalRecord> planExist = mentalRecordRepository.findByAppUserId(appUser.getId());
+        List<MentalRecord> planExist = mentalRecordRepository.findByAppUserId(appUser.get().getId());
         for (Integer rule : mentalRecordDTO.getMentalRuleId()){
             ruleExists = planExist.stream()
                     .anyMatch(record -> record.getMentalRule().getId().equals(rule));
@@ -277,11 +276,10 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     public List<MentalRule> getListMentalPerWeek(String weekStart) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
-
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
         Date weekStartFind = formatDate.parse(weekStart);
 
-        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserId(appUser.getId());
+        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserId(appUser.get().getId());
         Set<MentalRule> uniqueRule = new TreeSet<>(Comparator.comparingInt(MentalRule::getId));
         for (MentalRecord record : mentalRecordList) {
             String recordDateStr = formatDate.format(record.getWeekStart());

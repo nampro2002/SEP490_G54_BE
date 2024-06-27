@@ -163,12 +163,11 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     public MedicineRecordResponseDTO updateMedicineRecord(MedicineRecordUpdateDTO medicineRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
-
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
         String dateStr= formatDate.format(medicineRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
         boolean ruleExists = false;
-        List<MedicineRecord> planExist = medicineRecordRepository.findByAppUser(appUser.getId());
+        List<MedicineRecord> planExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
         for (Integer rule : medicineRecordDTO.getMedicineTypeId()){
             ruleExists = planExist.stream()
                     .anyMatch(record -> {
@@ -227,7 +226,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     public List<MedicinePLanResponseDTO> getAllMedicinePlans(String weekStart) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
         //Ngày hôm nay
         Date today = new Date();
@@ -235,7 +234,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         Date dateToday = formatDate.parse(dateTodayStr);
 
         Date weekStartPlan = formatDate.parse(weekStart);
-        List<MedicineRecord> planExist = medicineRecordRepository.findByAppUser(appUser.getId());
+        List<MedicineRecord> planExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
         // Lọc các bản ghi theo weekStart và lấy các ID loại thuốc không bị trùng
         Set<MedicineType> uniqueMedicineTypeIds = planExist
                 .stream()
@@ -255,7 +254,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         List<MedicinePLanResponseDTO> medicinePLanResponseDTOList = new ArrayList<>();
 
         for (MedicineType type : uniqueMedicineTypeIds) {
-            List<MedicineRecord> planPerMedicine = medicineRecordRepository.findByAppUser(appUser.getId())
+            List<MedicineRecord> planPerMedicine = medicineRecordRepository.findByAppUser(appUser.get().getId())
                     .stream()
                     .filter(record -> {
                         String recordWeekStartStr = formatDate.format(record.getWeekStart());

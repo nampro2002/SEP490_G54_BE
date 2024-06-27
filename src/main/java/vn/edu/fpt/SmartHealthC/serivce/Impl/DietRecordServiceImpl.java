@@ -154,11 +154,10 @@ public class DietRecordServiceImpl implements DietRecordService {
     public DietRecord updateDietRecord(DietRecordUpdateDTO dietRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
-
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
         String dateStr= formatDate.format(dietRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
-        List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.getId());
+        List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.get().getId());
         Optional<DietRecord> dietRecord = dietPlanExist.stream()
                 .filter(record -> {
                     String recordDateStr = formatDate.format(record.getDate());

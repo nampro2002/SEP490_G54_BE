@@ -144,12 +144,11 @@ public class StepRecordServiceImpl implements StepRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        AppUser appUser = appUserService.findAppUserByEmail(email);
-
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
         String dateStr= formatDate.format(stepRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
-        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.getId());
+        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.get().getId());
         Optional<StepRecord> stepRecord = stepPlanExist.stream()
                 .filter(record -> {
                     String recordDateStr = formatDate.format(record.getDate());

@@ -155,11 +155,11 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     public ActivityRecord updateActivityRecord( ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
         String dateStr= formatDate.format(activityRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
-        List<ActivityRecord> planExist = activityRecordRepository.findRecordByIdUser(appUser.getId());
+        List<ActivityRecord> planExist = activityRecordRepository.findRecordByIdUser(appUser.get().getId());
         Optional<ActivityRecord> activityRecord = planExist.stream()
                 .filter(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
