@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,13 +13,11 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.RecordPerDa
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
+import vn.edu.fpt.SmartHealthC.repository.StepRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.WeightRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.WeightRecordService;
@@ -38,8 +37,10 @@ public class WeightRecordServiceImpl implements WeightRecordService {
     private AppUserService appUserService;
     @Autowired
     private SimpleDateFormat formatDate;
+    @Autowired
+    private StepRecordRepository stepRecordRepository;
 
-
+    @Transactional
     @Override
     public WeightRecord createWeightRecord(WeightRecordDTO weightRecordDTO) throws ParseException {
         WeightRecord weightRecord =  WeightRecord.builder()
@@ -49,11 +50,14 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         String dateStr= formatDate.format(weightRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
-        List<WeightRecord> weightRecordListExits = weightRecordRepository.findAppUser(appUser.getId());
+        List<WeightRecord> weightRecordListExits = weightRecordRepository.findAppUser(appUser.get().getId());
         boolean dateExists = weightRecordListExits.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
@@ -68,7 +72,7 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         if (dateExists) {
             throw new AppException(ErrorCode.WEIGHT_RECORD_DAY_EXIST);
         }
-        weightRecord.setAppUserId(appUser);
+        weightRecord.setAppUserId(appUser.get());
         return  weightRecordRepository.save(weightRecord);
     }
 
@@ -130,14 +134,17 @@ public class WeightRecordServiceImpl implements WeightRecordService {
     public WeightResponseChartDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
 
-        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUser(appUser.getId());
+        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUser(appUser.get().getId());
         //Sắp xếp giảm dần theo date
         weightRecordList.sort(new Comparator<WeightRecord>() {
             @Override
@@ -186,6 +193,40 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         weightResponseChartDTO.setAvgValue((int)sumValue/weightResponseChartDTO.getWeightResponseList().stream().count()+"kg");
         return  weightResponseChartDTO;
     }
+
+    @Override
+    public Boolean checkPlanPerDay(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date today = new Date();
+        String dateStr= formatDate.format(today);
+        Date date = formatDate.parse(dateStr);
+        Date weekStartNow = formatDate.parse(weekStart);
+        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUser(appUser.get().getId());
+        Optional<WeightRecord> weightRecord = weightRecordList.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordDate.equals(date)
+                                && recordWeekStart.equals(weekStartNow);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (weightRecord.isEmpty()) {
+            throw new AppException(ErrorCode.WEIGHT_PLAN_NOT_FOUND);
+        }
+        return true;
+    }
+
     public Date calculateDate(Date sourceDate , int minus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
         Calendar calendar = Calendar.getInstance();
@@ -196,12 +237,13 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         return calendar.getTime();
     }
 
+    @Transactional
     @Override
-    public WeightRecord updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO) {
+    public void updateWeightRecord(Integer id, WeightRecordDTO weightRecordDTO) {
 
         WeightRecord weightRecord = getWeightRecordById(id);
         weightRecord.setWeight(weightRecordDTO.getWeight());
-        return  weightRecordRepository.save(weightRecord);
+        weightRecordRepository.save(weightRecord);
     }
 
     @Override

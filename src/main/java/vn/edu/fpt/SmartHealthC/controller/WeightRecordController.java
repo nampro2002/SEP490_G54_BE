@@ -43,6 +43,14 @@ public class WeightRecordController {
                         .result(weightRecordService.getDataChart())
                         .build()).getBody();
     }
+    @GetMapping("/mobile/check-plan/{weekStart}")
+    public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(weightRecordService.checkPlanPerDay(weekStart))
+                        .build()).getBody();
+    }
 
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<WeightResponseDTO>> getAllWeightRecordsByAppUserId(@PathVariable Integer id) {
@@ -54,11 +62,12 @@ public class WeightRecordController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<WeightRecord> updateWeightRecord(@PathVariable Integer id, @RequestBody @Valid WeightRecordDTO weightRecordDTO) {
+    public ApiResponse<Void> updateWeightRecord(@PathVariable Integer id, @RequestBody @Valid WeightRecordDTO weightRecordDTO) {
+        weightRecordService.updateWeightRecord(id, weightRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<WeightRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result( weightRecordService.updateWeightRecord(id, weightRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
     //Test only

@@ -43,6 +43,14 @@ public class CardinalRecordController {
                         .result(cardinalRecordService.getDataChart())
                         .build()).getBody();
     }
+    @GetMapping("/mobile/check-plan/{weekStart}")
+    public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(cardinalRecordService.checkPlanPerDay(weekStart))
+                        .build()).getBody();
+    }
 
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse< List<CardinalRecordResponseDTO>> getAllCardinalRecordsByAppUserId(@PathVariable Integer id) {
@@ -53,12 +61,12 @@ public class CardinalRecordController {
                         .build()).getBody();
     }
     @PutMapping("/{id}")
-    public ApiResponse<CardinalRecord> updateCardinalRecord(@PathVariable Integer id, @RequestBody @Valid CardinalRecordDTO cardinalRecordDTO) {
-        CardinalRecord updatedCardinalRecord = cardinalRecordService.updateCardinalRecord(id, cardinalRecordDTO);
+    public ApiResponse<Void> updateCardinalRecord(@PathVariable Integer id, @RequestBody @Valid CardinalRecordDTO cardinalRecordDTO) {
+        cardinalRecordService.updateCardinalRecord(id, cardinalRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<CardinalRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(updatedCardinalRecord)
+                        .result(null)
                         .build()).getBody();
     }
 

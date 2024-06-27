@@ -27,21 +27,30 @@ public class MentalRecordController {
     private MentalRecordService mentalRecordService;
 
     @PostMapping
-    public ApiResponse<MentalRecordResponseDTO> createMentalRecord(@RequestBody @Valid MentalRecordCreateDTO mentalRecordDTO) throws ParseException {
+    public ApiResponse<Void> createMentalRecord(@RequestBody @Valid MentalRecordCreateDTO mentalRecordDTO) throws ParseException {
+        mentalRecordService.createMentalRecord(mentalRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MentalRecordResponseDTO>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result( mentalRecordService.createMentalRecord(mentalRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
 
 
     @GetMapping("/mobile/mental-rule/{weekStart}")
-    public ApiResponse<List<MentalRule>> getMentalRecordById(@PathVariable String weekStart) throws ParseException {
+    public ApiResponse<List<MentalRule>> getMentalRuleByWeek(@PathVariable String weekStart) throws ParseException {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MentalRule>>builder()
                         .code(HttpStatus.OK.value())
                         .result(mentalRecordService.getListMentalPerWeek(weekStart))
+                        .build()).getBody();
+    }
+    @GetMapping("/mobile/check-plan/{weekStart}")
+    public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(mentalRecordService.checkPlanPerDay(weekStart))
                         .build()).getBody();
     }
 
@@ -65,11 +74,12 @@ public class MentalRecordController {
 
 
     @PutMapping("")
-    public ApiResponse<MentalRecordResponseDTO> updateMentalRecord(@RequestBody @Valid MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
+    public ApiResponse<Void> updateMentalRecord(@RequestBody @Valid MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
+        mentalRecordService.updateMentalRecord(mentalRecordDTO);
         return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MentalRecordResponseDTO>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(mentalRecordService.updateMentalRecord(mentalRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
     //Test only

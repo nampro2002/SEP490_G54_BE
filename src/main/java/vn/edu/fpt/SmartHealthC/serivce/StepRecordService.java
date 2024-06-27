@@ -10,11 +10,13 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface StepRecordService {
-    StepRecord createStepRecord(StepRecordCreateDTO stepRecordDTO) throws ParseException;
+    void createStepRecord(StepRecordCreateDTO stepRecordDTO) throws ParseException;
     StepRecord getStepRecordById(Integer id);
     List<StepRecordResListDTO> getAllStepRecords(Integer id);
-    StepRecord updateStepRecord(StepRecordUpdateDTO stepRecordDTO) throws ParseException;
+    void updateStepRecord(StepRecordUpdateDTO stepRecordDTO) throws ParseException;
     StepRecord deleteStepRecord(Integer id);
 
     StepResponseChartDTO getDataChart() throws ParseException;
+
+    Boolean checkPlanPerDay(String weekStart) throws ParseException;
 }

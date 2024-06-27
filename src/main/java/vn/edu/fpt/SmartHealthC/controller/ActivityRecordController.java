@@ -25,13 +25,12 @@ public class ActivityRecordController {
     private ActivityRecordService activityRecordService;
 
     @PostMapping
-    public ApiResponse<ActivityRecord> createActivityRecord(@RequestBody @Valid ActivityRecordCreateDTO activityRecordDTO) throws ParseException {
-
-        ActivityRecord createdActivityRecord= activityRecordService.createActivityRecord(activityRecordDTO);
+    public ApiResponse<Void> createActivityRecord(@RequestBody @Valid ActivityRecordCreateDTO activityRecordDTO) throws ParseException {
+        activityRecordService.createActivityRecord(activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<ActivityRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(createdActivityRecord)
+                        .result(null)
                         .build()).getBody();
     }
 
@@ -53,14 +52,22 @@ public class ActivityRecordController {
                         .result(activityRecordService.getAllActivityRecords(id))
                         .build()).getBody();
     }
+    @GetMapping("/mobile/check-plan/{weekStart}")
+    public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(activityRecordService.checkPlanPerDay(weekStart))
+                        .build()).getBody();
+    }
 
     @PutMapping("")
-    public ApiResponse<ActivityRecord> updateActivityRecord(@RequestBody @Valid ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {
-        ActivityRecord updatedActivityRecord = activityRecordService.updateActivityRecord(activityRecordDTO);
+    public ApiResponse<Void> updateActivityRecord(@RequestBody @Valid ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {
+        activityRecordService.updateActivityRecord(activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<ActivityRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(updatedActivityRecord)
+                        .result(null)
                         .build()).getBody();
     }
     //Test only
