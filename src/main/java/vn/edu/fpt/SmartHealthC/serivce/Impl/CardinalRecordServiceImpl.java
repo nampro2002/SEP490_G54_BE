@@ -48,6 +48,9 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         String email = authentication.getName();
 
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
         cardinalRecord.setAppUserId(appUser.get());
 
         String dateStr= formatDate.format(cardinalRecord.getDate());
@@ -179,6 +182,9 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);

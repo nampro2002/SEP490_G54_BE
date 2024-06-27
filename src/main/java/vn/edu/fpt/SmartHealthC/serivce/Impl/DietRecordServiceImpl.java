@@ -58,6 +58,9 @@ public class DietRecordServiceImpl implements DietRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
 
         String weekStartStr= formatDate.format(dietRecordDTO.getWeekStart());
@@ -155,6 +158,9 @@ public class DietRecordServiceImpl implements DietRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
         String dateStr= formatDate.format(dietRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
         List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.get().getId());
@@ -192,6 +198,9 @@ public class DietRecordServiceImpl implements DietRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         Date today = new Date();
         String dateStr= formatDate.format(today);

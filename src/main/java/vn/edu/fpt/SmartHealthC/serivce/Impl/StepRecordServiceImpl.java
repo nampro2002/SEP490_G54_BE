@@ -55,6 +55,9 @@ public class StepRecordServiceImpl implements StepRecordService {
         String email = authentication.getName();
 
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
 
         String weekStartStr= formatDate.format(stepRecordDTO.getWeekStart());
@@ -145,6 +148,9 @@ public class StepRecordServiceImpl implements StepRecordService {
         String email = authentication.getName();
 
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         String dateStr= formatDate.format(stepRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
@@ -183,6 +189,9 @@ public class StepRecordServiceImpl implements StepRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         Date today = new Date();
         String dateStr= formatDate.format(today);

@@ -44,11 +44,13 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        AppUser appUser = appUserService.findAppUserByEmail(email);
-
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
         String dateStr= formatDate.format(bloodPressureRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
-        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.getId());
+        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.get().getId());
         boolean dateExists = bloodPressureRecordListExits.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
@@ -64,7 +66,7 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
             throw new AppException(ErrorCode.BLOOD_PRESSURE_DAY_EXIST);
         }
 
-        bloodPressureRecord.setAppUserId(appUser);
+        bloodPressureRecord.setAppUserId(appUser.get());
         return bloodPressureRecordRepository.save(bloodPressureRecord);
     }
 
@@ -155,6 +157,9 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         Date today = new Date();
         String dateStr= formatDate.format(today);

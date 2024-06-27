@@ -47,6 +47,9 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         String email = authentication.getName();
 
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         //Check plan
         for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList){
@@ -164,6 +167,9 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
         String dateStr= formatDate.format(medicineRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
         boolean ruleExists = false;
@@ -227,6 +233,9 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         //Ngày hôm nay
         Date today = new Date();
@@ -287,6 +296,9 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         Date today = new Date();
         String dateStr= formatDate.format(today);

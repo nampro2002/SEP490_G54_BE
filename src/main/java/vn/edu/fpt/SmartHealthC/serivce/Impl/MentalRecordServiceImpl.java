@@ -54,7 +54,9 @@ public class MentalRecordServiceImpl implements MentalRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         String weekStartStr= formatDate.format(mentalRecordDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
@@ -154,6 +156,9 @@ public class MentalRecordServiceImpl implements MentalRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
         String dateStr= formatDate.format(mentalRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
         boolean ruleExists = false;
@@ -208,6 +213,9 @@ public class MentalRecordServiceImpl implements MentalRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
 
         Date today = new Date();
         String dateStr= formatDate.format(today);
@@ -277,6 +285,9 @@ public class MentalRecordServiceImpl implements MentalRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
         Date weekStartFind = formatDate.parse(weekStart);
 
         List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserId(appUser.get().getId());
