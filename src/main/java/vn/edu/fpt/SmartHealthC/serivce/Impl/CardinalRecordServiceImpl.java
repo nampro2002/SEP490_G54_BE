@@ -47,12 +47,12 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        AppUser appUser = appUserService.findAppUserByEmail(email);
-        cardinalRecord.setAppUserId(appUser);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        cardinalRecord.setAppUserId(appUser.get());
 
         String dateStr= formatDate.format(cardinalRecord.getDate());
         Date date = formatDate.parse(dateStr);
-        List<CardinalRecord> cardinalRecordListExits = cardinalRecordRepository.findByAppUserId(appUser.getId());
+        List<CardinalRecord> cardinalRecordListExits = cardinalRecordRepository.findByAppUserId(appUser.get().getId());
         boolean dateExists = cardinalRecordListExits.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
@@ -178,12 +178,12 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
     public CardinalChartResponseDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
-        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByAppUserId(appUser.getId());
+        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByAppUserId(appUser.get().getId());
         cardinalRecordList.sort((recordDateSmaller, recordDateBigger) -> recordDateBigger.getDate().compareTo(recordDateSmaller.getDate()));
         // Lấy 5 bản ghi có ngày gần với ngày hiện tại nhất
         // Tạo một Set để theo dõi các ngày đã được thêm

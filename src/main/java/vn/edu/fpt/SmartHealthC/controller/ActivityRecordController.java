@@ -25,13 +25,12 @@ public class ActivityRecordController {
     private ActivityRecordService activityRecordService;
 
     @PostMapping
-    public ApiResponse<ActivityRecord> createActivityRecord(@RequestBody @Valid ActivityRecordCreateDTO activityRecordDTO) throws ParseException {
-
-        ActivityRecord createdActivityRecord= activityRecordService.createActivityRecord(activityRecordDTO);
+    public ApiResponse<Void> createActivityRecord(@RequestBody @Valid ActivityRecordCreateDTO activityRecordDTO) throws ParseException {
+        activityRecordService.createActivityRecord(activityRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<ActivityRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(createdActivityRecord)
+                        .result(null)
                         .build()).getBody();
     }
 

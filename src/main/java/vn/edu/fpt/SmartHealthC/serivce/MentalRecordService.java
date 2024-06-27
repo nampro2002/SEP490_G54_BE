@@ -12,7 +12,7 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface MentalRecordService {
-    MentalRecordResponseDTO createMentalRecord(MentalRecordCreateDTO mentalRecordDTO) throws ParseException;
+    void createMentalRecord(MentalRecordCreateDTO mentalRecordDTO) throws ParseException;
     MentalRecord getMentalRecordEntityById(Integer id);
     MentalRecordResponseDTO getMentalRecordById(Integer id);
     List<MentalRecordListResDTO> getAllMentalRecords(Integer userId);

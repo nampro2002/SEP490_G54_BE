@@ -49,17 +49,17 @@ public class StepRecordServiceImpl implements StepRecordService {
     }
 
     @Override
-    public StepRecord createStepRecord(StepRecordCreateDTO stepRecordDTO) throws ParseException {
+    public void createStepRecord(StepRecordCreateDTO stepRecordDTO) throws ParseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
 
         String weekStartStr= formatDate.format(stepRecordDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
-        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.getId());
+        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.get().getId());
         boolean dateExists = stepPlanExist.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getWeekStart());
@@ -87,11 +87,10 @@ public class StepRecordServiceImpl implements StepRecordService {
                     .actualValue(0f)
                     .weekStart(stepRecordDTO.getWeekStart())
                     .date(dateCalculate).build();
-            stepRecord.setAppUserId(appUser);
+            stepRecord.setAppUserId(appUser.get());
             stepRecordRepository.save(stepRecord);
             count++;
         }
-        return null;
     }
 
     @Override
@@ -184,14 +183,14 @@ public class StepRecordServiceImpl implements StepRecordService {
     public StepResponseChartDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
 
-        List<StepRecord> stepRecordList = stepRecordRepository.findByAppUserId(appUser.getId());
+        List<StepRecord> stepRecordList = stepRecordRepository.findByAppUserId(appUser.get().getId());
         //Sắp xếp giảm dần theo date
         stepRecordList.sort(new Comparator<StepRecord>() {
             @Override

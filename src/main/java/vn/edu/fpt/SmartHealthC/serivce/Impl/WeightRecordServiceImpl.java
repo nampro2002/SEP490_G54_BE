@@ -49,11 +49,11 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
         String dateStr= formatDate.format(weightRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
-        List<WeightRecord> weightRecordListExits = weightRecordRepository.findAppUser(appUser.getId());
+        List<WeightRecord> weightRecordListExits = weightRecordRepository.findAppUser(appUser.get().getId());
         boolean dateExists = weightRecordListExits.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
@@ -68,7 +68,7 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         if (dateExists) {
             throw new AppException(ErrorCode.WEIGHT_RECORD_DAY_EXIST);
         }
-        weightRecord.setAppUserId(appUser);
+        weightRecord.setAppUserId(appUser.get());
         return  weightRecordRepository.save(weightRecord);
     }
 
@@ -130,14 +130,14 @@ public class WeightRecordServiceImpl implements WeightRecordService {
     public WeightResponseChartDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
 
-        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUser(appUser.getId());
+        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUser(appUser.get().getId());
         //Sắp xếp giảm dần theo date
         weightRecordList.sort(new Comparator<WeightRecord>() {
             @Override

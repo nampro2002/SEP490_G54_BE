@@ -49,16 +49,16 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     }
 
     @Override
-    public MentalRecordResponseDTO createMentalRecord(MentalRecordCreateDTO mentalRecordDTO) throws ParseException {
+    public void createMentalRecord(MentalRecordCreateDTO mentalRecordDTO) throws ParseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
 
         String weekStartStr= formatDate.format(mentalRecordDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
-        List<MentalRecord> mentalRecordExist = mentalRecordRepository.findByAppUserId(appUser.getId());
+        List<MentalRecord> mentalRecordExist = mentalRecordRepository.findByAppUserId(appUser.get().getId());
         boolean dateExists = mentalRecordExist.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getWeekStart());
@@ -87,7 +87,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
                         .weekStart(mentalRecordDTO.getWeekStart())
                         .date(dateCalculate)
                         .build();
-                mentalRecord.setAppUserId(appUser);
+                mentalRecord.setAppUserId(appUser.get());
 
                 Optional<MentalRule> mentalRule = mentalRuleRepository.findById(id);
                 if(mentalRule.isEmpty()) {
@@ -99,15 +99,6 @@ public class MentalRecordServiceImpl implements MentalRecordService {
             count++;
         }
 
-
-//        return MentalRecordResponseDTO.builder()
-//                .appUserId(mentalRecord.getAppUserId().getId())
-//                .status(mentalRecord.isStatus())
-//                .weekStart(mentalRecord.getWeekStart())
-//                .date(mentalRecord.getDate())
-//                .mentalRuleId(mentalRecord.getMentalRule().getId())
-//                .build();
-        return null;
     }
 
     @Override
@@ -217,14 +208,14 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     public MentalResponseChartDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
 
-        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserId(appUser.getId());
+        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserId(appUser.get().getId());
         //Sắp xếp giảm dần theo date
         mentalRecordList.sort(new Comparator<MentalRecord>() {
             @Override

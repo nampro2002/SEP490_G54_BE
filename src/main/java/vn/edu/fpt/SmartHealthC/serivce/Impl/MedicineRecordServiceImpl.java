@@ -41,18 +41,18 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     @Autowired
     private SimpleDateFormat formatDate;
     @Override
-    public MedicineRecordResponseDTO createMedicineRecord(List<MedicineRecordCreateDTO> medicineRecordDTOList) throws ParseException {
+    public void createMedicineRecord(List<MedicineRecordCreateDTO> medicineRecordDTOList) throws ParseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
         //Check plan
         for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList){
         String weekStartStr= formatDate.format(medicineRecordCreateDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
-        List<MedicineRecord> medicinePlanExist = medicineRecordRepository.findByAppUser(appUser.getId());
+        List<MedicineRecord> medicinePlanExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
             boolean dateExists = medicinePlanExist.stream()
                     .anyMatch(record -> {
                         String recordDateStr = formatDate.format(record.getWeekStart());
@@ -76,7 +76,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                 throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
             }
             //Check type medicine
-            List<MedicineRecord> medicinePlanExist = medicineRecordRepository.findByAppUser(appUser.getId());
+            List<MedicineRecord> medicinePlanExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
             boolean dateExists = medicinePlanExist.stream()
                     .anyMatch(record -> {
                         return record.getMedicineType().getId().equals(medicineRecordCreateDTO.getMedicineTypeId());
@@ -92,14 +92,13 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                         .weekStart(medicineRecordCreateDTO.getWeekStart())
                         .status(false)
                         .build();
-                medicineRecord.setAppUserId(appUser);
+                medicineRecord.setAppUserId(appUser.get());
                 medicineRecord.setMedicineType(medicineType.get());
                 medicineRecord.setDate(date);
                 medicineRecordRepository.save(medicineRecord);
             }
         }
 
-        return null;
     }
     public Date calculateDate(Date date , int plus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
@@ -288,14 +287,14 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     public MedicineResponseChartDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
 
-        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.getId());
+        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.get().getId());
         //Sắp xếp giảm dần theo date
         medicineRecordList.sort(new Comparator<MedicineRecord>() {
             @Override

@@ -9,10 +9,8 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.Blood
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.RecordPerDay;
-import vn.edu.fpt.SmartHealthC.domain.entity.ActivityRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.BloodPressureRecord;
-import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
@@ -156,7 +154,8 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
     public BloodPressureResponseChartDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
@@ -164,7 +163,7 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         int count = 5;
         BloodPressureResponseChartDTO bloodPressureResponseChartDTO = new BloodPressureResponseChartDTO();
         List<BloodPressureResponse> bloodPressureResponseList = new ArrayList<>();
-        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.getId());
+        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.get().getId());
 
         //Sắp xếp giảm dần theo date
         bloodPressureRecordListExits.sort(new Comparator<BloodPressureRecord>() {

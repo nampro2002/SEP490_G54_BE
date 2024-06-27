@@ -10,8 +10,6 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.Acti
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.ActivityResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.ActivityResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ActivityRecordListResDTO.RecordPerDay;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponse;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -22,11 +20,6 @@ import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -42,15 +35,15 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     private SimpleDateFormat formatDate;
 
     @Override
-    public ActivityRecord createActivityRecord(ActivityRecordCreateDTO activityRecordDTO) throws ParseException {
-        activityRecordDTO.getWeekStart();
+    public void createActivityRecord(ActivityRecordCreateDTO activityRecordDTO) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+
 
         String weekStartStr= formatDate.format(activityRecordDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
-        List<ActivityRecord> planExist = activityRecordRepository.findRecordByIdUser(appUser.getId());
+        List<ActivityRecord> planExist = activityRecordRepository.findRecordByIdUser(appUser.get().getId());
         boolean dateExists = planExist.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getWeekStart());
@@ -84,7 +77,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
             ActivityRecord activityRecord =  ActivityRecord.builder()
                     .actualDuration(0f)
                     .weekStart(activityRecordDTO.getWeekStart()).build();
-            activityRecord.setAppUserId(appUser);
+            activityRecord.setAppUserId(appUser.get());
             activityRecord.setPlanType(activityRecordDTO.getPlanType());
             if (activityRecordDTO.getSchedule().contains(dayIndexMap.get(count))) {
                 activityRecord.setPlanDuration(activityRecordDTO.getPlanDuration());
@@ -96,7 +89,6 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
             activityRecordRepository.save(activityRecord);
             count++;
         }
-        return null;
     }
     public Date calculateDate(Date sourceDate , int plus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
@@ -210,13 +202,13 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
     public ActivityResponseChartDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
-        List<ActivityRecord> activityRecordList = activityRecordRepository.findRecordByIdUser(appUser.getId());
+        List<ActivityRecord> activityRecordList = activityRecordRepository.findRecordByIdUser(appUser.get().getId());
         //Sắp xếp giảm dần theo date
         activityRecordList.sort(new Comparator<ActivityRecord>() {
             @Override

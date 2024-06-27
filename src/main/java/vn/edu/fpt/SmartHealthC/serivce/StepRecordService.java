@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface StepRecordService {
-    StepRecord createStepRecord(StepRecordCreateDTO stepRecordDTO) throws ParseException;
+    void createStepRecord(StepRecordCreateDTO stepRecordDTO) throws ParseException;
     StepRecord getStepRecordById(Integer id);
     List<StepRecordResListDTO> getAllStepRecords(Integer id);
     StepRecord updateStepRecord(StepRecordUpdateDTO stepRecordDTO) throws ParseException;

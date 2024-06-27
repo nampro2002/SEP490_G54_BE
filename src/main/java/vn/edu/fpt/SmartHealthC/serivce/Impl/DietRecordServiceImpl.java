@@ -53,16 +53,16 @@ public class DietRecordServiceImpl implements DietRecordService {
     }
 
     @Override
-    public DietRecord createDietRecord(DietRecordCreateDTO dietRecordDTO) throws ParseException {
+    public void createDietRecord(DietRecordCreateDTO dietRecordDTO) throws ParseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
 
         String weekStartStr= formatDate.format(dietRecordDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
-        List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.getId());
+        List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.get().getId());
         boolean dateExists = dietPlanExist.stream()
                 .anyMatch(record -> {
                     String recordDateStr = formatDate.format(record.getWeekStart());
@@ -93,11 +93,10 @@ public class DietRecordServiceImpl implements DietRecordService {
                     .weekStart(dietRecordDTO.getWeekStart())
                     .date(dateCalculate).build();
 
-            dietRecord.setAppUserId(appUser);
+            dietRecord.setAppUserId(appUser.get());
             dietRecordRepository.save(dietRecord);
             count++;
         }
-        return null;
     }
 
     @Override
@@ -193,14 +192,14 @@ public class DietRecordServiceImpl implements DietRecordService {
     public DietResponseChartDTO getDataChart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        AppUser appUser = appUserService.findAppUserByEmail(email);
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
 
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
 
-        List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.getId());
+        List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.get().getId());
         //Sắp xếp giảm dần theo date
         dietRecordList.sort(new Comparator<DietRecord>() {
             @Override

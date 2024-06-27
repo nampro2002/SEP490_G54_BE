@@ -25,11 +25,12 @@ public class DietRecordController {
     private DietRecordService dietRecordService;
 
     @PostMapping
-    public ApiResponse<DietRecord> createDietRecord(@RequestBody @Valid DietRecordCreateDTO dietRecordDTO) throws ParseException {
+    public ApiResponse<Void> createDietRecord(@RequestBody @Valid DietRecordCreateDTO dietRecordDTO) throws ParseException {
+       dietRecordService.createDietRecord(dietRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<DietRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(dietRecordService.createDietRecord(dietRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
 

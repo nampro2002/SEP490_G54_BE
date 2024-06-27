@@ -27,11 +27,12 @@ public class MentalRecordController {
     private MentalRecordService mentalRecordService;
 
     @PostMapping
-    public ApiResponse<MentalRecordResponseDTO> createMentalRecord(@RequestBody @Valid MentalRecordCreateDTO mentalRecordDTO) throws ParseException {
+    public ApiResponse<Void> createMentalRecord(@RequestBody @Valid MentalRecordCreateDTO mentalRecordDTO) throws ParseException {
+        mentalRecordService.createMentalRecord(mentalRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MentalRecordResponseDTO>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result( mentalRecordService.createMentalRecord(mentalRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
 

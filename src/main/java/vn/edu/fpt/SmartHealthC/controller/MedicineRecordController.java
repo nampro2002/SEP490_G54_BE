@@ -29,11 +29,12 @@ public class MedicineRecordController {
     private AppUserRepository appUserRepository;
 
     @PostMapping
-    public ApiResponse<MedicineRecordResponseDTO>  createMedicineRecord(@RequestBody @Valid List<MedicineRecordCreateDTO> medicineRecordDTO) throws ParseException {
+    public ApiResponse<Void>  createMedicineRecord(@RequestBody @Valid List<MedicineRecordCreateDTO> medicineRecordDTO) throws ParseException {
+        medicineRecordService.createMedicineRecord(medicineRecordDTO);
         return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MedicineRecordResponseDTO>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicineRecordService.createMedicineRecord(medicineRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
 

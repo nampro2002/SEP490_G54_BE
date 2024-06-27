@@ -25,11 +25,12 @@ public class StepRecordController {
     private StepRecordService stepRecordService;
 
     @PostMapping
-    public ApiResponse<StepRecord> createStepRecord(@RequestBody @Valid StepRecordCreateDTO stepRecordDTO) throws ParseException {
+    public ApiResponse<Void> createStepRecord(@RequestBody @Valid StepRecordCreateDTO stepRecordDTO) throws ParseException {
+       stepRecordService.createStepRecord(stepRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<StepRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.OK.value())
-                        .result(stepRecordService.createStepRecord(stepRecordDTO))
+                        .result(null)
                         .build()).getBody();
     }
 
