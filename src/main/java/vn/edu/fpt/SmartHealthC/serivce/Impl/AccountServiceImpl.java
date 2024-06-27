@@ -150,13 +150,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public ResponsePaging<List<AppUserResponseDTO>> getUserPendingAssign(Integer pageNo) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<AppUser> pagedResult = appUserRepository.findAllAccountUserNotAssign(TypeAccount.USER, paging);
+        Page<AppUser> pagedResult = appUserRepository.findAllAccountUserNotAssign(paging);
         List<AppUser> accountList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             accountList = pagedResult.getContent();
         }
         List<AppUserResponseDTO> listResponse = accountList.stream()
-//                .filter(record -> (!record.getAccountId().getIsActive() && record.getAccountId().getType().equals(TypeAccount.USER)))
                 .map(record -> {
                     AppUserResponseDTO dto = new AppUserResponseDTO();
                     dto.setAccountId(record.getAccountId().getId());
@@ -173,7 +172,7 @@ public class AccountServiceImpl implements AccountService {
         return ResponsePaging.<List<AppUserResponseDTO>>builder()
                 .totalPages(pagedResult.getTotalPages())
                 .currentPage(pageNo + 1)
-                .totalItems((int) pagedResult.getTotalElements())
+                .totalItems((listResponse.size()))
                 .dataResponse(listResponse)
                 .build();
     }

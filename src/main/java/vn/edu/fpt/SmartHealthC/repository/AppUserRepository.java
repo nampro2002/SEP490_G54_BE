@@ -19,9 +19,10 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
 
     @Query("SELECT u FROM AppUser u WHERE u.accountId.isActive = false AND u.accountId.type = ?1")
     Page<AppUser> findAllInactiveAccountUser(TypeAccount type, Pageable paging);
-    //account.webuserid = null or account.webuser.isdeleted = true
-    @Query("SELECT u FROM AppUser u WHERE u.accountId.isActive = true AND u.accountId.type = ?1 AND u.webUser.id IS NULL OR u.webUser.accountId.isDeleted = true")
-    Page<AppUser> findAllAccountUserNotAssign(TypeAccount type, Pageable paging);
+    //native query
+//    @Query(value = "SELECT a.id, a.dob,a.gender,a.height,a.medical_specialist_note,a.name,a.phone_number,a.weight,a.account_id,a.cic,a.web_user_id FROM smarthealthc.app_user a left join web_user w on a.web_user_id = w.id left join account acc on w.account_id = acc.id where a.web_user_id is null or acc.is_deleted = true", nativeQuery = true)
+    @Query(value = "SELECT a.id, a.dob, a.gender, a.height, a.medical_specialist_note, a.name, a.phone_number, a.weight, a.account_id, a.cic, a.web_user_id FROM account ac JOIN app_user a ON ac.id = a.account_id LEFT JOIN web_user w ON a.web_user_id = w.id LEFT JOIN account acc ON w.account_id = acc.id WHERE ac.is_active = 1 AND (a.web_user_id IS NULL OR acc.is_deleted = true) ORDER BY ac.id ASC", nativeQuery = true)
+    Page<AppUser> findAllAccountUserNotAssign(Pageable paging);
     @Query("SELECT u FROM AppUser u WHERE u.accountId.email = ?1")
     Optional<AppUser> findByAccountEmail(String email);
     @Query("SELECT u FROM AppUser u WHERE u.accountId.Id = ?1 AND u.accountId.isActive = true")
