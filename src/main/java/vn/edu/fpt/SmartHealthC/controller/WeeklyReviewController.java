@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyReviewResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.WeekReview;
 import vn.edu.fpt.SmartHealthC.serivce.WeeklyReviewService;
 
 import java.text.ParseException;
@@ -36,13 +37,12 @@ public class WeeklyReviewController {
                         .build()).getBody();
     }
 
-    @GetMapping("/web/review/{appUserId}/{weekstart}")
-    public ApiResponse<WeeklyReviewResponseDTO> returnReviewForWeekDate(@PathVariable Integer appUserId,
-                                                     @PathVariable String weekstart) throws ParseException {
+    @GetMapping("/web/review/{weekstart}")
+    public ApiResponse<WeekReview> returnReviewForWeekDate(@PathVariable String weekstart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<WeeklyReviewResponseDTO>builder()
+                .body(ApiResponse.<WeekReview>builder()
                         .code(HttpStatus.OK.value())
-                        .result(weeklyReviewService.getDataReviewForWeek(appUserId,weekstart))
+                        .result(weeklyReviewService.getDataReviewForWeek(weekstart))
                         .build()).getBody();
     }
 

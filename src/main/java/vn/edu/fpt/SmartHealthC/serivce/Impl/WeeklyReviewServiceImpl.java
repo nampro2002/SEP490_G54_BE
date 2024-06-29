@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeActivity;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.*;
@@ -10,11 +12,8 @@ import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.*;
 import vn.edu.fpt.SmartHealthC.serivce.WeeklyReviewService;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,7 +42,8 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     private StepRecordRepository stepRecordRepository;
     @Autowired
     private  SimpleDateFormat formatDate;
-
+    @Autowired
+    private WeekReviewRepository weekReviewRepository;
 
     @Override
     public WeeklyReviewResponseDTO getWeek(Integer id) throws ParseException {
@@ -116,33 +116,94 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
 
 
     @Override
-    public WeeklyReviewResponseDTO getDataReviewForWeek(Integer id, String weekStart) throws ParseException {
-        WeeklyReviewResponseDTO weeklyReviewResponseDTO = new WeeklyReviewResponseDTO();
-
-        Optional<AppUser> appUser = appUserRepository.findById(id);
-        if (appUser.isEmpty()) {
+    public WeekReview getDataReviewForWeek(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         //week start for filter
         Date weekStartFilter = formatDate.parse(weekStart);
-        weeklyReviewResponseDTO.setWeekStart(weekStartFilter);
+        List<WeekReview> weekReviews = weekReviewRepository.findByAppUserId(appUser.get().getId());
+        Optional<WeekReview> weekReviewExist = weekReviews.stream()
+                .filter(record -> {
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordWeekStart.equals(weekStartFilter);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (weekReviewExist.isEmpty()) {
+            throw new AppException(ErrorCode.WEEK_REVIEW_EXIST);
+        }
+        return weekReviewExist.get();
+    }
+
+    @Override
+    public void saveDataReviewForWeek(String weekStart) throws ParseException {
+        WeekReview weekReview = new WeekReview();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        //week start for filter
+        Date weekStartFilter = formatDate.parse(weekStart);
+        List<WeekReview> weekReviews = weekReviewRepository.findByAppUserId(appUser.get().getId());
+        Optional<WeekReview> weekReviewExist = weekReviews.stream()
+                .filter(record -> {
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordWeekStart.equals(weekStartFilter);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (weekReviewExist.isPresent()) {
+            throw new AppException(ErrorCode.WEEK_REVIEW_EXIST);
+        }
+
+        weekReview.setAppUserId(appUser.get());
+        weekReview.setWeekStart(weekStartFilter);
         //Average cardinal per week
-        weeklyReviewResponseDTO.setCardinalPerWeek(getAverageCardinalPerWeek(appUser.get(), weekStartFilter));
+        CardinalPerWeekResponseDTO  cardinalPerWeekResponseDTO = getAverageCardinalPerWeek(appUser.get(), weekStartFilter);
+        weekReview.setHba1cTotalRecord(cardinalPerWeekResponseDTO.getHba1cTotalRecord());
+        weekReview.setHba1cSafeRecord(cardinalPerWeekResponseDTO.getHba1cSafeRecord());
+        weekReview.setCholesterolTotalRecord(cardinalPerWeekResponseDTO.getCholesterolTotalRecord());
+        weekReview.setCholesterolSafeRecord(cardinalPerWeekResponseDTO.getCholesterolSafeRecord());
+        weekReview.setBloodSugarTotalRecord(cardinalPerWeekResponseDTO.getBloodSugarTotalRecord());
+        weekReview.setBloodSugarSafeRecord(cardinalPerWeekResponseDTO.getBloodSugarSafeRecord());
+
         //Average bloodPressure per week
-        weeklyReviewResponseDTO.setBloodPressurePerWeek(getAverageBloodPressurePerWeek(appUser.get(), weekStartFilter));
+        BloodPressurePerWeekResponseDTO bloodPressurePerWeekResponseDTO =getAverageBloodPressurePerWeek(appUser.get(), weekStartFilter);
+        weekReview.setTotalBloodPressureRecord(bloodPressurePerWeekResponseDTO.getTotalRecord());
+        weekReview.setSafeBloodPressureRecord(bloodPressurePerWeekResponseDTO.getSafeRecord());
         //Average Weight per week
-        weeklyReviewResponseDTO.setAverageWeightRecordPerWeek(getAverageWeightPerWeek(appUser.get(), weekStartFilter));
+        weekReview.setAverageWeightRecordPerWeek(getAverageWeightPerWeek(appUser.get(), weekStartFilter));
         //Average Mental per week
-        weeklyReviewResponseDTO.setAverageMentalRecordPerWeek(getMentalPerWeek(appUser.get(), weekStartFilter));
+        weekReview.setAverageMentalRecordPerWeek(getMentalPerWeek(appUser.get(), weekStartFilter));
         //Review Activity per week
-        weeklyReviewResponseDTO.setActivityRecordPerWeek(getActivityPerWeek(appUser.get(), weekStartFilter));
+        ActivityPerWeekResponseDTO activityPerWeekResponseDTO =getActivityPerWeek(appUser.get(), weekStartFilter);
+        weekReview.setHeavyActivity(activityPerWeekResponseDTO.getHeavyActivity());
+        weekReview.setMediumActivity(activityPerWeekResponseDTO.getMediumActivity());
+        weekReview.setLightActivity(activityPerWeekResponseDTO.getLightActivity());
         //Average diet per week
-        weeklyReviewResponseDTO.setAverageDietRecordPerWeek(getAverageDietPerWeek(appUser.get(), weekStartFilter));
+        weekReview.setAverageDietRecordPerWeek(getAverageDietPerWeek(appUser.get(), weekStartFilter));
         //get Done and Total medicine per week
-        weeklyReviewResponseDTO.setMedicineRecordPerWeek(getMedicinePerWeek(appUser.get(),weekStartFilter));
+        MedicinePerWeekResponseDTO medicinePerWeekResponseDTO = getMedicinePerWeek(appUser.get(),weekStartFilter);
+        weekReview.setMedicineRecordDone(medicinePerWeekResponseDTO.getMedicineRecordDone());
+        weekReview.setMedicineRecordTotal(medicinePerWeekResponseDTO.getMedicineRecordTotal());
         //Average step per week
-        weeklyReviewResponseDTO.setAverageStepRecordPerWeek(getAverageStepPerWeek(appUser.get(),weekStartFilter));
-        return weeklyReviewResponseDTO;
+        weekReview.setAverageStepRecordPerWeek(getAverageStepPerWeek(appUser.get(),weekStartFilter));
+        weekReviewRepository.save(weekReview);
     }
 
     private CardinalPerWeekResponseDTO getAverageCardinalPerWeek(AppUser appUser, Date weekStart) {
