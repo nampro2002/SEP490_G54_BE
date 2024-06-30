@@ -14,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class WeightResponseChartDTO {
 
-    private String avgValue;
-    private String valueToday;
+    private Integer avgValue;
+    private Float valueToday;
     private List<WeightResponse> weightResponseList = new ArrayList<>();
 
 
