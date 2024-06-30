@@ -26,6 +26,8 @@ public class RefreshToken {
 
     private Date refreshExpiryTime;
 
+    private String deviceToken;
+
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account accountId;

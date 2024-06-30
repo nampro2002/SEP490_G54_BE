@@ -29,10 +29,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -82,9 +79,11 @@ public class AuthServiceImpl implements AuthService {
                 .accessExpiryTime(jwtProvider.extractExpirationDate(jwt))
                 .refreshToken(refreshToken)
                 .refreshExpiryTime(formatDate.parse(stringFormatedDate))
-                .accountId(optionalUser.get()).build();
+                .accountId(optionalUser.get())
+                .deviceToken(request.getDeviceToken())
+                .build();
         refreshTokenRepository.save(refreshTokenCreate);
-
+        cleanRefreshToken(optionalUser.get().getId());
         return AuthenticationResponseDto.builder()
                 .type(optionalUser.get().getType())
                 .idUser(optionalUser.get().getId())
@@ -92,6 +91,21 @@ public class AuthServiceImpl implements AuthService {
                 .accessToken(jwt)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public void cleanRefreshToken(Integer accountId) throws ParseException {
+    //find all record of this account in table refresh_token, if refreshExpiryTime < now, delete it
+        List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordByAccountId(accountId);
+        LocalDateTime now = LocalDateTime.now();
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String stringFormatedDate = now.format(formatter);
+        //Check expires refresh token
+        for(RefreshToken refreshToken : refreshTokenList){
+            if(formatDate.parse(stringFormatedDate).after(refreshToken.getRefreshExpiryTime())){
+                refreshTokenRepository.delete(refreshToken);
+            }
+        }
     }
 
     @Override

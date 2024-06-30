@@ -172,7 +172,7 @@ public class AccountServiceImpl implements AccountService {
         return ResponsePaging.<List<AppUserResponseDTO>>builder()
                 .totalPages(pagedResult.getTotalPages())
                 .currentPage(pageNo + 1)
-                .totalItems((listResponse.size()))
+                .totalItems((int) pagedResult.getTotalElements())
                 .dataResponse(listResponse)
                 .build();
     }

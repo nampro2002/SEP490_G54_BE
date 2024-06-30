@@ -17,4 +17,6 @@ public class LoginDto {
     private String email;
     @NotBlank(message = "Password is mandatory")
     private String password;
+    @NotBlank(message = "Device token is mandatory")
+    private String deviceToken;
 }
