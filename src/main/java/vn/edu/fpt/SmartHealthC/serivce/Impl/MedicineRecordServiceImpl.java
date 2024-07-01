@@ -286,7 +286,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                         }
                     }).collect(Collectors.toList());
             MedicinePLanResponseDTO medicinePLanResponseDTO = new MedicinePLanResponseDTO();
-            medicinePLanResponseDTO.setMedicineId(type.getId());
+            medicinePLanResponseDTO.setMedicineTypeId(type.getId());
             medicinePLanResponseDTO.setMedicineTitle(type.getTitle());
             for (MedicineRecord record : planPerMedicine) {
                 medicinePLanResponseDTO.setTime(getTime(record.getDate()));
@@ -295,7 +295,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             medicinePLanResponseDTOList.add(medicinePLanResponseDTO);
         }
         return medicinePLanResponseDTOList.stream()
-                .sorted((record1, record2) -> record1.getMedicineId().compareTo(record2.getMedicineId()))
+                .sorted((record1, record2) -> record1.getMedicineTypeId().compareTo(record2.getMedicineTypeId()))
                 .collect(Collectors.toList());
 
     }

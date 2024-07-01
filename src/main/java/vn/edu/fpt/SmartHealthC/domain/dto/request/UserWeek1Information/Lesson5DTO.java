@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.domain.dto.request.UserWeek1Information;
 
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,15 +16,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Lesson4DTO {
-    @NotNull(message = "missing planType")
-    private TypeActivity planType;
-    @NotNull(message = "missing weekStart")
-    private Date weekStart;
-    @NotNull(message = "missing planDuration")
-    private Float planDuration;
-    @NotNull(message = "missing schedule")
-    private List<String> schedule;
+public class Lesson5DTO {
+    @NotBlank(message = "missing currentEmotion")
+    private String currentEmotion;
+    @NotBlank(message = "missing whyIfRealistic")
+    private String whyIfRealistic;
+    @NotBlank(message = "missing whyIfNotBetterForLife")
+    private String whyIfNotBetterForLife;
+
+
 
 
 }

@@ -3,8 +3,9 @@ package vn.edu.fpt.SmartHealthC.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeActivity;
 
 import java.util.Date;
@@ -14,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ActivityRecord {
+public class UserWeek1Information {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -25,17 +26,49 @@ public class ActivityRecord {
     @JsonIgnore
     private AppUser appUserId;
 
-    private Date weekStart;
+    private String intermediateGoal;
+    private String endOfYearGoal;
 
-    @Enumerated(EnumType.STRING)
-    private TypeActivity planType;
-    @Enumerated(EnumType.STRING)
-    private TypeActivity actualType;
+    private String strength;
+    private String weakPoint;
 
-    private Float planDuration;
+    private String closePerson1;
+    private String closePerson2;
+    private String closePerson1Message;
+    private String closePerson2Message;
+    private String prefrerredEnvironment;
+    private Date prefrerredTime;
+    private String notPreferredLocation;
+    private Date notPreferredTime;
 
-    private Float actualDuration;
+    private Integer score10;
+    private Integer score20;
+    private Integer score30;
+    private Integer score40;
+    private Integer score50;
+    private String recentValues;
+    private String influenceOnLife;
+    private String newValues;
+    private String reasonForChanging;
 
-    private Date date;
+    private String currentEmotion;
+    private String whyIfRealistic;
+    private String whyIfNotBetterForLife;
+
+
+    private Boolean noMoreThan2;
+    private Boolean todoList;
+    private Boolean noProcastinating;
+    private Boolean doExercises;
+
+    private String whatIsHealth;
+    private String activityCommitment;
+    private String dietCommitment;
+    private String mentalCommitment;
+    private String medicineCommitment;
+    private String roadBlock;
+    private String solution;
+    private String commitment;
+
 
 }

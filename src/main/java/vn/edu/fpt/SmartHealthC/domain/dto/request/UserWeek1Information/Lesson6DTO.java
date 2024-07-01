@@ -15,15 +15,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Lesson5DTO {
-    @NotNull(message = "missing planType")
-    private TypeActivity planType;
-    @NotNull(message = "missing weekStart")
-    private Date weekStart;
-    @NotNull(message = "missing planDuration")
-    private Float planDuration;
-    @NotNull(message = "missing schedule")
-    private List<String> schedule;
+public class Lesson6DTO {
+    @NotNull(message = "missing noMoreThan2")
+    private Boolean noMoreThan2;
+    @NotNull(message = "missing todoList")
+    private Boolean todoList;
+    @NotNull(message = "missing noProcastinating")
+    private Boolean noProcastinating;
+    @NotNull(message = "missing doExercises")
+    private Boolean doExercises;
 
 
 }
