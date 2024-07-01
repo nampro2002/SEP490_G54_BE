@@ -10,17 +10,19 @@ import java.util.List;
 
 public interface AccountService {
     void createStaff(WebUserRequestDTO account);
-    Account getAccountById(Integer id);
-    Account getAccountByEmail(String email);
-    List<Account> getAllAccounts();
-    Account deleteAccount(Integer id);
+    Account getAccountEntityById(Integer id);
+    AccountResponseDTO getAccountById(Integer id);
+    AccountResponseDTO getAccountByEmail(String email);
+    Account getAccountEntityByEmail(String email);
+    List<AccountResponseDTO> getAllAccounts();
+    AccountResponseDTO deleteAccount(Integer id);
 
     boolean activateAccount(Integer id);
 
     ResponsePaging<List<AppUserResponseDTO>> getPendingAccount(Integer pageNo, TypeAccount type);
     List<AvailableMSResponseDTO> getAvailableMS();
 
-    Account changePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO);
+    AccountResponseDTO changePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO);
 
     ResponsePaging<List<AppUserResponseDTO>> getUserPendingAssign(Integer pageNo);
 }

@@ -298,61 +298,61 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         return result;
     }
 
-    private List<Date> getArraySmallestWeekStartByUser(AppUser appUser) {
+    private List<Date> getArraySmallestWeekStartByUser(Integer appUserId) {
         List<Date> smallestDateList = new ArrayList<>();
 
         stepRecordRepository.findAll().stream()
-                .filter(record -> record.getAppUserId() == appUser)
+                .filter(record -> record.getAppUserId().getId() == appUserId)
                 .map(StepRecord::getWeekStart)
                 .min(Comparator.naturalOrder())
                 .ifPresent(smallestDateList::add);
 
         cardinalRecordRepository.findAll().stream()
-                .filter(record -> record.getAppUserId() == appUser)
+                .filter(record -> record.getAppUserId().getId() == appUserId)
                 .map(CardinalRecord::getWeekStart)
                 .min(Comparator.naturalOrder())
                 .ifPresent(smallestDateList::add);
 
         bloodPressureRecordRepository.findAll().stream()
-                .filter(record -> record.getAppUserId() == appUser)
+                .filter(record -> record.getAppUserId().getId() == appUserId)
                 .map(BloodPressureRecord::getWeekStart)
                 .min(Comparator.naturalOrder())
                 .ifPresent(smallestDateList::add);
 
        weightRecordRepository.findAll().stream()
-                .filter(record -> record.getAppUserId() == appUser)
+                .filter(record -> record.getAppUserId().getId() == appUserId)
                 .map(WeightRecord::getWeekStart)
                 .min(Comparator.naturalOrder())
                 .ifPresent(smallestDateList::add);
 
        mentalRecordRepository.findAll().stream()
-        .filter(record -> record.getAppUserId() == appUser)
+        .filter(record -> record.getAppUserId().getId() == appUserId)
         .map(MentalRecord::getWeekStart)
         .min(Comparator.naturalOrder())
         .ifPresent(smallestDateList::add);
 
        dietRecordRepository.findAll().stream()
-                .filter(record -> record.getAppUserId() == appUser)
+                .filter(record -> record.getAppUserId().getId() == appUserId)
                 .map(DietRecord::getWeekStart)
                 .min(Comparator.naturalOrder())
                 .ifPresent(smallestDateList::add);
 
        medicineRecordRepository.findAll().stream()
-                .filter(record -> record.getAppUserId() == appUser)
+                .filter(record -> record.getAppUserId().getId() == appUserId)
                 .map(MedicineRecord::getWeekStart)
                 .min(Comparator.naturalOrder())
                 .ifPresent(smallestDateList::add);
 
        activityRecordRepository.findAll().stream()
-                .filter(record -> record.getAppUserId() == appUser)
+                .filter(record -> record.getAppUserId().getId() == appUserId)
                 .map(ActivityRecord::getWeekStart)
                 .min(Comparator.naturalOrder())
                 .ifPresent(smallestDateList::add);
        return smallestDateList;
     }
 
-    private Date findSmallestWeekStart(AppUser appUser) {
-        List<Date> smallestDateList = getArraySmallestWeekStartByUser(appUser);
+    public Date findSmallestWeekStart(AppUser appUser) {
+        List<Date> smallestDateList = getArraySmallestWeekStartByUser(appUser.getId());
         if (smallestDateList.isEmpty()) {
             throw new AppException(ErrorCode.USER_WEEK_START_NOT_EXIST);
         }

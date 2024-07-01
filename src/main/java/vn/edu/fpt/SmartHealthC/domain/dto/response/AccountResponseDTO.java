@@ -13,9 +13,9 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 @Builder
 public class AccountResponseDTO {
 
-    private String Email;
+    private String email;
 
-    private TypeAccount Type;
+    private TypeAccount type;
 
     private Boolean isActive;
 

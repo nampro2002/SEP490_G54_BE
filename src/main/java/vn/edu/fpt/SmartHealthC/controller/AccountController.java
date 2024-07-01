@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UpdatePasswordRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AccountResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
@@ -53,7 +54,7 @@ public class AccountController {
     @GetMapping("/{id}")
     public ApiResponse<?> getAccountById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Account>builder()
+                .body(ApiResponse.<AccountResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(accountService.getAccountById(id))
                         .build()).getBody();
@@ -77,16 +78,16 @@ public class AccountController {
     @GetMapping("/get-by-email/{email}")
     public ApiResponse<?> getAccountByEmail(@PathVariable String email) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Account>builder()
+                .body(ApiResponse.<AccountResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(accountService.getAccountByEmail(email))
                         .build()).getBody();
     }
 
     @GetMapping("/get-all")
-    public ApiResponse<List<Account>> getAllAccounts() {
+    public ApiResponse<List<AccountResponseDTO>> getAllAccounts() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<Account>>builder()
+                .body(ApiResponse.<List<AccountResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
                         .result(accountService.getAllAccounts())
                         .build()).getBody();
@@ -94,18 +95,18 @@ public class AccountController {
 
     // active / changepass
     @PutMapping("/change-password")
-    public ApiResponse<Account> changePassword(@RequestBody @Valid UpdatePasswordRequestDTO updatePasswordRequestDTO) {
+    public ApiResponse<AccountResponseDTO> changePassword(@RequestBody @Valid UpdatePasswordRequestDTO updatePasswordRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Account>builder()
+                .body(ApiResponse.<AccountResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(accountService.changePassword(updatePasswordRequestDTO))
                         .build()).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<Account> deleteAccount(@PathVariable Integer id) {
+    public ApiResponse<AccountResponseDTO> deleteAccount(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Account>builder()
+                .body(ApiResponse.<AccountResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(accountService.deleteAccount(id))
                         .build()).getBody();

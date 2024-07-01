@@ -16,22 +16,41 @@ public class SchedulerConfig {
     private JobFactory jobFactory;
 
     @Autowired
-    private Trigger dailyJobTrigger;
-
-    @Autowired
     private Trigger weeklyJobTrigger;
 
     @Autowired
     private Trigger monthlyJobTrigger;
 
     @Autowired
-    private JobDetail dailyJobDetail;
-
-    @Autowired
     private JobDetail weeklyJobDetail;
 
     @Autowired
     private JobDetail monthlyJobDetail;
+
+    @Autowired
+    private JobDetail morningJobDetail;
+
+    @Autowired
+    private JobDetail eveningJobDetail;
+
+    @Autowired
+    private Trigger morningTrigger;
+
+    @Autowired
+    private Trigger eveningTrigger;
+
+    @Autowired
+    private JobDetail sundayEveningJobDetail;
+
+    @Autowired
+    private JobDetail mondayMorningJobDetail;
+
+    @Autowired
+    private Trigger sundayEveningTrigger;
+
+    @Autowired
+    private Trigger mondayMorningTrigger;
+
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean() {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
@@ -43,9 +62,12 @@ public class SchedulerConfig {
     public void initialJob() {
         try {
             Scheduler scheduler = schedulerFactoryBean().getScheduler();
-            scheduler.scheduleJob(dailyJobDetail, dailyJobTrigger);
-            scheduler.scheduleJob(weeklyJobDetail, weeklyJobTrigger);
+//            scheduler.scheduleJob(weeklyJobDetail, weeklyJobTrigger);
             scheduler.scheduleJob(monthlyJobDetail, monthlyJobTrigger);
+            scheduler.scheduleJob(morningJobDetail, morningTrigger);
+            scheduler.scheduleJob(eveningJobDetail, eveningTrigger);
+            scheduler.scheduleJob(sundayEveningJobDetail, sundayEveningTrigger);
+            scheduler.scheduleJob(mondayMorningJobDetail, mondayMorningTrigger);
             scheduler.start();
         } catch (SchedulerException e) {
             e.printStackTrace();

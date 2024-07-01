@@ -14,7 +14,7 @@ public class MonthlyJobTriggerConfig {
     public Trigger monthlyJobTrigger(@Qualifier("monthlyJobDetail") JobDetail jobDetail) {
         System.out.println("execute trigger jobBoot");
         try {
-            String time = "0/50 * * * * ?";
+            String time = "0/20 * * * * ?";
 //            String time = "0 0 8 1 * ?";
             return TriggerBuilder.newTrigger().forJob(jobDetail)
                     .withIdentity("monthly_job", "JOB_GROUP")

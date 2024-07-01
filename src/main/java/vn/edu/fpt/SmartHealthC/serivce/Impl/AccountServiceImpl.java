@@ -136,15 +136,21 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account changePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO) {
+    public AccountResponseDTO changePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Account account = getAccountByEmail(email);
+        Account account = getAccountEntityByEmail(email);
         if (!passwordEncoder.matches(updatePasswordRequestDTO.getOldPassword(), account.getPassword())) {
             throw new AppException(ErrorCode.WRONG_OLD_PASSWORD);
         }
         account.setPassword(passwordEncoder.encode(updatePasswordRequestDTO.getNewPassword()));
-        return accountRepository.save(account);
+        accountRepository.save(account);
+        AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
+                .email(account.getEmail())
+                .type(account.getType())
+                .isActive(account.getIsActive())
+                .build();
+        return accountResponseDTO;
     }
 
     @Override
@@ -177,6 +183,20 @@ public class AccountServiceImpl implements AccountService {
                 .build();
     }
 
+//
+//    public List<AccountResponseDTO> getAllAccountAppUser() {
+//        List<Account> accountList =  accountRepository.findAllAccountAppUser(TypeAccount.USER);
+//        return accountList.stream()
+//                .map(record -> {
+//                    AccountResponseDTO dto = new AccountResponseDTO();
+//                    dto.setEmail(record.getEmail());
+//                    dto.setType(record.getType());
+//                    dto.setIsActive(record.getIsActive());
+//                    return dto;
+//                })
+//                .toList();
+//    }
+
     @Transactional
     @Override
     public void createStaff(WebUserRequestDTO requestDTO) {
@@ -203,7 +223,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccountById(Integer id) {
+    public Account getAccountEntityById(Integer id) {
         Optional<Account> account = accountRepository.findById(id);
         if (account.isEmpty()) {
             throw new AppException(ErrorCode.NOT_FOUND);
@@ -211,8 +231,37 @@ public class AccountServiceImpl implements AccountService {
         return account.get();
     }
 
+
     @Override
-    public Account getAccountByEmail(String email) {
+    public AccountResponseDTO getAccountById(Integer id) {
+        Optional<Account> account = accountRepository.findById(id);
+        if (account.isEmpty()) {
+            throw new AppException(ErrorCode.NOT_FOUND);
+        }
+        AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
+                .email(account.get().getEmail())
+                .type(account.get().getType())
+                .isActive(account.get().getIsActive())
+                .build();
+        return accountResponseDTO;
+    }
+
+    @Override
+    public AccountResponseDTO getAccountByEmail(String email) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+        if (account.isEmpty()) {
+            throw new AppException(ErrorCode.NOT_FOUND);
+        }
+        AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
+                .email(account.get().getEmail())
+                .type(account.get().getType())
+                .isActive(account.get().getIsActive())
+                .build();
+        return accountResponseDTO;
+    }
+
+    @Override
+    public Account getAccountEntityByEmail(String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         if (account.isEmpty()) {
             throw new AppException(ErrorCode.NOT_FOUND);
@@ -221,8 +270,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAllNotDeleted();
+    public List<AccountResponseDTO> getAllAccounts() {
+        List<Account> accountList = accountRepository.findAllNotDeleted();
+        return accountList.stream()
+                .map(record -> {
+                    AccountResponseDTO dto = new AccountResponseDTO();
+                    dto.setEmail(record.getEmail());
+                    dto.setType(record.getType());
+                    dto.setIsActive(record.getIsActive());
+                    return dto;
+                })
+                .toList();
     }
 
 
@@ -232,14 +290,19 @@ public class AccountServiceImpl implements AccountService {
 //    }
 
     @Override
-    public Account deleteAccount(Integer id) {
-        Account account = getAccountById(id);
+    public AccountResponseDTO deleteAccount(Integer id) {
+        Account account = getAccountEntityById(id);
         if (account.isDeleted()) {
             throw new AppException(ErrorCode.ACCOUNT_DELETED);
         }
         account.setDeleted(true);
         accountRepository.save(account);
-        return account;
+        AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
+                .email(account.getEmail())
+                .type(account.getType())
+                .isActive(account.getIsActive())
+                .build();
+        return accountResponseDTO;
     }
 
 

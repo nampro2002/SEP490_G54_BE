@@ -89,6 +89,7 @@ public class AppUser {
 //    private List<WeightRecord> weightRecords;
 //
     @OneToMany(mappedBy = "appUserId")
+    @ToString.Exclude
     private List<UserMedicalHistory> userMedicalHistoryList;
 //
 //    @OneToMany(mappedBy = "appUserId")

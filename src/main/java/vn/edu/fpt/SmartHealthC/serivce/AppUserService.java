@@ -22,4 +22,6 @@ public interface AppUserService {
     AppUserDetailResponseDTO updateAppUser(Integer id, AppUserRequestDTO appUserDTO);
 
     AppUser findAppUserByEmail(String email);
+    Optional<AppUser> findAppUserEntityById(Integer id);
+    List<AppUser> getListAppUser();
 }

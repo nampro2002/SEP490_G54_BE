@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class WeeklyJobTriggerConfig {
-    @Bean(name = "weeklyJobTrigger")
+public class MedicalAppointmentTriggerConfig {
+    @Bean(name = "medicalAppointmentTrigger")
     public Trigger weeklyJobTrigger(@Qualifier("weeklyJobDetail") JobDetail jobDetail) {
         System.out.println("execute trigger jobBoot");
         try {

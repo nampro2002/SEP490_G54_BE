@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.quartz.job;
 
+
 import com.google.firebase.messaging.FirebaseMessagingException;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -9,27 +10,30 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.TopicNotificationRequest;
+import vn.edu.fpt.SmartHealthC.quartz.quartzService.TriggerExecutionService;
 import vn.edu.fpt.SmartHealthC.serivce.notification.NotificationService;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
+
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class WeeklyJob implements Job {
+public class DailyEveningJob implements Job {
     @Autowired
     private NotificationService notificationService;
+
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        System.out.println("Executing Weekly Job at: "+ new Date());
+        System.out.println("Executing Daily Evening Job at: " + new Date());
         HashMap<String, String> data = new HashMap<>();
         data.put("key1", "value1");
         TopicNotificationRequest topicNotificationRequest = TopicNotificationRequest.builder()
-                .title("Weekly")
-                .body("This is a weekly notification.")
+                .title("Daily")
+                .body("This is a daily evening notification.")
                 .imageUrl("http://example.com/image.png")
                 .data(data)
-                .topicName("weekly")
+                .topicName("dailyPM")
                 .build();
         try {
             notificationService.sendPushNotificationToTopic(topicNotificationRequest);
