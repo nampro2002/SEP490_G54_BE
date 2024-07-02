@@ -227,30 +227,25 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
         });
         int count = 5;
         ActivityResponseChartDTO activityResponseChartDTO = new ActivityResponseChartDTO();
+        Set<Date> activityDateResponseList = new HashSet<>();
         List<ActivityResponse> activityResponseList = new ArrayList<>();
         for (ActivityRecord activityRecord : activityRecordList) {
             String smallerDateStr= formatDate.format(activityRecord.getDate());
             Date smallerDate = formatDate.parse(smallerDateStr);
 
-            if(smallerDate.before(date)){
-                Integer value = (int) Math.round(activityRecord.getActualDuration());
-                ActivityResponse activityResponse = new ActivityResponse()
-                        .builder().date(activityRecord.getDate())
-                        .duration(value)
-                        .type(activityRecord.getActualType()).build();
-                count--;
-                activityResponseList.add(activityResponse);
-            }
-            if(smallerDate.equals(date)){
-                Integer value = (int) Math.round(activityRecord.getActualDuration());
-                activityResponseChartDTO.setDurationToday(value);
-                activityResponseChartDTO.setTypeToDay(activityRecord.getActualType());
-                ActivityResponse activityResponse = new ActivityResponse()
-                        .builder().date(activityRecord.getDate())
-                        .duration(value)
-                        .type(activityRecord.getActualType()).build();
-                activityResponseList.add(activityResponse);
-                count--;
+            if(activityRecord.getActualType() != null){
+                if(smallerDate.before(date) || smallerDate.equals(date)){
+                    if(!activityDateResponseList.contains(smallerDate)){
+                        activityDateResponseList.add(smallerDate);
+                        Integer value = (int) Math.round(activityRecord.getActualDuration());
+                        ActivityResponse activityResponse = new ActivityResponse()
+                                .builder().date(activityRecord.getDate())
+                                .duration(value)
+                                .type(activityRecord.getActualType()).build();
+                        activityResponseList.add(activityResponse);
+                        count--;
+                    }
+                }
             }
             today = calculateDateMinus(today,1);
             if(count < 1){
