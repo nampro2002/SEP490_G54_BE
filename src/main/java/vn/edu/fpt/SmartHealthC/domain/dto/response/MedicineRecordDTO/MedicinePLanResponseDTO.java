@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MedicinePLanResponseDTO {
-    private Integer medicineId;
+    private Integer medicineTypeId;
     private String medicineTitle;
     private String time;
     private List<String> weekday = new ArrayList<String>();

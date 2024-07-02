@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyReviewResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.WeekReview;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -11,5 +12,7 @@ public interface WeeklyReviewService {
 
     List<Date> getListWeekStart(Integer id) throws ParseException;
 
-    WeeklyReviewResponseDTO getDataReviewForWeek(Integer id,String weekstart) throws ParseException;
+    WeekReview getDataReviewForWeek(String weekstart) throws ParseException;
+
+    void saveDataReviewForWeek(String weekStart) throws ParseException;
 }

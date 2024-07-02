@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class WeightResponse {
 
-    private String value;
+    private Float value;
     private Date date;
 
 
