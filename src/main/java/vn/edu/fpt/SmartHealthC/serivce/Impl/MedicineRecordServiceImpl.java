@@ -54,11 +54,18 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
 
-        //Check plan
+
         for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList){
         String weekStartStr= formatDate.format(medicineRecordCreateDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
         List<MedicineRecord> medicinePlanExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
+
+            //check type exist
+            Optional<MedicineType> medicineType = medicineTypeRepository.findById(medicineRecordCreateDTO.getMedicineTypeId());
+            if (medicineType.isEmpty()) {
+                throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
+            }
+            //Check plan with type medicine
             boolean dateExists = medicinePlanExist.stream()
                     .anyMatch(record -> {
                         String recordDateStr = formatDate.format(record.getWeekStart());
@@ -74,29 +81,12 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             if (dateExists) {
                 throw new AppException(ErrorCode.MEDICINE_PLAN_EXIST);
             }
-        }
-
-        for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList){
-            Optional<MedicineType> medicineType = medicineTypeRepository.findById(medicineRecordCreateDTO.getMedicineTypeId());
-            if (medicineType.isEmpty()) {
-                throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
-            }
-            //Check type medicine
-            List<MedicineRecord> medicinePlanExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
-            boolean dateExists = medicinePlanExist.stream()
-                    .anyMatch(record -> {
-                        return record.getMedicineType().getId().equals(medicineRecordCreateDTO.getMedicineTypeId());
-                    });
-            if (dateExists) {
-                throw new AppException(ErrorCode.MEDICINE_TYPE_EXIST);
-            }
 
             //Check schedule
             for(Date date : medicineRecordCreateDTO.getSchedule()){
 
                 MedicineRecord medicineRecord = MedicineRecord.builder()
                         .weekStart(medicineRecordCreateDTO.getWeekStart())
-//                        .status(false)
                         .build();
                 medicineRecord.setAppUserId(appUser.get());
                 medicineRecord.setMedicineType(medicineType.get());
@@ -104,7 +94,6 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                 medicineRecordRepository.save(medicineRecord);
             }
         }
-
     }
     public Date calculateDate(Date date , int plus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
