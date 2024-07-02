@@ -221,22 +221,24 @@ public class DietRecordServiceImpl implements DietRecordService {
         for (DietRecord dietRecord : dietRecordList) {
             String smallerDateStr= formatDate.format(dietRecord.getDate());
             Date smallerDate = formatDate.parse(smallerDateStr);
+            if(dietRecord.getActualValue() != 0){
+                if(smallerDate.before(date)){
+                    Integer value = (int) Math.round(dietRecord.getActualValue());
+                    DietResponse dietResponse = new DietResponse().builder()
+                            .date(dietRecord.getDate()).value(value).build();
+                    count--;
+                    sumValue+=dietRecord.getActualValue();
+                    dietResponseList.add(dietResponse);
+                }
+                if(smallerDate.equals(date)){
+                    Integer value = (int) Math.round(dietRecord.getActualValue());
+                    DietResponse dietResponse = new DietResponse().builder()
+                            .date(dietRecord.getDate()).value(value).build();
+                    count--;
+                    sumValue+=dietRecord.getActualValue();
+                    dietResponseList.add(dietResponse);
+                }
 
-            if(smallerDate.before(date)){
-                Integer value = (int) Math.round(dietRecord.getActualValue());
-                DietResponse dietResponse = new DietResponse().builder()
-                        .date(dietRecord.getDate()).value(value).build();
-                count--;
-                sumValue+=dietRecord.getActualValue();
-                dietResponseList.add(dietResponse);
-            }
-            if(smallerDate.equals(date)){
-                Integer value = (int) Math.round(dietRecord.getActualValue());
-                DietResponse dietResponse = new DietResponse().builder()
-                        .date(dietRecord.getDate()).value(value).build();
-                count--;
-                sumValue+=dietRecord.getActualValue();
-                dietResponseList.add(dietResponse);
             }
 
             today = calculateDateMinus(today,1);
