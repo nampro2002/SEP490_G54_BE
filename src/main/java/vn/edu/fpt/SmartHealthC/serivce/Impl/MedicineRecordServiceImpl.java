@@ -325,25 +325,41 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         });
         MedicineResponseChartDTO medicineResponseChartDTO = new MedicineResponseChartDTO();
         List<MedicineResponse> medicineResponseList = new ArrayList<>();
-        //Lấy ra 5 date gần nhất
+        //Lấy ra 5 date gần nhất và có value không bị null (1 thằng bị null trong ngày đó cx ko lấy)
         Set<Date> uniqueDates = new HashSet<>();
         for (MedicineRecord record : medicineRecordList) {
             String recordDateStr = formatDate.format(record.getDate());
             Date recordDate = formatDate.parse(recordDateStr);
-            if(recordDate.before(date) || recordDate.equals(date)) {
-                if(!uniqueDates.contains(recordDate)){
-                    uniqueDates.add(recordDate);
+            if (recordDate.before(date) || recordDate.equals(date)) {
+                boolean dataNullExists = medicineRecordList.stream()
+                        .anyMatch(item -> {
+                            String itemDateStr = formatDate.format(item.getDate());
+                            try {
+                                Date itemDate = formatDate.parse(itemDateStr);
+                                String sortedDateStr = formatDate.format(record.getDate());
+                                Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                                return itemDate.equals(parsedSortedDate)
+                                        && item.getStatus() == null;
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                return false;
+                            }
+                        });
+                // ko có value nào bị null
+                if (dataNullExists == false) {
+                    if (!uniqueDates.contains(recordDate)) {
+                        uniqueDates.add(recordDate);
+                    }
                 }
-            }
-            if(uniqueDates.size() == 5){
-                break;
+                if (uniqueDates.size() == 5) {
+                    break;
+                }
             }
         }
         //Sắp xếp date tăng dần
         Set<Date> sortedDates = new TreeSet<>(uniqueDates);
         //Tìm danh sách theo date
         for (Date sortedDate : sortedDates) {
-
             if(sortedDate.equals(date)){
                 List<MedicineRecord> listByDate = medicineRecordList.stream()
                         .filter(record -> {
