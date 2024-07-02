@@ -255,8 +255,10 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
                     }
                 })
                 .findFirst();
+        //Hôm nay chưa nhập liệu
         if (bloodPressureRecord.isEmpty()) {
-            throw new AppException(ErrorCode.BLOOD_PRESSURE_DATA_DAY_EMPTY);
+//            throw new AppException(ErrorCode.BLOOD_PRESSURE_DATA_DAY_EMPTY);
+        return false;
         }
         return true;
     }

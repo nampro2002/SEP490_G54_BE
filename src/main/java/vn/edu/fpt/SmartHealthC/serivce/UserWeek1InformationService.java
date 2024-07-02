@@ -1,8 +1,10 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserWeek1Information.*;
+import vn.edu.fpt.SmartHealthC.domain.entity.UserWeek1Information;
 
 public interface UserWeek1InformationService {
+    UserWeek1Information getUserWeek1Information(Integer id);
     Lesson1DTO getLesson1(Integer id);
     void setLesson1(Integer id, Lesson1DTO lesson1DTO);
 

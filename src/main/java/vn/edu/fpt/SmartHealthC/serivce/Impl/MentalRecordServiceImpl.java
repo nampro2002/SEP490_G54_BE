@@ -333,8 +333,10 @@ public class MentalRecordServiceImpl implements MentalRecordService {
                     }
                 })
                 .toList();
+        //Không có plan
         if (mentalRecords.isEmpty()) {
-            throw new AppException(ErrorCode.MENTAL_PLAN_NOT_FOUND);
+//            throw new AppException(ErrorCode.MENTAL_PLAN_NOT_FOUND);
+        return false;
         }
         int count =0;
         for(MentalRecord mentalRecord : mentalRecords){
@@ -342,8 +344,10 @@ public class MentalRecordServiceImpl implements MentalRecordService {
                 count ++;
             }
         }
+        //có mà chưa nhập
         if(count < 1 ){
-            throw new AppException(ErrorCode.MENTAL_DAY_DATA_EMPTY);
+//            throw new AppException(ErrorCode.MENTAL_DAY_DATA_EMPTY);
+        return false;
         }
         return true;
     }

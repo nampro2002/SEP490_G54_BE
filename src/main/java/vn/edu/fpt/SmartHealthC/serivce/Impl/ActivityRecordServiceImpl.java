@@ -298,12 +298,15 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
                 .findFirst();
         //Không có kế hoạch
         if (activityRecord.isEmpty()) {
-            throw new AppException(ErrorCode.ACTIVITY_PLAN_NOT_FOUND);
+//            throw new AppException(ErrorCode.ACTIVITY_PLAN_NOT_FOUND);
+        return false;
         }
+
         //Có kế hoạch mà chưa nhập liệu
         if (activityRecord.get().getActualDuration() == 0 &&
         activityRecord.get().getActualType() == null) {
-            throw new AppException(ErrorCode.ACTIVITY_DAY_DATA_EMPTY);
+//            throw new AppException(ErrorCode.ACTIVITY_DAY_DATA_EMPTY);
+            return false;
         }
         return true;
     }

@@ -219,8 +219,10 @@ public class WeightRecordServiceImpl implements WeightRecordService {
                     }
                 })
                 .findFirst();
+        //Hôm nay chưa nhập liệu
         if (weightRecord.isEmpty()) {
-            throw new AppException(ErrorCode.WEIGHT_PLAN_NOT_FOUND);
+//            throw new AppException(ErrorCode.WEIGHT_DATA_DAY_EMPTY);
+        return false;
         }
         return true;
     }

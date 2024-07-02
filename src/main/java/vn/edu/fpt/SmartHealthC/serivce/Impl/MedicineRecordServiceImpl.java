@@ -484,12 +484,16 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                     }
                 })
                 .toList();
+        //Không có plane
         if (medicineRecord.isEmpty()) {
-            throw new AppException(ErrorCode.MEDICINE_PLAN_NOT_FOUND);
+//            throw new AppException(ErrorCode.MEDICINE_PLAN_NOT_FOUND);
+        return false;
         }
+        //Có mà chưa nhập
         for (MedicineRecord record : medicineRecord) {
             if (record.getStatus() == null) {
-                throw new AppException(ErrorCode.MEDICINE_DAY_DATA_EMPTY);
+//                throw new AppException(ErrorCode.MEDICINE_DAY_DATA_EMPTY);
+            return false;
             }
         }
 

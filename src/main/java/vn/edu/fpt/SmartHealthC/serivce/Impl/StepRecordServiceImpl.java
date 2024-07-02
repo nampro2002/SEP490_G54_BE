@@ -281,11 +281,15 @@ public class StepRecordServiceImpl implements StepRecordService {
                     }
                 })
                 .findFirst();
+        //Không có plan
         if (stepRecords.isEmpty()) {
-            throw new AppException(ErrorCode.STEP_PLAN_NOT_FOUND);
+//            throw new AppException(ErrorCode.STEP_PLAN_NOT_FOUND);
+        return false;
         }
+        // có mà chưa nhập
         if(stepRecords.get().getActualValue() == 0 ){
-            throw new AppException(ErrorCode.STEP_DAY_DATA_EMPTY);
+//            throw new AppException(ErrorCode.STEP_DAY_DATA_EMPTY);
+       return false;
         }
         return true;
     }

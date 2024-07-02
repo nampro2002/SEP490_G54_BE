@@ -352,9 +352,12 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                     }
                 })
                 .findFirst();
+        //Hôm nay chưa nhập liệu
         if (cardinalRecord.isEmpty()) {
-            throw new AppException(ErrorCode.CARDINAL_DATA_DAY_EMPTY);
+//            throw new AppException(ErrorCode.CARDINAL_DATA_DAY_EMPTY);
+        return false;
         }
+
 
         return true;
 
