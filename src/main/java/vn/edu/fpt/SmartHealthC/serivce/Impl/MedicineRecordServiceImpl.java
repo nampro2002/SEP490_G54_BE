@@ -54,35 +54,45 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
 
+        // Kiểm tra trùng lặp MedicineTypeId
+        HashSet<Integer> checkDuplicate = new HashSet<>();
+        for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList) {
+            int uniqueIdentifier = medicineRecordCreateDTO.getMedicineTypeId();
+                if (checkDuplicate.contains(uniqueIdentifier)) {
+                    throw new AppException(ErrorCode.MEDICINE_TYPE_LIST_DUPLICATE);
+                }else{
+                    checkDuplicate.add(uniqueIdentifier);
+                }
+        }
 
         for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList){
-        String weekStartStr= formatDate.format(medicineRecordCreateDTO.getWeekStart());
-        Date weekStart = formatDate.parse(weekStartStr);
-        List<MedicineRecord> medicinePlanExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
-
-            //check type exist
+            //Check plan với week start và type medicine có trong tuần chưa
+            String weekStartStr= formatDate.format(medicineRecordCreateDTO.getWeekStart());
+            Date weekStart = formatDate.parse(weekStartStr);
+            List<MedicineRecord> medicinePlanExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
+                boolean dateExists = medicinePlanExist.stream()
+                        .anyMatch(record -> {
+                            String recordDateStr = formatDate.format(record.getWeekStart());
+                            try {
+                                Date recordDate = formatDate.parse(recordDateStr);
+                                return recordDate.equals(weekStart)
+                                        && record.getMedicineType().getId().equals(medicineRecordCreateDTO.getMedicineTypeId()) ;
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                return false;
+                            }
+                        });
+                if (dateExists) {
+                    throw new AppException(ErrorCode.MEDICINE_PLAN_EXIST);
+                }
+        }
+        for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList){
+            //Check type medicine có tồn tại chưa
             Optional<MedicineType> medicineType = medicineTypeRepository.findById(medicineRecordCreateDTO.getMedicineTypeId());
             if (medicineType.isEmpty()) {
                 throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
             }
-            //Check plan with type medicine
-            boolean dateExists = medicinePlanExist.stream()
-                    .anyMatch(record -> {
-                        String recordDateStr = formatDate.format(record.getWeekStart());
-                        try {
-                            Date recordDate = formatDate.parse(recordDateStr);
-                            return recordDate.equals(weekStart)
-                                    && record.getMedicineType().getId().equals(medicineRecordCreateDTO.getMedicineTypeId());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                            return false;
-                        }
-                    });
-            if (dateExists) {
-                throw new AppException(ErrorCode.MEDICINE_PLAN_EXIST);
-            }
-
-            //Check schedule
+            //add by schedule
             for(Date date : medicineRecordCreateDTO.getSchedule()){
 
                 MedicineRecord medicineRecord = MedicineRecord.builder()
@@ -94,6 +104,8 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                 medicineRecordRepository.save(medicineRecord);
             }
         }
+
+
     }
     public Date calculateDate(Date date , int plus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
