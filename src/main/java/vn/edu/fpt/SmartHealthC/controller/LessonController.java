@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LessonRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -22,6 +23,7 @@ public class LessonController {
     @Autowired
     private LessonService lessonService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ApiResponse<LessonResponseDTO> createLesson(@RequestBody @Valid LessonRequestDTO lesson) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -30,7 +32,7 @@ public class LessonController {
                         .result(lessonService.createLesson(lesson))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public ApiResponse<LessonResponseDTO> getLessonById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -39,7 +41,7 @@ public class LessonController {
                         .result(lessonService.getLessonById(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/web/others")
     public ApiResponse<ResponsePaging<List<LessonResponseDTO>>> getAllLessons(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -48,7 +50,7 @@ public class LessonController {
                         .result(lessonService.getAllLessons(pageNo-1, search))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<LessonResponseDTO> updateLesson(@PathVariable Integer id, @RequestBody @Valid LessonRequestDTO lessonRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -57,7 +59,7 @@ public class LessonController {
                         .result(lessonService.updateLesson(id,lessonRequestDTO))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<LessonResponseDTO> deleteLesson(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

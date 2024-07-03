@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.BloodPressureRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -21,7 +22,7 @@ public class BloodPressureRecordController {
 
     @Autowired
     private BloodPressureRecordService bloodPressureRecordService;
-
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ApiResponse<BloodPressureRecord> createBloodPressureRecord(@RequestBody @Valid BloodPressureRecordDTO bloodPressureRecordDTO) throws ParseException {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -31,7 +32,7 @@ public class BloodPressureRecordController {
                         .build()).getBody();
     }
 
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/chart")
     public ApiResponse<BloodPressureResponseChartDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -40,7 +41,7 @@ public class BloodPressureRecordController {
                         .result(bloodPressureRecordService.getDataChart())
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') or hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<BloodPressureResponseDTO>> getAllBloodPressureRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -49,7 +50,7 @@ public class BloodPressureRecordController {
                         .result(bloodPressureRecordService.getListBloodPressureRecordsByUser(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/{id}")
     public ApiResponse<Void> updateBloodPressureRecord(@PathVariable Integer id, @RequestBody @Valid BloodPressureRecordDTO bloodPressureRecordDTO) {
         bloodPressureRecordService.updateBloodPressureRecord(id, bloodPressureRecordDTO);
@@ -59,6 +60,7 @@ public class BloodPressureRecordController {
                         .result(null)
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/check-plan/{weekStart}")
     public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)

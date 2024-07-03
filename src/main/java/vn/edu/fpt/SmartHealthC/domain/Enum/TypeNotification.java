@@ -1,0 +1,11 @@
+package vn.edu.fpt.SmartHealthC.domain.Enum;
+
+public enum TypeNotification {
+    MEDICAL_APPOINTMENT_NOTIFICATION,
+    QUESTION_NOTIFICATION,
+    WEEKLY_REPORT_NOTIFICATION,
+    MONTHLY_REPORT_NOTIFICATION,
+    DAILY_NOTIFICATION,
+    PLAN_NOTIFICATION,
+    ALL
+}

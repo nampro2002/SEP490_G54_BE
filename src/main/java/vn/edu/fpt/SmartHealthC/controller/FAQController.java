@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FAQRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -21,6 +22,7 @@ public class FAQController {
     @Autowired
     private FAQService faqService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ApiResponse<FAQResponseDTO> createFAQ(@RequestBody @Valid FAQRequestDTO faqRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -30,6 +32,7 @@ public class FAQController {
                         .build()).getBody();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public ApiResponse<?> getFAQById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -37,7 +40,7 @@ public class FAQController {
                         .result(faqService.getFAQById(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get-all")
     public ApiResponse<?> getAllFAQs() {
         return ResponseEntity.status(HttpStatus.OK)
@@ -45,6 +48,7 @@ public class FAQController {
                         .result(faqService.getAllFAQs())
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile")
     public ApiResponse<?> getAllFAQsMobile() {
         return ResponseEntity.status(HttpStatus.OK)
@@ -52,7 +56,7 @@ public class FAQController {
                         .result(faqService.getAllFAQsMobile())
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<?> updateFAQ(@PathVariable Integer id, @RequestBody @Valid FAQRequestDTO faq) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -61,7 +65,7 @@ public class FAQController {
                         .result(faqService.updateFAQ(id,faq))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<?> deleteFAQ(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

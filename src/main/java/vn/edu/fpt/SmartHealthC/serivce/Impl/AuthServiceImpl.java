@@ -24,15 +24,13 @@ import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
 import vn.edu.fpt.SmartHealthC.serivce.EmailService;
+import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
     private final AppUserRepository appUserRepository;
     private final EmailService  emailService;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final AppUserService appUserService;
+    private final NotificationService notificationService;
     @Override
     public AuthenticationResponseDto login(LoginDto request) throws ParseException {
         Optional<Account> optionalUser = accountRepository.findAccountByEmail(request.getEmail());
@@ -70,7 +68,6 @@ public class AuthServiceImpl implements AuthService {
         );
         //AccessToken
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("isActive",true);
         extraClaims.put("UniqueIdentifier", UUID.randomUUID().toString());
         var jwt = jwtProvider.generateToken(extraClaims, optionalUser.get());
         //RefreshToken
@@ -86,16 +83,37 @@ public class AuthServiceImpl implements AuthService {
                 .accessExpiryTime(jwtProvider.extractExpirationDate(jwt))
                 .refreshToken(refreshToken)
                 .refreshExpiryTime(formatDate.parse(stringFormatedDate))
-                .accountId(optionalUser.get()).build();
+                .accountId(optionalUser.get())
+                .deviceToken(request.getDeviceToken())
+                .build();
         refreshTokenRepository.save(refreshTokenCreate);
-
+        cleanRefreshToken(optionalUser.get().getId());
+        if(optionalUser.get().getType().equals(TypeAccount.USER) && optionalUser.get().isActive()){
+            notificationService.updateStatusNotification(request.getEmail(), request.getDeviceToken());
+        }
         return AuthenticationResponseDto.builder()
-                .type(optionalUser.get().getType())
                 .idUser(optionalUser.get().getId())
                 .role(optionalUser.get().getType())
+                .isActivated(optionalUser.get().isActive())
+                .isDeleted(optionalUser.get().isDeleted())
                 .accessToken(jwt)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public void cleanRefreshToken(Integer accountId) throws ParseException {
+    //find all record of this account in table refresh_token, if refreshExpiryTime < now, delete it
+        List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordByAccountId(accountId);
+        LocalDateTime now = LocalDateTime.now();
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String stringFormatedDate = now.format(formatter);
+        //Check expires refresh token
+        for(RefreshToken refreshToken : refreshTokenList){
+            if(formatDate.parse(stringFormatedDate).after(refreshToken.getRefreshExpiryTime())){
+                refreshTokenRepository.delete(refreshToken);
+            }
+        }
     }
 
     @Override

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateDTO;
@@ -23,7 +24,7 @@ public class StepRecordController {
 
     @Autowired
     private StepRecordService stepRecordService;
-
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ApiResponse<Void> createStepRecord(@RequestBody @Valid StepRecordCreateDTO stepRecordDTO) throws ParseException {
        stepRecordService.createStepRecord(stepRecordDTO);
@@ -34,7 +35,7 @@ public class StepRecordController {
                         .build()).getBody();
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') or hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<StepRecordResListDTO>> getAllStepRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -43,7 +44,7 @@ public class StepRecordController {
                         .result(stepRecordService.getAllStepRecords(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/chart")
     public ApiResponse<StepResponseChartDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -52,6 +53,7 @@ public class StepRecordController {
                         .result(stepRecordService.getDataChart())
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/check-plan/{weekStart}")
     public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -60,7 +62,7 @@ public class StepRecordController {
                         .result(stepRecordService.checkPlanPerDay(weekStart))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("")
     public ApiResponse<Void> updateStepRecord( @RequestBody @Valid StepRecordUpdateDTO stepRecordDTO) throws ParseException {
         stepRecordService.updateStepRecord(stepRecordDTO);

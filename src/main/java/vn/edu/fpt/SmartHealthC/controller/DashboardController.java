@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointment;
@@ -23,7 +24,7 @@ public class DashboardController {
     private final MedicalAppointmentService medicalAppointmentService;
     private final AccountService accountService;
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin-question")
     public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListAdmin() {
         List<QuestionResponseDTO> responseDTOList = questionService.getAllQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN);
@@ -35,7 +36,7 @@ public class DashboardController {
     }
 
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/register-request/app-user")
     public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getUserPendingList(@RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -44,6 +45,7 @@ public class DashboardController {
                         .result(accountService.getPendingAccount(pageNo - 1, TypeAccount.USER))
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/register-request/doctor")
     public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getDoctorPendingList(@RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -52,6 +54,7 @@ public class DashboardController {
                         .result(accountService.getPendingAccount(pageNo - 1, TypeAccount.DOCTOR))
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/assign-pending")
     public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getUserPendingAssignList(@RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -60,7 +63,7 @@ public class DashboardController {
                         .result(accountService.getUserPendingAssign(pageNo - 1))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/ms-question")
     public ApiResponse<List<QuestionResponseDTO>> getQuestionResponseListMs() {
         List<QuestionResponseDTO> responseDTOList = questionService.getAllPendingQuestionsByType(TypeUserQuestion.ASSIGN_MS);
@@ -70,7 +73,7 @@ public class DashboardController {
                         .result(responseDTOList)
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/medical-appointment/diagnosis")
     public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointmentsDiagnosisPending(@RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -79,7 +82,7 @@ public class DashboardController {
                         .result(medicalAppointmentService.getAllMedicalAppointmentsPending(pageNo - 1, TypeMedicalAppointment.DIAGNOSIS))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/medical-appointment/checkup")
     public ApiResponse<ResponsePaging<List<MedicalAppointmentResponseDTO>>> getAllMedicalAppointmentsCheckupPending(@RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)

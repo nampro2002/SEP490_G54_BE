@@ -8,15 +8,16 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
-//    UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
+    //    UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
 //    INVALID_KEY(1001, "Uncategorized error", HttpStatus.BAD_REQUEST),
 //    USER_EXISTED(1002, "User existed", HttpStatus.BAD_REQUEST),
 //    UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
 //    UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
+    NOTIFICATION_SETTING_NOT_FOUND("Notification setting not found", HttpStatus.NOT_FOUND),
     FORBIDDEN("You do not have permission", HttpStatus.FORBIDDEN),
     APP_USER_NOT_FOUND_OR_NOT_ACTIVATED("AppUser not found or not activated", HttpStatus.NOT_FOUND),
-    JWT_INVALID ( ",Invalid jwt token", HttpStatus.BAD_REQUEST),
-    CREDENTIAL_EXPIRED ( "Your login session has expired", HttpStatus.UNAUTHORIZED),
+    JWT_INVALID(",Invalid jwt token", HttpStatus.BAD_REQUEST),
+    CREDENTIAL_EXPIRED("Your login session has expired", HttpStatus.UNAUTHORIZED),
     EMAIL_EXISTED("Email existed", HttpStatus.BAD_REQUEST),
     SEND_EMAIL_FAIL("Send email fail", HttpStatus.BAD_REQUEST),
     TOKEN_NOT_OWNED("Tokens are not owned ", HttpStatus.BAD_REQUEST),
@@ -44,7 +45,7 @@ public enum ErrorCode {
     ACTIVITY_RECORD_NOT_FOUND("Activity record not found", HttpStatus.NOT_FOUND),
     ACTIVITY_PLAN_NOT_FOUND("Activity record plan not found", HttpStatus.NOT_FOUND),
     DIET_PLAN_NOT_FOUND("Diet record plan not found", HttpStatus.NOT_FOUND),
-   MEDICINE_PLAN_NOT_FOUND("Medicine record plan not found", HttpStatus.NOT_FOUND),
+    MEDICINE_PLAN_NOT_FOUND("Medicine record plan not found", HttpStatus.NOT_FOUND),
     MENTAL_PLAN_NOT_FOUND("Mental record plan not found", HttpStatus.NOT_FOUND),
     STEP_PLAN_NOT_FOUND("Step record plan not found", HttpStatus.NOT_FOUND),
     WEIGHT_PLAN_NOT_FOUND("Weight record plan not found", HttpStatus.NOT_FOUND),
@@ -97,7 +98,7 @@ public enum ErrorCode {
     STAFF_CREATED("Staff created successfully", HttpStatus.CREATED),
     WRONG_OLD_PASSWORD("Wrong old password", HttpStatus.BAD_REQUEST),
     ACCOUNT_DELETED("Account has been deleted", HttpStatus.BAD_REQUEST),
-    ACCOUNT_ACTIVATED("Account has been activated", HttpStatus.OK),
+    ACCOUNT_ACTIVATED("Account has been activated", HttpStatus.BAD_REQUEST),
     WEB_USER_FULL("Web user is full 10 patient", HttpStatus.BAD_REQUEST),
     ;
 

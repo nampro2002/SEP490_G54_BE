@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordUpdateDTO;
@@ -26,6 +27,7 @@ public class MentalRecordController {
     @Autowired
     private MentalRecordService mentalRecordService;
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ApiResponse<Void> createMentalRecord(@RequestBody @Valid MentalRecordCreateDTO mentalRecordDTO) throws ParseException {
         mentalRecordService.createMentalRecord(mentalRecordDTO);
@@ -36,7 +38,7 @@ public class MentalRecordController {
                         .build()).getBody();
     }
 
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/mental-rule/{weekStart}")
     public ApiResponse<List<MentalRule>> getMentalRuleByWeek(@PathVariable String weekStart) throws ParseException {
         return  ResponseEntity.status(HttpStatus.OK)
@@ -45,6 +47,7 @@ public class MentalRecordController {
                         .result(mentalRecordService.getListMentalPerWeek(weekStart))
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/check-plan/{weekStart}")
     public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -53,7 +56,7 @@ public class MentalRecordController {
                         .result(mentalRecordService.checkPlanPerDay(weekStart))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') or hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<MentalRecordListResDTO>> getAllMentalRecordsByAppUserId(@PathVariable Integer id) {
         return  ResponseEntity.status(HttpStatus.OK)
@@ -62,7 +65,7 @@ public class MentalRecordController {
                         .result(mentalRecordService.getAllMentalRecords(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/chart")
     public ApiResponse<MentalResponseChartDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -72,7 +75,7 @@ public class MentalRecordController {
                         .build()).getBody();
     }
 
-
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("")
     public ApiResponse<Void> updateMentalRecord(@RequestBody @Valid MentalRecordUpdateDTO mentalRecordDTO) throws ParseException {
         mentalRecordService.updateMentalRecord(mentalRecordDTO);

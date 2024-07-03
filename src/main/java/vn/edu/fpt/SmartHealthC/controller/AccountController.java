@@ -5,11 +5,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UpdatePasswordRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AccountResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
@@ -39,7 +41,7 @@ public class AccountController {
 //                        .result(accountService.loginStaff(loginDto))
 //                        .build()).getBody();
 //    }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/web/create-staff")
     public ApiResponse<?> createStaff(@RequestBody @Valid WebUserRequestDTO account) {
         accountService.createStaff(account);
@@ -49,16 +51,15 @@ public class AccountController {
                         .message(ErrorCode.STAFF_CREATED.getMessage())
                         .build()).getBody();
     }
-
     @GetMapping("/{id}")
     public ApiResponse<?> getAccountById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Account>builder()
+                .body(ApiResponse.<AccountResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(accountService.getAccountById(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/web/activate-account/{id}")
     public ApiResponse<?> activateAccount(@PathVariable Integer id) {
         if (accountService.activateAccount(id)) {
@@ -73,20 +74,20 @@ public class AccountController {
         apiResponse.setMessage("Activation failed");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse).getBody();
     }
-
+    // ??
     @GetMapping("/get-by-email/{email}")
     public ApiResponse<?> getAccountByEmail(@PathVariable String email) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Account>builder()
+                .body(ApiResponse.<AccountResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(accountService.getAccountByEmail(email))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') or hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/get-all")
-    public ApiResponse<List<Account>> getAllAccounts() {
+    public ApiResponse<List<AccountResponseDTO>> getAllAccounts() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<Account>>builder()
+                .body(ApiResponse.<List<AccountResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
                         .result(accountService.getAllAccounts())
                         .build()).getBody();
@@ -94,18 +95,18 @@ public class AccountController {
 
     // active / changepass
     @PutMapping("/change-password")
-    public ApiResponse<Account> changePassword(@RequestBody @Valid UpdatePasswordRequestDTO updatePasswordRequestDTO) {
+    public ApiResponse<AccountResponseDTO> changePassword(@RequestBody @Valid UpdatePasswordRequestDTO updatePasswordRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Account>builder()
+                .body(ApiResponse.<AccountResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(accountService.changePassword(updatePasswordRequestDTO))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
-    public ApiResponse<Account> deleteAccount(@PathVariable Integer id) {
+    public ApiResponse<AccountResponseDTO> deleteAccount(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Account>builder()
+                .body(ApiResponse.<AccountResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(accountService.deleteAccount(id))
                         .build()).getBody();

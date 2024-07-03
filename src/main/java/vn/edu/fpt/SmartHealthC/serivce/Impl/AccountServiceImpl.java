@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +16,6 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.Question;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -27,6 +25,7 @@ import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AccountService;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
+import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
 
 import java.util.ArrayList;
@@ -50,6 +49,8 @@ public class AccountServiceImpl implements AccountService {
     private WebUserService webUserService;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private NotificationService notificationService;
 
 //    @Override
 //    public AuthenticationResponseDto loginStaff(LoginDto request) {
@@ -80,14 +81,17 @@ public class AccountServiceImpl implements AccountService {
     public boolean activateAccount(Integer id) {
         AppUser appUser = appUserRepository.findById(id).orElseThrow(() ->
                 new AppException(ErrorCode.APP_USER_NOT_FOUND));
-        if (appUser.getAccountId().getIsActive()) {
+        if (appUser.getAccountId().isActive()) {
             throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
         }
         Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
-        account.setIsActive(true);
+        account.setActive(true);
         accountRepository.save(account);
+        notificationService.createRecordForAccount(appUser.getAccountId());
         return true;
     }
+
+
 
     @Override
     public ResponsePaging<List<AppUserResponseDTO>> getPendingAccount(Integer pageNo, TypeAccount type) {
@@ -136,15 +140,21 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account changePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO) {
+    public AccountResponseDTO changePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Account account = getAccountByEmail(email);
+        Account account = getAccountEntityByEmail(email);
         if (!passwordEncoder.matches(updatePasswordRequestDTO.getOldPassword(), account.getPassword())) {
             throw new AppException(ErrorCode.WRONG_OLD_PASSWORD);
         }
         account.setPassword(passwordEncoder.encode(updatePasswordRequestDTO.getNewPassword()));
-        return accountRepository.save(account);
+        accountRepository.save(account);
+        AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
+                .email(account.getEmail())
+                .type(account.getType())
+                .isActive(account.isActive())
+                .build();
+        return accountResponseDTO;
     }
 
     @Override
@@ -172,10 +182,24 @@ public class AccountServiceImpl implements AccountService {
         return ResponsePaging.<List<AppUserResponseDTO>>builder()
                 .totalPages(pagedResult.getTotalPages())
                 .currentPage(pageNo + 1)
-                .totalItems((listResponse.size()))
+                .totalItems((int) pagedResult.getTotalElements())
                 .dataResponse(listResponse)
                 .build();
     }
+
+//
+//    public List<AccountResponseDTO> getAllAccountAppUser() {
+//        List<Account> accountList =  accountRepository.findAllAccountAppUser(TypeAccount.USER);
+//        return accountList.stream()
+//                .map(record -> {
+//                    AccountResponseDTO dto = new AccountResponseDTO();
+//                    dto.setEmail(record.getEmail());
+//                    dto.setType(record.getType());
+//                    dto.setIsActive(record.getIsActive());
+//                    return dto;
+//                })
+//                .toList();
+//    }
 
     @Transactional
     @Override
@@ -203,7 +227,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccountById(Integer id) {
+    public Account getAccountEntityById(Integer id) {
         Optional<Account> account = accountRepository.findById(id);
         if (account.isEmpty()) {
             throw new AppException(ErrorCode.NOT_FOUND);
@@ -211,8 +235,37 @@ public class AccountServiceImpl implements AccountService {
         return account.get();
     }
 
+
     @Override
-    public Account getAccountByEmail(String email) {
+    public AccountResponseDTO getAccountById(Integer id) {
+        Optional<Account> account = accountRepository.findById(id);
+        if (account.isEmpty()) {
+            throw new AppException(ErrorCode.NOT_FOUND);
+        }
+        AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
+                .email(account.get().getEmail())
+                .type(account.get().getType())
+                .isActive(account.get().isActive())
+                .build();
+        return accountResponseDTO;
+    }
+
+    @Override
+    public AccountResponseDTO getAccountByEmail(String email) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+        if (account.isEmpty()) {
+            throw new AppException(ErrorCode.NOT_FOUND);
+        }
+        AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
+                .email(account.get().getEmail())
+                .type(account.get().getType())
+                .isActive(account.get().isActive())
+                .build();
+        return accountResponseDTO;
+    }
+
+    @Override
+    public Account getAccountEntityByEmail(String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         if (account.isEmpty()) {
             throw new AppException(ErrorCode.NOT_FOUND);
@@ -221,8 +274,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAllNotDeleted();
+    public List<AccountResponseDTO> getAllAccounts() {
+        List<Account> accountList = accountRepository.findAllNotDeleted();
+        return accountList.stream()
+                .map(record -> {
+                    AccountResponseDTO dto = new AccountResponseDTO();
+                    dto.setEmail(record.getEmail());
+                    dto.setType(record.getType());
+                    dto.setIsActive(record.isActive());
+                    return dto;
+                })
+                .toList();
     }
 
 
@@ -232,14 +294,19 @@ public class AccountServiceImpl implements AccountService {
 //    }
 
     @Override
-    public Account deleteAccount(Integer id) {
-        Account account = getAccountById(id);
+    public AccountResponseDTO deleteAccount(Integer id) {
+        Account account = getAccountEntityById(id);
         if (account.isDeleted()) {
             throw new AppException(ErrorCode.ACCOUNT_DELETED);
         }
         account.setDeleted(true);
         accountRepository.save(account);
-        return account;
+        AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
+                .email(account.getEmail())
+                .type(account.getType())
+                .isActive(account.isActive())
+                .build();
+        return accountResponseDTO;
     }
 
 

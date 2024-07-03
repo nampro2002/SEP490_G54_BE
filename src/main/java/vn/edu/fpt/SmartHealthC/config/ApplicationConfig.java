@@ -2,8 +2,11 @@ package vn.edu.fpt.SmartHealthC.config;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.quartz.spi.JobFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -57,5 +60,13 @@ public class ApplicationConfig {
     public void init(){
         // Thiết lập múi giờ mặc định
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
+
+    @Bean
+    public JobFactory jobFactory(ApplicationContext applicationContext)
+    {
+        AutowiringSpringBeanJobFactory jobFactory = new AutowiringSpringBeanJobFactory();
+        jobFactory.setApplicationContext(applicationContext);
+        return jobFactory;
     }
 }

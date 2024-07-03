@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordUpdateDTO;
@@ -23,7 +24,7 @@ public class ActivityRecordController {
 
     @Autowired
     private ActivityRecordService activityRecordService;
-
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ApiResponse<Void> createActivityRecord(@RequestBody @Valid ActivityRecordCreateDTO activityRecordDTO) throws ParseException {
         activityRecordService.createActivityRecord(activityRecordDTO);
@@ -33,8 +34,7 @@ public class ActivityRecordController {
                         .result(null)
                         .build()).getBody();
     }
-
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/chart")
     public ApiResponse<ActivityResponseChartDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -43,7 +43,7 @@ public class ActivityRecordController {
                         .result(activityRecordService.getDataChart())
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') or hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<ActivityRecordResListDTO>> getAllActivityRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -52,6 +52,7 @@ public class ActivityRecordController {
                         .result(activityRecordService.getAllActivityRecords(id))
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/check-plan/{weekStart}")
     public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -60,7 +61,7 @@ public class ActivityRecordController {
                         .result(activityRecordService.checkPlanPerDay(weekStart))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("")
     public ApiResponse<Void> updateActivityRecord(@RequestBody @Valid ActivityRecordUpdateDTO activityRecordDTO) throws ParseException {
         activityRecordService.updateActivityRecord(activityRecordDTO);

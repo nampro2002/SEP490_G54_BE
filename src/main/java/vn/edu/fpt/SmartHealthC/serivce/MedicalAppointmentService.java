@@ -23,5 +23,6 @@ public interface MedicalAppointmentService {
 
     List<MedicalAppointmentResponseDTO> getMedicalAppointmentByUserIdMobile();
     ResponsePaging<List<MedicalAppointmentResponseDTO>> getMedicalAppointmentByUserId(Integer userId,  Integer pageNo);
+    List<MedicalAppointment> getMedicalAppointmentConfirm();
 
 }

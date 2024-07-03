@@ -246,6 +246,11 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .build();
     }
 
+    @Override
+    public List<MedicalAppointment> getMedicalAppointmentConfirm() {
+        return medicalAppointmentRepository.findAllByType(TypeMedicalAppointmentStatus.CONFIRM);
+
+    }
 
 
 }

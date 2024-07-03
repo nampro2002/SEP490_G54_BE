@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AppUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
@@ -22,7 +23,7 @@ public class AppUserController {
     @Autowired
     private final AppUserService appUserService;
 
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') or hasAuthority('MEDICAL_SPECIALIST')")
     //getListAppUser with paging and search
     @GetMapping("/web")
     public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getListAppUser (@RequestParam(defaultValue = "1") Integer pageNo,
@@ -50,7 +51,7 @@ public class AppUserController {
 //                        .result(appUserService.getAppUserDetailMobile())
 //                        .build()).getBody();
 //    }
-
+    @PreAuthorize("hasAuthority('MEDICAL_SPECIALIST')")
     @PutMapping("/{id}")
     public ApiResponse<AppUserDetailResponseDTO> updateAppUser (@PathVariable Integer id, @RequestBody @Valid AppUserRequestDTO appUserRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)

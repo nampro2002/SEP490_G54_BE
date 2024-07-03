@@ -6,6 +6,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.ForgetPasswordCode;
 import vn.edu.fpt.SmartHealthC.domain.entity.RefreshToken;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Integer> {
@@ -15,4 +16,6 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Inte
 
     @Query("SELECT a FROM RefreshToken a WHERE a.refreshToken = ?1")
     Optional<RefreshToken> findRecordByReToken(String refreshToken);
+    @Query("SELECT a FROM RefreshToken a WHERE a.accountId.Id = ?1")
+    List<RefreshToken> findRecordByAccountId(Integer accountId);
 }

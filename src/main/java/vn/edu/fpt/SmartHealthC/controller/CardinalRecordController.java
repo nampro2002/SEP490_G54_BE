@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.CardinalRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -23,6 +24,7 @@ public class CardinalRecordController {
     @Autowired
     private CardinalRecordService cardinalRecordService;
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ApiResponse<CardinalRecord> createCardinalRecord(@RequestBody @Valid CardinalRecordDTO cardinalRecordDTO) throws ParseException {
 
@@ -34,7 +36,7 @@ public class CardinalRecordController {
                         .build()).getBody();
     }
 
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/chart")
     public ApiResponse<CardinalChartResponseDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -43,6 +45,7 @@ public class CardinalRecordController {
                         .result(cardinalRecordService.getDataChart())
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/check-plan/{weekStart}")
     public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -51,7 +54,7 @@ public class CardinalRecordController {
                         .result(cardinalRecordService.checkPlanPerDay(weekStart))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') or hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse< List<CardinalRecordResponseDTO>> getAllCardinalRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -60,6 +63,7 @@ public class CardinalRecordController {
                         .result(cardinalRecordService.getAllCardinalRecords(id))
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/{id}")
     public ApiResponse<Void> updateCardinalRecord(@PathVariable Integer id, @RequestBody @Valid CardinalRecordDTO cardinalRecordDTO) {
         cardinalRecordService.updateCardinalRecord(id, cardinalRecordDTO);

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalHistoryRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -22,6 +23,8 @@ import java.util.Optional;
 public class MedicalHistoryController {
     @Autowired
     private MedicalHistoryService medicalHistoryService;
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ApiResponse<MedicalHistoryResDTO> createMedicalHistory(@RequestBody @Valid MedicalHistoryRequestDTO medicalHistory) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -30,7 +33,7 @@ public class MedicalHistoryController {
                         .result(medicalHistoryService.createMedicalHistory(medicalHistory))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public ApiResponse<MedicalHistoryResDTO> getMedicalHistoryById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -39,7 +42,7 @@ public class MedicalHistoryController {
                         .result(medicalHistoryService.getMedicalHistoryById(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/web/others")
     public ApiResponse<ResponsePaging<List<MedicalHistoryResDTO>>> getAllMedicalHistory(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -57,7 +60,7 @@ public class MedicalHistoryController {
                         .build()).getBody();
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<MedicalHistoryResDTO> updateMedicalHistory(@PathVariable Integer id, @RequestBody @Valid MedicalHistoryRequestDTO medicalHistory) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -66,7 +69,7 @@ public class MedicalHistoryController {
                         .result(medicalHistoryService.updateMedicalHistory(id, medicalHistory))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<MedicalHistoryResDTO> deleteMedicalHistory(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

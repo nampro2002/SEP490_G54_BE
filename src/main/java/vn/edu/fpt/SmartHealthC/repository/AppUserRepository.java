@@ -9,6 +9,7 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -25,6 +26,9 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
     Page<AppUser> findAllAccountUserNotAssign(Pageable paging);
     @Query("SELECT u FROM AppUser u WHERE u.accountId.email = ?1")
     Optional<AppUser> findByAccountEmail(String email);
-    @Query("SELECT u FROM AppUser u WHERE u.accountId.Id = ?1 AND u.accountId.isActive = true")
+    @Query("SELECT u FROM AppUser u WHERE u.id = ?1 AND u.accountId.isActive = true")
     Optional<AppUser> findByIdActivated(Integer appUserId);
+    //deleted = false
+    @Query("SELECT u FROM AppUser u WHERE u.accountId.isActive = true AND u.accountId.isDeleted = false")
+    List<AppUser> findAllValidUser();
 }
