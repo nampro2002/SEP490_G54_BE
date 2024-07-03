@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +16,6 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.Question;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -27,6 +25,7 @@ import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AccountService;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
+import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
 
 import java.util.ArrayList;
@@ -50,6 +49,8 @@ public class AccountServiceImpl implements AccountService {
     private WebUserService webUserService;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private NotificationService notificationService;
 
 //    @Override
 //    public AuthenticationResponseDto loginStaff(LoginDto request) {
@@ -86,8 +87,11 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
         account.setIsActive(true);
         accountRepository.save(account);
+        notificationService.createRecordForAccount(appUser.getAccountId());
         return true;
     }
+
+
 
     @Override
     public ResponsePaging<List<AppUserResponseDTO>> getPendingAccount(Integer pageNo, TypeAccount type) {

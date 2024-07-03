@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNotification;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AnswerQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionRequestDTO;
@@ -14,10 +15,9 @@ import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.*;
-import vn.edu.fpt.SmartHealthC.serivce.AccountService;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
+import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 import vn.edu.fpt.SmartHealthC.serivce.QuestionService;
-import vn.edu.fpt.SmartHealthC.serivce.notification.NotificationService;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -120,7 +120,7 @@ public class QuestionServiceImpl implements QuestionService {
         dto.setAppUserName(question.getAppUserId().getName());
         if (!question.getAnswer().isBlank()) {
             dto.setWebUserName(question.getWebUserId().getUserName());
-        }else{
+        } else {
             dto.setWebUserName("");
         }
         dto.setTitle(question.getTitle());
@@ -132,22 +132,25 @@ public class QuestionServiceImpl implements QuestionService {
         Account account = question.getAppUserId().getAccountId();
         Map<String, String> data = new HashMap<>();
         Question finalQuestion = question;
-        refreshTokenRepository.findRecordByAccountId(account.getId()).forEach(refreshToken -> {
-            try {
-                notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
-                        .deviceToken(refreshToken.getDeviceToken())
-                        .title("Question Answered")
-                        .body("Your question about "+ finalQuestion.getTitle()+"has been answered")
-                        .data(data)
-                        .build());
-            } catch (FirebaseMessagingException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(account.getId(), TypeNotification.QUESTION_NOTIFICATION);
+        if (notificationSetting.isStatus()) {
+            refreshTokenRepository.findRecordByAccountId(account.getId()).forEach(refreshToken -> {
+                try {
+                    notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
+                            .deviceToken(refreshToken.getDeviceToken())
+                            .title("Question Answered")
+                            .body("Your question about " + finalQuestion.getTitle() + "has been answered")
+                            .data(data)
+                            .build());
+                } catch (FirebaseMessagingException e) {
+                    throw new RuntimeException(e);
+                } catch (ExecutionException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
         return dto;
     }
 
@@ -185,7 +188,7 @@ public class QuestionServiceImpl implements QuestionService {
                     dto.setAppUserName(question.getAppUserId().getName());
                     if (!question.getAnswer().isBlank()) {
                         dto.setWebUserName(question.getWebUserId().getUserName());
-                    }else{
+                    } else {
                         dto.setWebUserName("");
                     }
                     dto.setTitle(question.getTitle());
@@ -214,7 +217,7 @@ public class QuestionServiceImpl implements QuestionService {
                     dto.setAppUserName(question.getAppUserId().getName());
                     if (!question.getAnswer().isBlank()) {
                         dto.setWebUserName(question.getWebUserId().getUserName());
-                    }else{
+                    } else {
                         dto.setWebUserName("");
                     }
                     dto.setTitle(question.getTitle());
@@ -242,7 +245,7 @@ public class QuestionServiceImpl implements QuestionService {
                     dto.setAppUserName(question.getAppUserId().getName());
                     if (!question.getAnswer().isBlank()) {
                         dto.setWebUserName(question.getWebUserId().getUserName());
-                    }else{
+                    } else {
                         dto.setWebUserName("");
                     }
                     dto.setTitle(question.getTitle());
@@ -271,7 +274,7 @@ public class QuestionServiceImpl implements QuestionService {
         dto.setAppUserName(question.getAppUserId().getName());
         if (!question.getAnswer().isBlank()) {
             dto.setWebUserName(question.getWebUserId().getUserName());
-        }else{
+        } else {
             dto.setWebUserName("");
         }
         dto.setTitle(question.getTitle());

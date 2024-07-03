@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.TopicNotificationRequest;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.DeviceNotificationRequest;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
+import vn.edu.fpt.SmartHealthC.domain.entity.RefreshToken;
+import vn.edu.fpt.SmartHealthC.repository.RefreshTokenRepository;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
-import vn.edu.fpt.SmartHealthC.serivce.notification.NotificationService;
+import vn.edu.fpt.SmartHealthC.serivce.Impl.NotificationServiceImpl;
+import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -28,8 +31,11 @@ public class MedicalAppointmentJob implements Job {
     private NotificationService notificationService;
     @Autowired
     private MedicalAppointmentService medicalAppointmentService;
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
+        System.out.println("Executing Medical Reminder Job at: " + new Date());
         List<MedicalAppointment> medicalAppointments = medicalAppointmentService.getMedicalAppointmentConfirm();
         for (MedicalAppointment item: medicalAppointments){
             Instant instant =  item.getDate().toInstant();
@@ -37,27 +43,31 @@ public class MedicalAppointmentJob implements Job {
             // Convert Instant to LocalDateTime considering system default zone
             LocalDate localDateTime = LocalDate.ofInstant(instant, ZoneId.systemDefault());
             LocalDate currentDate = LocalDate.now();
-            long daysBetween = ChronoUnit.DAYS.between(localDateTime, currentDate);
+            long daysBetween = ChronoUnit.DAYS.between(currentDate, localDateTime);
+            System.out.println("Days between Medical Appointment: " + daysBetween);
             //if daysBetween = 1, 3, 7
             if (daysBetween == 1 || daysBetween == 3 || daysBetween == 7){
-                HashMap<String, String> data = new HashMap<>();
-                data.put("key1", "value1");
-                TopicNotificationRequest topicNotificationRequest = TopicNotificationRequest.builder()
-                        .title("Medical Appointment")
-                        .body("You have a medical appointment in " + daysBetween + " days.")
-                        .imageUrl("http://example.com/image.png")
-                        .data(data)
-                        .topicName("medical_appointment")
-                        .build();
-                try {
-                    notificationService.sendPushNotificationToTopic(topicNotificationRequest);
-                } catch (FirebaseMessagingException e) {
-                    throw new RuntimeException(e);
-                } catch (ExecutionException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+              List<RefreshToken> refreshToken = refreshTokenRepository.findRecordByAccountId(item.getAppUserId().getAccountId().getId());
+             for (RefreshToken token : refreshToken){
+                 HashMap<String, String> data = new HashMap<>();
+                 data.put("key1", "value1");
+                 DeviceNotificationRequest deviceNotificationRequest = DeviceNotificationRequest.builder()
+                         .title("Medical Appointment")
+                         .body("You have a medical appointment in " + daysBetween + " days.")
+                         .imageUrl("http://example.com/image.png")
+                         .data(data)
+                        .deviceToken(token.getDeviceToken())
+                         .build();
+                 try {
+                     notificationService.sendNotificationToDevice(deviceNotificationRequest);
+                 } catch (FirebaseMessagingException e) {
+                     throw new RuntimeException(e);
+                 } catch (ExecutionException e) {
+                     throw new RuntimeException(e);
+                 } catch (InterruptedException e) {
+                     throw new RuntimeException(e);
+                 }
+             }
             }
 
         }

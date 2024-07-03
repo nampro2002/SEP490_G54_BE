@@ -11,7 +11,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.TopicNotificationRequest;
 import vn.edu.fpt.SmartHealthC.quartz.quartzService.TriggerExecutionService;
-import vn.edu.fpt.SmartHealthC.serivce.notification.NotificationService;
+import vn.edu.fpt.SmartHealthC.serivce.Impl.NotificationServiceImpl;
+import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -22,27 +23,31 @@ import java.util.concurrent.ExecutionException;
 public class DailyMorningJob implements Job {
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private TriggerExecutionService triggerExecutionService;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        System.out.println("Executing Daily Morning Job at: " + new Date());
-        HashMap<String, String> data = new HashMap<>();
-        data.put("key1", "value1");
-        TopicNotificationRequest topicNotificationRequest = TopicNotificationRequest.builder()
-                .title("Daily")
-                .body("This is a daily morning notification.")
-                .imageUrl("http://example.com/image.png")
-                .data(data)
-                .topicName("dailyAM")
-                .build();
-        try {
-            notificationService.sendPushNotificationToTopic(topicNotificationRequest);
-        } catch (FirebaseMessagingException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if (triggerExecutionService.shouldExecuteMorningJob()) {
+            System.out.println("Executing Daily Morning Job at: " + new Date());
+            HashMap<String, String> data = new HashMap<>();
+            data.put("key1", "value1");
+            TopicNotificationRequest topicNotificationRequest = TopicNotificationRequest.builder()
+                    .title("Daily")
+                    .body("Thông báo sử dụng định kỳ")
+                    .imageUrl("http://example.com/image.png")
+                    .data(data)
+                    .topicName("daily")
+                    .build();
+            try {
+                notificationService.sendPushNotificationToTopic(topicNotificationRequest);
+            } catch (FirebaseMessagingException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

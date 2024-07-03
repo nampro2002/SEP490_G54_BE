@@ -1,11 +1,11 @@
 package vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
-
-@Setter
-@Getter
+import lombok.*;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class NotificationSubscriptionRequest {
     @NotBlank
     private String deviceToken;

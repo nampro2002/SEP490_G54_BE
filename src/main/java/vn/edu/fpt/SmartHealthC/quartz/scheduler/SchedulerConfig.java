@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.quartz.scheduler;
 
+import org.checkerframework.checker.units.qual.A;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.spi.JobFactory;
@@ -16,13 +17,7 @@ public class SchedulerConfig {
     private JobFactory jobFactory;
 
     @Autowired
-    private Trigger weeklyJobTrigger;
-
-    @Autowired
     private Trigger monthlyJobTrigger;
-
-    @Autowired
-    private JobDetail weeklyJobDetail;
 
     @Autowired
     private JobDetail monthlyJobDetail;
@@ -51,6 +46,12 @@ public class SchedulerConfig {
     @Autowired
     private Trigger mondayMorningTrigger;
 
+    @Autowired
+    private Trigger medicalAppointmentTrigger;
+
+    @Autowired
+    private JobDetail medicalReminderJobDetail;
+
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean() {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
@@ -62,7 +63,7 @@ public class SchedulerConfig {
     public void initialJob() {
         try {
             Scheduler scheduler = schedulerFactoryBean().getScheduler();
-//            scheduler.scheduleJob(weeklyJobDetail, weeklyJobTrigger);
+            scheduler.scheduleJob(medicalReminderJobDetail, medicalAppointmentTrigger);
             scheduler.scheduleJob(monthlyJobDetail, monthlyJobTrigger);
             scheduler.scheduleJob(morningJobDetail, morningTrigger);
             scheduler.scheduleJob(eveningJobDetail, eveningTrigger);

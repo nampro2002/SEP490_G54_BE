@@ -15,7 +15,7 @@ public class DailyJobTriggerConfig {
 //        System.out.println("execute trigger jobBoot");
 //        try {
 //            String time = "0/10 * * * * ?";
-////            String time = "0 0 8 * * ?";
+////            String time = "0 0 8,20 * * ?";
 //            return TriggerBuilder.newTrigger().forJob(jobDetail)
 //                    .withIdentity("daily_job", "JOB_GROUP")
 //                    .startNow().withSchedule(CronScheduleBuilder.cronSchedule(time))
@@ -91,13 +91,33 @@ public class DailyJobTriggerConfig {
         }
     }
 
-//    @Bean
-//    public Trigger sundayEveningTrigger() {
-//        return TriggerBuilder.newTrigger()
-//                .forJob(weeklyReviewReminderJobDetail())
-//                .withIdentity("sundayEveningTrigger")
-//                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 20 ? * SUN *"))
-//                .build();
+//    @Bean(name = "monthlyTrigger")
+//    public Trigger monthlyTrigger(@Qualifier("monthlyJobDetail") JobDetail jobDetail) {
+//        try {
+//            String time = "0 21 * * * ?";
+//            return TriggerBuilder.newTrigger().forJob(jobDetail)
+//                    .withIdentity("monthly", "JOB_GROUP")
+//                    .startNow().withSchedule(CronScheduleBuilder.cronSchedule(time))
+//                    .build();
+//        }catch (Exception e){
+//            System.out.println("error in trigger monthly Job");
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//    @Bean(name = "medicalReminderTrigger")
+//    public Trigger medicalReminderTrigger(@Qualifier("medicalReminderJobDetail") JobDetail jobDetail) {
+//        try {
+//            String time = "0 13 * * * ?";
+//            return TriggerBuilder.newTrigger().forJob(jobDetail)
+//                    .withIdentity("remind", "JOB_GROUP")
+//                    .startNow().withSchedule(CronScheduleBuilder.cronSchedule(time))
+//                    .build();
+//        }catch (Exception e){
+//            System.out.println("error in trigger monthly Job");
+//            e.printStackTrace();
+//            return null;
+//        }
 //    }
 //    @Bean
 //    public Trigger mondayMorningTrigger() {

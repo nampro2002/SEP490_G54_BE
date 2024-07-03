@@ -24,6 +24,7 @@ import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
 import vn.edu.fpt.SmartHealthC.serivce.EmailService;
+import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
     private final AppUserRepository appUserRepository;
     private final EmailService  emailService;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final AppUserService appUserService;
+    private final NotificationService notificationService;
     @Override
     public AuthenticationResponseDto login(LoginDto request) throws ParseException {
         Optional<Account> optionalUser = accountRepository.findAccountByEmail(request.getEmail());
@@ -84,6 +85,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
         refreshTokenRepository.save(refreshTokenCreate);
         cleanRefreshToken(optionalUser.get().getId());
+        notificationService.updateStatusNotification(request.getDeviceToken());
         return AuthenticationResponseDto.builder()
                 .type(optionalUser.get().getType())
                 .idUser(optionalUser.get().getId())
