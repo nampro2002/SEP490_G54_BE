@@ -237,7 +237,26 @@ public class MentalRecordServiceImpl implements MentalRecordService {
             Date recordDate = formatDate.parse(recordDateStr);
             if(recordDate.before(date) || recordDate.equals(date)) {
                 if(!uniqueDates.contains(recordDate)){
-                    uniqueDates.add(recordDate);
+                    long point = mentalRecordList.stream()
+                            .filter(record1 -> {
+                                String recordDateStr1 = formatDate.format(record1.getDate());
+                                try {
+                                    Date recordDate1 = formatDate.parse(recordDateStr1);
+                                    String sortedDateStr = formatDate.format(record.getDate());
+                                    Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                                    return recordDate.equals(parsedSortedDate)
+                                            && record.isStatus() == true;
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                    return false;
+                                }
+                            })
+                            .count();
+                    //Ngày nhập r mới lấy
+                    if(point != 0){
+                        uniqueDates.add(recordDate);
+                    }
+
                 }
             }
             if(uniqueDates.size() == 6){
