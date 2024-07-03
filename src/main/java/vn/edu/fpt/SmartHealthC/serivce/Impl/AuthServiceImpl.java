@@ -52,6 +52,9 @@ public class AuthServiceImpl implements AuthService {
         if(optionalUser.isEmpty()) {
             throw new AppException(ErrorCode.CREDENTIAL_INVALID);
         }
+        if(optionalUser.get().isDeleted()) {
+            throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }
         Account existingUser = optionalUser.get();
         //check password
         if(!passwordEncoder.matches(request.getPassword(), existingUser.getPassword())) {
@@ -65,6 +68,7 @@ public class AuthServiceImpl implements AuthService {
         );
         //AccessToken
         Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("isActive",true);
         extraClaims.put("UniqueIdentifier", UUID.randomUUID().toString());
         var jwt = jwtProvider.generateToken(extraClaims, optionalUser.get());
         //RefreshToken

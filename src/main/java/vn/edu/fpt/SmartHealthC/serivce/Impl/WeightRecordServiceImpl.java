@@ -161,20 +161,18 @@ public class WeightRecordServiceImpl implements WeightRecordService {
             Date smallerDate = formatDate.parse(smallerDateStr);
 
             if(smallerDate.before(date)){
-                Integer value = (int) Math.round(weightRecord.getWeight());
                 WeightResponse weightResponse = new WeightResponse().builder()
-                        .date(weightRecord.getDate()).value(value+"kg").build();
+                        .date(weightRecord.getDate()).value(weightRecord.getWeight()).build();
                 count--;
                 sumValue+=weightRecord.getWeight();
                 weightResponseList.add(weightResponse);
             }
             if(smallerDate.equals(date)){
-                Integer value = (int) Math.round(weightRecord.getWeight());
                 WeightResponse weightResponse = new WeightResponse().builder()
-                        .date(weightRecord.getDate()).value(value+"kg").build();
+                        .date(weightRecord.getDate()).value(weightRecord.getWeight()).build();
                 count--;
                 sumValue+=weightRecord.getWeight();
-                weightResponseChartDTO.setValueToday(value+"kg");
+                weightResponseChartDTO.setValueToday(weightRecord.getWeight());
                 weightResponseList.add(weightResponse);
             }
             today = calculateDate(today,1);
@@ -190,7 +188,7 @@ public class WeightRecordServiceImpl implements WeightRecordService {
             }
         });
         weightResponseChartDTO.setWeightResponseList(weightResponseList);
-        weightResponseChartDTO.setAvgValue((int)sumValue/weightResponseChartDTO.getWeightResponseList().stream().count()+"kg");
+        weightResponseChartDTO.setAvgValue((int) (sumValue/weightResponseChartDTO.getWeightResponseList().stream().count()));
         return  weightResponseChartDTO;
     }
 
@@ -221,8 +219,10 @@ public class WeightRecordServiceImpl implements WeightRecordService {
                     }
                 })
                 .findFirst();
+        //Hôm nay chưa nhập liệu
         if (weightRecord.isEmpty()) {
-            throw new AppException(ErrorCode.WEIGHT_PLAN_NOT_FOUND);
+//            throw new AppException(ErrorCode.WEIGHT_DATA_DAY_EMPTY);
+        return false;
         }
         return true;
     }
