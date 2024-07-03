@@ -54,49 +54,49 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
 
-        //Check plan
-        for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList){
-        String weekStartStr= formatDate.format(medicineRecordCreateDTO.getWeekStart());
-        Date weekStart = formatDate.parse(weekStartStr);
-        List<MedicineRecord> medicinePlanExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
-            boolean dateExists = medicinePlanExist.stream()
-                    .anyMatch(record -> {
-                        String recordDateStr = formatDate.format(record.getWeekStart());
-                        try {
-                            Date recordDate = formatDate.parse(recordDateStr);
-                            return recordDate.equals(weekStart)
-                                    && record.getMedicineType().getId().equals(medicineRecordCreateDTO.getMedicineTypeId());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                            return false;
-                        }
-                    });
-            if (dateExists) {
-                throw new AppException(ErrorCode.MEDICINE_PLAN_EXIST);
-            }
+        // Kiểm tra trùng lặp MedicineTypeId
+        HashSet<Integer> checkDuplicate = new HashSet<>();
+        for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList) {
+            int uniqueIdentifier = medicineRecordCreateDTO.getMedicineTypeId();
+                if (checkDuplicate.contains(uniqueIdentifier)) {
+                    throw new AppException(ErrorCode.MEDICINE_TYPE_LIST_DUPLICATE);
+                }else{
+                    checkDuplicate.add(uniqueIdentifier);
+                }
         }
 
         for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList){
+            //Check plan với week start và type medicine có trong tuần chưa
+            String weekStartStr= formatDate.format(medicineRecordCreateDTO.getWeekStart());
+            Date weekStart = formatDate.parse(weekStartStr);
+            List<MedicineRecord> medicinePlanExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
+                boolean dateExists = medicinePlanExist.stream()
+                        .anyMatch(record -> {
+                            String recordDateStr = formatDate.format(record.getWeekStart());
+                            try {
+                                Date recordDate = formatDate.parse(recordDateStr);
+                                return recordDate.equals(weekStart)
+                                        && record.getMedicineType().getId().equals(medicineRecordCreateDTO.getMedicineTypeId()) ;
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                return false;
+                            }
+                        });
+                if (dateExists) {
+                    throw new AppException(ErrorCode.MEDICINE_PLAN_EXIST);
+                }
+        }
+        for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList){
+            //Check type medicine có tồn tại chưa
             Optional<MedicineType> medicineType = medicineTypeRepository.findById(medicineRecordCreateDTO.getMedicineTypeId());
             if (medicineType.isEmpty()) {
                 throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
             }
-            //Check type medicine
-            List<MedicineRecord> medicinePlanExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
-            boolean dateExists = medicinePlanExist.stream()
-                    .anyMatch(record -> {
-                        return record.getMedicineType().getId().equals(medicineRecordCreateDTO.getMedicineTypeId());
-                    });
-            if (dateExists) {
-                throw new AppException(ErrorCode.MEDICINE_TYPE_EXIST);
-            }
-
-            //Check schedule
+            //add by schedule
             for(Date date : medicineRecordCreateDTO.getSchedule()){
 
                 MedicineRecord medicineRecord = MedicineRecord.builder()
                         .weekStart(medicineRecordCreateDTO.getWeekStart())
-//                        .status(false)
                         .build();
                 medicineRecord.setAppUserId(appUser.get());
                 medicineRecord.setMedicineType(medicineType.get());
@@ -104,6 +104,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                 medicineRecordRepository.save(medicineRecord);
             }
         }
+
 
     }
     public Date calculateDate(Date date , int plus) throws ParseException {
@@ -324,25 +325,41 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         });
         MedicineResponseChartDTO medicineResponseChartDTO = new MedicineResponseChartDTO();
         List<MedicineResponse> medicineResponseList = new ArrayList<>();
-        //Lấy ra 5 date gần nhất
+        //Lấy ra 5 date gần nhất và có value không bị null (1 thằng bị null trong ngày đó cx ko lấy)
         Set<Date> uniqueDates = new HashSet<>();
         for (MedicineRecord record : medicineRecordList) {
             String recordDateStr = formatDate.format(record.getDate());
             Date recordDate = formatDate.parse(recordDateStr);
-            if(recordDate.before(date) || recordDate.equals(date)) {
-                if(!uniqueDates.contains(recordDate)){
-                    uniqueDates.add(recordDate);
+            if (recordDate.before(date) || recordDate.equals(date)) {
+                boolean dataNullExists = medicineRecordList.stream()
+                        .anyMatch(item -> {
+                            String itemDateStr = formatDate.format(item.getDate());
+                            try {
+                                Date itemDate = formatDate.parse(itemDateStr);
+                                String sortedDateStr = formatDate.format(record.getDate());
+                                Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                                return itemDate.equals(parsedSortedDate)
+                                        && item.getStatus() == null;
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                return false;
+                            }
+                        });
+                // ko có value nào bị null
+                if (dataNullExists == false) {
+                    if (!uniqueDates.contains(recordDate)) {
+                        uniqueDates.add(recordDate);
+                    }
                 }
-            }
-            if(uniqueDates.size() == 5){
-                break;
+                if (uniqueDates.size() == 5) {
+                    break;
+                }
             }
         }
         //Sắp xếp date tăng dần
         Set<Date> sortedDates = new TreeSet<>(uniqueDates);
         //Tìm danh sách theo date
         for (Date sortedDate : sortedDates) {
-
             if(sortedDate.equals(date)){
                 List<MedicineRecord> listByDate = medicineRecordList.stream()
                         .filter(record -> {
@@ -483,12 +500,16 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                     }
                 })
                 .toList();
+        //Không có plane
         if (medicineRecord.isEmpty()) {
-            throw new AppException(ErrorCode.MEDICINE_PLAN_NOT_FOUND);
+//            throw new AppException(ErrorCode.MEDICINE_PLAN_NOT_FOUND);
+        return false;
         }
+        //Có mà chưa nhập
         for (MedicineRecord record : medicineRecord) {
             if (record.getStatus() == null) {
-                throw new AppException(ErrorCode.MEDICINE_DAY_DATA_EMPTY);
+//                throw new AppException(ErrorCode.MEDICINE_DAY_DATA_EMPTY);
+            return false;
             }
         }
 

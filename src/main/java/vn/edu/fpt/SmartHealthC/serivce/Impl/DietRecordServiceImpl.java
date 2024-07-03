@@ -221,22 +221,24 @@ public class DietRecordServiceImpl implements DietRecordService {
         for (DietRecord dietRecord : dietRecordList) {
             String smallerDateStr= formatDate.format(dietRecord.getDate());
             Date smallerDate = formatDate.parse(smallerDateStr);
+            if(dietRecord.getActualValue() != 0){
+                if(smallerDate.before(date)){
+                    Integer value = (int) Math.round(dietRecord.getActualValue());
+                    DietResponse dietResponse = new DietResponse().builder()
+                            .date(dietRecord.getDate()).value(value).build();
+                    count--;
+                    sumValue+=dietRecord.getActualValue();
+                    dietResponseList.add(dietResponse);
+                }
+                if(smallerDate.equals(date)){
+                    Integer value = (int) Math.round(dietRecord.getActualValue());
+                    DietResponse dietResponse = new DietResponse().builder()
+                            .date(dietRecord.getDate()).value(value).build();
+                    count--;
+                    sumValue+=dietRecord.getActualValue();
+                    dietResponseList.add(dietResponse);
+                }
 
-            if(smallerDate.before(date)){
-                Integer value = (int) Math.round(dietRecord.getActualValue());
-                DietResponse dietResponse = new DietResponse().builder()
-                        .date(dietRecord.getDate()).value(value).build();
-                count--;
-                sumValue+=dietRecord.getActualValue();
-                dietResponseList.add(dietResponse);
-            }
-            if(smallerDate.equals(date)){
-                Integer value = (int) Math.round(dietRecord.getActualValue());
-                DietResponse dietResponse = new DietResponse().builder()
-                        .date(dietRecord.getDate()).value(value).build();
-                count--;
-                sumValue+=dietRecord.getActualValue();
-                dietResponseList.add(dietResponse);
             }
 
             today = calculateDateMinus(today,1);
@@ -312,11 +314,15 @@ public class DietRecordServiceImpl implements DietRecordService {
                     }
                 })
                 .findFirst();
+        //Hôm nay không có plan tuần
         if (dietRecord.isEmpty()) {
-            throw new AppException(ErrorCode.DIET_PLAN_NOT_FOUND);
+//            throw new AppException(ErrorCode.DIET_PLAN_NOT_FOUND);
+        return false;
         }
+        // có mà hôm nay chưa nhập
         if (dietRecord.get().getActualValue() == 0) {
-            throw new AppException(ErrorCode.DIET_DAY_DATA_EMPTY);
+//            throw new AppException(ErrorCode.DIET_DAY_DATA_EMPTY);
+        return false;
         }
 
         return true;

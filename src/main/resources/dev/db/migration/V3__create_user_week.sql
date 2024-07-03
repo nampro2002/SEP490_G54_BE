@@ -19,7 +19,7 @@ CREATE TABLE `smarthealthc`.`user_week1_information` (
                                                        `score40` INT NULL,
                                                        `score50` INT NULL,
                                                        `recent_values` VARCHAR(225) NULL,
-                                                       `influence_onLife` VARCHAR(225) NULL,
+                                                       `influence_on_life` VARCHAR(225) NULL,
                                                        `new_values` VARCHAR(225) NULL,
                                                        `reason_for_changing` VARCHAR(225) NULL,
                                                        `current_emotion` VARCHAR(225) NULL,

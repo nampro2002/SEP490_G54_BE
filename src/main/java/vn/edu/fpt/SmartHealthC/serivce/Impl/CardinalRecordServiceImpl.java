@@ -201,10 +201,30 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
             String recordDateStr = formatDate.format(record.getDate());
             Date recordDate = formatDate.parse(recordDateStr);
             if(recordDate.before(date) || recordDate.equals(date)) {
-                if(!uniqueDates.contains(recordDate)){
-                    uniqueDates.add(recordDate);
+                boolean dataNullExists = cardinalRecordList.stream()
+                        .anyMatch(item -> {
+                            String itemDateStr = formatDate.format(item.getDate());
+                            try {
+                                Date itemDate = formatDate.parse(itemDateStr);
+                                String sortedDateStr = formatDate.format(record.getDate());
+                                Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                                return itemDate.equals(parsedSortedDate)
+                                        &&
+                                        item.getCholesterol() == null
+                                        ;
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                return false;
+                            }
+                        });
+                // ko có value nào bị null
+                if (dataNullExists == false) {
+                    if (!uniqueDates.contains(recordDate)) {
+                        uniqueDates.add(recordDate);
+                    }
                 }
             }
+
             if(uniqueDates.size() == 5){
                 break;
             }
@@ -352,9 +372,12 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                     }
                 })
                 .findFirst();
+        //Hôm nay chưa nhập liệu
         if (cardinalRecord.isEmpty()) {
-            throw new AppException(ErrorCode.CARDINAL_DATA_DAY_EMPTY);
+//            throw new AppException(ErrorCode.CARDINAL_DATA_DAY_EMPTY);
+        return false;
         }
+
 
         return true;
 

@@ -10,7 +10,7 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeActivity;
 
 import java.util.Date;
 
-@Entity
+@Entity(name = "user_week1_information")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,7 +34,9 @@ public class UserWeek1Information {
 
     private String closePerson1;
     private String closePerson2;
+    @Column(name = "close_person1_message")
     private String closePerson1Message;
+    @Column(name = "close_person2_message")
     private String closePerson2Message;
     private String prefrerredEnvironment;
     private Date prefrerredTime;
@@ -47,6 +49,7 @@ public class UserWeek1Information {
     private Integer score40;
     private Integer score50;
     private String recentValues;
+    @Column(name="influence_on_life")
     private String influenceOnLife;
     private String newValues;
     private String reasonForChanging;

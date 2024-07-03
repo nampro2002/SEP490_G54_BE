@@ -180,35 +180,26 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
             }
         });
 
-        Optional<BloodPressureRecord> bloodPressureRecordByDate = bloodPressureRecordListExits.stream()
-                .filter(record -> {
-                    String recordDateStr = formatDate.format(record.getDate());
-                    try {
-                        Date recordDate = formatDate.parse(recordDateStr);
-                        String sortedDateStr = formatDate.format(date);
-                        Date parsedSortedDate = formatDate.parse(sortedDateStr);
-                        return recordDate.equals(parsedSortedDate);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                }).findFirst();
-        bloodPressureResponseChartDTO.setSystoleToday(
-                bloodPressureRecordByDate.map(BloodPressureRecord::getSystole).orElse((float) 0)
-        );
-        bloodPressureResponseChartDTO.setDiastoleToday(
-                bloodPressureRecordByDate.map(BloodPressureRecord::getDiastole).orElse((float) 0)
-        );
 
             for (BloodPressureRecord bloodPressureRecord : bloodPressureRecordListExits) {
                 String smallerDateStr= formatDate.format(bloodPressureRecord.getDate());
                 Date smallerDate = formatDate.parse(smallerDateStr);
                 BloodPressureResponse bloodPressureResponse = new BloodPressureResponse();
-                if(smallerDate.before(date) || smallerDate.equals(date)){
+
+                if(smallerDate.before(date)){
                     bloodPressureResponse.setDate(bloodPressureRecord.getDate());
                     bloodPressureResponse.setSystole(bloodPressureRecord.getSystole());
                     bloodPressureResponse.setDiastole(bloodPressureRecord.getDiastole());
                     bloodPressureResponseList.add(bloodPressureResponse);
+                    count--;
+                }
+                if( smallerDate.equals(date)){
+                    bloodPressureResponse.setDate(bloodPressureRecord.getDate());
+                    bloodPressureResponse.setSystole(bloodPressureRecord.getSystole());
+                    bloodPressureResponse.setDiastole(bloodPressureRecord.getDiastole());
+                    bloodPressureResponseList.add(bloodPressureResponse);
+                    bloodPressureResponseChartDTO.setSystoleToday(bloodPressureRecord.getSystole());
+                    bloodPressureResponseChartDTO.setDiastoleToday(bloodPressureRecord.getDiastole());
                     count--;
                 }
                 today = calculateDate(today,1);
@@ -255,8 +246,10 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
                     }
                 })
                 .findFirst();
+        //Hôm nay chưa nhập liệu
         if (bloodPressureRecord.isEmpty()) {
-            throw new AppException(ErrorCode.BLOOD_PRESSURE_DATA_DAY_EMPTY);
+//            throw new AppException(ErrorCode.BLOOD_PRESSURE_DATA_DAY_EMPTY);
+        return false;
         }
         return true;
     }

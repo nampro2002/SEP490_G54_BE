@@ -216,26 +216,29 @@ public class StepRecordServiceImpl implements StepRecordService {
             String smallerDateStr= formatDate.format(stepRecord.getDate());
             Date smallerDate = formatDate.parse(smallerDateStr);
 
-            if(smallerDate.before(date)){
+            if(stepRecord.getActualValue() != 0){
+                if(smallerDate.before(date)){
 
-                double valuePercent = ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100;
-                StepResponse stepResponse = new StepResponse();
-                stepResponse.setValuePercent((int) valuePercent);
-                stepResponse.setDate(stepRecord.getDate());
-                stepResponseList.add(stepResponse);
-                count--;
+                    double valuePercent = ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100;
+                    StepResponse stepResponse = new StepResponse();
+                    stepResponse.setValuePercent((int) valuePercent);
+                    stepResponse.setDate(stepRecord.getDate());
+                    stepResponseList.add(stepResponse);
+                    count--;
 
+                }
+                if(smallerDate.equals(date)){
+                    double valuePercent = ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100;
+                    StepResponse stepResponse = new StepResponse();
+                    stepResponse.setValuePercent((int) valuePercent);
+                    stepResponse.setDate(stepRecord.getDate());
+                    stepResponseList.add(stepResponse);
+                    Integer value = (int) Math.round(stepRecord.getActualValue());
+                    stepResponseChartDTO.setValueToday(value);
+                    count--;
+                }
             }
-            if(smallerDate.equals(date)){
-                double valuePercent = ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100;
-                StepResponse stepResponse = new StepResponse();
-                stepResponse.setValuePercent((int) valuePercent);
-                stepResponse.setDate(stepRecord.getDate());
-                stepResponseList.add(stepResponse);
-                Integer value = (int) Math.round(stepRecord.getActualValue());
-                stepResponseChartDTO.setValueToday(value);
-                count--;
-            }
+
             today = calculateDate(today,1);
             if(count < 1){
                 break;
@@ -281,11 +284,15 @@ public class StepRecordServiceImpl implements StepRecordService {
                     }
                 })
                 .findFirst();
+        //Không có plan
         if (stepRecords.isEmpty()) {
-            throw new AppException(ErrorCode.STEP_PLAN_NOT_FOUND);
+//            throw new AppException(ErrorCode.STEP_PLAN_NOT_FOUND);
+        return false;
         }
+        // có mà chưa nhập
         if(stepRecords.get().getActualValue() == 0 ){
-            throw new AppException(ErrorCode.STEP_DAY_DATA_EMPTY);
+//            throw new AppException(ErrorCode.STEP_DAY_DATA_EMPTY);
+       return false;
         }
         return true;
     }
