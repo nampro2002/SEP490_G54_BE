@@ -138,11 +138,8 @@ public class NotificationServiceImpl implements NotificationService {
         return ApnsConfig.builder()
                 .setAps(Aps.builder().setCategory(topic).setThreadId(topic).build()).build();
     }
-
-    public void updateStatusNotification(String deviceToken) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
+    //call api
+    public void updateStatusNotification(String email, String deviceToken) {
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
@@ -185,14 +182,14 @@ public class NotificationServiceImpl implements NotificationService {
             NotificationSetting notificationSetting = findByAccountIdAndType(appUser.get().getAccountId().getId(), request.getTypeNotification());
             notificationSetting.setStatus(request.isStatus());
             notificationSettingRepository.save(notificationSetting);
-            updateStatusNotification(request.getDeviceToken());
+            updateStatusNotification(email, request.getDeviceToken());
         } else {
             List<NotificationSetting> notificationSettingList = notificationSettingRepository.findByAccountId(appUser.get().getAccountId().getId());
             for (NotificationSetting notificationSetting : notificationSettingList) {
                 notificationSetting.setStatus(request.isStatus());
                 notificationSettingRepository.save(notificationSetting);
             }
-            updateStatusNotification(request.getDeviceToken());
+            updateStatusNotification(email, request.getDeviceToken());
         }
     }
 

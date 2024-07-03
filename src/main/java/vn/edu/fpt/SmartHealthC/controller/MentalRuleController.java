@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRuleRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -23,6 +24,7 @@ public class MentalRuleController {
     @Autowired
     private MentalRuleService mentalRuleService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ApiResponse<MentalRuleResponseDTO> createMentalRule(@RequestBody @Valid MentalRuleRequestDTO mentalRule) {
 
@@ -32,7 +34,7 @@ public class MentalRuleController {
                         .result(mentalRuleService.createMentalRule(mentalRule))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public ApiResponse<MentalRule> getMentalRuleById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -41,7 +43,7 @@ public class MentalRuleController {
                         .result(mentalRuleService.getMentalRuleEntityById(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/web/others")
     public ApiResponse<ResponsePaging<List<MentalRuleResponseDTO>>> getAllMentalRules(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -51,7 +53,7 @@ public class MentalRuleController {
                         .build()).getBody();
     }
 
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile")
     public ApiResponse<List<MentalRuleResponseDTO>> getAllMentalRulesMobile() {
         return ResponseEntity.status(HttpStatus.OK)
@@ -61,7 +63,7 @@ public class MentalRuleController {
                         .build()).getBody();
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<MentalRuleResponseDTO> updateMentalRule( @PathVariable Integer id,@RequestBody @Valid MentalRuleRequestDTO mentalRule) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -70,7 +72,7 @@ public class MentalRuleController {
                         .result(mentalRuleService.updateMentalRule(id,mentalRule))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<MentalRuleResponseDTO> deleteMentalRule(@PathVariable Integer id) {
         return  ResponseEntity.status(HttpStatus.OK)

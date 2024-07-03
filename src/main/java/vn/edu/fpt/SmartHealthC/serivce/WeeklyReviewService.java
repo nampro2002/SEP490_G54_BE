@@ -13,7 +13,7 @@ public interface WeeklyReviewService {
 
     List<Date> getListWeekStart(Integer id) throws ParseException;
 
-    WeeklyReviewResponseDTO getDataReviewForWeek(Integer id,String weekstart) throws ParseException;
+//    WeeklyReviewResponseDTO getDataReviewForWeek(Integer id,String weekstart) throws ParseException;
     Date findSmallestWeekStart(AppUser appUser);
     WeekReview getDataReviewForWeek(String weekstart) throws ParseException;
 

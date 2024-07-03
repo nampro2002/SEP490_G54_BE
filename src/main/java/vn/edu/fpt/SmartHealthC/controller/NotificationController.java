@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NotificationSettingRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.AllDevicesNotificationRequest;
@@ -120,6 +121,7 @@ public class NotificationController {
                             .build()).getBody();
         }
     }
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("mobile/status")
     public ApiResponse<?> settingNotification(@RequestBody @Valid NotificationSettingRequestDTO request) {
         try {
@@ -138,6 +140,7 @@ public class NotificationController {
                             .build()).getBody();
         }
     }
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("mobile/get-all")
     public ApiResponse<?> getNotificationStatusUser() {
         try {

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WeightRecordDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -25,7 +26,7 @@ public class WeightRecordController {
 
     @Autowired
     private WeightRecordService weightRecordService;
-
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ApiResponse<WeightRecord> createWeightRecord(@RequestBody @Valid WeightRecordDTO weightRecordDTO) throws ParseException {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -34,7 +35,7 @@ public class WeightRecordController {
                         .result(weightRecordService.createWeightRecord(weightRecordDTO))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/chart")
     public ApiResponse<WeightResponseChartDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -43,6 +44,7 @@ public class WeightRecordController {
                         .result(weightRecordService.getDataChart())
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/check-plan/{weekStart}")
     public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -51,7 +53,7 @@ public class WeightRecordController {
                         .result(weightRecordService.checkPlanPerDay(weekStart))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') or hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<WeightResponseDTO>> getAllWeightRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -60,7 +62,7 @@ public class WeightRecordController {
                         .result(weightRecordService.getWeightRecordList(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/{id}")
     public ApiResponse<Void> updateWeightRecord(@PathVariable Integer id, @RequestBody @Valid WeightRecordDTO weightRecordDTO) {
         weightRecordService.updateWeightRecord(id, weightRecordDTO);

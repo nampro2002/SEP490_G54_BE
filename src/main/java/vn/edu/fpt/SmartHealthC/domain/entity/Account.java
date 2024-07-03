@@ -33,7 +33,7 @@ public class Account implements UserDetails
     @Enumerated(EnumType.STRING)
     private TypeAccount type;
 
-    private Boolean isActive;
+    private boolean isActive;
     private boolean isDeleted = false;
 
     @Override

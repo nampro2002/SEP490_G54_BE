@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypeRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -22,6 +23,7 @@ public class MedicineTypeController {
     @Autowired
     private MedicineTypeService medicineTypeService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ApiResponse<MedicineTypeResponseDTO> createMedicineType(@RequestBody @Valid MedicineTypeRequestDTO medicineType) {
         return  ResponseEntity.status(HttpStatus.CREATED)
@@ -31,6 +33,7 @@ public class MedicineTypeController {
                         .build()).getBody();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public ApiResponse<MedicineTypeResponseDTO>  getMedicineTypeById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -40,6 +43,7 @@ public class MedicineTypeController {
                         .build()).getBody();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/web/others")
     public ApiResponse<ResponsePaging<List<MedicineTypeResponseDTO>>> getAllMedicineTypes(@RequestParam(defaultValue = "1") Integer pageNo,  @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -48,6 +52,8 @@ public class MedicineTypeController {
                         .result(medicineTypeService.getAllMedicineTypes(pageNo-1, search))
                         .build()).getBody();
     }
+
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile")
     public ApiResponse<List<MedicineTypeResponseDTO>> getAllMedicineTypesMobile() {
         return ResponseEntity.status(HttpStatus.OK)
@@ -57,6 +63,7 @@ public class MedicineTypeController {
                         .build()).getBody();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<MedicineTypeResponseDTO> updateMedicineType(@PathVariable Integer id,@RequestBody @Valid MedicineTypeRequestDTO medicineType) {
         return  ResponseEntity.status(HttpStatus.OK)
@@ -66,6 +73,7 @@ public class MedicineTypeController {
                         .build()).getBody();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<MedicineTypeResponseDTO> deleteMedicineType(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

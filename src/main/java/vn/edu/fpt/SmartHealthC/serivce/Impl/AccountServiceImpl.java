@@ -81,11 +81,11 @@ public class AccountServiceImpl implements AccountService {
     public boolean activateAccount(Integer id) {
         AppUser appUser = appUserRepository.findById(id).orElseThrow(() ->
                 new AppException(ErrorCode.APP_USER_NOT_FOUND));
-        if (appUser.getAccountId().getIsActive()) {
+        if (appUser.getAccountId().isActive()) {
             throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
         }
         Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
-        account.setIsActive(true);
+        account.setActive(true);
         accountRepository.save(account);
         notificationService.createRecordForAccount(appUser.getAccountId());
         return true;
@@ -152,7 +152,7 @@ public class AccountServiceImpl implements AccountService {
         AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
                 .email(account.getEmail())
                 .type(account.getType())
-                .isActive(account.getIsActive())
+                .isActive(account.isActive())
                 .build();
         return accountResponseDTO;
     }
@@ -245,7 +245,7 @@ public class AccountServiceImpl implements AccountService {
         AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
                 .email(account.get().getEmail())
                 .type(account.get().getType())
-                .isActive(account.get().getIsActive())
+                .isActive(account.get().isActive())
                 .build();
         return accountResponseDTO;
     }
@@ -259,7 +259,7 @@ public class AccountServiceImpl implements AccountService {
         AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
                 .email(account.get().getEmail())
                 .type(account.get().getType())
-                .isActive(account.get().getIsActive())
+                .isActive(account.get().isActive())
                 .build();
         return accountResponseDTO;
     }
@@ -281,7 +281,7 @@ public class AccountServiceImpl implements AccountService {
                     AccountResponseDTO dto = new AccountResponseDTO();
                     dto.setEmail(record.getEmail());
                     dto.setType(record.getType());
-                    dto.setIsActive(record.getIsActive());
+                    dto.setIsActive(record.isActive());
                     return dto;
                 })
                 .toList();
@@ -304,7 +304,7 @@ public class AccountServiceImpl implements AccountService {
         AccountResponseDTO accountResponseDTO = AccountResponseDTO.builder()
                 .email(account.getEmail())
                 .type(account.getType())
-                .isActive(account.getIsActive())
+                .isActive(account.isActive())
                 .build();
         return accountResponseDTO;
     }

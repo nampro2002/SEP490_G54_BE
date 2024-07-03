@@ -68,7 +68,6 @@ public class AuthServiceImpl implements AuthService {
         );
         //AccessToken
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("isActive",true);
         extraClaims.put("UniqueIdentifier", UUID.randomUUID().toString());
         var jwt = jwtProvider.generateToken(extraClaims, optionalUser.get());
         //RefreshToken
@@ -89,11 +88,14 @@ public class AuthServiceImpl implements AuthService {
                 .build();
         refreshTokenRepository.save(refreshTokenCreate);
         cleanRefreshToken(optionalUser.get().getId());
-        notificationService.updateStatusNotification(request.getDeviceToken());
+        if(optionalUser.get().getType().equals(TypeAccount.USER) && optionalUser.get().isActive()){
+            notificationService.updateStatusNotification(request.getEmail(), request.getDeviceToken());
+        }
         return AuthenticationResponseDto.builder()
-                .type(optionalUser.get().getType())
                 .idUser(optionalUser.get().getId())
                 .role(optionalUser.get().getType())
+                .isActivated(optionalUser.get().isActive())
+                .isDeleted(optionalUser.get().isDeleted())
                 .accessToken(jwt)
                 .refreshToken(refreshToken)
                 .build();

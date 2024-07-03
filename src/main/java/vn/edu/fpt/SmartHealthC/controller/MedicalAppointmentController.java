@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -23,7 +24,7 @@ public class MedicalAppointmentController {
 
     @Autowired
     private MedicalAppointmentService medicalAppointmentService;
-
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('MEDICAL_APPOINTMENT')")
     @PostMapping
     public ApiResponse<MedicalAppointmentResponseDTO> createMedicalAppointment(@RequestBody @Valid MedicalAppointmentDTO medicalAppointmentDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)

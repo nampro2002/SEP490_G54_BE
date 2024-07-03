@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
@@ -29,6 +30,7 @@ public class MedicineRecordController {
     @Autowired
     private AppUserRepository appUserRepository;
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ApiResponse<Void>  createMedicineRecord(@RequestBody @Valid List<MedicineRecordCreateDTO> medicineRecordDTO) throws ParseException {
         medicineRecordService.createMedicineRecord(medicineRecordDTO);
@@ -39,7 +41,7 @@ public class MedicineRecordController {
                         .build()).getBody();
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') or hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/web/weekly-record/{id}")
     public  ApiResponse<List<MedicineRecordListResDTO>> getAllMedicineRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -48,7 +50,7 @@ public class MedicineRecordController {
                         .result(medicineRecordService.getAllMedicineRecords(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/check-plan/{weekStart}")
     public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -57,7 +59,7 @@ public class MedicineRecordController {
                         .result(medicineRecordService.checkPlanPerDay(weekStart))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/chart")
     public ApiResponse<MedicineResponseChartDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -66,6 +68,7 @@ public class MedicineRecordController {
                         .result(medicineRecordService.getDataChart())
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/medicine-day/{weekStart}")
     public ApiResponse<List<MedicinePlanPerDayResponse>> getMedicinePerDay(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -74,7 +77,7 @@ public class MedicineRecordController {
                         .result(medicineRecordService.getMedicinePerDay(weekStart))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/plan-medicine/{weekStart}")
     public  ApiResponse<List<MedicinePLanResponseDTO> > getAllMedicinePlanRecord(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -83,7 +86,7 @@ public class MedicineRecordController {
                         .result(medicineRecordService.getAllMedicinePlans(weekStart))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("")
     public ApiResponse<Void> updateMedicineRecord(@RequestBody @Valid MedicineRecordUpdateDTO medicineRecordDTO) throws ParseException {
         medicineRecordService.updateMedicineRecord(medicineRecordDTO);

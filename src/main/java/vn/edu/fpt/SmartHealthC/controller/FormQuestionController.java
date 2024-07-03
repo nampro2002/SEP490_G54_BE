@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -22,7 +23,7 @@ import java.util.Optional;
 public class FormQuestionController {
     @Autowired
     private FormQuestionService formQuestionService;
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ApiResponse<FormQuestionResponseDTO> createFormQuestion(@RequestBody @Valid FormQuestionRequestDTO formQuestion) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -31,7 +32,7 @@ public class FormQuestionController {
                         .result(formQuestionService.createFormQuestion(formQuestion))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public ApiResponse<?> getFormQuestionById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -40,7 +41,7 @@ public class FormQuestionController {
                         .result(formQuestionService.getFormQuestionById(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/web/others")
     public ApiResponse<ResponsePaging<List<FormQuestionResponseDTO>>> getAllFormQuestions(@RequestParam(defaultValue = "1") Integer pageNo,  @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -49,6 +50,7 @@ public class FormQuestionController {
                         .result(formQuestionService.getAllFormQuestions(pageNo-1, search))
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile")
     public ApiResponse<List<FormQuestionResponseDTO>> getAllFormQuestionsMobile() {
         return ResponseEntity.status(HttpStatus.OK)
@@ -58,7 +60,7 @@ public class FormQuestionController {
                         .build()).getBody();
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping({"/{id}"})
     public ApiResponse<FormQuestionResponseDTO> updateFormQuestion(@PathVariable Integer id, @RequestBody @Valid FormQuestionRequestDTO formQuestion) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -67,7 +69,7 @@ public class FormQuestionController {
                         .result(formQuestionService.updateFormQuestion(id, formQuestion))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ApiResponse<FormQuestionResponseDTO> deleteFormQuestion(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)

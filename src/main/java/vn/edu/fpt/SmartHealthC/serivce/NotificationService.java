@@ -34,5 +34,5 @@ public interface NotificationService {
 
     NotificationSetting findByAccountIdAndType(Integer id, TypeNotification typeNotification);
 
-    void updateStatusNotification(String deviceToken);
+    void updateStatusNotification(String email, String deviceToken);
 }

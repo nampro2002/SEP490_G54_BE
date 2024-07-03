@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordUpdateDTO;
@@ -24,6 +25,7 @@ public class DietRecordController {
     @Autowired
     private DietRecordService dietRecordService;
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ApiResponse<Void> createDietRecord(@RequestBody @Valid DietRecordCreateDTO dietRecordDTO) throws ParseException {
        dietRecordService.createDietRecord(dietRecordDTO);
@@ -33,7 +35,7 @@ public class DietRecordController {
                         .result(null)
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/chart")
     public ApiResponse<DietResponseChartDTO> getDataChart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -42,6 +44,7 @@ public class DietRecordController {
                         .result(dietRecordService.getDataChart())
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/dish-plan/{weekStart}")
     public ApiResponse<Integer> getDishPlan(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -50,6 +53,7 @@ public class DietRecordController {
                         .result(dietRecordService.getDishPlan(weekStart))
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mobile/check-plan/{weekStart}")
     public ApiResponse<Boolean> checkPlanPerDay(@PathVariable String weekStart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -59,7 +63,7 @@ public class DietRecordController {
                         .build()).getBody();
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') or hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/web/weekly-record/{id}")
     public ApiResponse<List<DietRecordListResDTO>> getAllDietRecordsByAppUserId(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -68,7 +72,7 @@ public class DietRecordController {
                         .result(dietRecordService.getAllDietRecords(id))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("")
     public ApiResponse<Void> updateDietRecord(@RequestBody @Valid DietRecordUpdateDTO dietRecordDTO) throws ParseException {
         dietRecordService.updateDietRecord(dietRecordDTO);

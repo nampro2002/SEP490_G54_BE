@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
@@ -21,6 +22,7 @@ public class PatientController {
 
     private final AppUserService appUserService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/register-request")
     public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getUserPendingList(@RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -29,6 +31,7 @@ public class PatientController {
                         .result(accountService.getPendingAccount(pageNo - 1, TypeAccount.USER))
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/assign-request")
     public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getAssignPendingList(@RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -46,7 +49,7 @@ public class PatientController {
                         .result(availableMSResponseDTOList)
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/assign")
     public ApiResponse<AppUserAssignResponseDTO> assignPatientToDoctor (@RequestBody @Valid AssignRequestDTO assignRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
