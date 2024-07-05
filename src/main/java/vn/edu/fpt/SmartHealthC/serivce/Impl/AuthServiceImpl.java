@@ -55,6 +55,9 @@ public class AuthServiceImpl implements AuthService {
         if(optionalUser.get().isDeleted()) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
+        if(optionalUser.get().isActive() == false) {
+            throw new AppException(ErrorCode.ACCOUNT_NOT_ACTIVATED);
+        }
         Account existingUser = optionalUser.get();
         //check password
         if(!passwordEncoder.matches(request.getPassword(), existingUser.getPassword())) {

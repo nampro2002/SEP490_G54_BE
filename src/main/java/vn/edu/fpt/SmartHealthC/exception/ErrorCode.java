@@ -95,6 +95,7 @@ public enum ErrorCode {
     WEIGHT_RECORD_NOT_FOUND("Weight record not found", HttpStatus.NOT_FOUND),
     WEIGHT_RECORD_DAY_EXIST("Weight record day  exists", HttpStatus.BAD_REQUEST),
     ACCOUNT_NOT_FOUND("Account not found", HttpStatus.NOT_FOUND),
+    ACCOUNT_NOT_ACTIVATED("Account not activated", HttpStatus.BAD_REQUEST),
     NULL_ANSWER("Answer is null", HttpStatus.BAD_REQUEST),
     USER_CREATED("User created successfully", HttpStatus.CREATED),
     STAFF_CREATED("Staff created successfully", HttpStatus.CREATED),
