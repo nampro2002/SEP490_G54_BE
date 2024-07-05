@@ -64,4 +64,6 @@ public class WeekReview {
     private int medicineRecordTotal;
 
     private int averageStepRecordPerWeek;
+
+    private int totalPoint;
 }

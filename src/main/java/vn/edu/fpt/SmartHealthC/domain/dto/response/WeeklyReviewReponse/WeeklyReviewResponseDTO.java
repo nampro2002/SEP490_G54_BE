@@ -13,22 +13,51 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class WeeklyReviewResponseDTO {
+
+
     private Date weekStart;
 
-    private CardinalPerWeekResponseDTO cardinalPerWeek;
 
-    private BloodPressurePerWeekResponseDTO bloodPressurePerWeek;
+    //CardinalPerWeekResponseDTO
+    private int hba1cTotalRecord;
+
+    private int hba1cSafeRecord;
+
+    private int cholesterolTotalRecord;
+
+    private int cholesterolSafeRecord;
+
+    private int bloodSugarTotalRecord;
+
+    private int bloodSugarSafeRecord;
+
+    //BloodPressurePerWeekResponseDTO
+
+    private int totalBloodPressureRecord;
+
+    private int safeBloodPressureRecord;
 
     private int averageWeightRecordPerWeek;
 
     private int averageMentalRecordPerWeek;
 
-    private ActivityPerWeekResponseDTO activityRecordPerWeek;
+    //ActivityPerWeekResponseDTO
+
+    private int heavyActivity;
+
+    private int mediumActivity;
+
+    private int lightActivity;
 
     private int averageDietRecordPerWeek;
+    //MedicinePerWeekResponseDTO
 
-    private MedicinePerWeekResponseDTO medicineRecordPerWeek;
+    private int medicineDateDone;
+
+    private int medicineDateTotal;
 
     private int averageStepRecordPerWeek;
+
+    private int totalPoint;
 
 }
