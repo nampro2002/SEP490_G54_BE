@@ -84,7 +84,10 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String stringFormatedDate = now.format(formatter);
 
-        if (formatDate.parse(stringFormatedDate).after(formatDate.parse(forgetPasswordCode.get().getExpiredDate().toString()))) {
+        String expiresDate = formatDate.format(forgetPasswordCode.get().getExpiredDate());
+        Date expiredDate = formatDate.parse(expiresDate);
+
+        if (formatDate.parse(stringFormatedDate).after(expiredDate)) {
             throw new AppException(ErrorCode.CODE_EXPIRED);
         }
 //        System.out.printf(forgetPasswordCode.get().getExpiredDate().toString());
