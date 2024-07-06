@@ -21,4 +21,6 @@ public interface WeeklyReviewService {
     void saveDataReviewForWeek(String weekStart) throws ParseException;
 
     WeeklyMoblieChartResponseDTO getMobileChartReviewForWeek() throws ParseException;
+
+    List<Date> getMobileListWeekStart() throws ParseException;
 }
