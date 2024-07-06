@@ -6,8 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentByWebUserDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ListPatientResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
@@ -24,7 +27,7 @@ public class MedicalAppointmentController {
 
     @Autowired
     private MedicalAppointmentService medicalAppointmentService;
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('MEDICAL_APPOINTMENT')")
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ApiResponse<MedicalAppointmentResponseDTO> createMedicalAppointment(@RequestBody @Valid MedicalAppointmentDTO medicalAppointmentDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -33,13 +36,29 @@ public class MedicalAppointmentController {
                         .result(medicalAppointmentService.createMedicalAppointment(medicalAppointmentDTO))
                         .build()).getBody();
     }
-
+    @PreAuthorize("hasAuthority('MEDICAL_SPECIALIST')")
+    @PostMapping("/web")
+    public ApiResponse<MedicalAppointmentResponseDTO> createMedicalAppointmentByWebUser(@RequestBody @Valid MedicalAppointmentByWebUserDTO medicalAppointmentDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<MedicalAppointmentResponseDTO>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(medicalAppointmentService.createMedicalAppointmentByWebUser(medicalAppointmentDTO))
+                        .build()).getBody();
+    }
     @GetMapping("detail/{id}")
     public ApiResponse<MedicalAppointmentResponseDTO> getMedicalAppointmentById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicalAppointmentResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(medicalAppointmentService.getMedicalAppointmentById(id))
+                        .build()).getBody();
+    }
+    @GetMapping("web/list-patient")
+    public ApiResponse<List<ListPatientResponseDTO>> getListPatientByWebUserId() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<ListPatientResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(medicalAppointmentService.getListPatientByWebUserId())
                         .build()).getBody();
     }
 
@@ -70,7 +89,7 @@ public class MedicalAppointmentController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MedicalAppointmentResponseDTO> updateMedicalAppointment(@PathVariable Integer id, @RequestBody @Valid MedicalAppointmentDTO medicalAppointmentDTO) {
+    public ApiResponse<MedicalAppointmentResponseDTO> updateMedicalAppointment(@PathVariable Integer id, @RequestBody @Valid MedicalAppointmentUpdateDTO medicalAppointmentDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicalAppointmentResponseDTO>builder()
                         .code(HttpStatus.OK.value())

@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,21 +11,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointmentStatus;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNotification;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentByWebUserDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentUpdateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.DeviceNotificationRequest;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicalAppointmentRepository;
-import vn.edu.fpt.SmartHealthC.serivce.AccountService;
-import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
-import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
-import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
+import vn.edu.fpt.SmartHealthC.repository.RefreshTokenRepository;
+import vn.edu.fpt.SmartHealthC.serivce.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class MedicalAppointmentServiceImpl implements MedicalAppointmentService {
@@ -35,6 +37,10 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     private AppUserService appUserService;
     @Autowired
     private WebUserService webUserService;
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
 
     @Override
     public MedicalAppointmentResponseDTO createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO) {
@@ -63,6 +69,55 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .build();
         return medicalAppointmentResponseDTO;
     }
+
+    @Override
+    public MedicalAppointmentResponseDTO createMedicalAppointmentByWebUser(MedicalAppointmentByWebUserDTO medicalAppointmentDTO) {
+        MedicalAppointment medicalAppointment = MedicalAppointment.builder()
+                .typeMedicalAppointment(medicalAppointmentDTO.getType())
+                .hospital(medicalAppointmentDTO.getLocation())
+                .date(medicalAppointmentDTO.getDate())
+                .statusMedicalAppointment(TypeMedicalAppointmentStatus.CONFIRM)
+                .note(medicalAppointmentDTO.getNote())
+                .build();
+
+        Optional<AppUser> appUser = appUserService.findAppUserEntityById(medicalAppointmentDTO.getPatientId());
+        if (appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        medicalAppointment.setAppUserId(appUser.get());
+        medicalAppointment = medicalAppointmentRepository.save(medicalAppointment);
+        MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
+                .id(medicalAppointment.getId())
+                .appUserName(medicalAppointment.getAppUserId().getName())
+                .date(medicalAppointment.getDate())
+                .hospital(medicalAppointment.getHospital())
+                .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
+                .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
+                .note(medicalAppointment.getNote())
+                .build();
+//        NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(appUser.get().getAccountId().getId(), TypeNotification.MEDICAL_APPOINTMENT_NOTIFICATION);
+//        Map<String, String> data = new HashMap<>();
+//        if (notificationSetting.isStatus()) {
+//            refreshTokenRepository.findRecordByAccountId(appUser.get().getAccountId().getId()).forEach(refreshToken -> {
+//                try {
+//                    notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
+//                            .deviceToken(refreshToken.getDeviceToken())
+//                            .title("Medical Appointment" +medicalAppointmentResponseDTO.getTypeMedicalAppointment())
+//                            .body("Your medical appointment has create " + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "for you")
+//                            .data(data)
+//                            .build());
+//                } catch (FirebaseMessagingException e) {
+//                    throw new RuntimeException(e);
+//                } catch (ExecutionException e) {
+//                    throw new RuntimeException(e);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//        }
+        return medicalAppointmentResponseDTO;
+    }
+
 
     @Override
     public MedicalAppointment getMedicalAppointmentEntityById(Integer id) {
@@ -125,12 +180,13 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     }
 
     @Override
-    public MedicalAppointmentResponseDTO updateMedicalAppointment(Integer id, MedicalAppointmentDTO medicalAppointmentDTO) {
+    public MedicalAppointmentResponseDTO updateMedicalAppointment(Integer id, MedicalAppointmentUpdateDTO medicalAppointmentDTO) {
         MedicalAppointment medicalAppointment = getMedicalAppointmentEntityById(id);
         medicalAppointment.setTypeMedicalAppointment(medicalAppointmentDTO.getType());
         medicalAppointment.setDate(medicalAppointmentDTO.getDate());
         medicalAppointment.setHospital(medicalAppointmentDTO.getLocation());
         medicalAppointment.setNote(medicalAppointmentDTO.getNote());
+        medicalAppointment.setStatusMedicalAppointment(medicalAppointmentDTO.getStatus());
         medicalAppointment = medicalAppointmentRepository.save(medicalAppointment);
         MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
                 .id(medicalAppointment.getId())
@@ -141,6 +197,27 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
                 .note(medicalAppointment.getNote())
                 .build();
+//        NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(medicalAppointment.getAppUserId().getAccountId().getId(), TypeNotification.MEDICAL_APPOINTMENT_NOTIFICATION);
+//        Map<String, String> data = new HashMap<>();
+//        if (notificationSetting.isStatus()) {
+//            refreshTokenRepository.findRecordByAccountId(medicalAppointment.getAppUserId().getAccountId().getId()).forEach(refreshToken -> {
+//                try {
+//                    notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
+//                            .deviceToken(refreshToken.getDeviceToken())
+//                            .title("Medical Appointment" +medicalAppointmentResponseDTO.getTypeMedicalAppointment())
+//                            .body("Your medical appointment has updated " + medicalAppointmentResponseDTO.getTypeMedicalAppointment())
+//                            .data(data)
+//                            .build());
+//                } catch (FirebaseMessagingException e) {
+//                    throw new RuntimeException(e);
+//                } catch (ExecutionException e) {
+//                    throw new RuntimeException(e);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//        }
+
         return medicalAppointmentResponseDTO;
     }
 
@@ -201,7 +278,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         String email = authentication.getName();
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
-        List<MedicalAppointment> medicalAppointmentList  = medicalAppointmentRepository.findAllByUserIdAndType(TypeMedicalAppointmentStatus.DONE, appUser.getId());
+        List<MedicalAppointment> medicalAppointmentList = medicalAppointmentRepository.findAllByUserIdAndType(TypeMedicalAppointmentStatus.DONE, appUser.getId());
         List<MedicalAppointmentResponseDTO> responseDTOList = new ArrayList<>();
         for (MedicalAppointment medicalAppointment : medicalAppointmentList) {
             MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
@@ -217,8 +294,9 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         }
         return responseDTOList;
     }
+
     @Override
-    public ResponsePaging<List<MedicalAppointmentResponseDTO>> getMedicalAppointmentByUserId(Integer userId,  Integer pageNo) {
+    public ResponsePaging<List<MedicalAppointmentResponseDTO>> getMedicalAppointmentByUserId(Integer userId, Integer pageNo) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
         Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllByAppUserId(userId, paging);
         List<MedicalAppointment> medicalAppointmentList = new ArrayList<>();
@@ -250,6 +328,23 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     public List<MedicalAppointment> getMedicalAppointmentConfirm() {
         return medicalAppointmentRepository.findAllByType(TypeMedicalAppointmentStatus.CONFIRM);
 
+    }
+
+    @Override
+    public List<ListPatientResponseDTO> getListPatientByWebUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        WebUser webUser = webUserService.getWebUserByEmail(email);
+        List<AppUser> appUserList = appUserService.findAllByWebUserId(webUser.getId());
+        List<ListPatientResponseDTO> listPatientResponseDTOList = new ArrayList<>();
+        for (AppUser appUser : appUserList) {
+            ListPatientResponseDTO listPatientResponseDTO = ListPatientResponseDTO.builder()
+                    .id(appUser.getId())
+                    .patientName(appUser.getName())
+                    .build();
+            listPatientResponseDTOList.add(listPatientResponseDTO);
+        }
+        return listPatientResponseDTOList;
     }
 
 
