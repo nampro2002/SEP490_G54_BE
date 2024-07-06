@@ -14,8 +14,8 @@ public class MedicalAppointmentTriggerConfig {
     public Trigger weeklyJobTrigger(@Qualifier("medicalReminderJobDetail") JobDetail jobDetail) {
         System.out.println("execute trigger jobBoot");
         try {
-//            String time = "0 0 13 * * ?";
-            String time = "0/10 * * * * ?";
+            String time = "0 0 13 * * ?";
+//            String time = "0/10 * * * * ?";
             return TriggerBuilder.newTrigger().forJob(jobDetail)
                     .withIdentity("remind", "JOB_GROUP")
                     .startNow().withSchedule(CronScheduleBuilder.cronSchedule(time))

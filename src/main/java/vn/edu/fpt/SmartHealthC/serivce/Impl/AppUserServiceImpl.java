@@ -211,6 +211,11 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    public List<AppUser> findAllByWebUserId(Integer id) {
+        return appUserRepository.findAllByWebUserId(id);
+    }
+
+    @Override
     public AppUserAssignResponseDTO assignPatientToDoctor(AssignRequestDTO assignRequestDTO) {
         AppUser appUser = appUserRepository.findByIdActivated(assignRequestDTO.getAppUserId()).orElseThrow(
                 () -> new AppException(ErrorCode.APP_USER_NOT_FOUND_OR_NOT_ACTIVATED)
