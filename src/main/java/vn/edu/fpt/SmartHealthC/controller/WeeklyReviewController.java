@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyMoblieChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyReviewResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeekReview;
 import vn.edu.fpt.SmartHealthC.serivce.WeeklyReviewService;
@@ -21,9 +22,9 @@ public class WeeklyReviewController {
     private WeeklyReviewService weeklyReviewService;
 
     @GetMapping("/web/week-date/{appUserId}")
-    public ApiResponse<WeeklyReviewResponseDTO> returnWeekDate(@PathVariable Integer appUserId) throws ParseException {
+    public ApiResponse<WeekReview> returnWeekDate(@PathVariable Integer appUserId) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<WeeklyReviewResponseDTO>builder()
+                .body(ApiResponse.<WeekReview>builder()
                         .code(HttpStatus.OK.value())
                         .result(weeklyReviewService.getWeek(appUserId))
                         .build()).getBody();
@@ -42,10 +43,26 @@ public class WeeklyReviewController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<WeekReview>builder()
                         .code(HttpStatus.OK.value())
-                        .result(weeklyReviewService.getDataReviewForWeek(weekstart))
+                        .result(weeklyReviewService.getWebDataReviewForWeek(weekstart))
                         .build()).getBody();
     }
+    @GetMapping("/mobile/review/{weekstart}")
+    public ApiResponse<WeeklyReviewResponseDTO> returnMobileReviewForWeekDate(@PathVariable String weekstart) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<WeeklyReviewResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(weeklyReviewService.getMobileDataReviewForWeek(weekstart))
+                        .build()).getBody();
+    }
+    @GetMapping("/mobile/chart/review")
+    public ApiResponse<WeeklyMoblieChartResponseDTO> returnMobileChartReview() throws ParseException {
 
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<WeeklyMoblieChartResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(weeklyReviewService.getMobileChartReviewForWeek())
+                        .build()).getBody();
+    }
 
 
 }
