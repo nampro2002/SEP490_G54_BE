@@ -37,6 +37,14 @@ public class WeeklyReviewController {
                         .result(weeklyReviewService.getListWeekStart(appUserId))
                         .build()).getBody();
     }
+    @GetMapping("/mobile/week-starts/{appUserId}")
+    public ApiResponse<List<Date>> returnMobileListWeekStart(@PathVariable Integer appUserId) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<Date>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(weeklyReviewService.getListWeekStart(appUserId))
+                        .build()).getBody();
+    }
 
     @GetMapping("/web/review/{weekstart}")
     public ApiResponse<WeekReview> returnReviewForWeekDate(@PathVariable String weekstart) throws ParseException {
