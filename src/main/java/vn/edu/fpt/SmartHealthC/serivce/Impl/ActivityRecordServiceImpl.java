@@ -234,7 +234,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
             Date smallerDate = formatDate.parse(smallerDateStr);
 
             if(activityRecord.getActualType() != null){
-                if(smallerDate.before(date) || smallerDate.equals(date)){
+                if(smallerDate.before(date)){
                     if(!activityDateResponseList.contains(smallerDate)){
                         activityDateResponseList.add(smallerDate);
                         Integer value = (int) Math.round(activityRecord.getActualDuration());
@@ -243,6 +243,20 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
                                 .duration(value)
                                 .type(activityRecord.getActualType()).build();
                         activityResponseList.add(activityResponse);
+                        count--;
+                    }
+                }
+                if(smallerDate.equals(date)){
+                    if(!activityDateResponseList.contains(smallerDate)){
+                        activityDateResponseList.add(smallerDate);
+                        Integer value = (int) Math.round(activityRecord.getActualDuration());
+                        ActivityResponse activityResponse = new ActivityResponse()
+                                .builder().date(activityRecord.getDate())
+                                .duration(value)
+                                .type(activityRecord.getActualType()).build();
+                        activityResponseList.add(activityResponse);
+                        activityResponseChartDTO.setDurationToday(value);
+                        activityResponseChartDTO.setTypeToDay(activityRecord.getActualType());
                         count--;
                     }
                 }

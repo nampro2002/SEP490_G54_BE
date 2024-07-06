@@ -24,7 +24,7 @@ public class MentalRecord {
     @ToString.Exclude
     private AppUser appUserId;
 
-    private boolean status;
+    private Boolean status;
 
     private Date weekStart;
 

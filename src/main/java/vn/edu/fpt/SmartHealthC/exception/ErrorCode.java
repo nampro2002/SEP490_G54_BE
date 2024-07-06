@@ -50,6 +50,8 @@ public enum ErrorCode {
     STEP_PLAN_NOT_FOUND("Step record plan not found", HttpStatus.NOT_FOUND),
     WEIGHT_PLAN_NOT_FOUND("Weight record plan not found", HttpStatus.NOT_FOUND),
     WEEK_REVIEW_EXIST("Week Review exist", HttpStatus.BAD_REQUEST),
+    WEEK_REVIEW_NOT_EXIST("Week Review not exist", HttpStatus.BAD_REQUEST),
+
     ACTIVITY_DAY_DATA_EMPTY("Activity day not have data", HttpStatus.BAD_REQUEST),
     DIET_DAY_DATA_EMPTY("Diet day not have data", HttpStatus.BAD_REQUEST),
     MEDICINE_DAY_DATA_EMPTY("Medicine day not have data", HttpStatus.BAD_REQUEST),
@@ -93,6 +95,7 @@ public enum ErrorCode {
     WEIGHT_RECORD_NOT_FOUND("Weight record not found", HttpStatus.NOT_FOUND),
     WEIGHT_RECORD_DAY_EXIST("Weight record day  exists", HttpStatus.BAD_REQUEST),
     ACCOUNT_NOT_FOUND("Account not found", HttpStatus.NOT_FOUND),
+    ACCOUNT_NOT_ACTIVATED("Account not activated", HttpStatus.BAD_REQUEST),
     NULL_ANSWER("Answer is null", HttpStatus.BAD_REQUEST),
     USER_CREATED("User created successfully", HttpStatus.CREATED),
     STAFF_CREATED("Staff created successfully", HttpStatus.CREATED),

@@ -87,7 +87,6 @@ public class MentalRecordServiceImpl implements MentalRecordService {
             dateCalculate = calculateDate(mentalRecordDTO.getWeekStart(), count);
             for (Integer id : mentalRecordDTO.getMentalRuleId()) {
                 MentalRecord mentalRecord =  MentalRecord.builder()
-                        .status(false)
                         .weekStart(mentalRecordDTO.getWeekStart())
                         .date(dateCalculate)
                         .build();
@@ -121,7 +120,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
         }
         return MentalRecordResponseDTO.builder()
                 .appUserId(mentalRecord.get().getAppUserId().getId())
-                .status(mentalRecord.get().isStatus())
+                .status(mentalRecord.get().getStatus())
                 .weekStart(mentalRecord.get().getWeekStart())
                 .date(mentalRecord.get().getDate())
                 .mentalRuleId(mentalRecord.get().getMentalRule().getId())
@@ -143,7 +142,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
             record.setMentalRuleTitle(new ArrayList<>());
             int count = 0;
             for (MentalRecord mentalRecord : mentalRecords) {
-                if (mentalRecord.isStatus()) {
+                if (mentalRecord.getStatus()) {
                     record.getMentalRuleTitle().add(mentalRecord.getMentalRule().getTitle());
                     count++;
                 }
@@ -173,7 +172,19 @@ public class MentalRecordServiceImpl implements MentalRecordService {
             throw new AppException(ErrorCode.MENTAL_RULE_NOT_FOUND);
         }
 
-        for (Integer rule : mentalRecordDTO.getMentalRuleId()){
+        //Lấy ra toàn bộ mental của ngày hôm đó
+        Set<Integer> mentalTypeExist = new HashSet<>();
+        for (MentalRecord mentalRecord : planExist) {
+            String recordDateStr = formatDate.format(mentalRecord.getDate());
+            Date recordDate = formatDate.parse(recordDateStr);
+            if( recordDate.equals(date)){
+                if(!mentalTypeExist.contains(mentalRecord.getMentalRule().getId())){
+                    mentalTypeExist.add(mentalRecord.getMentalRule().getId());
+                }
+            }
+        }
+
+        for (Integer rule : mentalTypeExist){
             Optional<MentalRecord> mentalRecord = planExist.stream()
                     .filter(record -> {
                         String recordDateStr = formatDate.format(record.getDate());
@@ -189,9 +200,14 @@ public class MentalRecordServiceImpl implements MentalRecordService {
             if (mentalRecord.isEmpty()) {
                 throw new AppException(ErrorCode.MENTAL_RULE_IN_PLAN_NOT_FOUND);
             }
+
             MentalRecord mentalRecordUpdate =getMentalRecordEntityById(mentalRecord.get().getId());
             mentalRecordUpdate.setDate(mentalRecordDTO.getDate());
-            mentalRecordUpdate.setStatus(mentalRecordDTO.getStatus());
+            if(mentalRecordDTO.getMentalRuleId().contains(rule)){
+                mentalRecordUpdate.setStatus(mentalRecordDTO.getStatus());
+            }else{
+                mentalRecordUpdate.setStatus(false);
+            }
             mentalRecordRepository.save(mentalRecordUpdate);
         }
     }
@@ -202,7 +218,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
         mentalRecordRepository.deleteById(id);
         return MentalRecordResponseDTO.builder()
                 .appUserId(mentalRecord.getAppUserId().getId())
-                .status(mentalRecord.isStatus())
+                .status(mentalRecord.getStatus())
                 .weekStart(mentalRecord.getWeekStart())
                 .date(mentalRecord.getDate())
                 .mentalRuleId(mentalRecord.getMentalRule().getId())
@@ -231,13 +247,30 @@ public class MentalRecordServiceImpl implements MentalRecordService {
                 return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
             }
         });
+        //Lấy date unique
         Set<Date> uniqueDates = new HashSet<>();
         for (MentalRecord record : mentalRecordList) {
             String recordDateStr = formatDate.format(record.getDate());
-            Date recordDate = formatDate.parse(recordDateStr);
+             Date recordDate = formatDate.parse(recordDateStr);
             if(recordDate.before(date) || recordDate.equals(date)) {
                 if(!uniqueDates.contains(recordDate)){
-                    uniqueDates.add(recordDate);
+                    List<MentalRecord> mentalRecords = mentalRecordList.stream()
+                            .filter(record1 -> {
+                                try {
+                                    String sortedDateStr = formatDate.format(record1.getDate());
+                                    Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                                    return recordDate.equals(parsedSortedDate);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                    return false;
+                                }
+                            })
+                            .toList();
+                    boolean mentalNotInput = mentalRecords.stream()
+                            .anyMatch(record2 -> record2.getStatus()==null);
+                    if (!mentalNotInput) {
+                        uniqueDates.add(recordDate);
+                    }
                 }
             }
             if(uniqueDates.size() == 6){
@@ -258,7 +291,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
                             String sortedDateStr = formatDate.format(sortedDate);
                             Date parsedSortedDate = formatDate.parse(sortedDateStr);
                             return recordDate.equals(parsedSortedDate)
-                                    && record.isStatus() == true;
+                                    && record.getStatus() == true;
                         } catch (ParseException e) {
                             e.printStackTrace();
                             return false;
@@ -338,16 +371,10 @@ public class MentalRecordServiceImpl implements MentalRecordService {
 //            throw new AppException(ErrorCode.MENTAL_PLAN_NOT_FOUND);
         return false;
         }
-        int count =0;
-        for(MentalRecord mentalRecord : mentalRecords){
-            if(mentalRecord.isStatus() == true){
-                count ++;
-            }
-        }
-        //có mà chưa nhập
-        if(count < 1 ){
-//            throw new AppException(ErrorCode.MENTAL_DAY_DATA_EMPTY);
-        return false;
+        boolean mentalNotInput = mentalRecords.stream()
+                .anyMatch(record -> record.getStatus()==null);
+        if (mentalNotInput) {
+                return false;
         }
         return true;
     }

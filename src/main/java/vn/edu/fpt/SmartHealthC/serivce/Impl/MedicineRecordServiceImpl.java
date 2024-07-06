@@ -192,6 +192,19 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         if(planDateExist.isEmpty()){
                 throw new AppException(ErrorCode.MEDICINE_DAY_NOT_FOUND);
         }
+
+        //Lấy ra toàn bộ thuốc của ngày hôm đó
+        Set<Integer> medicineTypeExist = new HashSet<>();
+        for (MedicineRecord medicineRecord : planDateExist) {
+            String recordDateStr = formatDate.format(medicineRecord.getDate());
+            Date recordDate = formatDate.parse(recordDateStr);
+            if( recordDate.equals(date)){
+                if(!medicineTypeExist.contains(medicineRecord.getMedicineType().getId())){
+                    medicineTypeExist.add(medicineRecord.getMedicineType().getId());
+                }
+            }
+        }
+        //Check xem medicineType truyền về có tồn tại ko
         for (Integer rule : medicineRecordDTO.getMedicineTypeId()){
             boolean ruleExists = planDateExist.stream()
                     .anyMatch(record -> {
@@ -201,9 +214,10 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                 throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
             }
         }
-
-
-        for (Integer type : medicineRecordDTO.getMedicineTypeId()){
+        //Check xem medicine exist với medicine truyền
+        //nếu medicine exist contain thì true
+        // ko contain thì false
+        for (Integer type : medicineTypeExist){
             Optional<MedicineRecord> medicineRecord = planDateExist.stream()
                     .filter(record -> {
                         String recordDateStr = formatDate.format(record.getDate());
@@ -221,7 +235,12 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
 //            }
            MedicineRecord medicineRecordUpdate =getMedicineRecordEntityById(medicineRecord.get().getId());
             medicineRecordUpdate.setDate(medicineRecordDTO.getDate());
-            medicineRecordUpdate.setStatus(medicineRecordDTO.getStatus());
+            if(medicineRecordDTO.getMedicineTypeId().contains(type)){
+                medicineRecordUpdate.setStatus(medicineRecordDTO.getStatus());
+            }else{
+                medicineRecordUpdate.setStatus(false);
+            }
+
             medicineRecordRepository.save(medicineRecordUpdate);
         }
     }

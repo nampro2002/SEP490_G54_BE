@@ -210,7 +210,9 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                                 Date parsedSortedDate = formatDate.parse(sortedDateStr);
                                 return itemDate.equals(parsedSortedDate)
                                         &&
-                                        item.getCholesterol() == null
+                                        (item.getCholesterol() == null
+                                                || item.getBloodSugar() == null
+                                        || item.getHBA1C() == null)
                                         ;
                             } catch (ParseException e) {
                                 e.printStackTrace();
