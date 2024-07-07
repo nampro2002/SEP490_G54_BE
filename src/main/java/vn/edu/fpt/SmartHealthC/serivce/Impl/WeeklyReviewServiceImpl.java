@@ -253,7 +253,6 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 .totalPoint(weekReviewExist.get().getTotalPoint())
                 .build();
 
-       //Tìm danh sách thuốc theo tuần
         List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.get().getId());
         List<MedicineRecord> medicineRecordListByWeekStart = medicineRecordList.stream()
                 .filter(item -> {
@@ -266,23 +265,28 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                         return false;
                     }
                 }).toList();
-        //Lấy ra date unique
-        Set<Date> uniqueDates = new HashSet<>();
-        for (MedicineRecord record : medicineRecordListByWeekStart) {
-            String itemDateStr = formatDate.format(record.getDate());
-            Date itemDate = formatDate.parse(itemDateStr);
-            if (!uniqueDates.contains(itemDate)) {
-                uniqueDates.add(itemDate);
+        if(medicineRecordListByWeekStart.isEmpty()){
+            responseDTO.setMedicineDateDone(0);
+            responseDTO.setMedicineDateTotal(0);
+
+        }else{
+            //Lấy ra date unique
+            Set<Date> uniqueDates = new HashSet<>();
+            for (MedicineRecord record : medicineRecordListByWeekStart) {
+                String itemDateStr = formatDate.format(record.getDate());
+                Date itemDate = formatDate.parse(itemDateStr);
+                if (!uniqueDates.contains(itemDate)) {
+                    uniqueDates.add(itemDate);
+                }
             }
-        }
 
-        //Sắp xếp date tăng dần
-        Set<Date> sortedDates = new TreeSet<>(uniqueDates);
-        //Đếm từng ngày xem có uống đủ thuốc không
-        int countDone = 0;
-        for (Date date : sortedDates) {
+            //Sắp xếp date tăng dần
+            Set<Date> sortedDates = new TreeSet<>(uniqueDates);
+            //Đếm từng ngày xem có uống đủ thuốc không
+            int countDone = 0;
+            for (Date date : sortedDates) {
 
-            boolean dataNullExists = medicineRecordListByWeekStart.stream()
+                boolean dataNullExists = medicineRecordListByWeekStart.stream()
                         .anyMatch(item -> {
                             String itemDateStr = formatDate.format(item.getDate());
                             try {
@@ -298,11 +302,85 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 if (dataNullExists == false) {
                     countDone++;
                 }
+            }
+            responseDTO.setMedicineDateDone(countDone);
+            responseDTO.setMedicineDateTotal(uniqueDates.size());
         }
-        responseDTO.setMedicineDateDone(countDone);
-        responseDTO.setMedicineDateTotal(uniqueDates.size());
+
+
+        int hba1cPoint= (int) ((double)weekReviewExist.get().getHba1cSafeRecord()/weekReviewExist.get().getHba1cTotalRecord()*100);
+        responseDTO.setHba1cPoint(responseDTO.getHba1cTotalRecord()!=0?hba1cPoint:0);
+
+        int cholesterolPoint= (int) ((double)weekReviewExist.get().getCholesterolSafeRecord()/weekReviewExist.get().getCholesterolTotalRecord()*100);
+        responseDTO.setCholesterolPoint(responseDTO.getCholesterolTotalRecord()!=0?cholesterolPoint:0);
+
+        int bloodSugarPoint= (int) ((double)weekReviewExist.get().getBloodSugarSafeRecord()/weekReviewExist.get().getBloodSugarTotalRecord()*100);
+        responseDTO.setBloodSugarPoint(responseDTO.getBloodSugarTotalRecord()!=0?bloodSugarPoint:0);
+
+        int bloodPressurePoint= (int) ((double)weekReviewExist.get().getSafeBloodPressureRecord()/weekReviewExist.get().getTotalBloodPressureRecord()*100);
+        responseDTO.setBloodPressurePoint(responseDTO.getTotalBloodPressureRecord()!=0?bloodPressurePoint:0);
+
+        responseDTO.setMentalPoint(responseDTO.getAverageMentalRecordPerWeek()!=0?
+                (int) ((double)responseDTO.getAverageMentalRecordPerWeek()/3*100):0);
+
+        ActivityPerWeekResponseDTO activityPerWeekResponseDTO =getActivityPerWeek(appUser.get(), weekStartFilter);
+        int activityActualPoint =
+                (activityPerWeekResponseDTO.getHeavyActivity()*2)+
+                (activityPerWeekResponseDTO.getMediumActivity()*1)+
+                (activityPerWeekResponseDTO.getLightActivity()*0);
+        int activityPlanPoint =
+                (activityPerWeekResponseDTO.getHeavyPlanActivity()*2)+
+                (activityPerWeekResponseDTO.getMediumPlanActivity()*1)+
+                (activityPerWeekResponseDTO.getLightPLanActivity()*0);
+        responseDTO.setActivityPoint(activityActualPoint !=0? (int) ((double)activityActualPoint/activityPlanPoint*100):0);
+
+        Optional<DietRecord> dietRecord = dietRecordRepository.findAll().stream()
+                .filter(item -> {
+                    String itemDateStr = formatDate.format(item.getWeekStart());
+                    try {
+                        Date itemDate = formatDate.parse(itemDateStr);
+                        return itemDate.equals(weekStartFilter) && item.getAppUserId() == appUser.get();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }})
+                .findFirst();
+        responseDTO.setDietPoint((int) ((double)responseDTO.getAverageDietRecordPerWeek()/dietRecord.get().getDishPerDay()*100));
+
+        int medicinePoint= (int) ((double)responseDTO.getMedicineDateDone()/responseDTO.getMedicineDateTotal()*100);
+        responseDTO.setMedicinePoint(responseDTO.getMedicineDateDone()!=0?medicinePoint:0);
+
+
+        Optional<StepRecord> stepRecord = stepRecordRepository.findAll().stream()
+                .filter(item -> {
+                    String itemDateStr = formatDate.format(item.getWeekStart());
+                    try {
+                        Date itemDate = formatDate.parse(itemDateStr);
+                        return itemDate.equals(weekStartFilter) && item.getAppUserId() == appUser.get();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }})
+                .findFirst();
+        int stepPoint= (int) ((double)responseDTO.getAverageStepRecordPerWeek()/stepRecord.get().getPlannedStepPerDay()*100);
+        responseDTO.setStepPoint(responseDTO.getAverageStepRecordPerWeek()!=0?stepPoint:0);
+
+        if(responseDTO.getAverageWeightRecordPerWeek() != 0){
+            float bmi = (float) calculateBMI(responseDTO.getAverageWeightRecordPerWeek(),appUser.get().getHeight());
+            // Tính phần trăm BMI (giả sử ideal BMI là 25)
+            double idealBMI = 25;
+            double bmiPercentage = (bmi / idealBMI) * 100;
+            responseDTO.setWeightPoint((int) bmiPercentage);
+        }else{
+            responseDTO.setWeightPoint(0);
+        }
 
         return responseDTO;
+    }
+    // Phương thức tính BMI
+    public static double calculateBMI(double weight, double height) {
+        double heightM = height / 100.0;
+        return weight / (heightM * heightM);
     }
 
     @Override
@@ -618,6 +696,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         BloodPressurePerWeekResponseDTO bloodPressurePerWeekResponseDTO =getAverageBloodPressurePerWeek(appUser.get(), weekStartFilter);
         weekReview.setTotalBloodPressureRecord(bloodPressurePerWeekResponseDTO.getTotalRecord());
         weekReview.setSafeBloodPressureRecord(bloodPressurePerWeekResponseDTO.getSafeRecord());
+
         //Average Weight per week
         weekReview.setAverageWeightRecordPerWeek(getAverageWeightPerWeek(appUser.get(), weekStartFilter));
         //Average Mental per week
@@ -656,23 +735,33 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         int hba1cTotal = 0;
         int cholesterolTotal = 0;
         int bloodSugarTotal = 0;
-        for (CardinalRecord record : cardinalRecordList) {
-            hba1c += (record.getHBA1C() != null && record.getHBA1C() <= 7.5 ) ? 1 : 0;
-            cholesterol += (record.getCholesterol() != null && record.getCholesterol() <= 200 ) ? 1 : 0;
-            bloodSugar += (record.getBloodSugar() != null && record.getBloodSugar() <= 99 ) ? 1 : 0;
+        if(cardinalRecordList.isEmpty()){
+            responseDTO.setCholesterolSafeRecord(0);
+            responseDTO.setCholesterolTotalRecord(0);
+            responseDTO.setBloodSugarSafeRecord(0);
+            responseDTO.setBloodSugarTotalRecord(0);
+            responseDTO.setHba1cSafeRecord(0);
+            responseDTO.setHba1cTotalRecord(0);
+        }else{
+            for (CardinalRecord record : cardinalRecordList) {
+                hba1c += (record.getHBA1C() != null && record.getHBA1C() <= 7.5 ) ? 1 : 0;
+                cholesterol += (record.getCholesterol() != null && record.getCholesterol() <= 200 ) ? 1 : 0;
+                bloodSugar += (record.getBloodSugar() != null && record.getBloodSugar() <= 99 ) ? 1 : 0;
 
-            hba1cTotal += (record.getHBA1C() != null) ? 1 : 0;
-            cholesterolTotal += (record.getCholesterol() != null ) ? 1 : 0;
-            bloodSugarTotal += (record.getBloodSugar() != null) ? 1 : 0;
+                hba1cTotal += (record.getHBA1C() != null) ? 1 : 0;
+                cholesterolTotal += (record.getCholesterol() != null ) ? 1 : 0;
+                bloodSugarTotal += (record.getBloodSugar() != null) ? 1 : 0;
+            }
+            responseDTO.setCholesterolSafeRecord(cholesterol);
+            responseDTO.setCholesterolTotalRecord(cholesterolTotal);
+
+            responseDTO.setBloodSugarSafeRecord(bloodSugar);
+            responseDTO.setBloodSugarTotalRecord(bloodSugarTotal);
+
+            responseDTO.setHba1cSafeRecord(hba1c);
+            responseDTO.setHba1cTotalRecord(hba1cTotal);
         }
-        responseDTO.setCholesterolSafeRecord(cholesterol);
-        responseDTO.setCholesterolTotalRecord(cholesterolTotal);
 
-        responseDTO.setBloodSugarSafeRecord(bloodSugar);
-        responseDTO.setBloodSugarTotalRecord(bloodSugarTotal);
-
-        responseDTO.setHba1cSafeRecord(hba1c);
-        responseDTO.setHba1cTotalRecord(hba1cTotal);
         return responseDTO;
     }
 
@@ -684,13 +773,19 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                                 && record.getAppUserId() == appUser)
                 .collect(Collectors.toList());
         int count = 0;
-        for (BloodPressureRecord record : bloodPressureRecordList) {
-            if(checkBloodPressure(record.getSystole(),record.getDiastole())){
-                count++;
+        if(bloodPressureRecordList.isEmpty()){
+            responseDTO.setSafeRecord(0);
+            responseDTO.setTotalRecord(0);
+        }else{
+            for (BloodPressureRecord record : bloodPressureRecordList) {
+                if(checkBloodPressure(record.getSystole(),record.getDiastole())){
+                    count++;
+                }
             }
+            responseDTO.setSafeRecord(count);
+            responseDTO.setTotalRecord(bloodPressureRecordList.size());
         }
-        responseDTO.setSafeRecord(count);
-        responseDTO.setTotalRecord(bloodPressureRecordList.size());
+
         return responseDTO;
     }
 
@@ -709,6 +804,9 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             sum += record.getWeight();
         }
         int result = (int) (sum / 7);
+        if(weightRecordList.isEmpty()){
+            result = 0;
+        }
         return result;
     }
 
@@ -725,6 +823,9 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             }
         }
         int result = (int) (sum / 7);
+        if(mentalRecordList.isEmpty()){
+            result = 0;
+        }
         return result;
     }
 
@@ -738,14 +839,30 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         int heavy = 0;
         int medium = 0;
         int light = 0;
-        for (ActivityRecord record : activityRecordList) {
-            heavy += record.getActualType() == TypeActivity.HEAVY ? record.getActualDuration() : 0;
-            medium += record.getActualType() == TypeActivity.MEDIUM ? record.getActualDuration(): 0;
-            light += record.getActualType() == TypeActivity.LIGHT ? record.getActualDuration() : 0;
+        int heavyPlan = 0;
+        int mediumPlan = 0;
+        int lightPlan = 0;
+        if(activityRecordList.isEmpty()){
+            responseDTO.setHeavyActivity(heavy);
+            responseDTO.setMediumActivity(medium);
+            responseDTO.setLightActivity(light);
+        }else{
+            for (ActivityRecord record : activityRecordList) {
+                heavy += record.getActualType() == TypeActivity.HEAVY ? record.getActualDuration() : 0;
+                medium += record.getActualType() == TypeActivity.MEDIUM ? record.getActualDuration(): 0;
+                light += record.getActualType() == TypeActivity.LIGHT ? record.getActualDuration() : 0;
+
+                heavyPlan += record.getPlanType() == TypeActivity.HEAVY ? record.getPlanDuration() : 0;
+                mediumPlan += record.getPlanType() == TypeActivity.MEDIUM ? record.getPlanDuration(): 0;
+                lightPlan += record.getPlanType() == TypeActivity.LIGHT ? record.getPlanDuration() : 0;
+            }
+            responseDTO.setHeavyActivity(heavy);
+            responseDTO.setMediumActivity(medium);
+            responseDTO.setLightActivity(light);
+            responseDTO.setHeavyPlanActivity(heavyPlan);
+            responseDTO.setMediumPlanActivity(mediumPlan);
+            responseDTO.setLightPLanActivity(lightPlan);
         }
-        responseDTO.setHeavyActivity(heavy);
-        responseDTO.setMediumActivity(medium);
-        responseDTO.setLightActivity(light);
         return responseDTO;
     }
 
@@ -760,6 +877,9 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             sum += record.getActualValue();
         }
         int result = (int) (sum / 7);
+        if(dietRecordList.isEmpty()){
+            result = 0;
+        }
         return result;
     }
 
@@ -771,13 +891,17 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                                 && record.getAppUserId() == appUser && record.getStatus() != null)
                 .collect(Collectors.toList());
         int count = 0;
-        for (MedicineRecord record : medicineRecordList) {
-            if(record.getStatus() == true){
-                count++;
+        if(medicineRecordList.isEmpty()){
+            responseDTO.setMedicineRecordTotal(0);
+            responseDTO.setMedicineRecordDone(0);
+        }else{
+            for (MedicineRecord record : medicineRecordList) {
+                if(record.getStatus() == true){
+                    count++;
+                }
             }
+            responseDTO.setMedicineRecordDone(count);
         }
-        responseDTO.setMedicineRecordDone(count);
-        responseDTO.setMedicineRecordTotal(medicineRecordList.size());
         return responseDTO;
     }
 
@@ -792,6 +916,9 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             sum += record.getActualValue();
         }
         int result = (int) (sum / 7);
+        if(stepRecordList.isEmpty()){
+            result = 0;
+        }
         return result;
     }
 

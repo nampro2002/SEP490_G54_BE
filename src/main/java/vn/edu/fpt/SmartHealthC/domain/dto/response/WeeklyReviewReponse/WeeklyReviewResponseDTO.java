@@ -23,13 +23,19 @@ public class WeeklyReviewResponseDTO {
 
     private int hba1cSafeRecord;
 
+    private int hba1cPoint;
+
     private int cholesterolTotalRecord;
 
     private int cholesterolSafeRecord;
 
+    private int cholesterolPoint;
+
     private int bloodSugarTotalRecord;
 
     private int bloodSugarSafeRecord;
+
+    private int bloodSugarPoint;
 
     //BloodPressurePerWeekResponseDTO
 
@@ -37,9 +43,15 @@ public class WeeklyReviewResponseDTO {
 
     private int safeBloodPressureRecord;
 
+    private int bloodPressurePoint;
+
     private int averageWeightRecordPerWeek;
 
+    private int weightPoint;
+
     private int averageMentalRecordPerWeek;
+
+    private int mentalPoint;
 
     //ActivityPerWeekResponseDTO
 
@@ -49,14 +61,22 @@ public class WeeklyReviewResponseDTO {
 
     private int lightActivity;
 
+    private int activityPoint;
+
     private int averageDietRecordPerWeek;
+
+    private int dietPoint;
     //MedicinePerWeekResponseDTO
 
     private int medicineDateDone;
 
     private int medicineDateTotal;
 
+    private int medicinePoint;
+
     private int averageStepRecordPerWeek;
+
+    private int stepPoint;
 
     private int totalPoint;
 
