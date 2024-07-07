@@ -19,4 +19,6 @@ public interface StepRecordService {
     StepResponseChartDTO getDataChart() throws ParseException;
 
     Boolean checkPlanPerDay(String weekStart) throws ParseException;
+
+    Boolean checkPlanExist(String weekStart) throws ParseException;
 }

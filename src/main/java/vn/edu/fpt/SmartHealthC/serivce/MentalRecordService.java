@@ -24,4 +24,6 @@ public interface MentalRecordService {
     List<MentalRule> getListMentalPerWeek(String weekStart) throws ParseException;
 
     Boolean checkPlanPerDay(String weekStart) throws ParseException;
+
+    Boolean checkPlanExist(String weekStart) throws ParseException;
 }

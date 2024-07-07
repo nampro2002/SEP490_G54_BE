@@ -10,7 +10,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.*;
-import vn.edu.fpt.SmartHealthC.serivce.WeeklyReviewService;
+import vn.edu.fpt.SmartHealthC.serivce.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,6 +44,17 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     private  SimpleDateFormat formatDate;
     @Autowired
     private WeekReviewRepository weekReviewRepository;
+
+    @Autowired
+    private StepRecordService stepRecordService;
+    @Autowired
+    private MentalRecordService mentalRecordService;
+    @Autowired
+    private MedicineRecordService medicineRecordService;
+    @Autowired
+    private DietRecordService dietRecordService;
+    @Autowired
+    private ActivityRecordService activityRecordService;
 
     @Override
     public WeekReview getWeek(Integer id) throws ParseException {
@@ -135,6 +146,27 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             }
         }
         return weekStartList;
+    }
+
+    @Override
+    public WeekCheckPlanResponseDTO checkWeeklyPlanExist(String weekStart) throws ParseException {
+        WeekCheckPlanResponseDTO weekCheckPlanResponseDTO = new WeekCheckPlanResponseDTO();
+        weekCheckPlanResponseDTO.setActivityPlan(
+                activityRecordService.checkPlanExist(weekStart)
+        );
+        weekCheckPlanResponseDTO.setDietPlan(
+                dietRecordService.checkPlanExist(weekStart)
+        );
+        weekCheckPlanResponseDTO.setMentalPlan(
+                mentalRecordService.checkPlanExist(weekStart)
+        );
+        weekCheckPlanResponseDTO.setMedicinePLan(
+                medicineRecordService.checkPlanExist(weekStart)
+        );
+        weekCheckPlanResponseDTO.setStepPlan(
+                stepRecordService.checkPlanExist(weekStart)
+        );
+        return weekCheckPlanResponseDTO;
     }
 
     public Date calculateDate(Date sourceDate , int plus) throws ParseException {
