@@ -79,15 +79,14 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean activateAccount(Integer id) {
-        AppUser appUser = appUserRepository.findById(id).orElseThrow(() ->
-                new AppException(ErrorCode.APP_USER_NOT_FOUND));
-        if (appUser.getAccountId().isActive()) {
+        Account account = accountRepository.findById(id).orElseThrow(() ->
+                new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+        if (account.isActive()) {
             throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
         }
-        Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
         account.setActive(true);
         accountRepository.save(account);
-        notificationService.createRecordForAccount(appUser.getAccountId());
+        notificationService.createRecordForAccount(account);
         return true;
     }
 
