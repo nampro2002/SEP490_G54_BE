@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordCreateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateContinuousDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponseChartDTO;
@@ -39,7 +40,8 @@ public class StepRecordServiceImpl implements StepRecordService {
     private AppUserService appUserService;
     @Autowired
     private SimpleDateFormat formatDate;
-    public Date calculateDate(Date date , int plus) throws ParseException {
+
+    public Date calculateDate(Date date, int plus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -59,33 +61,22 @@ public class StepRecordServiceImpl implements StepRecordService {
         String email = authentication.getName();
 
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
 
 
-        String weekStartStr= formatDate.format(stepRecordDTO.getWeekStart());
+        String weekStartStr = formatDate.format(stepRecordDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
-        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.get().getId());
-        boolean dateExists = stepPlanExist.stream()
-                .anyMatch(record -> {
-                    String recordDateStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordDate = formatDate.parse(recordDateStr);
-                        return recordDate.equals(weekStart);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                });
-        if (dateExists) {
+        List<StepRecord> recordList = stepRecordRepository.findByAppUserIdAndWeekStart(appUser.get().getId(), weekStart);
+
+        if (recordList.size() == 7) {
             throw new AppException(ErrorCode.STEP_PLAN_EXIST);
         }
-
-        int count=0;
+        int count = recordList.size();
         Date dateCalculate;
-        while(true){
-            if(count >= 7 ){
+        while (true) {
+            if (count >= 7) {
                 break;
             }
             dateCalculate = calculateDate(stepRecordDTO.getWeekStart(), count);
@@ -97,6 +88,13 @@ public class StepRecordServiceImpl implements StepRecordService {
             stepRecord.setAppUserId(appUser.get());
             stepRecordRepository.save(stepRecord);
             count++;
+        }
+        recordList = stepRecordRepository.findByAppUserIdAndWeekStart(appUser.get().getId(), weekStart);
+        for (StepRecord record : recordList) {
+            if (record.getPlannedStepPerDay() != stepRecordDTO.getPlannedStepPerDay()) {
+                record.setPlannedStepPerDay(stepRecordDTO.getPlannedStepPerDay());
+                stepRecordRepository.save(record);
+            }
         }
     }
 
@@ -154,13 +152,11 @@ public class StepRecordServiceImpl implements StepRecordService {
         String email = authentication.getName();
 
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
 
-
-
-        String dateStr= formatDate.format(stepRecordDTO.getDate());
+        String dateStr = formatDate.format(stepRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
         List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.get().getId());
         Optional<StepRecord> stepRecord = stepPlanExist.stream()
@@ -196,12 +192,12 @@ public class StepRecordServiceImpl implements StepRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
 
         Date today = new Date();
-        String dateStr= formatDate.format(today);
+        String dateStr = formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
 
@@ -218,11 +214,11 @@ public class StepRecordServiceImpl implements StepRecordService {
         List<StepResponse> stepResponseList = new ArrayList<>();
         int count = 5;
         for (StepRecord stepRecord : stepRecordList) {
-            String smallerDateStr= formatDate.format(stepRecord.getDate());
+            String smallerDateStr = formatDate.format(stepRecord.getDate());
             Date smallerDate = formatDate.parse(smallerDateStr);
 
-            if(stepRecord.getActualValue() != 0){
-                if(smallerDate.before(date)){
+            if (stepRecord.getActualValue() != 0) {
+                if (smallerDate.before(date)) {
 
                     double valuePercent = ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100;
                     StepResponse stepResponse = new StepResponse();
@@ -232,7 +228,7 @@ public class StepRecordServiceImpl implements StepRecordService {
                     count--;
 
                 }
-                if(smallerDate.equals(date)){
+                if (smallerDate.equals(date)) {
                     double valuePercent = ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100;
                     StepResponse stepResponse = new StepResponse();
                     stepResponse.setValuePercent((int) valuePercent);
@@ -244,8 +240,8 @@ public class StepRecordServiceImpl implements StepRecordService {
                 }
             }
 
-            today = calculateDate(today,1);
-            if(count < 1){
+            today = calculateDate(today, 1);
+            if (count < 1) {
                 break;
             }
         }
@@ -259,7 +255,7 @@ public class StepRecordServiceImpl implements StepRecordService {
 
 
         stepResponseChartDTO.setStepResponseList(stepResponseList);
-            return stepResponseChartDTO;
+        return stepResponseChartDTO;
     }
 
     @Override
@@ -267,11 +263,11 @@ public class StepRecordServiceImpl implements StepRecordService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         Date today = new Date();
-        String dateStr= formatDate.format(today);
+        String dateStr = formatDate.format(today);
         Date date = formatDate.parse(dateStr);
         Date weekStartNow = formatDate.parse(weekStart);
         List<StepRecord> stepRecordsList = stepRecordRepository.findByAppUserId(appUser.get().getId());
@@ -292,14 +288,72 @@ public class StepRecordServiceImpl implements StepRecordService {
         //Không có plan
         if (stepRecords.isEmpty()) {
 //            throw new AppException(ErrorCode.STEP_PLAN_NOT_FOUND);
-        return false;
+            return false;
         }
         // có mà chưa nhập
-        if(stepRecords.get().getActualValue() == 0 ){
+        if (stepRecords.get().getActualValue() == 0) {
 //            throw new AppException(ErrorCode.STEP_DAY_DATA_EMPTY);
-       return false;
+            return false;
         }
         return true;
+    }
+
+    @Override
+    public void updateStepRecordNEW(StepRecordUpdateContinuousDTO stepRecordDTO) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Optional<AppUser> appUser = appUserRepository.findById(stepRecordDTO.getUserId());
+        if (appUser.isEmpty()) {
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+
+        String dateStr = formatDate.format(stepRecordDTO.getDate());
+        Date date = formatDate.parse(dateStr);
+        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.get().getId());
+        Optional<StepRecord> stepRecord = stepPlanExist.stream()
+                .filter(record -> {
+                    String recordDateStr = formatDate.format(record.getDate());
+                    try {
+                        Date recordDate = formatDate.parse(recordDateStr);
+                        return recordDate.equals(date);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
+        if (stepRecord.isEmpty()) {
+            StepRecord stepRecordNew = StepRecord.builder()
+                    .appUserId(appUser.get())
+                    .date(stepRecordDTO.getDate())
+                    .actualValue(stepRecordDTO.getActualValue())
+                    .plannedStepPerDay(0)
+                    .weekStart(getFirstDayOfWeek(stepRecordDTO.getDate()))
+                    .build();
+            stepRecordRepository.save(stepRecordNew);
+        } else {
+            StepRecord stepRecordNew = getStepRecordById(stepRecord.get().getId());
+            stepRecordNew.setActualValue(stepRecordNew.getActualValue() + stepRecordDTO.getActualValue());
+            stepRecordRepository.save(stepRecordNew);
+        }
+    }
+
+    public Date getFirstDayOfWeek(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        // Set the first day of the week to Monday
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        // Get the current day of the week
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        // Calculate the difference to Monday
+        int diff = Calendar.MONDAY - dayOfWeek;
+        // If the current day is Sunday, adjust the difference
+        if (dayOfWeek == Calendar.SUNDAY) {
+            diff = -6;
+        }
+        // Add the difference to the calendar date
+        calendar.add(Calendar.DAY_OF_MONTH, diff);
+        return calendar.getTime();
     }
 
 
