@@ -695,7 +695,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     }
 
     private boolean checkBloodPressure(float systole , float diastole ){
-        return (systole <= 120 && diastole <= 80) == true ? true :false;
+        return (systole>=90 &&  systole <= 120) && (diastole>=60 &&  diastole <= 80) == true ? true :false;
     }
 
     private  int getAverageWeightPerWeek(AppUser appUser, Date weekStart) {
