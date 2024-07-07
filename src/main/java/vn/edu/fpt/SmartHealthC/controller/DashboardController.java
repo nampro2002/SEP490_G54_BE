@@ -47,11 +47,11 @@ public class DashboardController {
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/register-request/doctor")
-    public ApiResponse<ResponsePaging<List<AppUserResponseDTO>>> getDoctorPendingList(@RequestParam(defaultValue = "1") Integer pageNo) {
+    public ApiResponse<ResponsePaging<List<WebUserResponseDTO>>> getDoctorPendingList(@RequestParam(defaultValue = "1") Integer pageNo) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<ResponsePaging<List<AppUserResponseDTO>>>builder()
+                .body(ApiResponse.<ResponsePaging<List<WebUserResponseDTO>>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(accountService.getPendingAccount(pageNo - 1, TypeAccount.DOCTOR))
+                        .result(accountService.getPendingAccountDoctor(pageNo - 1, TypeAccount.DOCTOR))
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('ADMIN')")
