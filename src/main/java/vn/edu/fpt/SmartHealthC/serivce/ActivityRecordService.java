@@ -19,4 +19,6 @@ public interface ActivityRecordService {
     ActivityResponseChartDTO getDataChart() throws ParseException;
 
     Boolean checkPlanPerDay(String weekStart) throws ParseException;
+
+    Boolean checkPlanExist(String weekStart) throws ParseException;
 }

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeekCheckPlanResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyMoblieChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyReviewResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeekReview;
@@ -37,6 +38,14 @@ public class WeeklyReviewController {
                         .result(weeklyReviewService.getListWeekStart(appUserId))
                         .build()).getBody();
     }
+    @GetMapping("/mobile/week-starts")
+    public ApiResponse<List<Date>> returnMobileListWeekStart() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<Date>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(weeklyReviewService.getMobileListWeekStart())
+                        .build()).getBody();
+    }
 
     @GetMapping("/web/review/{weekstart}")
     public ApiResponse<WeekReview> returnReviewForWeekDate(@PathVariable String weekstart) throws ParseException {
@@ -61,6 +70,17 @@ public class WeeklyReviewController {
                 .body(ApiResponse.<WeeklyMoblieChartResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(weeklyReviewService.getMobileChartReviewForWeek())
+                        .build()).getBody();
+    }
+    @GetMapping("/mobile/check/week-plan/{weekStart}")
+    public ApiResponse<WeekCheckPlanResponseDTO> returnMobileChartReview(
+            @PathVariable String weekStart
+    ) throws ParseException {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<WeekCheckPlanResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(weeklyReviewService.checkWeeklyPlanExist (weekStart))
                         .build()).getBody();
     }
 

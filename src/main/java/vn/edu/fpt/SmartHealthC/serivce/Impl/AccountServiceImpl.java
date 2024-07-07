@@ -16,11 +16,13 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.UserWeek1Information;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
+import vn.edu.fpt.SmartHealthC.repository.UserWeek1InformationRepository;
 import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AccountService;
@@ -51,7 +53,8 @@ public class AccountServiceImpl implements AccountService {
     private AppUserRepository appUserRepository;
     @Autowired
     private NotificationService notificationService;
-
+    @Autowired
+    private UserWeek1InformationRepository userWeek1InformationRepository;
 //    @Override
 //    public AuthenticationResponseDto loginStaff(LoginDto request) {
 //        Optional<Account> optionalUser = accountRepository.findByEmail(request.getEmail());
@@ -78,6 +81,7 @@ public class AccountServiceImpl implements AccountService {
 //    }
 
     @Override
+    @Transactional
     public boolean activateAccount(Integer id) {
         Account account = accountRepository.findById(id).orElseThrow(() ->
                 new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
@@ -85,6 +89,9 @@ public class AccountServiceImpl implements AccountService {
             throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
         }
         account.setActive(true);
+        UserWeek1Information userWeek1Information = new UserWeek1Information();
+//        userWeek1Information.setAppUserId(appUser);
+        userWeek1InformationRepository.save(userWeek1Information);
         accountRepository.save(account);
         notificationService.createRecordForAccount(account);
         return true;

@@ -11,8 +11,6 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietReco
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.DietResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.DietRecordListResDTO.RecordPerDay;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponse;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.WeightResponseDTO.WeightResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -23,8 +21,6 @@ import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -327,6 +323,36 @@ public class DietRecordServiceImpl implements DietRecordService {
 
         return true;
     }
+
+    @Override
+    public Boolean checkPlanExist(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+
+        Date weekStartNow = formatDate.parse(weekStart);
+        List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.get().getId());
+        List<DietRecord> dietRecord = dietRecordList.stream()
+                .filter(record -> {
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordWeekStart.equals(weekStartNow);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .toList();
+        //Hôm nay không có plan tuần
+        if (dietRecord.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
 
     public Date calculateDateMinus(Date sourceDate , int minus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
