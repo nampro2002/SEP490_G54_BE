@@ -24,4 +24,6 @@ public interface AppUserService {
     AppUser findAppUserByEmail(String email);
     Optional<AppUser> findAppUserEntityById(Integer id);
     List<AppUser> getListAppUser();
+
+    List<AppUser> findAllByWebUserId(Integer id);
 }

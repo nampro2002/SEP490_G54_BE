@@ -83,18 +83,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public boolean activateAccount(Integer id) {
-        AppUser appUser = appUserRepository.findById(id).orElseThrow(() ->
-                new AppException(ErrorCode.APP_USER_NOT_FOUND));
-        if (appUser.getAccountId().isActive()) {
+        Account account = accountRepository.findById(id).orElseThrow(() ->
+                new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+        if (account.isActive()) {
             throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
         }
-        Account account = accountRepository.findById(appUser.getAccountId().getId()).orElseThrow();
         account.setActive(true);
         UserWeek1Information userWeek1Information = new UserWeek1Information();
         userWeek1Information.setAppUserId(appUser);
         userWeek1InformationRepository.save(userWeek1Information);
         accountRepository.save(account);
-        notificationService.createRecordForAccount(appUser.getAccountId());
+        notificationService.createRecordForAccount(account);
         return true;
     }
 
@@ -124,6 +123,35 @@ public class AccountServiceImpl implements AccountService {
                 })
                 .toList();
         return ResponsePaging.<List<AppUserResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(listResponse)
+                .build();
+    }
+    @Override
+    public ResponsePaging<List<WebUserResponseDTO>> getPendingAccountDoctor(Integer pageNo, TypeAccount type) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<WebUser> pagedResult = webUserRepository.findAllInactiveAccountUser(type, paging);
+        List<WebUser> accountList = new ArrayList<>();
+        if (pagedResult.hasContent()) {
+            accountList = pagedResult.getContent();
+        }
+        List<WebUserResponseDTO> listResponse = accountList.stream()
+//                .filter(record -> (!record.getAccountId().getIsActive() && record.getAccountId().getType().equals(TypeAccount.USER)))
+                .map(record -> {
+                    WebUserResponseDTO dto = new WebUserResponseDTO();
+                    dto.setAccountId(record.getAccountId().getId());
+                    dto.setEmail(record.getAccountId().getEmail());
+                    dto.setWebUserId(record.getId());
+                    dto.setName(record.getUserName());
+                    dto.setDob(record.getDob());
+                    dto.setGender(record.isGender());
+                    dto.setPhoneNumber(record.getPhoneNumber());
+                    return dto;
+                })
+                .toList();
+        return ResponsePaging.<List<WebUserResponseDTO>>builder()
                 .totalPages(pagedResult.getTotalPages())
                 .currentPage(pageNo + 1)
                 .totalItems((int) pagedResult.getTotalElements())

@@ -44,6 +44,8 @@ public class StepRecordServiceImpl implements StepRecordService {
         return calendar.getTime();
     }
 
+    // check bản ghi cùng weekstart đã toonf tại
+    // update planRecord vaof banr ghi trrớc đos
     @Transactional
     @Override
     public void createStepRecord(StepRecordCreateDTO stepRecordDTO) throws ParseException {
@@ -139,6 +141,7 @@ public class StepRecordServiceImpl implements StepRecordService {
         return listResponseDTOList;
     }
 
+    // nếu chưa có plan thì tạo record với planStepPerday = 0 và weekstart hiện tại
     @Transactional
     @Override
     public void updateStepRecord(StepRecordUpdateDTO stepRecordDTO) throws ParseException {
@@ -149,6 +152,8 @@ public class StepRecordServiceImpl implements StepRecordService {
         if(appUser.isEmpty()){
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
+
+
 
         String dateStr= formatDate.format(stepRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);

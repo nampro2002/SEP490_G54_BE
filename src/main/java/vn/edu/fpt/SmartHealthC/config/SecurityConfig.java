@@ -48,6 +48,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/forget-password/**").permitAll()
                                 .requestMatchers("/api/medical-history/mobile").permitAll()
                                 .requestMatchers("/xx/demo/**").permitAll()
+                                .requestMatchers("/api/notifications/**").permitAll()
 //                                .requestMatchers("/api/auth/refresh-token").permitAll()
 //                                .requestMatchers("/api/**").permitAll()
                                 .requestMatchers(SWAGGER).permitAll()
