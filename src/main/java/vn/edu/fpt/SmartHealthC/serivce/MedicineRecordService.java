@@ -27,4 +27,6 @@ public interface MedicineRecordService {
     List<MedicinePlanPerDayResponse> getMedicinePerDay(String weekStart) throws ParseException;
 
     Boolean checkPlanPerDay(String weekStart) throws ParseException;
+
+    Boolean checkPlanExist(String weekStart) throws ParseException;
 }

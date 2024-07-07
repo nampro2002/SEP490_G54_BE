@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeekCheckPlanResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyMoblieChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyReviewResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
@@ -21,4 +22,8 @@ public interface WeeklyReviewService {
     void saveDataReviewForWeek(String weekStart) throws ParseException;
 
     WeeklyMoblieChartResponseDTO getMobileChartReviewForWeek() throws ParseException;
+
+    List<Date> getMobileListWeekStart() throws ParseException;
+
+    WeekCheckPlanResponseDTO checkWeeklyPlanExist(String weekStart) throws ParseException;
 }

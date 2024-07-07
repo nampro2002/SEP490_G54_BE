@@ -320,5 +320,33 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
         return true;
     }
 
+    @Override
+    public Boolean checkPlanExist(String weekStart) throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date weekStartNow = formatDate.parse(weekStart);
+        List<ActivityRecord> activityRecordList = activityRecordRepository.findRecordByIdUser(appUser.get().getId());
+        List<ActivityRecord> activityRecord = activityRecordList.stream()
+                .filter(record -> {
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
+                    try {
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordWeekStart.equals(weekStartNow);
+                    } catch (ParseException e) {
+                        return false;
+                    }
+                })
+                .toList();
+        //Không có kế hoạch
+        if (activityRecord.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
 
 }

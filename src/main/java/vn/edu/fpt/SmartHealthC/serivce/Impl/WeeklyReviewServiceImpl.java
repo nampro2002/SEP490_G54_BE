@@ -10,7 +10,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.*;
-import vn.edu.fpt.SmartHealthC.serivce.WeeklyReviewService;
+import vn.edu.fpt.SmartHealthC.serivce.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,6 +44,17 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     private  SimpleDateFormat formatDate;
     @Autowired
     private WeekReviewRepository weekReviewRepository;
+
+    @Autowired
+    private StepRecordService stepRecordService;
+    @Autowired
+    private MentalRecordService mentalRecordService;
+    @Autowired
+    private MedicineRecordService medicineRecordService;
+    @Autowired
+    private DietRecordService dietRecordService;
+    @Autowired
+    private ActivityRecordService activityRecordService;
 
     @Override
     public WeekReview getWeek(Integer id) throws ParseException {
@@ -104,6 +115,58 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 }
         }
         return weekStartList;
+    }
+    @Override
+    public List<Date> getMobileListWeekStart() throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        //trả về ngày sớm nhất của user
+        Date smallestWeekStart = findSmallestWeekStart(appUser.get());
+        List<Date> weekStartList = new ArrayList<>();
+
+        weekStartList.add(smallestWeekStart);
+
+        //Lấy ra ngày hiện tại và gán ngày sớm nhất cho datePlus7
+        Date today = new Date();
+        Date datePlus7 = smallestWeekStart;
+
+        //Vòng lặp cho đến ngày hiện tại
+        boolean loopStatus = true;
+        for (; loopStatus;) {
+            datePlus7 = calculateDate(datePlus7,7);
+            // Kiểm tra xem datePlus7 nhỏ hơn ngày hôm nay
+            if (datePlus7.before(today) || datePlus7.equals(today)) {
+                weekStartList.add(datePlus7);
+            }else{ // dateplus mà quá lớn hơn hiên tại thì dừng
+                loopStatus = false;
+            }
+        }
+        return weekStartList;
+    }
+
+    @Override
+    public WeekCheckPlanResponseDTO checkWeeklyPlanExist(String weekStart) throws ParseException {
+        WeekCheckPlanResponseDTO weekCheckPlanResponseDTO = new WeekCheckPlanResponseDTO();
+        weekCheckPlanResponseDTO.setActivityPlan(
+                activityRecordService.checkPlanExist(weekStart)
+        );
+        weekCheckPlanResponseDTO.setDietPlan(
+                dietRecordService.checkPlanExist(weekStart)
+        );
+        weekCheckPlanResponseDTO.setMentalPlan(
+                mentalRecordService.checkPlanExist(weekStart)
+        );
+        weekCheckPlanResponseDTO.setMedicinePLan(
+                medicineRecordService.checkPlanExist(weekStart)
+        );
+        weekCheckPlanResponseDTO.setStepPlan(
+                stepRecordService.checkPlanExist(weekStart)
+        );
+        return weekCheckPlanResponseDTO;
     }
 
     public Date calculateDate(Date sourceDate , int plus) throws ParseException {
