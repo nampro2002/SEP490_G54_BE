@@ -55,6 +55,7 @@ public class ActivityRecordServiceImplTest {
     private List<ActivityRecord> activityRecordList;
     private ActivityRecord activityRecord ;
 
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -114,9 +115,26 @@ public class ActivityRecordServiceImplTest {
         assertDoesNotThrow(() -> activityRecordRepository.findRecordByIdUser(testAppUser.getId()));
         assertDoesNotThrow(() -> activityRecordRepository.save(activityRecord));
 
-
-
     }
 
+    @Test
+    void getDataChart_Success() {
+        Integer userId = 13;
+        String email = "test@test.com";
+        //Act
+        when(appUserRepository.findByAccountEmail(email)).thenReturn(Optional.of(testAppUser));
+        when(activityRecordRepository.findRecordByIdUser(userId)).thenReturn(activityRecordList);
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail(email);
+        List<ActivityRecord> result = activityRecordRepository.findRecordByIdUser(userId);
+
+        //THEN
+        assertNotNull(resultAppUser);
+        assertNotNull(result);
+        org.assertj.core.api.Assertions.assertThat(result.size()).isGreaterThanOrEqualTo(0);
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail(email));
+        assertDoesNotThrow(() -> activityRecordRepository.findRecordByIdUser(userId));
+
+    }
 
 }
