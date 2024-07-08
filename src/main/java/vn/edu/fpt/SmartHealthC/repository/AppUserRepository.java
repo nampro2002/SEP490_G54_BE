@@ -33,7 +33,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
     List<AppUser> findAllValidUser();
     @Query("SELECT u FROM AppUser u WHERE u.accountId.isActive = true AND u.accountId.isDeleted = false AND u.webUser.id = ?1")
     List<AppUser> findAllByWebUserId(Integer id);
-
-    @Query("SELECT u FROM AppUser u WHERE u.accountId.Id = ?1")
-    Optional<AppUser> findByAccountId(Integer accountId);
+    @Query("SELECT u FROM AppUser u WHERE u.accountId.isActive = true AND u.accountId.isDeleted = false")
+    List<AppUser> findAllActiveAndNotDeleted();
 }

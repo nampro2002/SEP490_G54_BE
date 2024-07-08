@@ -13,6 +13,7 @@ public enum ErrorCode {
 //    USER_EXISTED(1002, "User existed", HttpStatus.BAD_REQUEST),
 //    UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
 //    UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
+    INTERNAL_SERVER_ERROR("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),
     NOTIFICATION_SETTING_NOT_FOUND("Notification setting not found", HttpStatus.NOT_FOUND),
     FORBIDDEN("You do not have permission", HttpStatus.FORBIDDEN),
     APP_USER_NOT_FOUND_OR_NOT_ACTIVATED("AppUser not found or not activated", HttpStatus.NOT_FOUND),

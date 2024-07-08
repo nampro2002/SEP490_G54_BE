@@ -41,7 +41,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     @Autowired
     private StepRecordRepository stepRecordRepository;
     @Autowired
-    private  SimpleDateFormat formatDate;
+    private SimpleDateFormat formatDate;
     @Autowired
     private WeekReviewRepository weekReviewRepository;
 
@@ -67,7 +67,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         //trả về ngày sớm nhất của user
         Date smallestWeekStart = findSmallestWeekStart(appUser.get());
         //week start for filter
-        String weekStartStr=formatDate.format(smallestWeekStart);
+        String weekStartStr = formatDate.format(smallestWeekStart);
         Date weekStartFilter = formatDate.parse(weekStartStr);
         List<WeekReview> weekReviews = weekReviewRepository.findByAppUserId(appUser.get().getId());
         Optional<WeekReview> weekReviewExist = weekReviews.stream()
@@ -105,23 +105,24 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
 
         //Vòng lặp cho đến ngày hiện tại
         boolean loopStatus = true;
-        for (; loopStatus;) {
-            datePlus7 = calculateDate(datePlus7,7);
-                // Kiểm tra xem datePlus7 nhỏ hơn ngày hôm nay
-                if (datePlus7.before(today) ) {
-                        weekStartList.add(datePlus7);
-                }else{ // dateplus mà quá lớn hơn hiên tại thì dừng
-                    loopStatus = false;
-                }
+        for (; loopStatus; ) {
+            datePlus7 = calculateDate(datePlus7, 7);
+            // Kiểm tra xem datePlus7 nhỏ hơn ngày hôm nay
+            if (datePlus7.before(today)) {
+                weekStartList.add(datePlus7);
+            } else { // dateplus mà quá lớn hơn hiên tại thì dừng
+                loopStatus = false;
+            }
         }
         return weekStartList;
     }
+
     @Override
     public List<Date> getMobileListWeekStart() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         //trả về ngày sớm nhất của user
@@ -136,12 +137,12 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
 
         //Vòng lặp cho đến ngày hiện tại
         boolean loopStatus = true;
-        for (; loopStatus;) {
-            datePlus7 = calculateDate(datePlus7,7);
+        for (; loopStatus; ) {
+            datePlus7 = calculateDate(datePlus7, 7);
             // Kiểm tra xem datePlus7 nhỏ hơn ngày hôm nay
             if (datePlus7.before(today) || datePlus7.equals(today)) {
                 weekStartList.add(datePlus7);
-            }else{ // dateplus mà quá lớn hơn hiên tại thì dừng
+            } else { // dateplus mà quá lớn hơn hiên tại thì dừng
                 loopStatus = false;
             }
         }
@@ -169,7 +170,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         return weekCheckPlanResponseDTO;
     }
 
-    public Date calculateDate(Date sourceDate , int plus) throws ParseException {
+    public Date calculateDate(Date sourceDate, int plus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(sourceDate);
@@ -185,7 +186,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         //week start for filter
@@ -213,7 +214,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         //week start for filter
@@ -253,6 +254,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 .totalPoint(weekReviewExist.get().getTotalPoint())
                 .build();
 
+        //Tìm danh sách thuốc theo tuần
         List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.get().getId());
         List<MedicineRecord> medicineRecordListByWeekStart = medicineRecordList.stream()
                 .filter(item -> {
@@ -424,7 +426,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
         List<WeekReview> weekReviews = weekReviewRepository.findByAppUserId(appUser.get().getId());
@@ -438,12 +440,12 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         //Lấy ra 5 gần nhất  weekStart
         List<WeekReview> fiveNearlyDates = new ArrayList<>();
         for (WeekReview record : weekReviews) {
-                if (!fiveNearlyDates.contains(fiveNearlyDates)) {
-                    fiveNearlyDates.add(record);
-                }
-                if(fiveNearlyDates.size() > 5){
-                    break;
-                }
+            if (!fiveNearlyDates.contains(fiveNearlyDates)) {
+                fiveNearlyDates.add(record);
+            }
+            if (fiveNearlyDates.size() > 5) {
+                break;
+            }
         }
         //Sắp xếp giảm dần theo date
         fiveNearlyDates.sort(new Comparator<WeekReview>() {
@@ -457,9 +459,10 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             response.getWeekStart().add(weekReview.getWeekStart());
             response.getPercentage().add(weekReview.getTotalPoint());
         }
-    return response;
+        return response;
     }
-    public double calculateTotalPointOfWeek(Date weekStart) throws ParseException {
+
+    public double calculateTotalPointOfWeek( Date weekStart) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);

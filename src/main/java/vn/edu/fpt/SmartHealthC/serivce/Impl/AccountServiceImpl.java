@@ -89,14 +89,9 @@ public class AccountServiceImpl implements AccountService {
             throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
         }
         account.setActive(true);
-
-        Optional<AppUser> appUser = appUserRepository.findByAccountId(account.getId());
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        UserWeek1Information userWeek1Information = new UserWeek1Information();
-        userWeek1Information.setAppUserId(appUser.get());
-        userWeek1InformationRepository.save(userWeek1Information);
+//        UserWeek1Information userWeek1Information = new UserWeek1Information();
+//        userWeek1Information.setAppUserId(appUser);
+//        userWeek1InformationRepository.save(userWeek1Information);
         accountRepository.save(account);
         notificationService.createRecordForAccount(account);
         return true;

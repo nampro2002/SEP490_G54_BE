@@ -129,7 +129,7 @@ public class NotificationController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(ApiResponse.<String>builder()
                             .code(HttpStatus.OK.value())
-                            .result(request.getTypeNotification().name())
+                            .message("Setting notification successfully.")
                             .build()).getBody();
         } catch (Exception e) {
             e.printStackTrace();

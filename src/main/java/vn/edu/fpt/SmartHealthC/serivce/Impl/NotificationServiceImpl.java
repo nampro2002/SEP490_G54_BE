@@ -178,14 +178,17 @@ public class NotificationServiceImpl implements NotificationService {
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
-        if (!request.getTypeNotification().equals(TypeNotification.ALL)) {
-            NotificationSetting notificationSetting = findByAccountIdAndType(appUser.get().getAccountId().getId(), request.getTypeNotification());
-            notificationSetting.setStatus(request.isStatus());
-            notificationSettingRepository.save(notificationSetting);
-            updateStatusNotification(email, request.getDeviceToken());
-        } else {
+        //check if request.getTypeNotificationList() contains TypeNotification.ALL
+        if(request.getTypeNotificationList().contains(TypeNotification.ALL)){
             List<NotificationSetting> notificationSettingList = notificationSettingRepository.findByAccountId(appUser.get().getAccountId().getId());
             for (NotificationSetting notificationSetting : notificationSettingList) {
+                notificationSetting.setStatus(request.isStatus());
+                notificationSettingRepository.save(notificationSetting);
+            }
+            updateStatusNotification(email, request.getDeviceToken());
+        }else{
+            for (TypeNotification typeNotification : request.getTypeNotificationList()) {
+                NotificationSetting notificationSetting = findByAccountIdAndType(appUser.get().getAccountId().getId(), typeNotification);
                 notificationSetting.setStatus(request.isStatus());
                 notificationSettingRepository.save(notificationSetting);
             }
