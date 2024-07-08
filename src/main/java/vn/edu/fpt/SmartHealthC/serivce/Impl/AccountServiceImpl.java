@@ -89,9 +89,9 @@ public class AccountServiceImpl implements AccountService {
             throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
         }
         account.setActive(true);
-        UserWeek1Information userWeek1Information = new UserWeek1Information();
+//        UserWeek1Information userWeek1Information = new UserWeek1Information();
 //        userWeek1Information.setAppUserId(appUser);
-        userWeek1InformationRepository.save(userWeek1Information);
+//        userWeek1InformationRepository.save(userWeek1Information);
         accountRepository.save(account);
         notificationService.createRecordForAccount(account);
         return true;
