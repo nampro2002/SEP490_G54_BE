@@ -18,5 +18,10 @@ public class ActivityPerWeekResponseDTO {
 
     private int lightActivity;
 
+    private int heavyPlanActivity;
+
+    private int mediumPlanActivity;
+
+    private int lightPLanActivity;
 
 }
