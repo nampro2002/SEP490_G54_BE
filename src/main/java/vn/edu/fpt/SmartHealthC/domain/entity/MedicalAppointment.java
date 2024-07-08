@@ -32,6 +32,8 @@ public class MedicalAppointment {
 
     private String note;
 
+    private String result;
+
     @Enumerated(EnumType.STRING)
     private TypeMedicalAppointment typeMedicalAppointment;
     @Enumerated(EnumType.STRING)

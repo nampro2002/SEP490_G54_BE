@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.checkerframework.common.aliasing.qual.Unique;
 
 import java.util.Date;
 
@@ -14,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "user_lesson")
 public class    UserLesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +23,10 @@ public class    UserLesson {
 
     @ManyToOne
     @JoinColumn(name = "appuser_id")
+    @Unique
     private AppUser appUserId;
 
-    @ManyToOne
-    @JoinColumn(name = "lesson_id")
-    private Lesson lessonId;
+    private int lesson;
 
     private Date lessonDate;
 

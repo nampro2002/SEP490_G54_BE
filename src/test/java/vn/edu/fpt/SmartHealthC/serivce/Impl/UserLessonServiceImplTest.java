@@ -8,18 +8,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserLessonDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserMedicalHistory;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
-import vn.edu.fpt.SmartHealthC.repository.LessonRepository;
 import vn.edu.fpt.SmartHealthC.repository.UserLessonRepository;
 import vn.edu.fpt.SmartHealthC.repository.UserMedicalHistoryRepository;
-import vn.edu.fpt.SmartHealthC.serivce.UserLessonService;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

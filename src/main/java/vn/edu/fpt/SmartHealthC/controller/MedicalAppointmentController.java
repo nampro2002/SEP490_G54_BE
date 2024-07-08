@@ -13,13 +13,9 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ListPatientResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
-import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/medical-appointment")

@@ -1,18 +1,23 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserWeek1Information.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserWeek1Information;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
+import vn.edu.fpt.SmartHealthC.repository.UserLessonRepository;
 import vn.edu.fpt.SmartHealthC.repository.UserWeek1InformationRepository;
 import vn.edu.fpt.SmartHealthC.serivce.UserWeek1InformationService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,17 +30,16 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
     private UserWeek1InformationRepository userWeek1InformationRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    @Autowired
+    private UserLessonRepository userLessonRepository;
+
+    @Autowired
+    private SimpleDateFormat simpleDateFormat;
 
     @Override
     public UserWeek1Information getUserWeek1Information() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        Optional<UserWeek1Information> userWeek1Information = userWeek1InformationRepository.findByAppUser(appUser.get());
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Optional<UserWeek1Information> userWeek1Information = userWeek1InformationRepository.findByAppUser(appUser);
         if(userWeek1Information.isEmpty()) {
             throw new AppException(ErrorCode.USER_WEEK1_LESSON1_NOT_FOUND);
         }
@@ -52,10 +56,23 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
     }
 
     @Override
-    public void setLesson1( Lesson1DTO lesson1DTO) {
+    public void setLesson1( Lesson1DTO lesson1DTO) throws ParseException {
+
         UserWeek1Information userWeek1Information = getUserWeek1Information();
         userWeek1Information.setEndOfYearGoal(lesson1DTO.getEndOfYearGoal());
         userWeek1Information.setIntermediateGoal(lesson1DTO.getIntermediateGoal());
+
+
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
+
+        if(userLesson.isEmpty()){
+            UserLesson userLesson1 = new UserLesson();
+            userLesson1.setAppUserId(appUser);
+            userLesson1.setLesson(1);
+            userLesson1.setLessonDate(DateUtils.getToday(simpleDateFormat));
+            userLessonRepository.save(userLesson1);
+        }
         userWeek1InformationRepository.save(userWeek1Information);
     }
 
@@ -69,10 +86,25 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
     }
 
     @Override
-    public void setLesson2( Lesson2DTO lesson2DTO) {
+    public void setLesson2( Lesson2DTO lesson2DTO) throws ParseException {
         UserWeek1Information userWeek1Information = getUserWeek1Information();
         userWeek1Information.setStrength(lesson2DTO.getStrength());
         userWeek1Information.setWeakPoint(lesson2DTO.getWeakPoint());
+
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
+        if(userLesson.isPresent()){
+            UserLesson userLesson2 = userLesson.get();
+            userLesson2.setAppUserId(appUser);
+            if(userLesson.get().getLesson() <2){
+                userLesson2.setLesson(2);
+                userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+            }
+            userLessonRepository.save(userLesson2);
+        }else{
+            throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
+        }
+
         userWeek1InformationRepository.save(userWeek1Information);
     }
 
@@ -92,7 +124,7 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
     }
 
     @Override
-    public void setLesson3(Lesson3DTO lesson3DTO) {
+    public void setLesson3(Lesson3DTO lesson3DTO) throws ParseException {
         UserWeek1Information userWeek1Information = getUserWeek1Information();
         userWeek1Information.setClosePerson1(lesson3DTO.getClosePerson1());
         userWeek1Information.setClosePerson2(lesson3DTO.getClosePerson2());
@@ -102,6 +134,19 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
         userWeek1Information.setPrefrerredTime(lesson3DTO.getPrefrerredTime());
         userWeek1Information.setNotPreferredLocation(lesson3DTO.getNotPreferredLocation());
         userWeek1Information.setNotPreferredTime(lesson3DTO.getNotPreferredTime());
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
+        if(userLesson.isPresent()){
+            UserLesson userLesson2 = userLesson.get();
+            userLesson2.setAppUserId(appUser);
+            if(userLesson.get().getLesson() <3){
+                userLesson2.setLesson(3);
+                userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+            }
+            userLessonRepository.save(userLesson2);
+        }else{
+            throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
+        }
         userWeek1InformationRepository.save(userWeek1Information);
     }
 
@@ -122,7 +167,7 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
     }
 
     @Override
-    public void setLesson4( Lesson4DTO lesson4DTO) {
+    public void setLesson4( Lesson4DTO lesson4DTO) throws ParseException {
         UserWeek1Information userWeek1Information = getUserWeek1Information();
         userWeek1Information.setScore10(lesson4DTO.getScore10());
         userWeek1Information.setScore20(lesson4DTO.getScore20());
@@ -133,6 +178,21 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
         userWeek1Information.setInfluenceOnLife(lesson4DTO.getInfluenceOnLife());
         userWeek1Information.setNewValues(lesson4DTO.getNewValues());
         userWeek1Information.setReasonForChanging(lesson4DTO.getReasonForChanging());
+
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
+        if(userLesson.isPresent()){
+            UserLesson userLesson2 = userLesson.get();
+            userLesson2.setAppUserId(appUser);
+            if(userLesson.get().getLesson() <4){
+                userLesson2.setLesson(4);
+                userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+            }
+            userLessonRepository.save(userLesson2);
+        }else{
+            throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
+        }
+
         userWeek1InformationRepository.save(userWeek1Information);
     }
 
@@ -147,11 +207,26 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
     }
 
     @Override
-    public void setLesson5(Lesson5DTO lesson5DTO) {
+    public void setLesson5(Lesson5DTO lesson5DTO) throws ParseException {
         UserWeek1Information userWeek1Information = getUserWeek1Information();
         userWeek1Information.setCurrentEmotion(lesson5DTO.getCurrentEmotion());
         userWeek1Information.setWhyIfRealistic(lesson5DTO.getWhyIfRealistic());
         userWeek1Information.setWhyIfNotBetterForLife(lesson5DTO.getWhyIfNotBetterForLife());
+
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
+        if(userLesson.isPresent()){
+            UserLesson userLesson2 = userLesson.get();
+            userLesson2.setAppUserId(appUser);
+            if(userLesson.get().getLesson() <5){
+                userLesson2.setLesson(5);
+                userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+            }
+            userLessonRepository.save(userLesson2);
+        }else{
+            throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
+        }
+
         userWeek1InformationRepository.save(userWeek1Information);
     }
 
@@ -167,12 +242,27 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
     }
 
     @Override
-    public void setLesson6( Lesson6DTO lesson6DTO) {
+    public void setLesson6( Lesson6DTO lesson6DTO) throws ParseException {
         UserWeek1Information userWeek1Information = getUserWeek1Information();
         userWeek1Information.setNoMoreThan2(lesson6DTO.getNoMoreThan2());
         userWeek1Information.setTodoList(lesson6DTO.getTodoList());
         userWeek1Information.setNoProcastinating(lesson6DTO.getNoProcastinating());
         userWeek1Information.setDoExercises(lesson6DTO.getDoExercises());
+
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
+        if(userLesson.isPresent()){
+            UserLesson userLesson2 = userLesson.get();
+            userLesson2.setAppUserId(appUser);
+            if(userLesson.get().getLesson() <6){
+                userLesson2.setLesson(6);
+                userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+            }
+            userLessonRepository.save(userLesson2);
+        }else{
+            throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
+        }
+
         userWeek1InformationRepository.save(userWeek1Information);
     }
 
@@ -192,7 +282,7 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
     }
 
     @Override
-    public void setLesson7( Lesson7DTO lesson7DTO) {
+    public void setLesson7( Lesson7DTO lesson7DTO) throws ParseException {
         UserWeek1Information userWeek1Information = getUserWeek1Information();
         userWeek1Information.setWhatIsHealth(lesson7DTO.getWhatIsHealth());
         userWeek1Information.setActivityCommitment(lesson7DTO.getActivityCommitment());
@@ -202,6 +292,21 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
         userWeek1Information.setRoadBlock(lesson7DTO.getRoadBlock());
         userWeek1Information.setSolution(lesson7DTO.getSolution());
         userWeek1Information.setCommitment(lesson7DTO.getCommitment());
+
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
+        if(userLesson.isPresent()){
+            UserLesson userLesson2 = userLesson.get();
+            userLesson2.setAppUserId(appUser);
+            if(userLesson.get().getLesson() <7){
+                userLesson2.setLesson(7);
+                userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+            }
+            userLessonRepository.save(userLesson2);
+        }else{
+            throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
+        }
+
         userWeek1InformationRepository.save(userWeek1Information);
     }
 }

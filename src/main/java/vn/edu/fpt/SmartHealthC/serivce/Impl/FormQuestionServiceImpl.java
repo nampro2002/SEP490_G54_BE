@@ -9,15 +9,11 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
-import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.FormQuestionRepository;
-import vn.edu.fpt.SmartHealthC.repository.LessonRepository;
 import vn.edu.fpt.SmartHealthC.serivce.FormQuestionService;
-import vn.edu.fpt.SmartHealthC.serivce.LessonService;
 
 import java.util.ArrayList;
 import java.util.List;
