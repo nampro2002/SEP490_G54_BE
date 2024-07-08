@@ -27,7 +27,7 @@ public class DailyEveningJob implements Job {
     private TriggerExecutionService triggerExecutionService;
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        if(triggerExecutionService.shouldExecuteMorningJob()){
+        if(triggerExecutionService.shouldExecuteEveningJob()){
             System.out.println("Executing Daily Evening Job at: " + new Date());
             HashMap<String, String> data = new HashMap<>();
             data.put("key1", "value1");
