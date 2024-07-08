@@ -55,7 +55,7 @@ public class ActivityRecordServiceImplTest {
     private List<ActivityRecord> activityRecordList;
     private ActivityRecord activityRecord ;
 
-
+    private List<Date> dateList;
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -66,6 +66,11 @@ public class ActivityRecordServiceImplTest {
 
         activityRecordList  = new ArrayList<>();
         activityRecord = new ActivityRecord();
+
+        dateList = new ArrayList<>();
+        dateList.add(new Date());
+        dateList.add(new Date(System.currentTimeMillis() - 86400000));
+        dateList.add(new Date(System.currentTimeMillis() + 86400000));
     }
 
 
@@ -171,4 +176,26 @@ public class ActivityRecordServiceImplTest {
         assertDoesNotThrow(() -> activityRecordRepository.findById(1));
 
     }
+
+    @Test
+    void getAllActivityRecords_Success() {
+
+        //Given
+        when(activityRecordRepository.findDistinctWeek(1)).thenReturn(dateList);
+        when(activityRecordRepository.findByWeekStart(dateList.get(0), 1)).thenReturn(activityRecordList);
+
+
+        List<Date> Result_activityWeekList = activityRecordRepository.findDistinctWeek(1);
+        assertNotNull(Result_activityWeekList);
+
+        List<ActivityRecord> Result_activityRecordList = activityRecordRepository.findByWeekStart(dateList.get(0), 1);
+        assertNotNull(Result_activityRecordList);
+
+
+        assertDoesNotThrow(() -> activityRecordRepository.findDistinctWeek(1));
+        assertDoesNotThrow(() -> activityRecordRepository.findByWeekStart(dateList.get(0), 1));
+
+    }
+
+
 }
