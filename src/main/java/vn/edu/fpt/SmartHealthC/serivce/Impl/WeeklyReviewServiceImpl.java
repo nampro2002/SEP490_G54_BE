@@ -345,7 +345,12 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                         return false;
                     }})
                 .findFirst();
-        responseDTO.setDietPoint((int) ((double)responseDTO.getAverageDietRecordPerWeek()/dietRecord.get().getDishPerDay()*100));
+        if(dietRecord.isEmpty()){
+            responseDTO.setDietPoint(0);
+
+        }else{
+            responseDTO.setDietPoint((int) ((double)responseDTO.getAverageDietRecordPerWeek()/dietRecord.get().getDishPerDay()*100));
+        }
 
         int medicinePoint= (int) ((double)responseDTO.getMedicineDateDone()/responseDTO.getMedicineDateTotal()*100);
         responseDTO.setMedicinePoint(responseDTO.getMedicineDateDone()!=0?medicinePoint:0);
@@ -362,17 +367,44 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                         return false;
                     }})
                 .findFirst();
-        int stepPoint= (int) ((double)responseDTO.getAverageStepRecordPerWeek()/stepRecord.get().getPlannedStepPerDay()*100);
-        responseDTO.setStepPoint(responseDTO.getAverageStepRecordPerWeek()!=0?stepPoint:0);
+        if(stepRecord.isEmpty()){
+            responseDTO.setStepPoint(0);
+        }else{
+            int stepPoint= (int) ((double)responseDTO.getAverageStepRecordPerWeek()/stepRecord.get().getPlannedStepPerDay()*100);
+            responseDTO.setStepPoint(responseDTO.getAverageStepRecordPerWeek()!=0?stepPoint:0);
+        }
+
 
         if(responseDTO.getAverageWeightRecordPerWeek() != 0){
-            float bmi = (float) calculateBMI(responseDTO.getAverageWeightRecordPerWeek(),appUser.get().getHeight());
-            // Tính phần trăm BMI (giả sử ideal BMI là 25)
-            double idealBMI = 25;
-            double bmiPercentage = (bmi / idealBMI) * 100;
-            responseDTO.setWeightPoint((int) bmiPercentage);
+            List<WeightRecord> weightRecord = weightRecordRepository.findAll().stream()
+                    .filter(item -> {
+                        String itemDateStr = formatDate.format(item.getWeekStart());
+                        try {
+                            Date itemDate = formatDate.parse(itemDateStr);
+                            return itemDate.equals(weekStartFilter) && item.getAppUserId() == appUser.get();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            return false;
+                        }})
+                    .toList();
+            int countBMI=0;
+            int total=weightRecord.size();
+            if(weightRecord.isEmpty()){
+                responseDTO.setWeightPoint(-1);
+            }else{
+
+                for (WeightRecord record : weightRecord) {
+                    float bmi = (float) calculateBMI(record.getWeight(),appUser.get().getHeight());
+                    countBMI += checkBMI(bmi) == true ? 1 : 0;
+                }
+            }
+            if(countBMI==0){
+                responseDTO.setWeightPoint(0);
+            }else{
+                responseDTO.setWeightPoint((int) ((double)countBMI/total*100));
+            }
         }else{
-            responseDTO.setWeightPoint(0);
+            responseDTO.setWeightPoint(-1);
         }
 
         return responseDTO;
@@ -381,6 +413,10 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     public static double calculateBMI(double weight, double height) {
         double heightM = height / 100.0;
         return weight / (heightM * heightM);
+    }
+    // Phương thức tính BMI
+    public static Boolean checkBMI(double bmi) {
+        return (bmi >= 15 && bmi <= 25);
     }
 
     @Override
