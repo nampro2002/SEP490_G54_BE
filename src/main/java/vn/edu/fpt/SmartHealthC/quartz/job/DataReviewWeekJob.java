@@ -9,15 +9,16 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.TopicNotificationRequest;
+import vn.edu.fpt.SmartHealthC.domain.entity.WeekReview;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.quartz.quartzService.TriggerExecutionService;
 import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 import vn.edu.fpt.SmartHealthC.serivce.WeeklyReviewService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Component
@@ -27,6 +28,8 @@ public class DataReviewWeekJob implements Job {
     private WeeklyReviewService weeklyReviewService;
     @Autowired
     private SimpleDateFormat simpleDateFormat;
+    @Autowired
+    private SimpleDateFormat formatDate;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -59,4 +62,5 @@ public class DataReviewWeekJob implements Job {
         calendar.add(Calendar.DAY_OF_MONTH, diff);
         return calendar.getTime();
     }
+
 }

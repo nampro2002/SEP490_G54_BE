@@ -595,45 +595,43 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                         }
                     })
                     .findFirst();
-            if (weekReviewExist.isPresent()) {
-                throw new AppException(ErrorCode.WEEK_REVIEW_EXIST);
+            if (!weekReviewExist.isPresent()) {
+                weekReview.setAppUserId(appUser);
+                weekReview.setWeekStart(weekStartFilter);
+                //Average cardinal per week
+                CardinalPerWeekResponseDTO cardinalPerWeekResponseDTO = getAverageCardinalPerWeek(appUser, weekStartFilter);
+                weekReview.setHba1cTotalRecord(cardinalPerWeekResponseDTO.getHba1cTotalRecord());
+                weekReview.setHba1cSafeRecord(cardinalPerWeekResponseDTO.getHba1cSafeRecord());
+                weekReview.setCholesterolTotalRecord(cardinalPerWeekResponseDTO.getCholesterolTotalRecord());
+                weekReview.setCholesterolSafeRecord(cardinalPerWeekResponseDTO.getCholesterolSafeRecord());
+                weekReview.setBloodSugarTotalRecord(cardinalPerWeekResponseDTO.getBloodSugarTotalRecord());
+                weekReview.setBloodSugarSafeRecord(cardinalPerWeekResponseDTO.getBloodSugarSafeRecord());
+
+                //Average bloodPressure per week
+                BloodPressurePerWeekResponseDTO bloodPressurePerWeekResponseDTO = getAverageBloodPressurePerWeek(appUser, weekStartFilter);
+                weekReview.setTotalBloodPressureRecord(bloodPressurePerWeekResponseDTO.getTotalRecord());
+                weekReview.setSafeBloodPressureRecord(bloodPressurePerWeekResponseDTO.getSafeRecord());
+                //Average Weight per week
+                weekReview.setAverageWeightRecordPerWeek(getAverageWeightPerWeek(appUser, weekStartFilter));
+                //Average Mental per week
+                weekReview.setAverageMentalRecordPerWeek(getMentalPerWeek(appUser, weekStartFilter));
+                //Review Activity per week
+                ActivityPerWeekResponseDTO activityPerWeekResponseDTO = getActivityPerWeek(appUser, weekStartFilter);
+                weekReview.setHeavyActivity(activityPerWeekResponseDTO.getHeavyActivity());
+                weekReview.setMediumActivity(activityPerWeekResponseDTO.getMediumActivity());
+                weekReview.setLightActivity(activityPerWeekResponseDTO.getLightActivity());
+                //Average diet per week
+                weekReview.setAverageDietRecordPerWeek(getAverageDietPerWeek(appUser, weekStartFilter));
+                //get Done and Total medicine per week
+                MedicinePerWeekResponseDTO medicinePerWeekResponseDTO = getMedicinePerWeek(appUser, weekStartFilter);
+                weekReview.setMedicineRecordDone(medicinePerWeekResponseDTO.getMedicineRecordDone());
+                weekReview.setMedicineRecordTotal(medicinePerWeekResponseDTO.getMedicineRecordTotal());
+                //Average step per week
+                weekReview.setAverageStepRecordPerWeek(getAverageStepPerWeek(appUser, weekStartFilter));
+                //Total point per week
+                weekReview.setTotalPoint((int) calculateTotalPointOfWeek(appUser, weekStartFilter));
+                weekReviewRepository.save(weekReview);
             }
-
-            weekReview.setAppUserId(appUser);
-            weekReview.setWeekStart(weekStartFilter);
-            //Average cardinal per week
-            CardinalPerWeekResponseDTO cardinalPerWeekResponseDTO = getAverageCardinalPerWeek(appUser, weekStartFilter);
-            weekReview.setHba1cTotalRecord(cardinalPerWeekResponseDTO.getHba1cTotalRecord());
-            weekReview.setHba1cSafeRecord(cardinalPerWeekResponseDTO.getHba1cSafeRecord());
-            weekReview.setCholesterolTotalRecord(cardinalPerWeekResponseDTO.getCholesterolTotalRecord());
-            weekReview.setCholesterolSafeRecord(cardinalPerWeekResponseDTO.getCholesterolSafeRecord());
-            weekReview.setBloodSugarTotalRecord(cardinalPerWeekResponseDTO.getBloodSugarTotalRecord());
-            weekReview.setBloodSugarSafeRecord(cardinalPerWeekResponseDTO.getBloodSugarSafeRecord());
-
-            //Average bloodPressure per week
-            BloodPressurePerWeekResponseDTO bloodPressurePerWeekResponseDTO = getAverageBloodPressurePerWeek(appUser, weekStartFilter);
-            weekReview.setTotalBloodPressureRecord(bloodPressurePerWeekResponseDTO.getTotalRecord());
-            weekReview.setSafeBloodPressureRecord(bloodPressurePerWeekResponseDTO.getSafeRecord());
-            //Average Weight per week
-            weekReview.setAverageWeightRecordPerWeek(getAverageWeightPerWeek(appUser, weekStartFilter));
-            //Average Mental per week
-            weekReview.setAverageMentalRecordPerWeek(getMentalPerWeek(appUser, weekStartFilter));
-            //Review Activity per week
-            ActivityPerWeekResponseDTO activityPerWeekResponseDTO = getActivityPerWeek(appUser, weekStartFilter);
-            weekReview.setHeavyActivity(activityPerWeekResponseDTO.getHeavyActivity());
-            weekReview.setMediumActivity(activityPerWeekResponseDTO.getMediumActivity());
-            weekReview.setLightActivity(activityPerWeekResponseDTO.getLightActivity());
-            //Average diet per week
-            weekReview.setAverageDietRecordPerWeek(getAverageDietPerWeek(appUser, weekStartFilter));
-            //get Done and Total medicine per week
-            MedicinePerWeekResponseDTO medicinePerWeekResponseDTO = getMedicinePerWeek(appUser, weekStartFilter);
-            weekReview.setMedicineRecordDone(medicinePerWeekResponseDTO.getMedicineRecordDone());
-            weekReview.setMedicineRecordTotal(medicinePerWeekResponseDTO.getMedicineRecordTotal());
-            //Average step per week
-            weekReview.setAverageStepRecordPerWeek(getAverageStepPerWeek(appUser, weekStartFilter));
-            //Total point per week
-            weekReview.setTotalPoint((int) calculateTotalPointOfWeek(appUser,weekStartFilter));
-            weekReviewRepository.save(weekReview);
         }
     }
 

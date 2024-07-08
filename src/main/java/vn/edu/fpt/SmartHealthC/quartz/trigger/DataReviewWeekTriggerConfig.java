@@ -15,8 +15,8 @@ public class DataReviewWeekTriggerConfig {
     public Trigger dataWeekReviewTrigger(@Qualifier("dataReviewWeekJobDetail") JobDetail jobDetail) {
         System.out.println("execute 7.45PM sunday trigger jobBoot");
         try {
-            String time = "0/10 * * * * ?";
-//            String time = "0 45 19 ? * SUN";
+//            String time = "0/10 * * * * ?";
+            String time = "0 45 19 ? * SUN";
             return TriggerBuilder.newTrigger().forJob(jobDetail)
                     .withIdentity("dataforweek", "JOB_GROUP")
                     .startNow().withSchedule(CronScheduleBuilder.cronSchedule(time))

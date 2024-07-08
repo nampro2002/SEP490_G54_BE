@@ -26,4 +26,5 @@ public interface WeeklyReviewService {
     List<Date> getMobileListWeekStart() throws ParseException;
 
     WeekCheckPlanResponseDTO checkWeeklyPlanExist(String weekStart) throws ParseException;
+
 }
