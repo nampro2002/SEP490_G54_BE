@@ -21,13 +21,13 @@ import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.ActivityRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MonthlyQuestionRepository;
+
+import javax.swing.text.html.Option;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -137,4 +137,38 @@ public class ActivityRecordServiceImplTest {
 
     }
 
+    @Test
+    void updateActivityRecord_Success() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(activityRecordRepository.findRecordByIdUser(testAppUser.getId())).thenReturn(activityRecordList);
+        when(activityRecordRepository.save(activityRecord)).thenReturn(activityRecord);
+        when(activityRecordRepository.findById(1)).thenReturn(Optional.of(activityRecord));
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail("test@test.com");
+
+        List<ActivityRecord> resultActivityRecords = activityRecordRepository.findRecordByIdUser(testAppUser.getId());
+        assertNotNull(resultActivityRecords);
+
+        Optional<ActivityRecord> activityRecordOption = activityRecordRepository.findById(1);
+        assertNotNull(activityRecordOption);
+
+        activityRecord.setDate(activityRecordOption.get().getWeekStart());
+        ActivityRecord resultActivityRecord = activityRecordRepository.save(activityRecord);
+
+        assertNotNull(resultAppUser.get());
+        assertNotNull(resultActivityRecord);
+        assertNotNull(resultAppUser.get());
+
+
+        org.assertj.core.api.Assertions.assertThat(resultActivityRecords.size()).isGreaterThanOrEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(activityRecord).isEqualTo(resultActivityRecord);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail("test@test.com"));
+        assertDoesNotThrow(() -> activityRecordRepository.findRecordByIdUser(testAppUser.getId()));
+        assertDoesNotThrow(() -> activityRecordRepository.save(activityRecord));
+        assertDoesNotThrow(() -> activityRecordRepository.findById(1));
+
+    }
 }
