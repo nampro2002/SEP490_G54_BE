@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNotification;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NotificationSettingRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.NotificationStatusRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.AllDevicesNotificationRequest;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.DeviceNotificationRequest;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.NotificationSubscriptionRequest;
@@ -138,6 +139,7 @@ public class NotificationServiceImpl implements NotificationService {
         return ApnsConfig.builder()
                 .setAps(Aps.builder().setCategory(topic).setThreadId(topic).build()).build();
     }
+
     //call api
     public void updateStatusNotification(String email, String deviceToken) {
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
@@ -178,22 +180,12 @@ public class NotificationServiceImpl implements NotificationService {
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
-        //check if request.getTypeNotificationList() contains TypeNotification.ALL
-        if(request.getTypeNotificationList().contains(TypeNotification.ALL)){
-            List<NotificationSetting> notificationSettingList = notificationSettingRepository.findByAccountId(appUser.get().getAccountId().getId());
-            for (NotificationSetting notificationSetting : notificationSettingList) {
-                notificationSetting.setStatus(request.isStatus());
-                notificationSettingRepository.save(notificationSetting);
-            }
-            updateStatusNotification(email, request.getDeviceToken());
-        }else{
-            for (TypeNotification typeNotification : request.getTypeNotificationList()) {
-                NotificationSetting notificationSetting = findByAccountIdAndType(appUser.get().getAccountId().getId(), typeNotification);
-                notificationSetting.setStatus(request.isStatus());
-                notificationSettingRepository.save(notificationSetting);
-            }
-            updateStatusNotification(email, request.getDeviceToken());
+        for (NotificationStatusRequestDTO notificationStatus : request.getNotificationStatusList()) {
+            NotificationSetting notificationSetting = findByAccountIdAndType(appUser.get().getAccountId().getId(), notificationStatus.getTypeNotification());
+            notificationSetting.setStatus(notificationStatus.isStatus());
+            notificationSettingRepository.save(notificationSetting);
         }
+        updateStatusNotification(email, request.getDeviceToken());
     }
 
     private void changeStatusDeviceToTopic(NotificationSetting notificationSetting, NotificationSubscriptionRequest notificationSubscriptionRequest) {
