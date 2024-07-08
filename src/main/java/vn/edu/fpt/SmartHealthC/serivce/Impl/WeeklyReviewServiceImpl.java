@@ -93,27 +93,19 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
-        //trả về ngày sớm nhất của user
-        Date smallestWeekStart = findSmallestWeekStart(appUser.get());
+
         List<Date> weekStartList = new ArrayList<>();
-
-        weekStartList.add(smallestWeekStart);
-
-        //Lấy ra ngày hiện tại và gán ngày sớm nhất cho datePlus7
-        Date today = new Date();
-        Date datePlus7 = smallestWeekStart;
-
-        //Vòng lặp cho đến ngày hiện tại
-        boolean loopStatus = true;
-        for (; loopStatus; ) {
-            datePlus7 = calculateDate(datePlus7, 7);
-            // Kiểm tra xem datePlus7 nhỏ hơn ngày hôm nay
-            if (datePlus7.before(today)) {
-                weekStartList.add(datePlus7);
-            } else { // dateplus mà quá lớn hơn hiên tại thì dừng
-                loopStatus = false;
-            }
+        List<WeekReview> weekReviews = weekReviewRepository.findByAppUserId(appUser.get().getId());
+        for (WeekReview weekReview : weekReviews) {
+                weekStartList.add(weekReview.getWeekStart());
         }
+        // Sắp xếp danh sách theo thứ tự giảm dần
+        Collections.sort(weekStartList, new Comparator<Date>() {
+            @Override
+            public int compare(Date d1, Date d2) {
+                return d2.compareTo(d1);
+            }
+        });
         return weekStartList;
     }
 
@@ -125,27 +117,18 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
-        //trả về ngày sớm nhất của user
-        Date smallestWeekStart = findSmallestWeekStart(appUser.get());
         List<Date> weekStartList = new ArrayList<>();
-
-        weekStartList.add(smallestWeekStart);
-
-        //Lấy ra ngày hiện tại và gán ngày sớm nhất cho datePlus7
-        Date today = new Date();
-        Date datePlus7 = smallestWeekStart;
-
-        //Vòng lặp cho đến ngày hiện tại
-        boolean loopStatus = true;
-        for (; loopStatus; ) {
-            datePlus7 = calculateDate(datePlus7, 7);
-            // Kiểm tra xem datePlus7 nhỏ hơn ngày hôm nay
-            if (datePlus7.before(today) || datePlus7.equals(today)) {
-                weekStartList.add(datePlus7);
-            } else { // dateplus mà quá lớn hơn hiên tại thì dừng
-                loopStatus = false;
-            }
+        List<WeekReview> weekReviews = weekReviewRepository.findByAppUserId(appUser.get().getId());
+        for (WeekReview weekReview : weekReviews) {
+            weekStartList.add(weekReview.getWeekStart());
         }
+        // Sắp xếp danh sách theo thứ tự giảm dần
+        Collections.sort(weekStartList, new Comparator<Date>() {
+            @Override
+            public int compare(Date d1, Date d2) {
+                return d2.compareTo(d1);
+            }
+        });
         return weekStartList;
     }
 
