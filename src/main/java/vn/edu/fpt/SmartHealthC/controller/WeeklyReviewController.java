@@ -73,10 +73,9 @@ public class WeeklyReviewController {
                         .build()).getBody();
     }
     @GetMapping("/mobile/check/week-plan/{weekStart}")
-    public ApiResponse<WeekCheckPlanResponseDTO> returnMobileChartReview(
+    public ApiResponse<WeekCheckPlanResponseDTO> checkWeeklyPlanExist(
             @PathVariable String weekStart
     ) throws ParseException {
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<WeekCheckPlanResponseDTO>builder()
                         .code(HttpStatus.OK.value())

@@ -309,19 +309,19 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
 
 
         int hba1cPoint= (int) ((double)weekReviewExist.get().getHba1cSafeRecord()/weekReviewExist.get().getHba1cTotalRecord()*100);
-        responseDTO.setHba1cPoint(responseDTO.getHba1cTotalRecord()!=0?hba1cPoint:0);
+        responseDTO.setHba1cPoint(responseDTO.getHba1cTotalRecord()!=0?hba1cPoint:-1);
 
         int cholesterolPoint= (int) ((double)weekReviewExist.get().getCholesterolSafeRecord()/weekReviewExist.get().getCholesterolTotalRecord()*100);
-        responseDTO.setCholesterolPoint(responseDTO.getCholesterolTotalRecord()!=0?cholesterolPoint:0);
+        responseDTO.setCholesterolPoint(responseDTO.getCholesterolTotalRecord()!=0?cholesterolPoint:-1);
 
         int bloodSugarPoint= (int) ((double)weekReviewExist.get().getBloodSugarSafeRecord()/weekReviewExist.get().getBloodSugarTotalRecord()*100);
-        responseDTO.setBloodSugarPoint(responseDTO.getBloodSugarTotalRecord()!=0?bloodSugarPoint:0);
+        responseDTO.setBloodSugarPoint(responseDTO.getBloodSugarTotalRecord()!=0?bloodSugarPoint:-1);
 
         int bloodPressurePoint= (int) ((double)weekReviewExist.get().getSafeBloodPressureRecord()/weekReviewExist.get().getTotalBloodPressureRecord()*100);
-        responseDTO.setBloodPressurePoint(responseDTO.getTotalBloodPressureRecord()!=0?bloodPressurePoint:0);
+        responseDTO.setBloodPressurePoint(responseDTO.getTotalBloodPressureRecord()!=0?bloodPressurePoint:-1);
 
         responseDTO.setMentalPoint(responseDTO.getAverageMentalRecordPerWeek()!=0?
-                (int) ((double)responseDTO.getAverageMentalRecordPerWeek()/3*100):0);
+                (int) ((double)responseDTO.getAverageMentalRecordPerWeek()/3*100):-1);
 
         ActivityPerWeekResponseDTO activityPerWeekResponseDTO =getActivityPerWeek(appUser.get(), weekStartFilter);
         int activityActualPoint =
@@ -332,7 +332,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 (activityPerWeekResponseDTO.getHeavyPlanActivity()*2)+
                 (activityPerWeekResponseDTO.getMediumPlanActivity()*1)+
                 (activityPerWeekResponseDTO.getLightPLanActivity()*0);
-        responseDTO.setActivityPoint(activityActualPoint !=0? (int) ((double)activityActualPoint/activityPlanPoint*100):0);
+        responseDTO.setActivityPoint(activityActualPoint !=0? (int) ((double)activityActualPoint/activityPlanPoint*100):-1);
 
         Optional<DietRecord> dietRecord = dietRecordRepository.findAll().stream()
                 .filter(item -> {
@@ -346,14 +346,14 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                     }})
                 .findFirst();
         if(dietRecord.isEmpty()){
-            responseDTO.setDietPoint(0);
+            responseDTO.setDietPoint(-1);
 
         }else{
             responseDTO.setDietPoint((int) ((double)responseDTO.getAverageDietRecordPerWeek()/dietRecord.get().getDishPerDay()*100));
         }
 
         int medicinePoint= (int) ((double)responseDTO.getMedicineDateDone()/responseDTO.getMedicineDateTotal()*100);
-        responseDTO.setMedicinePoint(responseDTO.getMedicineDateDone()!=0?medicinePoint:0);
+        responseDTO.setMedicinePoint(responseDTO.getMedicineDateDone()!=0?medicinePoint:-1);
 
 
         Optional<StepRecord> stepRecord = stepRecordRepository.findAll().stream()
@@ -368,7 +368,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                     }})
                 .findFirst();
         if(stepRecord.isEmpty()){
-            responseDTO.setStepPoint(0);
+            responseDTO.setStepPoint(-1);
         }else{
             int stepPoint= (int) ((double)responseDTO.getAverageStepRecordPerWeek()/stepRecord.get().getPlannedStepPerDay()*100);
             responseDTO.setStepPoint(responseDTO.getAverageStepRecordPerWeek()!=0?stepPoint:0);
