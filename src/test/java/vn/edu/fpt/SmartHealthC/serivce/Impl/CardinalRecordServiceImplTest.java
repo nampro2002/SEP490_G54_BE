@@ -47,7 +47,7 @@ public class CardinalRecordServiceImplTest {
 
     private List<CardinalRecord> cardinalRecords;
     private CardinalRecord cardinalRecord ;
-
+    private List<Date> cardinalWeekList;
     @Mock
     private SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -59,7 +59,7 @@ public class CardinalRecordServiceImplTest {
         testAppUser = new AppUser();
         testAppUser.setId(1);
         testAppUser.setName("Test User");
-
+        cardinalWeekList = new ArrayList<>();
         cardinalRecords  = new ArrayList<>();
         cardinalRecord = new CardinalRecord();
 
@@ -136,7 +136,38 @@ public class CardinalRecordServiceImplTest {
         boolean dateExists = false;
 
         org.assertj.core.api.Assertions.assertThat(expect).isEqualTo(ErrorCode.CARDINAL_TYPE_DAY_EXIST);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail("Test@gmail.com"));
+        assertDoesNotThrow(() -> cardinalRecordRepository.findByAppUserId(any()));
     }
+
+    @Test
+    void getAllCardinalRecords_Sucess() {
+
+        //Given
+        when(cardinalRecordRepository.findDistinctWeek(any())).thenReturn(cardinalWeekList);
+
+        when( cardinalRecordRepository.findByWeekStart(any(),any())).thenReturn(cardinalRecords);
+
+
+        List<Date> resultCardinalWeekList = cardinalRecordRepository.findDistinctWeek(any());
+        List<CardinalRecord> resultCardinalRecords =cardinalRecordRepository.findByWeekStart(any(),any());
+
+        assertNotNull(resultCardinalWeekList);
+        assertNotNull(resultCardinalRecords);
+        org.assertj.core.api.Assertions.assertThat(resultCardinalWeekList.size()).isGreaterThanOrEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(resultCardinalRecords.size()).isGreaterThanOrEqualTo(0);
+
+        assertDoesNotThrow(() -> cardinalRecordRepository.findDistinctWeek(any()));
+        assertDoesNotThrow(() -> cardinalRecordRepository.findByWeekStart(any(),any()));
+
+
+
+    }
+
+
+
+
 
 
 }
