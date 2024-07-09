@@ -326,10 +326,7 @@ public class StepRecordServiceImpl implements StepRecordService {
 
     @Override
     public void updateStepRecordNEW(StepRecordUpdateContinuousDTO stepRecordDTO) throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        Optional<AppUser> appUser = appUserRepository.findById(stepRecordDTO.getUserId());
+        Optional<AppUser> appUser = appUserRepository.findByIdActivated(stepRecordDTO.getUserId());
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
