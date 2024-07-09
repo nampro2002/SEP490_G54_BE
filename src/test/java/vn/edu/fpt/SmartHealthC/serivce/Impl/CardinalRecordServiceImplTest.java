@@ -181,6 +181,26 @@ public class CardinalRecordServiceImplTest {
 
     }
 
+    @Test
+    void getDataChart_appUserID_Notfound() {
+        //Act
+        CardinalRecordDTO activityRecord = new CardinalRecordDTO();
+
+        Authentication mockAuthentication = Mockito.mock(Authentication.class);
+        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(mockSecurityContext);
+        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+        when(mockAuthentication.getName()).thenReturn(any());
+        // Mock empty user retrieval (Optional.empty())
+        when(appUserRepository.findByAccountEmail("123@gmail.com")).thenReturn(Optional.empty());
+
+        // Assert the expected exception with specific error code
+        AppException exception = assertThrows(AppException.class, () -> cardinalRecordService.getDataChart());
+
+        assertEquals(ErrorCode.APP_USER_NOT_FOUND, exception.getErrorCode());
+
+    }
+
 
 
 
