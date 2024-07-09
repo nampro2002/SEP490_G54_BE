@@ -6,13 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNotification;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NotificationSettingRequestDTO {
-    private String deviceToken;
-    private List<NotificationStatusRequestDTO> notificationStatusList;
+public class NotificationStatusRequestDTO {
+    private TypeNotification typeNotification;
+    private boolean status;
 }

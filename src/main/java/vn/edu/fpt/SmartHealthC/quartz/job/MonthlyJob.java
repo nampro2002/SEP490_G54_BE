@@ -51,33 +51,31 @@ public class MonthlyJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         System.out.println("Executing Monthly Job at: " + new Date());
-//        List<UserWeekStart> userWeekStarts = appUserService.getListAppUser().stream().map(user -> {
-//            return UserWeekStart.builder()
-//                    .userId(user.getId())
-//                    .weekStart(weeklyReviewService.findSmallestWeekStart(user))
-//                    .build();
-//        }).toList();
+        List<UserWeekStart> userWeekStarts = appUserService.getListAppUser().stream().map(user -> {
+            return UserWeekStart.builder()
+                    .appUser(user)
+                    .weekStart(weeklyReviewService.findSmallestWeekStartForJob(user))
+                    .build();
+        }).toList();
 //        Optional<AppUser> appUser = appUserService.findAppUserEntityById(1);
-        AppUser appUser = triggerExecutionService.findAppUserById(1);
-        UserWeekStart userWeekStart = UserWeekStart.builder()
-                .userId(appUser.getId())
-                .weekStart(weeklyReviewService.findSmallestWeekStart(appUser))
-                .build();
-//        for (UserWeekStart userWeekStart : userWeekStarts) {
-        //Check if (date now + 1 -  userWeekStart.getWeekStart() ) % 7==0 & %4==1
+//        AppUser appUser = triggerExecutionService.findAppUserById(1);
+//        UserWeekStart userWeekStart = UserWeekStart.builder()
+//                .userId(appUser.getId())
+//                .weekStart(weeklyReviewService.findSmallestWeekStart(appUser))
+//                .build();
+        for (UserWeekStart userWeekStart : userWeekStarts) {
         Instant instant = userWeekStart.getWeekStart().toInstant();
-
         // Convert Instant to LocalDateTime considering system default zone
         LocalDate localDateTime = LocalDate.ofInstant(instant, ZoneId.systemDefault());
         LocalDate currentDate = LocalDate.now();
 //        LocalDate currentDate = LocalDate.of(2024, 6, 8);
         long daysBetween = ChronoUnit.DAYS.between(localDateTime, currentDate);
         System.out.println("Days between Monthly : " + daysBetween);
-        if(daysBetween % 7 == 0 && daysBetween % 4 == 1){
-            NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(appUser.getAccountId().getId(), TypeNotification.MONTHLY_REPORT_NOTIFICATION);
-            System.out.println("Send notification to user: " + appUser.getId());
+        if(daysBetween % 7 == 6 && daysBetween % 4 == 2){
+            NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(userWeekStart.getAppUser().getAccountId().getId(), TypeNotification.MONTHLY_REPORT_NOTIFICATION);
+            System.out.println("Send notification to user: " + userWeekStart.getAppUser().getId());
             if(notificationSetting.isStatus()){
-                List<RefreshToken> refreshToken = refreshTokenRepository.findRecordByAccountId(appUser.getAccountId().getId());
+                List<RefreshToken> refreshToken = refreshTokenRepository.findRecordByAccountId(userWeekStart.getAppUser().getAccountId().getId());
                 for (RefreshToken token : refreshToken){
                     HashMap<String, String> data = new HashMap<>();
                     data.put("key1", "value1");
@@ -100,6 +98,6 @@ public class MonthlyJob implements Job {
                 }
             }
         }
-//        }
+        }
     }
 }

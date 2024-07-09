@@ -19,6 +19,8 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.StepRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -184,61 +186,24 @@ public class StepRecordServiceImpl implements StepRecordService {
 
     @Override
     public StepResponseChartDTO getDataChart() throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-
-        Date today = new Date();
-        String dateStr = formatDate.format(today);
-        Date date = formatDate.parse(dateStr);
-
-
-        List<StepRecord> stepRecordList = stepRecordRepository.findByAppUserId(appUser.get().getId());
-        //Sắp xếp giảm dần theo date
-        stepRecordList.sort(new Comparator<StepRecord>() {
-            @Override
-            public int compare(StepRecord recordDateSmaller, StepRecord recordDateBigger) {
-                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
-            }
-        });
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Date date = DateUtils.getToday(formatDate);
+        List<StepRecord> stepRecordList = stepRecordRepository.find5RecordByIdUser(appUser.getId());
 
         StepResponseChartDTO stepResponseChartDTO = new StepResponseChartDTO();
         List<StepResponse> stepResponseList = new ArrayList<>();
-        int count = 5;
         for (StepRecord stepRecord : stepRecordList) {
-            String smallerDateStr = formatDate.format(stepRecord.getDate());
-            Date smallerDate = formatDate.parse(smallerDateStr);
-
-            if (stepRecord.getActualValue() != 0) {
-                if (smallerDate.before(date)) {
-
-                    double valuePercent = ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100;
+                    double valuePercent = stepRecord.getPlannedStepPerDay() != 0 ? ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100: 100;
                     StepResponse stepResponse = new StepResponse();
                     stepResponse.setValuePercent((int) valuePercent);
                     stepResponse.setDate(stepRecord.getDate());
                     stepResponseList.add(stepResponse);
-                    count--;
-
-                }
-                if (smallerDate.equals(date)) {
-                    double valuePercent = ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100;
-                    StepResponse stepResponse = new StepResponse();
-                    stepResponse.setValuePercent((int) valuePercent);
-                    stepResponse.setDate(stepRecord.getDate());
-                    stepResponseList.add(stepResponse);
-                    Integer value = (int) Math.round(stepRecord.getActualValue());
-                    stepResponseChartDTO.setValueToday(value);
-                    count--;
-                }
-            }
-
-            today = calculateDate(today, 1);
-            if (count < 1) {
-                break;
-            }
+        }
+        String todayStr = formatDate.format(stepResponseList.get(0).getDate());
+        Date todayDate = formatDate.parse(todayStr);
+        if(date.equals(todayDate)){
+            Integer value = (int) Math.round(stepRecordList.get(0).getActualValue());
+            stepResponseChartDTO.setValueToday(value);
         }
         //Sắp xếp giảm dần theo date
         stepResponseList.sort(new Comparator<StepResponse>() {
@@ -247,8 +212,6 @@ public class StepRecordServiceImpl implements StepRecordService {
                 return recordDateSmaller.getDate().compareTo(recordDateBigger.getDate());
             }
         });
-
-
         stepResponseChartDTO.setStepResponseList(stepResponseList);
         return stepResponseChartDTO;
     }
@@ -326,10 +289,7 @@ public class StepRecordServiceImpl implements StepRecordService {
 
     @Override
     public void updateStepRecordNEW(StepRecordUpdateContinuousDTO stepRecordDTO) throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        Optional<AppUser> appUser = appUserRepository.findById(stepRecordDTO.getUserId());
+        Optional<AppUser> appUser = appUserRepository.findByIdActivated(stepRecordDTO.getUserId());
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }

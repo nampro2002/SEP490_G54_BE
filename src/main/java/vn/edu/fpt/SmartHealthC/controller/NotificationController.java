@@ -8,13 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NotificationSettingRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.NotificationStatusRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.AllDevicesNotificationRequest;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.DeviceNotificationRequest;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.NotificationSubscriptionRequest;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.TopicNotificationRequest;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.NotificationSettingResponseDTO;
-import vn.edu.fpt.SmartHealthC.serivce.Impl.NotificationServiceImpl;
 import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 
 import java.util.List;
@@ -141,7 +141,7 @@ public class NotificationController {
         }
     }
     @PreAuthorize("hasAuthority('USER')")
-    @PutMapping("mobile/get-all")
+    @GetMapping("mobile/get-all")
     public ApiResponse<?> getNotificationStatusUser() {
         try {
 

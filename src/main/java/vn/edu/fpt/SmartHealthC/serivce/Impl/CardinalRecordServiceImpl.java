@@ -18,6 +18,7 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.CardinalRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -182,17 +183,12 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
 
     @Override
     public CardinalChartResponseDTO getDataChart() throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
-        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByAppUserId(appUser.get().getId());
+        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByAppUserId(appUser.getId());
         cardinalRecordList.sort((recordDateSmaller, recordDateBigger) -> recordDateBigger.getDate().compareTo(recordDateSmaller.getDate()));
         // Lấy 5 bản ghi có ngày gần với ngày hiện tại nhất
         // Tạo một Set để theo dõi các ngày đã được thêm

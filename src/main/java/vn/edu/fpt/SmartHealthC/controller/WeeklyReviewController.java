@@ -27,7 +27,7 @@ public class WeeklyReviewController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<WeekReview>builder()
                         .code(HttpStatus.OK.value())
-                        .result(weeklyReviewService.getWeek(appUserId))
+                        .result(weeklyReviewService.getDataOfNearestWeek(appUserId))
                         .build()).getBody();
     }
     @GetMapping("/web/week-starts/{appUserId}")

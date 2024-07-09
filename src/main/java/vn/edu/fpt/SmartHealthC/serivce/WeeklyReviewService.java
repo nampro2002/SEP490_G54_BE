@@ -11,12 +11,13 @@ import java.util.Date;
 import java.util.List;
 
 public interface WeeklyReviewService {
-    WeekReview getWeek(Integer id) throws ParseException;
+    WeekReview getDataOfNearestWeek(Integer id) throws ParseException;
 
     List<Date> getListWeekStart(Integer id) throws ParseException;
 
 //    WeeklyReviewResponseDTO getDataReviewForWeek(Integer id,String weekstart) throws ParseException;
     Date findSmallestWeekStart(AppUser appUser);
+    Date findSmallestWeekStartForJob(AppUser appUser);
     WeekReview getWebDataReviewForWeek(String weekstart) throws ParseException;
     WeeklyReviewResponseDTO getMobileDataReviewForWeek(String weekstart) throws ParseException;
     void saveDataReviewForWeek(String weekStart) throws ParseException;

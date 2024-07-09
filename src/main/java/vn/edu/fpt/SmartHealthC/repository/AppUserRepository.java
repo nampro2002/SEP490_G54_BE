@@ -28,7 +28,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
     Optional<AppUser> findByAccountEmail(String email);
     @Query("SELECT u FROM AppUser u WHERE u.accountId = ?1")
     Optional<AppUser> findByAccount(Account account);
-    @Query("SELECT u FROM AppUser u WHERE u.id = ?1 AND u.accountId.isActive = true")
+    @Query("SELECT u FROM AppUser u WHERE u.id = ?1 AND u.accountId.isActive = true AND u.accountId.isDeleted = false")
     Optional<AppUser> findByIdActivated(Integer appUserId);
     //deleted = false
     @Query("SELECT u FROM AppUser u WHERE u.accountId.isActive = true AND u.accountId.isDeleted = false")

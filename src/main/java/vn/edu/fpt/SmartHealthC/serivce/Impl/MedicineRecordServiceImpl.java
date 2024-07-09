@@ -21,6 +21,8 @@ import vn.edu.fpt.SmartHealthC.repository.MedicineRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicineTypeRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineRecordService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -319,19 +321,11 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
 
     @Override
     public MedicineResponseChartDTO getDataChart() throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-
-        Date today = new Date();
-        String dateStr= formatDate.format(today);
-        Date date = formatDate.parse(dateStr);
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Date date = DateUtils.getToday(formatDate);
 
 
-        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.get().getId());
+        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.getId());
         //Sắp xếp giảm dần theo date
         medicineRecordList.sort(new Comparator<MedicineRecord>() {
             @Override
