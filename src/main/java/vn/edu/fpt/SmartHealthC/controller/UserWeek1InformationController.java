@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserWeek1Information.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 import vn.edu.fpt.SmartHealthC.serivce.UserWeek1InformationService;
 
 import java.text.ParseException;
@@ -17,6 +18,15 @@ public class UserWeek1InformationController {
 
     @Autowired
     private UserWeek1InformationService userWeek1InformationService;
+
+    @GetMapping("/unlocked-lessons")
+    public  ApiResponse<Integer> getUnlockedLessons() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Integer>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(userWeek1InformationService.getUnlockedLessons())
+                        .build()).getBody();
+    }
 
     @GetMapping("/lesson1")
     public ApiResponse<Lesson1DTO> getLesson1() throws ParseException {

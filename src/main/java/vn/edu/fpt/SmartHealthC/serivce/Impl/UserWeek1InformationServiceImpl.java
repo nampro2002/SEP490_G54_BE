@@ -309,4 +309,21 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
 
         userWeek1InformationRepository.save(userWeek1Information);
     }
+
+    @Override
+    public Integer getUnlockedLessons() throws ParseException {
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+
+        Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
+        if(userLesson.isEmpty()){
+            return 1;
+        }
+        Date lastDate = userLesson.get().getLessonDate();
+        Date today = DateUtils.getToday(simpleDateFormat);
+        if(today.after(lastDate)){
+            return userLesson.get().getLesson() < 7 ?userLesson.get().getLesson() +1:
+                    userLesson.get().getLesson();
+        }
+        return Math.min(userLesson.get().getLesson(), 7);
+    }
 }
