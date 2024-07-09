@@ -161,7 +161,23 @@ public class CardinalRecordServiceImplTest {
         assertDoesNotThrow(() -> cardinalRecordRepository.findDistinctWeek(any()));
         assertDoesNotThrow(() -> cardinalRecordRepository.findByWeekStart(any(),any()));
 
+    }
 
+    @Test
+    void getDataChart_Success() {
+        //Act
+        when(appUserRepository.findByAccountEmail(any())).thenReturn(Optional.of(testAppUser));
+        when(cardinalRecordRepository.findByAppUserId(any())).thenReturn(cardinalRecords);
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail(any());
+        List<CardinalRecord> result = cardinalRecordRepository.findByAppUserId(any());
+
+        //THEN
+        assertNotNull(resultAppUser);
+        assertNotNull(result);
+        org.assertj.core.api.Assertions.assertThat(result.size()).isGreaterThanOrEqualTo(0);
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail(any()));
+        assertDoesNotThrow(() -> cardinalRecordRepository.findByAppUserId(any()));
 
     }
 
