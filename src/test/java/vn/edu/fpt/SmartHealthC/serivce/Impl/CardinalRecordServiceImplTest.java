@@ -23,6 +23,7 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.CardinalRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +44,14 @@ public class CardinalRecordServiceImplTest {
 
 
     private AppUser testAppUser;
+
+
+    private List<CardinalRecord> cardinalRecords;
+    private CardinalRecord cardinalRecord ;
+
+//    private List<Date> dateList;
+
+    private CardinalRecordDTO cardinalRecordDTO ;
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -50,6 +59,10 @@ public class CardinalRecordServiceImplTest {
         testAppUser = new AppUser();
         testAppUser.setId(1);
         testAppUser.setName("Test User");
+
+        cardinalRecords  = new ArrayList<>();
+        cardinalRecord = new CardinalRecord();
+
     }
 
     @Test
@@ -70,6 +83,36 @@ public class CardinalRecordServiceImplTest {
         AppException exception = assertThrows(AppException.class, () -> cardinalRecordService.createCardinalRecord(activityRecord));
 
         assertEquals(ErrorCode.APP_USER_NOT_FOUND, exception.getErrorCode());
+
+    }
+
+    @Test
+    void createCardinalRecord_Success() {
+
+        CardinalRecordDTO cardinalRecordDTO = new CardinalRecordDTO();
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(cardinalRecordRepository.findByAppUserId(testAppUser.getId())).thenReturn(cardinalRecords);
+        when(cardinalRecordRepository.save(cardinalRecord)).thenReturn(cardinalRecord);
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail("test@test.com");
+        List<CardinalRecord> resultCardinalRecordList = cardinalRecordRepository.findByAppUserId(testAppUser.getId());
+        boolean dateExists = true;
+        org.assertj.core.api.Assertions.assertThat(dateExists).isTrue();
+
+        CardinalRecord resultCardinalRecord = cardinalRecordRepository.save(cardinalRecord);
+
+        assertNotNull(resultAppUser.get());
+        assertNotNull(resultCardinalRecordList);
+        assertNotNull(resultCardinalRecord);
+
+
+        org.assertj.core.api.Assertions.assertThat(resultCardinalRecordList.size()).isGreaterThanOrEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(cardinalRecord).isEqualTo(resultCardinalRecord);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail("test@test.com"));
+        assertDoesNotThrow(() -> cardinalRecordRepository.findByAppUserId(testAppUser.getId()));
+        assertDoesNotThrow(() -> cardinalRecordRepository.save(cardinalRecord));
 
     }
 
