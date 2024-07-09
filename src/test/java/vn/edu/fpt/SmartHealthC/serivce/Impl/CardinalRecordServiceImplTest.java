@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,13 +26,11 @@ import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class CardinalRecordServiceImplTest {
@@ -49,7 +48,8 @@ public class CardinalRecordServiceImplTest {
     private List<CardinalRecord> cardinalRecords;
     private CardinalRecord cardinalRecord ;
 
-//    private List<Date> dateList;
+    @Mock
+    private SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private CardinalRecordDTO cardinalRecordDTO ;
     @BeforeEach
@@ -75,7 +75,6 @@ public class CardinalRecordServiceImplTest {
         SecurityContextHolder.setContext(mockSecurityContext);
         when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
         when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
-
         // Mock empty user retrieval (Optional.empty())
         when(appUserRepository.findByAccountEmail("Test@gmail.com")).thenReturn(Optional.empty());
 
@@ -114,6 +113,29 @@ public class CardinalRecordServiceImplTest {
         assertDoesNotThrow(() -> cardinalRecordRepository.findByAppUserId(testAppUser.getId()));
         assertDoesNotThrow(() -> cardinalRecordRepository.save(cardinalRecord));
 
+    }
+
+    @Test
+    void createCardinalRecord_CARDINAL_TYPE_DAY_EXIST() {
+
+        CardinalRecordDTO cardinalRecordDTO = new CardinalRecordDTO();
+        cardinalRecordDTO.setDate(new Date());
+
+        //Given Authen
+        Authentication mockAuthentication = Mockito.mock(Authentication.class);
+        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(mockSecurityContext);
+        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+        when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
+        // Mock empty user retrieval (Optional.empty())
+        when(appUserRepository.findByAccountEmail("Test@gmail.com")).thenReturn(Optional.of(testAppUser));
+        when(cardinalRecordRepository.findByAppUserId(any())).thenReturn(Collections.emptyList());
+
+        List<CardinalRecord> cardinalRecordListExits = cardinalRecordRepository.findByAppUserId(testAppUser.getId());
+        ErrorCode expect =   ErrorCode.CARDINAL_TYPE_DAY_EXIST;
+        boolean dateExists = false;
+
+        org.assertj.core.api.Assertions.assertThat(expect).isEqualTo(ErrorCode.CARDINAL_TYPE_DAY_EXIST);
     }
 
 
