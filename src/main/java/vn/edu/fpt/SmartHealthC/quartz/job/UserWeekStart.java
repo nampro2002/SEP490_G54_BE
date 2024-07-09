@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 
 import java.util.Date;
 
@@ -12,6 +13,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class UserWeekStart {
-    private Integer userId;
+    private AppUser appUser;
     private Date weekStart;
 }

@@ -17,6 +17,7 @@ public interface WeeklyReviewService {
 
 //    WeeklyReviewResponseDTO getDataReviewForWeek(Integer id,String weekstart) throws ParseException;
     Date findSmallestWeekStart(AppUser appUser);
+    Date findSmallestWeekStartForJob(AppUser appUser);
     WeekReview getWebDataReviewForWeek(String weekstart) throws ParseException;
     WeeklyReviewResponseDTO getMobileDataReviewForWeek(String weekstart) throws ParseException;
     void saveDataReviewForWeek(String weekStart) throws ParseException;
