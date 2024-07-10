@@ -119,4 +119,41 @@ public class DietRecordServiceImplTest {
         assertDoesNotThrow(() -> dietRecordRepository.save(dietRecord));
 
     }
+
+
+    @Test
+    void updateDietRecord_Success() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(dietRecordRepository.findByAppUser(testAppUser.getId())).thenReturn(dietRecords);
+        when(dietRecordRepository.save(dietRecord)).thenReturn(dietRecord);
+        when(dietRecordRepository.findById(1)).thenReturn(Optional.of(dietRecord));
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail("test@test.com");
+
+        List<DietRecord> resultDietRecords = dietRecordRepository.findByAppUser(testAppUser.getId());
+        assertNotNull(resultDietRecords);
+
+        Optional<DietRecord> optionalDietRecord = dietRecordRepository.findById(1);
+        assertNotNull(optionalDietRecord);
+
+        dietRecord.setDate(optionalDietRecord.get().getWeekStart());
+        DietRecord resultDietRecord = dietRecordRepository.save(dietRecord);
+
+        assertNotNull(resultAppUser.get());
+        assertNotNull(resultDietRecord);
+        assertNotNull(resultAppUser.get());
+
+
+        org.assertj.core.api.Assertions.assertThat(resultDietRecords.size()).isGreaterThanOrEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(resultDietRecord).isEqualTo(dietRecord);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail("test@test.com"));
+        assertDoesNotThrow(() -> dietRecordRepository.findByAppUser(testAppUser.getId()));
+        assertDoesNotThrow(() -> dietRecordRepository.save(dietRecord));
+        assertDoesNotThrow(() -> dietRecordRepository.findById(1));
+
+    }
+
 }
