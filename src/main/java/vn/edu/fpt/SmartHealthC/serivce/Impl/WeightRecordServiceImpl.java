@@ -21,6 +21,8 @@ import vn.edu.fpt.SmartHealthC.repository.StepRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.WeightRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.WeightRecordService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -132,53 +134,25 @@ public class WeightRecordServiceImpl implements WeightRecordService {
 
     @Override
     public WeightResponseChartDTO getDataChart() throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Date date = DateUtils.getToday(formatDate);
+        List<WeightRecord> weightRecordList = weightRecordRepository.find5RecordByIdUser(appUser.getId());
 
-        Date today = new Date();
-        String dateStr= formatDate.format(today);
-        Date date = formatDate.parse(dateStr);
-
-
-        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUser(appUser.get().getId());
-        //Sắp xếp giảm dần theo date
-        weightRecordList.sort(new Comparator<WeightRecord>() {
-            @Override
-            public int compare(WeightRecord recordDateSmaller, WeightRecord recordDateBigger) {
-                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
-            }
-        });
-        int count = 5;
         double sumValue = 0;
         WeightResponseChartDTO weightResponseChartDTO = new WeightResponseChartDTO();
         List<WeightResponse> weightResponseList = new ArrayList<>();
         for (WeightRecord weightRecord : weightRecordList) {
-            String smallerDateStr= formatDate.format(weightRecord.getDate());
-            Date smallerDate = formatDate.parse(smallerDateStr);
+                WeightResponse weightResponse = new WeightResponse().builder()
+                        .date(weightRecord.getDate()).value(weightRecord.getWeight()).build();
+                sumValue+=weightRecord.getWeight();
+                weightResponseList.add(weightResponse);
 
-            if(smallerDate.before(date)){
-                WeightResponse weightResponse = new WeightResponse().builder()
-                        .date(weightRecord.getDate()).value(weightRecord.getWeight()).build();
-                count--;
-                sumValue+=weightRecord.getWeight();
-                weightResponseList.add(weightResponse);
-            }
-            if(smallerDate.equals(date)){
-                WeightResponse weightResponse = new WeightResponse().builder()
-                        .date(weightRecord.getDate()).value(weightRecord.getWeight()).build();
-                count--;
-                sumValue+=weightRecord.getWeight();
-                weightResponseChartDTO.setValueToday(weightRecord.getWeight());
-                weightResponseList.add(weightResponse);
-            }
-            today = calculateDate(today,1);
-            if(count < 1){
-                break;
-            }
+        }
+        String todayStr = formatDate.format(weightRecordList.get(0).getDate());
+        Date todayDate = formatDate.parse(todayStr);
+        if(date.equals(todayDate)){
+            Integer value = (int) Math.round(weightRecordList.get(0).getWeight());
+            weightResponseChartDTO.setValueToday(weightRecordList.get(0).getWeight());
         }
         //sắp xếp tăng dần theo date
         weightResponseList.sort(new Comparator<WeightResponse>() {

@@ -21,6 +21,8 @@ import vn.edu.fpt.SmartHealthC.repository.MedicineRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicineTypeRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MedicineRecordService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -253,7 +255,31 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                 .status(medicineRecord.getStatus())
                 .build();
     }
+    public static int getDayOfWeekNumber(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
+        // Chuyển đổi ngày trong tuần thành số theo quy ước
+        switch (dayOfWeek) {
+            case Calendar.MONDAY:
+                return 1;
+            case Calendar.TUESDAY:
+                return 2;
+            case Calendar.WEDNESDAY:
+                return 3;
+            case Calendar.THURSDAY:
+                return 4;
+            case Calendar.FRIDAY:
+                return 5;
+            case Calendar.SATURDAY:
+                return 6;
+            case Calendar.SUNDAY:
+                return 0;
+            default:
+                throw new IllegalArgumentException("Invalid day of week: " + dayOfWeek);
+        }
+    }
     @Override
     public List<MedicinePLanResponseDTO> getAllMedicinePlans(String weekStart) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -308,6 +334,8 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             for (MedicineRecord record : planPerMedicine) {
                 medicinePLanResponseDTO.setTime(getTime(record.getDate()));
                 medicinePLanResponseDTO.getWeekday().add(getDayOfWeek(record.getDate()));
+                medicinePLanResponseDTO.getWeekTime().add(record.getDate());
+                medicinePLanResponseDTO.getIndexDay().add(getDayOfWeekNumber(record.getDate()));
             }
             medicinePLanResponseDTOList.add(medicinePLanResponseDTO);
         }
@@ -319,19 +347,11 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
 
     @Override
     public MedicineResponseChartDTO getDataChart() throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-
-        Date today = new Date();
-        String dateStr= formatDate.format(today);
-        Date date = formatDate.parse(dateStr);
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Date date = DateUtils.getToday(formatDate);
 
 
-        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.get().getId());
+        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.getId());
         //Sắp xếp giảm dần theo date
         medicineRecordList.sort(new Comparator<MedicineRecord>() {
             @Override

@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRuleRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRuleResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
-import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;

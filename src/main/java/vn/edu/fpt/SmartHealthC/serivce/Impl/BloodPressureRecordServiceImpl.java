@@ -19,6 +19,8 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.BloodPressureRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.BloodPressureRecordService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -156,58 +158,26 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
 
     @Override
     public BloodPressureResponseChartDTO getDataChart() throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Date dateToday = DateUtils.getToday(formatDate);
 
-        Date today = new Date();
-        String dateStr= formatDate.format(today);
-        Date date = formatDate.parse(dateStr);
-
-        int count = 5;
         BloodPressureResponseChartDTO bloodPressureResponseChartDTO = new BloodPressureResponseChartDTO();
         List<BloodPressureResponse> bloodPressureResponseList = new ArrayList<>();
-        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.findAllByUserId(appUser.get().getId());
-
-        //Sắp xếp giảm dần theo date
-        bloodPressureRecordListExits.sort(new Comparator<BloodPressureRecord>() {
-            @Override
-            public int compare(BloodPressureRecord recordDateSmaller, BloodPressureRecord recordDateBigger) {
-                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
-            }
-        });
-
-
+        List<BloodPressureRecord> bloodPressureRecordListExits = bloodPressureRecordRepository.find5RecordByIdUser(appUser.getId());
             for (BloodPressureRecord bloodPressureRecord : bloodPressureRecordListExits) {
-                String smallerDateStr= formatDate.format(bloodPressureRecord.getDate());
-                Date smallerDate = formatDate.parse(smallerDateStr);
                 BloodPressureResponse bloodPressureResponse = new BloodPressureResponse();
+                    bloodPressureResponse.setDate(bloodPressureRecord.getDate());
+                    bloodPressureResponse.setSystole(bloodPressureRecord.getSystole());
+                    bloodPressureResponse.setDiastole(bloodPressureRecord.getDiastole());
+                    bloodPressureResponseList.add(bloodPressureResponse);
 
-                if(smallerDate.before(date)){
-                    bloodPressureResponse.setDate(bloodPressureRecord.getDate());
-                    bloodPressureResponse.setSystole(bloodPressureRecord.getSystole());
-                    bloodPressureResponse.setDiastole(bloodPressureRecord.getDiastole());
-                    bloodPressureResponseList.add(bloodPressureResponse);
-                    count--;
-                }
-                if( smallerDate.equals(date)){
-                    bloodPressureResponse.setDate(bloodPressureRecord.getDate());
-                    bloodPressureResponse.setSystole(bloodPressureRecord.getSystole());
-                    bloodPressureResponse.setDiastole(bloodPressureRecord.getDiastole());
-                    bloodPressureResponseList.add(bloodPressureResponse);
-                    bloodPressureResponseChartDTO.setSystoleToday(bloodPressureRecord.getSystole());
-                    bloodPressureResponseChartDTO.setDiastoleToday(bloodPressureRecord.getDiastole());
-                    count--;
-                }
-                today = calculateDate(today,1);
-                if(count < 1){
-                    break;
-                }
             }
-
+        String todayStr = formatDate.format(bloodPressureRecordListExits.get(0).getDate());
+        Date todayDate = formatDate.parse(todayStr);
+        if(dateToday.equals(todayDate)){
+            bloodPressureResponseChartDTO.setSystoleToday(bloodPressureRecordListExits.get(0).getSystole());
+            bloodPressureResponseChartDTO.setDiastoleToday(bloodPressureRecordListExits.get(0).getDiastole());
+        }
             //sắp xếp tăng dần theo date
         bloodPressureResponseList.sort(new Comparator<BloodPressureResponse>() {
             @Override

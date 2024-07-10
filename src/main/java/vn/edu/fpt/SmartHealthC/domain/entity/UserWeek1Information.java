@@ -39,9 +39,9 @@ public class UserWeek1Information {
     @Column(name = "close_person2_message")
     private String closePerson2Message;
     private String prefrerredEnvironment;
-    private Date prefrerredTime;
+    private String prefrerredTime;
     private String notPreferredLocation;
-    private Date notPreferredTime;
+    private String notPreferredTime;
 
     private Integer score10;
     private Integer score20;

@@ -10,13 +10,9 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
-import vn.edu.fpt.SmartHealthC.domain.entity.FAQ;
-import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.serivce.FormQuestionService;
-import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/form-question")

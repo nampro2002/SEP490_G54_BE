@@ -18,6 +18,7 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.CardinalRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -182,17 +183,12 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
 
     @Override
     public CardinalChartResponseDTO getDataChart() throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
 
-        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByAppUserId(appUser.get().getId());
+        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByAppUserId(appUser.getId());
         cardinalRecordList.sort((recordDateSmaller, recordDateBigger) -> recordDateBigger.getDate().compareTo(recordDateSmaller.getDate()));
         // Lấy 5 bản ghi có ngày gần với ngày hiện tại nhất
         // Tạo một Set để theo dõi các ngày đã được thêm
@@ -259,9 +255,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
             Optional<Float> cholesterolByDate = listByDate.stream()
                     .map(CardinalRecord::getCholesterol)
                     .max(Comparator.naturalOrder());
-            Optional<Float> bloodSugarByDate = listByDate.stream()
-                    .map(CardinalRecord::getBloodSugar)
-                    .max(Comparator.naturalOrder());
+
             hba1cByDate.ifPresent(aFloat -> hba1CResponseDTOList.add(
                     HBA1CResponseDTO.builder()
                             .data(aFloat).date(sortedDate).build()
@@ -270,11 +264,64 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                     CholesterolResponseDTO.builder()
                             .data(aFloat).date(sortedDate).build()
             ));
-            bloodSugarByDate.ifPresent(aFloat -> bloodSugarResponseDTOList.add(
-                    BloodSugarResponseDTO.builder()
-                            .data(aFloat).date(sortedDate).build()
-            ));
+            //Data lúc truước ăn và sau ăn của blood sugar
+            float dataBloodSugarAfter;
+            float dataBloodSugarBefore;
+            //có trước ăn
+            List<CardinalRecord> listByDateAfter = cardinalRecordList.stream()
+                    .filter(record -> {
+                        String recordDateStr = formatDate.format(record.getDate());
+                        try {
+                            Date recordDate = formatDate.parse(recordDateStr);
+                            String sortedDateStr = formatDate.format(sortedDate);
+                            Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                            return recordDate.equals(parsedSortedDate)
+                                    && (record.getTimeMeasure().equals(TypeTimeMeasure.AFTER_DINNER)
+                                    || record.getTimeMeasure().equals(TypeTimeMeasure.AFTER_LUNCH)
+                                    || record.getTimeMeasure().equals(TypeTimeMeasure.AFTER_BREAKFAST));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+                    }).toList();
+            if(listByDateAfter.isEmpty()){
+                dataBloodSugarAfter = 0.f;
 
+            }else{
+                Optional<Float> bloodSugarByDate = listByDateAfter.stream()
+                        .map(CardinalRecord::getBloodSugar)
+                        .max(Comparator.naturalOrder());
+                dataBloodSugarAfter = bloodSugarByDate.orElse(0.f);
+            }
+            // có sau ăn
+            List<CardinalRecord> listByDateBefore = cardinalRecordList.stream()
+                    .filter(record -> {
+                        String recordDateStr = formatDate.format(record.getDate());
+                        try {
+                            Date recordDate = formatDate.parse(recordDateStr);
+                            String sortedDateStr = formatDate.format(sortedDate);
+                            Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                            return recordDate.equals(parsedSortedDate)
+                                    && (record.getTimeMeasure().equals(TypeTimeMeasure.BEFORE_BREAKFAST)
+                                    || record.getTimeMeasure().equals(TypeTimeMeasure.BEFORE_DINNER)
+                                    || record.getTimeMeasure().equals(TypeTimeMeasure.BEFORE_LUNCH));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+                    }).toList();
+            if(listByDateBefore.isEmpty()){
+                dataBloodSugarBefore = 0.f;
+            }else{
+                Optional<Float> bloodSugarByDate = listByDateBefore.stream()
+                        .map(CardinalRecord::getBloodSugar)
+                        .max(Comparator.naturalOrder());
+                dataBloodSugarBefore = bloodSugarByDate.orElse(0.f);
+            }
+             bloodSugarResponseDTOList.add(
+                    BloodSugarResponseDTO.builder()
+                            .afterEat(dataBloodSugarAfter).beforeEat(dataBloodSugarBefore).date(sortedDate).build()
+            );
         }
 
         CardinalChartResponseDTO planResponseDTO = new CardinalChartResponseDTO();

@@ -19,6 +19,8 @@ import vn.edu.fpt.SmartHealthC.repository.MentalRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.MentalRuleRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MentalRecordService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -227,19 +229,10 @@ public class MentalRecordServiceImpl implements MentalRecordService {
 
     @Override
     public MentalResponseChartDTO getDataChart() throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Date date = DateUtils.getToday(formatDate);
 
-        Date today = new Date();
-        String dateStr= formatDate.format(today);
-        Date date = formatDate.parse(dateStr);
-
-
-        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserId(appUser.get().getId());
+        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserId(appUser.getId());
         //Sắp xếp giảm dần theo date
         mentalRecordList.sort(new Comparator<MentalRecord>() {
             @Override

@@ -6,13 +6,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserLessonDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
-import vn.edu.fpt.SmartHealthC.domain.entity.MentalRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
-import vn.edu.fpt.SmartHealthC.repository.LessonRepository;
 import vn.edu.fpt.SmartHealthC.repository.UserLessonRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.UserLessonService;
@@ -28,8 +25,6 @@ public class UserLessonServiceImpl implements UserLessonService {
     @Autowired
     private AppUserRepository appUserRepository;
     @Autowired
-    private LessonRepository lessonRepository;
-    @Autowired
     private AppUserService appUserService;
 
     @Override
@@ -42,12 +37,12 @@ public class UserLessonServiceImpl implements UserLessonService {
         String email = authentication.getName();
 
         AppUser appUser = appUserService.findAppUserByEmail(email);
-        Optional<Lesson> lesson = lessonRepository.findById(userLessonDTO.getLessonId());
-        if (lesson.isEmpty()) {
-            throw new AppException(ErrorCode.LESSON_NOT_FOUND);
-        }
+//        Optional<Lesson> lesson = lessonRepository.findById(userLessonDTO.getLessonId());
+//        if (lesson.isEmpty()) {
+//            throw new AppException(ErrorCode.LESSON_NOT_FOUND);
+//        }
         userLesson.setAppUserId(appUser);
-        userLesson.setLessonId(lesson.get());
+//        userLesson.setLessonId(lesson.get());
         return userLessonRepository.save(userLesson);
     }
 

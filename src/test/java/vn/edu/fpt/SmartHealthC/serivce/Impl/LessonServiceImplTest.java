@@ -8,15 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LessonRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.LessonResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
-import vn.edu.fpt.SmartHealthC.domain.entity.Lesson;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
-import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
-import vn.edu.fpt.SmartHealthC.repository.LessonRepository;
-import vn.edu.fpt.SmartHealthC.serivce.Impl.LessonServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
