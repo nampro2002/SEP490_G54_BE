@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface WeeklyReviewService {
-    WeekReview getWeek(Integer id) throws ParseException;
+    WeekReview getDataOfNearestWeek(Integer id) throws ParseException;
 
     List<Date> getListWeekStart(Integer id) throws ParseException;
 

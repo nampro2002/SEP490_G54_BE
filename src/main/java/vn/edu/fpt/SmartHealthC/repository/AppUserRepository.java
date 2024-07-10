@@ -26,6 +26,8 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
     Page<AppUser> findAllAccountUserNotAssign(Pageable paging);
     @Query("SELECT u FROM AppUser u WHERE u.accountId.email = ?1")
     Optional<AppUser> findByAccountEmail(String email);
+    @Query("SELECT u FROM AppUser u WHERE u.accountId = ?1")
+    Optional<AppUser> findByAccount(Account account);
     @Query("SELECT u FROM AppUser u WHERE u.id = ?1 AND u.accountId.isActive = true AND u.accountId.isDeleted = false")
     Optional<AppUser> findByIdActivated(Integer appUserId);
     //deleted = false

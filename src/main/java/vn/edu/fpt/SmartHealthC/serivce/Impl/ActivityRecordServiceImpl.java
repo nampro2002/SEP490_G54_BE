@@ -18,6 +18,8 @@ import vn.edu.fpt.SmartHealthC.repository.ActivityRecordRepository;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.serivce.ActivityRecordService;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -207,64 +209,27 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
 
     @Override
     public ActivityResponseChartDTO getDataChart() throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-        Date today = new Date();
-        String dateStr= formatDate.format(today);
-        Date date = formatDate.parse(dateStr);
-
-        List<ActivityRecord> activityRecordList = activityRecordRepository.findRecordByIdUser(appUser.get().getId());
-        //Sắp xếp giảm dần theo date
-        activityRecordList.sort(new Comparator<ActivityRecord>() {
-            @Override
-            public int compare(ActivityRecord recordDateSmaller, ActivityRecord recordDateBigger) {
-                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
-            }
-        });
-        int count = 5;
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        List<ActivityRecord> activityRecordList = activityRecordRepository.find5RecordByIdUser(appUser.getId());
         ActivityResponseChartDTO activityResponseChartDTO = new ActivityResponseChartDTO();
-        Set<Date> activityDateResponseList = new HashSet<>();
         List<ActivityResponse> activityResponseList = new ArrayList<>();
         for (ActivityRecord activityRecord : activityRecordList) {
-            String smallerDateStr= formatDate.format(activityRecord.getDate());
-            Date smallerDate = formatDate.parse(smallerDateStr);
 
-            if(activityRecord.getActualType() != null){
-                if(smallerDate.before(date)){
-                    if(!activityDateResponseList.contains(smallerDate)){
-                        activityDateResponseList.add(smallerDate);
                         Integer value = (int) Math.round(activityRecord.getActualDuration());
                         ActivityResponse activityResponse = new ActivityResponse()
                                 .builder().date(activityRecord.getDate())
                                 .duration(value)
                                 .type(activityRecord.getActualType()).build();
                         activityResponseList.add(activityResponse);
-                        count--;
-                    }
-                }
-                if(smallerDate.equals(date)){
-                    if(!activityDateResponseList.contains(smallerDate)){
-                        activityDateResponseList.add(smallerDate);
-                        Integer value = (int) Math.round(activityRecord.getActualDuration());
-                        ActivityResponse activityResponse = new ActivityResponse()
-                                .builder().date(activityRecord.getDate())
-                                .duration(value)
-                                .type(activityRecord.getActualType()).build();
-                        activityResponseList.add(activityResponse);
-                        activityResponseChartDTO.setDurationToday(value);
-                        activityResponseChartDTO.setTypeToDay(activityRecord.getActualType());
-                        count--;
-                    }
-                }
-            }
-            today = calculateDateMinus(today,1);
-            if(count < 1){
-                break;
-            }
+
+        }
+        Date dateToday = DateUtils.getToday(formatDate);
+        String todayStr = formatDate.format(activityRecordList.get(0).getDate());
+        Date todayDate = formatDate.parse(todayStr);
+        if(dateToday.equals(todayDate)){
+            Integer value = (int) Math.round(activityRecordList.get(0).getActualDuration());
+            activityResponseChartDTO.setDurationToday(value);
+            activityResponseChartDTO.setTypeToDay(activityRecordList.get(0).getActualType());
         }
         //sắp xếp tăng dần theo date
         activityResponseList.sort(new Comparator<ActivityResponse>() {
@@ -274,7 +239,6 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
             }
         });
         activityResponseChartDTO.setActivityResponseList(activityResponseList);
-
         return activityResponseChartDTO;
     }
 

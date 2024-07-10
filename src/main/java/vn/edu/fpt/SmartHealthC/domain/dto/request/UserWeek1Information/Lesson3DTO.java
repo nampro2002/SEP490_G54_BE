@@ -28,12 +28,12 @@ public class Lesson3DTO {
     private String closePerson2Message;
     @NotBlank(message = "missing prefrerredEnvironment")
     private String prefrerredEnvironment;
-    @NotNull(message = "missing prefrerredTime")
-    private Date prefrerredTime;
+    @NotBlank(message = "missing prefrerredTime")
+    private String prefrerredTime;
     @NotBlank(message = "missing notPreferredLocation")
     private String notPreferredLocation;
     @NotBlank(message = "missing notPreferredTime")
-    private Date notPreferredTime;
+    private String notPreferredTime;
 
 
 

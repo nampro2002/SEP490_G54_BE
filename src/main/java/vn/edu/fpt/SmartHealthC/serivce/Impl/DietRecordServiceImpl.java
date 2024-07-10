@@ -18,6 +18,8 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.DietRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.DietRecordService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -190,58 +192,18 @@ public class DietRecordServiceImpl implements DietRecordService {
 
     @Override
     public DietResponseChartDTO getDataChart() throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
-
-        Date today = new Date();
-        String dateStr= formatDate.format(today);
-        Date date = formatDate.parse(dateStr);
-
-
-        List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.get().getId());
-        //Sắp xếp giảm dần theo date
-        dietRecordList.sort(new Comparator<DietRecord>() {
-            @Override
-            public int compare(DietRecord recordDateSmaller, DietRecord recordDateBigger) {
-                return recordDateBigger.getDate().compareTo(recordDateSmaller.getDate());
-            }
-        });
-        int count = 5;
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        List<DietRecord> dietRecordList = dietRecordRepository.find5RecordByIdUser(appUser.getId());
         double sumValue = 0;
         DietResponseChartDTO dietResponseChartDTO = new DietResponseChartDTO();
         List<DietResponse> dietResponseList = new ArrayList<>();
         for (DietRecord dietRecord : dietRecordList) {
-            String smallerDateStr= formatDate.format(dietRecord.getDate());
-            Date smallerDate = formatDate.parse(smallerDateStr);
-            if(dietRecord.getActualValue() != 0){
-                if(smallerDate.before(date)){
                     Integer value = (int) Math.round(dietRecord.getActualValue());
                     DietResponse dietResponse = new DietResponse().builder()
                             .date(dietRecord.getDate()).value(value).build();
-                    count--;
                     sumValue+=dietRecord.getActualValue();
                     dietResponseList.add(dietResponse);
-                }
-                if(smallerDate.equals(date)){
-                    Integer value = (int) Math.round(dietRecord.getActualValue());
-                    DietResponse dietResponse = new DietResponse().builder()
-                            .date(dietRecord.getDate()).value(value).build();
-                    count--;
-                    sumValue+=dietRecord.getActualValue();
-                    dietResponseList.add(dietResponse);
-                }
-
             }
-
-            today = calculateDateMinus(today,1);
-            if(count < 1){
-                break;
-            }
-        }
         //sắp xếp tăng dần theo date
         dietResponseList.sort(new Comparator<DietResponse>() {
             @Override

@@ -23,4 +23,7 @@ public interface ActivityRecordRepository extends JpaRepository<ActivityRecord, 
 
     @Query("SELECT a FROM ActivityRecord a WHERE a.appUserId.id = ?1")
     List<ActivityRecord> findRecordByIdUser( Integer userId);
+
+    @Query("SELECT a FROM ActivityRecord a WHERE a.appUserId.id = ?1 and a.actualType != null  order by a.date desc limit 5")
+    List<ActivityRecord> find5RecordByIdUser( Integer userId);
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -17,4 +18,6 @@ public class MedicinePLanResponseDTO {
     private String medicineTitle;
     private String time;
     private List<String> weekday = new ArrayList<String>();
+    private List<Date> weekTime = new ArrayList<Date>();
+    private List<Integer> indexDay = new ArrayList<Integer>();
 }
