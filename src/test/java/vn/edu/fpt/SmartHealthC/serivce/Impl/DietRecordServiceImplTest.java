@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.ActivityRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DietRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
@@ -175,5 +176,29 @@ public class DietRecordServiceImplTest {
         assertDoesNotThrow(() -> dietRecordRepository.findByAppUser(userId));
 
     }
+
+
+    @Test
+    void getDishPlan_appUserID_Notfound() {
+
+        DietRecordCreateDTO dietRecordCreateDTO = new DietRecordCreateDTO();
+
+        Authentication mockAuthentication = Mockito.mock(Authentication.class);
+        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(mockSecurityContext);
+        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+        when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
+
+        // Mock empty user retrieval (Optional.empty())
+        when(appUserRepository.findByAccountEmail("Test@gmail.com")).thenReturn(Optional.empty());
+
+        AppException exception = assertThrows(AppException.class, () -> dietRecordService.getDishPlan("2024/17/8"));
+
+        assertEquals(ErrorCode.APP_USER_NOT_FOUND, exception.getErrorCode());
+
+    }
+
+
+
 }
 
