@@ -49,7 +49,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/medical-history/mobile").permitAll()
                                 .requestMatchers("/xx/demo/**").permitAll()
                                 .requestMatchers("/api/notifications/**").permitAll()
-//                                .requestMatchers("/api/auth/refresh-token").permitAll()
+                                .requestMatchers("/api/step-records/update-cont").permitAll()
 //                                .requestMatchers("/api/**").permitAll()
                                 .requestMatchers(SWAGGER).permitAll()
                                 .anyRequest().authenticated()
