@@ -24,7 +24,7 @@ public class MonthlyRecord {
     @ToString.Exclude
     private AppUser appUserId;
 
-    private Date monthStart;
+    private Integer monthNumber;
     @Enumerated(EnumType.STRING)
     private MonthlyRecordType monthlyRecordType;
 

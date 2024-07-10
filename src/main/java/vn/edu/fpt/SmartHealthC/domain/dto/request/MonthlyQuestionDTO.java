@@ -18,7 +18,7 @@ import java.util.Date;
 public class MonthlyQuestionDTO {
 
     @NotNull(message = "missing monthStart")
-    private Date monthStart;
+    private Integer monthNumber;
     @NotNull(message = "missing monthlyRecordType")
     private MonthlyRecordType monthlyRecordType;
     @NotNull(message = "missing questionNumber")
@@ -26,7 +26,7 @@ public class MonthlyQuestionDTO {
     @NotBlank(message = "missing question")
     private String question;
     @NotNull(message = "missing answer")
-    private Integer answer;
+    private Integer answer = 1;
 
 
 

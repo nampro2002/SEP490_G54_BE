@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyAnswerResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyNumberResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyRecord;
 import vn.edu.fpt.SmartHealthC.serivce.MonthlyQuestionService;
 
@@ -20,53 +22,52 @@ public class MonthlyQuestionController {
     @Autowired
     private MonthlyQuestionService monthlyQuestionService;
 
-    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
-    public ApiResponse<MonthlyRecord> createMonthlyQuestion(@RequestBody @Valid MonthlyQuestionDTO monthlyQuestionDTO) {
-
-         MonthlyRecord createdMonthlyRecord =  monthlyQuestionService.createMonthlyQuestion(monthlyQuestionDTO);
+    public ApiResponse<Void> create40MonthlyQuestion(@RequestBody @Valid List<MonthlyQuestionDTO> monthlyQuestionDTO) {
+        monthlyQuestionService.create40MonthlyQuestion(monthlyQuestionDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.<MonthlyRecord>builder()
+                .body(ApiResponse.<Void>builder()
                         .code(HttpStatus.CREATED.value())
-                        .result(createdMonthlyRecord)
+                        .result(null)
                         .build()).getBody();
     }
-    //??
-    @GetMapping("/{id}")
-    public ApiResponse<MonthlyRecord> getMonthlyQuestionById(@PathVariable Integer id) {
+    @PostMapping("/test")
+    public ApiResponse<Void> createMonthlyQuestion() {
+        monthlyQuestionService.createNewMonthMark(13);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<Void>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(null)
+                        .build()).getBody();
+    }
+    @GetMapping("/list-month-number")
+    public ApiResponse<List<MonthlyNumberResponseDTO>> getListMonthlyNumber() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MonthlyRecord>builder()
+                .body(ApiResponse.<List<MonthlyNumberResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.getMonthlyQuestionById(id))
+                        .result(monthlyQuestionService.getList3MonthlyNumber())
                         .build()).getBody();
     }
-    @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/mobile")
-    public ApiResponse<List<MonthlyRecord>> getAllMonthlyQuestionsMobile() {
-        return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MonthlyRecord>>builder()
+    @GetMapping("/mobile/get-answer/{monthNumber}")
+    public ApiResponse<List<MonthlyAnswerResponseDTO>> getMobileListAnswer(
+            @PathVariable int monthNumber
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MonthlyAnswerResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.getAllMonthlyQuestionsMobile())
+                        .result(monthlyQuestionService.getMobileListAnswer(monthNumber))
                         .build()).getBody();
     }
-    @PreAuthorize("hasAuthority('USER')")
-    @PutMapping("/{id}")
-    public ApiResponse<MonthlyRecord> updateMonthlyQuestion(@PathVariable Integer id, @RequestBody @Valid  MonthlyQuestionDTO monthlyQuestionDTO) {
-         MonthlyRecord updatedMonthlyRecord =  monthlyQuestionService.updateMonthlyQuestion(id,monthlyQuestionDTO);
-        return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MonthlyRecord>builder()
+    @GetMapping("/web/get-answer/{userId}/{monthNumber}")
+    public ApiResponse<List<MonthlyAnswerResponseDTO>> getWebListAnswer(
+            @PathVariable int userId,
+            @PathVariable int monthNumber
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MonthlyAnswerResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(updatedMonthlyRecord)
+                        .result(monthlyQuestionService.getWebListAnswer(userId,monthNumber))
                         .build()).getBody();
     }
-    @PreAuthorize("hasAuthority('USER')")
-    @DeleteMapping("/{id}")
-    public ApiResponse<MonthlyRecord> deleteMonthlyQuestion(@PathVariable Integer id) {
-//         monthlyQuestionService.deleteMonthlyQuestion(id);
-        return  ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MonthlyRecord>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.deleteMonthlyQuestion(id))
-                        .build()).getBody();
-    }
+
 }
