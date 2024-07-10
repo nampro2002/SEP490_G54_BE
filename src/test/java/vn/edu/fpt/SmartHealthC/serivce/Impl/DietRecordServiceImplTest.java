@@ -94,4 +94,29 @@ public class DietRecordServiceImplTest {
 
     }
 
+    @Test
+    void createDietRecord_Success() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(dietRecordRepository.findByAppUser(any())).thenReturn(dietRecords);
+        when(dietRecordRepository.save(any())).thenReturn(dietRecord);
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail("test@test.com");
+        List<DietRecord> resultDietRecords = dietRecordRepository.findByAppUser(testAppUser.getId());
+        DietRecord resultDietRecord = dietRecordRepository.save(dietRecord);
+
+        assertNotNull(resultAppUser.get());
+        assertNotNull(resultDietRecords);
+        assertNotNull(resultDietRecord);
+
+
+        org.assertj.core.api.Assertions.assertThat(resultDietRecords.size()).isGreaterThanOrEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(resultDietRecord).isEqualTo(dietRecord);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail("test@test.com"));
+        assertDoesNotThrow(() -> dietRecordRepository.findByAppUser(testAppUser.getId()));
+        assertDoesNotThrow(() -> dietRecordRepository.save(dietRecord));
+
+    }
 }
