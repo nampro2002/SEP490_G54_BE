@@ -255,7 +255,31 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                 .status(medicineRecord.getStatus())
                 .build();
     }
+    public static int getDayOfWeekNumber(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
+        // Chuyển đổi ngày trong tuần thành số theo quy ước
+        switch (dayOfWeek) {
+            case Calendar.MONDAY:
+                return 1;
+            case Calendar.TUESDAY:
+                return 2;
+            case Calendar.WEDNESDAY:
+                return 3;
+            case Calendar.THURSDAY:
+                return 4;
+            case Calendar.FRIDAY:
+                return 5;
+            case Calendar.SATURDAY:
+                return 6;
+            case Calendar.SUNDAY:
+                return 0;
+            default:
+                throw new IllegalArgumentException("Invalid day of week: " + dayOfWeek);
+        }
+    }
     @Override
     public List<MedicinePLanResponseDTO> getAllMedicinePlans(String weekStart) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -310,6 +334,8 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             for (MedicineRecord record : planPerMedicine) {
                 medicinePLanResponseDTO.setTime(getTime(record.getDate()));
                 medicinePLanResponseDTO.getWeekday().add(getDayOfWeek(record.getDate()));
+                medicinePLanResponseDTO.getWeekTime().add(record.getDate());
+                medicinePLanResponseDTO.getIndexDay().add(getDayOfWeekNumber(record.getDate()));
             }
             medicinePLanResponseDTOList.add(medicinePLanResponseDTO);
         }

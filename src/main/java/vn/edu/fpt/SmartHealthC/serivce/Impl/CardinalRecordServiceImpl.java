@@ -255,9 +255,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
             Optional<Float> cholesterolByDate = listByDate.stream()
                     .map(CardinalRecord::getCholesterol)
                     .max(Comparator.naturalOrder());
-            Optional<Float> bloodSugarByDate = listByDate.stream()
-                    .map(CardinalRecord::getBloodSugar)
-                    .max(Comparator.naturalOrder());
+
             hba1cByDate.ifPresent(aFloat -> hba1CResponseDTOList.add(
                     HBA1CResponseDTO.builder()
                             .data(aFloat).date(sortedDate).build()
@@ -266,11 +264,64 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                     CholesterolResponseDTO.builder()
                             .data(aFloat).date(sortedDate).build()
             ));
-            bloodSugarByDate.ifPresent(aFloat -> bloodSugarResponseDTOList.add(
-                    BloodSugarResponseDTO.builder()
-                            .data(aFloat).date(sortedDate).build()
-            ));
+            //Data lúc truước ăn và sau ăn của blood sugar
+            float dataBloodSugarAfter;
+            float dataBloodSugarBefore;
+            //có trước ăn
+            List<CardinalRecord> listByDateAfter = cardinalRecordList.stream()
+                    .filter(record -> {
+                        String recordDateStr = formatDate.format(record.getDate());
+                        try {
+                            Date recordDate = formatDate.parse(recordDateStr);
+                            String sortedDateStr = formatDate.format(sortedDate);
+                            Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                            return recordDate.equals(parsedSortedDate)
+                                    && (record.getTimeMeasure().equals(TypeTimeMeasure.AFTER_DINNER)
+                                    || record.getTimeMeasure().equals(TypeTimeMeasure.AFTER_LUNCH)
+                                    || record.getTimeMeasure().equals(TypeTimeMeasure.AFTER_BREAKFAST));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+                    }).toList();
+            if(listByDateAfter.isEmpty()){
+                dataBloodSugarAfter = 0.f;
 
+            }else{
+                Optional<Float> bloodSugarByDate = listByDateAfter.stream()
+                        .map(CardinalRecord::getBloodSugar)
+                        .max(Comparator.naturalOrder());
+                dataBloodSugarAfter = bloodSugarByDate.orElse(0.f);
+            }
+            // có sau ăn
+            List<CardinalRecord> listByDateBefore = cardinalRecordList.stream()
+                    .filter(record -> {
+                        String recordDateStr = formatDate.format(record.getDate());
+                        try {
+                            Date recordDate = formatDate.parse(recordDateStr);
+                            String sortedDateStr = formatDate.format(sortedDate);
+                            Date parsedSortedDate = formatDate.parse(sortedDateStr);
+                            return recordDate.equals(parsedSortedDate)
+                                    && (record.getTimeMeasure().equals(TypeTimeMeasure.BEFORE_BREAKFAST)
+                                    || record.getTimeMeasure().equals(TypeTimeMeasure.BEFORE_DINNER)
+                                    || record.getTimeMeasure().equals(TypeTimeMeasure.BEFORE_LUNCH));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+                    }).toList();
+            if(listByDateBefore.isEmpty()){
+                dataBloodSugarBefore = 0.f;
+            }else{
+                Optional<Float> bloodSugarByDate = listByDateBefore.stream()
+                        .map(CardinalRecord::getBloodSugar)
+                        .max(Comparator.naturalOrder());
+                dataBloodSugarBefore = bloodSugarByDate.orElse(0.f);
+            }
+             bloodSugarResponseDTOList.add(
+                    BloodSugarResponseDTO.builder()
+                            .afterEat(dataBloodSugarAfter).beforeEat(dataBloodSugarBefore).date(sortedDate).build()
+            );
         }
 
         CardinalChartResponseDTO planResponseDTO = new CardinalChartResponseDTO();

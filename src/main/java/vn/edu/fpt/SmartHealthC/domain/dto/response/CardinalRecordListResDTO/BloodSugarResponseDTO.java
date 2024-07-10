@@ -13,6 +13,7 @@ import java.util.Date;
 @Builder
 public class BloodSugarResponseDTO {
 
-    private Float data;
+    private Float beforeEat;
+    private Float afterEat;
     private Date date;
 }
