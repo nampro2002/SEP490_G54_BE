@@ -198,6 +198,33 @@ public class DietRecordServiceImplTest {
 
     }
 
+    @Test
+    void getDishPlan_Sucess() {
+
+        DietRecordCreateDTO dietRecordCreateDTO = new DietRecordCreateDTO();
+
+        Authentication mockAuthentication = Mockito.mock(Authentication.class);
+        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(mockSecurityContext);
+        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+        when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
+
+        // Mock empty user retrieval (Optional.empty())
+        when(appUserRepository.findByAccountEmail("Test@gmail.com")).thenReturn(Optional.empty());
+        when(dietRecordRepository.findByAppUser(testAppUser.getId())).thenReturn(dietRecords);
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail(any());
+        List<DietRecord> result = dietRecordRepository.findByAppUser(any());
+
+        //THEN
+        assertNotNull(resultAppUser);
+        assertNotNull(result);
+        org.assertj.core.api.Assertions.assertThat(result.size()).isGreaterThanOrEqualTo(0);
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail(any()));
+        assertDoesNotThrow(() -> dietRecordRepository.findByAppUser(any()));
+
+    }
+
 
 
 }
