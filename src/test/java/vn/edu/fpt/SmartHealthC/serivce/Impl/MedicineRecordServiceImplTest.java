@@ -96,6 +96,32 @@ public class MedicineRecordServiceImplTest {
 
     }
 
+    @Test
+    void createMedicineRecord_Success() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(MedicineRecordRepository.findByAppUser(testAppUser.getId())).thenReturn(MedicineRecordList);
+        when(MedicineRecordRepository.save(MedicineRecord)).thenReturn(MedicineRecord);
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail("test@test.com");
+        List<MedicineRecord> resultMedicineRecords = MedicineRecordRepository.findByAppUser(testAppUser.getId());
+        MedicineRecord resultMedicineRecord = MedicineRecordRepository.save(MedicineRecord);
+
+        assertNotNull(resultAppUser.get());
+        assertNotNull(resultMedicineRecords);
+        assertNotNull(resultMedicineRecord);
+
+
+        org.assertj.core.api.Assertions.assertThat(resultMedicineRecords.size()).isGreaterThanOrEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(MedicineRecord).isEqualTo(resultMedicineRecord);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail("test@test.com"));
+        assertDoesNotThrow(() -> MedicineRecordRepository.findByAppUser(testAppUser.getId()));
+        assertDoesNotThrow(() -> MedicineRecordRepository.save(MedicineRecord));
+
+    }
+
 
 
 
