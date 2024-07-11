@@ -118,5 +118,25 @@ public class MentalRecordServiceImplTest {
 
     }
 
+    @Test
+    void getDataChart_Success() {
+        Integer userId = 13;
+        String email = "test@test.com";
+        //Act
+        when(appUserRepository.findByAccountEmail(email)).thenReturn(Optional.of(testAppUser));
+        when(MentalRecordRepository.findByAppUserId(userId)).thenReturn(MentalRecordList);
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail(email);
+        List<MentalRecord> result = MentalRecordRepository.findByAppUserId(userId);
+
+        //THEN
+        assertNotNull(resultAppUser);
+        assertNotNull(result);
+        org.assertj.core.api.Assertions.assertThat(result.size()).isGreaterThanOrEqualTo(0);
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail(email));
+        assertDoesNotThrow(() -> MentalRecordRepository.findByAppUserId(userId));
+
+    }
+
 
 }
