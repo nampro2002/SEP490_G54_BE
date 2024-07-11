@@ -93,15 +93,15 @@ public class GlobalExceptionHandler {
                         .message(errorCode.getMessage())
                         .build());
     }
-    @ExceptionHandler(value = RuntimeException.class)
-    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
-        ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-        return ResponseEntity.status(errorCode.getStatusCode())
-                .body(ApiResponse.builder()
-                        .code(errorCode.getStatusCode().value())
-                        .message(exception.getMessage())
-                        .build());
-    }
+//    @ExceptionHandler(value = RuntimeException.class)
+//    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
+//        ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+//        return ResponseEntity.status(errorCode.getStatusCode())
+//                .body(ApiResponse.builder()
+//                        .code(errorCode.getStatusCode().value())
+//                        .message(exception.getMessage())
+//                        .build());
+//    }
 
 //    @ExceptionHandler(value = MethodArgumentNotValidException.class)
 //    ResponseEntity<ApiResponse> handlingValidation(MethodArgumentNotValidException exception) {
