@@ -172,6 +172,25 @@ public class MentalRecordServiceImplTest {
         assertDoesNotThrow(() -> MentalRecordRepository.findById(1));
 
     }
+    @Test
+    void getAllMentalRecords_Success() {
+
+        //Given
+        when(MentalRecordRepository.findDistinctDate(1)).thenReturn(dateList);
+        when(MentalRecordRepository.findByAppUserIdAndDate( 1,dateList.get(0))).thenReturn(MentalRecordList);
+
+
+        List<Date> Result_activityWeekList = MentalRecordRepository.findDistinctDate(1);
+        assertNotNull(Result_activityWeekList);
+
+        List<MentalRecord> Result_MentalRecordList = MentalRecordRepository.findByAppUserIdAndDate( 1,dateList.get(0));
+        assertNotNull(Result_MentalRecordList);
+
+
+        assertDoesNotThrow(() -> MentalRecordRepository.findDistinctDate(1));
+        assertDoesNotThrow(() -> MentalRecordRepository.findByAppUserIdAndDate( 1,dateList.get(0)));
+
+    }
 
 
 }
