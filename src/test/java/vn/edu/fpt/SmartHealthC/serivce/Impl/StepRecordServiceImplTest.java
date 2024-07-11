@@ -175,6 +175,7 @@ public class StepRecordServiceImplTest {
 
     }
 
+
     @Test
     void getAllStepRecords_Success() {
 
@@ -194,6 +195,35 @@ public class StepRecordServiceImplTest {
         assertDoesNotThrow(() -> StepRecordRepository.findByAppUserIdAndWeekStart( 1,dateList.get(0)));
 
     }
+
+    @Test
+    void updateStepRecord_ACTIVITY_PLAN_NOT_FOUND() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(StepRecordRepository.findByAppUserId(testAppUser.getId())).thenReturn(StepRecordList);
+        when(StepRecordRepository.findById(1)).thenReturn(Optional.of(StepRecord));
+        when(StepRecordRepository.save(StepRecord)).thenReturn(StepRecord);
+
+
+        Authentication mockAuthentication = Mockito.mock(Authentication.class);
+        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(mockSecurityContext);
+
+        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+        when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
+
+
+        List<StepRecord> resultStepRecords = StepRecordRepository.findByAppUserId(testAppUser.getId());
+        assertNotNull(resultStepRecords);
+
+        AppException exception = assertThrows(AppException.class,
+                () -> StepRecordService.updateStepRecord(StepRecordDTO));
+
+        assertEquals(ErrorCode.APP_USER_NOT_FOUND, exception.getErrorCode());
+
+    }
+
 
 
 
