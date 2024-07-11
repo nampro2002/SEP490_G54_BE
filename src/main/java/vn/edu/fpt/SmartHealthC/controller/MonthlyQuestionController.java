@@ -32,17 +32,17 @@ public class MonthlyQuestionController {
                         .result(null)
                         .build()).getBody();
     }
-//    @PostMapping("/test")
-//    public ApiResponse<Void> createMonthlyQuestion() {
-//        monthlyQuestionService.createNewMonthMark(13);
-//        return ResponseEntity.status(HttpStatus.CREATED)
-//                .body(ApiResponse.<Void>builder()
-//                        .code(HttpStatus.CREATED.value())
-//                        .result(null)
-//                        .build()).getBody();
-//    }
+    @PostMapping("/test")
+    public ApiResponse<Void> createMonthlyQuestion() {
+        monthlyQuestionService.createNewMonthMark(13);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<Void>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .result(null)
+                        .build()).getBody();
+    }
 
-    //Lấy 3 tháng gần nhất
+    //Lấy 3 tháng gần nhất w.monthlyRecordType = 'NEW_MONTH_MARK' (chưa trả lời)
     @GetMapping("/mobile/list-month-number")
     public ApiResponse<List<MonthlyNumberResponseDTO>> getListMonthlyNumber() {
         return ResponseEntity.status(HttpStatus.OK)
@@ -51,6 +51,7 @@ public class MonthlyQuestionController {
                         .result(monthlyQuestionService.getList3MonthlyNumber())
                         .build()).getBody();
     }
+     // Lấy 3 tháng gần nhất w.monthlyRecordType != 'NEW_MONTH_MARK' (đã trả lời)
     @GetMapping("/web/get-3-month/{appUserId}")
     public ApiResponse<List<Integer>> getList3MonthlyNumberWeb( @PathVariable Integer appUserId) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -85,7 +86,7 @@ public class MonthlyQuestionController {
     }
 
 
-    //lấy chart
+    //lấy chart của 3 tháng gần nhất
     @GetMapping("/mobile/get-chart")
     public ApiResponse<List<MonthlyStatisticResponseDTO>> getPoint3MonthMobile() {
         return ResponseEntity.status(HttpStatus.OK)
@@ -94,19 +95,19 @@ public class MonthlyQuestionController {
                         .result(monthlyQuestionService.getPoint3MonthMobile())
                         .build()).getBody();
     }
-    @GetMapping("/web/get-chart/{appUserId}/{monthNumber}")
+    //lấy chart của 12 tháng
+    @GetMapping("/web/get-chart/{appUserId}")
     public ApiResponse<List<MonthlyStatisticResponseDTO>> getPoint12MonthWeb(
-            @PathVariable Integer appUserId,
-            @PathVariable Integer monthNumber
+            @PathVariable Integer appUserId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MonthlyStatisticResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.getPoint12MonthWeb(appUserId,monthNumber))
+                        .result(monthlyQuestionService.getPoint12MonthWeb(appUserId))
                         .build()).getBody();
     }
-    //Lấy chart chi tiết
-    @GetMapping("/mobile/get-detail-chart/{monthNumber}")
+    //Lấy chart chi tiết của 2 tháng gần với tháng nhập vào
+    @GetMapping("/mobile/get-detail/{monthNumber}")
     public ApiResponse<List<MonthlyStatisticResponseDTO>> getPoint2MonthMobile( @PathVariable Integer monthNumber) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MonthlyStatisticResponseDTO>>builder()

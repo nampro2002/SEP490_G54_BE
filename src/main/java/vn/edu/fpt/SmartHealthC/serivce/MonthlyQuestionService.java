@@ -34,5 +34,5 @@ public interface MonthlyQuestionService {
 
     List<MonthlyStatisticResponseDTO> getPoint2MonthWeb(Integer appUserId, Integer monthNumber);
 
-    List<MonthlyStatisticResponseDTO> getPoint12MonthWeb(Integer appUserId, Integer monthNumber);
+    List<MonthlyStatisticResponseDTO> getPoint12MonthWeb(Integer appUserId);
 }
