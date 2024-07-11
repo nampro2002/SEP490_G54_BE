@@ -174,6 +174,26 @@ public class WeightRecordServiceImplTest {
 
     }
 
+    @Test
+    void getAllWeightRecords_Success() {
+
+        //Given
+        when(WeightRecordRepository.findDistinctWeek( any())).thenReturn(dateList);
+        when(WeightRecordRepository.findByWeekStart( dateList.get(0),1)).thenReturn(WeightRecordList);
+
+
+        List<Date> Result_activityWeekList = WeightRecordRepository.findDistinctWeek(1);
+        assertNotNull(Result_activityWeekList);
+
+        List<WeightRecord> Result_WeightRecordList = WeightRecordRepository.findByWeekStart( dateList.get(0),1);
+        assertNotNull(Result_WeightRecordList);
+
+
+        assertDoesNotThrow(() -> WeightRecordRepository.findDistinctWeek( any()));
+        assertDoesNotThrow(() -> WeightRecordRepository.findByWeekStart( dateList.get(0),1));
+
+    }
+
 
 
 }
