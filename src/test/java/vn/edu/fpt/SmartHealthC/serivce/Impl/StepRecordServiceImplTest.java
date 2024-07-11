@@ -140,5 +140,61 @@ public class StepRecordServiceImplTest {
 
     }
 
+    @Test
+    void updateStepRecord_Success() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(StepRecordRepository.findByAppUserId(testAppUser.getId())).thenReturn(StepRecordList);
+        when(StepRecordRepository.save(StepRecord)).thenReturn(StepRecord);
+        when(StepRecordRepository.findById(1)).thenReturn(Optional.of(StepRecord));
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail("test@test.com");
+
+        List<StepRecord> resultStepRecords = StepRecordRepository.findByAppUserId(testAppUser.getId());
+        assertNotNull(resultStepRecords);
+
+        Optional<StepRecord> StepRecordOption = StepRecordRepository.findById(1);
+        assertNotNull(StepRecordOption);
+
+        StepRecord.setDate(StepRecordOption.get().getWeekStart());
+        StepRecord resultStepRecord = StepRecordRepository.save(StepRecord);
+
+        assertNotNull(resultAppUser.get());
+        assertNotNull(resultStepRecord);
+        assertNotNull(resultAppUser.get());
+
+
+        org.assertj.core.api.Assertions.assertThat(resultStepRecords.size()).isGreaterThanOrEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(StepRecord).isEqualTo(resultStepRecord);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail("test@test.com"));
+        assertDoesNotThrow(() -> StepRecordRepository.findByAppUserId(testAppUser.getId()));
+        assertDoesNotThrow(() -> StepRecordRepository.save(StepRecord));
+        assertDoesNotThrow(() -> StepRecordRepository.findById(1));
+
+    }
+
+    @Test
+    void getAllStepRecords_Success() {
+
+        //Given
+        when(StepRecordRepository.findDistinctWeek(1)).thenReturn(dateList);
+        when(StepRecordRepository.findByAppUserIdAndWeekStart( 1,dateList.get(0))).thenReturn(StepRecordList);
+
+
+        List<Date> Result_activityWeekList = StepRecordRepository.findDistinctWeek(1);
+        assertNotNull(Result_activityWeekList);
+
+        List<StepRecord> Result_StepRecordList = StepRecordRepository.findByAppUserIdAndWeekStart( 1,dateList.get(0));
+        assertNotNull(Result_StepRecordList);
+
+
+        assertDoesNotThrow(() -> StepRecordRepository.findDistinctWeek(1));
+        assertDoesNotThrow(() -> StepRecordRepository.findByAppUserIdAndWeekStart( 1,dateList.get(0)));
+
+    }
+
+
 
 }
