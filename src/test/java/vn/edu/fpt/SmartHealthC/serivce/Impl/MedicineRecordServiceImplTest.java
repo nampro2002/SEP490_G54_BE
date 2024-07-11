@@ -176,6 +176,26 @@ public class MedicineRecordServiceImplTest {
 
     }
 
+    @Test
+    void getAllMedicineRecords_Success() {
+
+        //Given
+        when(MedicineRecordRepository.findDistinctDate(1)).thenReturn(dateList);
+        when(MedicineRecordRepository.findByDate( dateList.get(0),1)).thenReturn(MedicineRecordList);
+
+
+        List<Date> Result_activityWeekList = MedicineRecordRepository.findDistinctDate(1);
+        assertNotNull(Result_activityWeekList);
+
+        List<MedicineRecord> Result_MedicineRecordList = MedicineRecordRepository.findByDate( dateList.get(0),1);
+        assertNotNull(Result_MedicineRecordList);
+
+
+        assertDoesNotThrow(() -> MedicineRecordRepository.findDistinctDate(1));
+        assertDoesNotThrow(() -> MedicineRecordRepository.findByDate( dateList.get(0),1));
+
+    }
+
 
 
 }
