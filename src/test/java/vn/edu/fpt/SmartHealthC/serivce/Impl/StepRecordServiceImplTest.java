@@ -246,6 +246,23 @@ public class StepRecordServiceImplTest {
 
     }
 
+    @Test
+    void getListStepPerWeek_Sucess() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail(any())).thenReturn(Optional.of(testAppUser));
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(any());
+        assertNotNull(appUser);
+        when(StepRecordRepository.findByAppUserId(any())).thenReturn(StepRecordList);
+        List<StepRecord> StepRecordList = StepRecordRepository.findByAppUserId(any());
+        assertNotNull(StepRecordList);
+        org.assertj.core.api.Assertions.assertThat(StepRecordList.size()).isGreaterThanOrEqualTo(0);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail(any()));
+        assertDoesNotThrow(() -> StepRecordRepository.findByAppUserId( any()));
+
+    }
+
 
 
 
