@@ -6,8 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResDTO.FormMonthlyQuestionDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResDTO.FormMonthlyResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.serivce.FormQuestionService;
@@ -53,6 +56,16 @@ public class FormQuestionController {
                 .body(ApiResponse.<List<FormQuestionResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
                         .result(formQuestionService.getAllFormQuestionsMobile())
+                        .build()).getBody();
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/mobile/get-form-monthly/{type}")
+    public ApiResponse<FormMonthlyResponseDTO> getFormMonthlyMobile(@PathVariable MonthlyRecordType type) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<FormMonthlyResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(formQuestionService.getFormMonthlyMobile(type))
                         .build()).getBody();
     }
 

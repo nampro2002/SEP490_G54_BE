@@ -18,6 +18,7 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.NotificationSettingRepository;
 import vn.edu.fpt.SmartHealthC.repository.RefreshTokenRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
+import vn.edu.fpt.SmartHealthC.serivce.MonthlyQuestionService;
 import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 import vn.edu.fpt.SmartHealthC.serivce.WeeklyReviewService;
 import vn.edu.fpt.SmartHealthC.serivce.Impl.NotificationServiceImpl;
@@ -46,6 +47,8 @@ public class MonthlyJob implements Job {
     private TriggerExecutionService triggerExecutionService;
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
+    @Autowired
+    private MonthlyQuestionService monthlyQuestionService;
 
 
     @Override
@@ -64,40 +67,41 @@ public class MonthlyJob implements Job {
 //                .weekStart(weeklyReviewService.findSmallestWeekStart(appUser))
 //                .build();
         for (UserWeekStart userWeekStart : userWeekStarts) {
-        Instant instant = userWeekStart.getWeekStart().toInstant();
-        // Convert Instant to LocalDateTime considering system default zone
-        LocalDate localDateTime = LocalDate.ofInstant(instant, ZoneId.systemDefault());
-        LocalDate currentDate = LocalDate.now();
+            Instant instant = userWeekStart.getWeekStart().toInstant();
+            // Convert Instant to LocalDateTime considering system default zone
+            LocalDate localDateTime = LocalDate.ofInstant(instant, ZoneId.systemDefault());
+            LocalDate currentDate = LocalDate.now();
 //        LocalDate currentDate = LocalDate.of(2024, 6, 8);
-        long daysBetween = ChronoUnit.DAYS.between(localDateTime, currentDate);
-        System.out.println("Days between Monthly : " + daysBetween);
-        if(daysBetween % 7 == 6 && daysBetween % 4 == 2){
-            NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(userWeekStart.getAppUser().getAccountId().getId(), TypeNotification.MONTHLY_REPORT_NOTIFICATION);
-            System.out.println("Send notification to user: " + userWeekStart.getAppUser().getId());
-            if(notificationSetting.isStatus()){
-                List<RefreshToken> refreshToken = refreshTokenRepository.findRecordByAccountId(userWeekStart.getAppUser().getAccountId().getId());
-                for (RefreshToken token : refreshToken){
-                    HashMap<String, String> data = new HashMap<>();
-                    data.put("key1", "value1");
-                    DeviceNotificationRequest deviceNotificationRequest = DeviceNotificationRequest.builder()
-                            .title("Monthly")
-                            .body("This is a monthly notification.")
-                            .imageUrl("http://example.com/image.png")
-                            .data(data)
-                            .deviceToken(token.getDeviceToken())
-                            .build();
-                    try {
-                        notificationService.sendNotificationToDevice(deviceNotificationRequest);
-                    } catch (FirebaseMessagingException e) {
-                        throw new RuntimeException(e);
-                    } catch (ExecutionException e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+            long daysBetween = ChronoUnit.DAYS.between(localDateTime, currentDate);
+            System.out.println("Days between Monthly : " + daysBetween);
+            if (daysBetween == 6 || (daysBetween % 7 == 6 && daysBetween % 4 == 2)) {
+                NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(userWeekStart.getAppUser().getAccountId().getId(), TypeNotification.MONTHLY_REPORT_NOTIFICATION);
+                System.out.println("Send notification to user: " + userWeekStart.getAppUser().getId());
+                monthlyQuestionService.createNewMonthMark(userWeekStart.getAppUser().getId());
+                if (notificationSetting.isStatus()) {
+                    List<RefreshToken> refreshToken = refreshTokenRepository.findRecordByAccountId(userWeekStart.getAppUser().getAccountId().getId());
+                    for (RefreshToken token : refreshToken) {
+                        HashMap<String, String> data = new HashMap<>();
+                        data.put("key1", "value1");
+                        DeviceNotificationRequest deviceNotificationRequest = DeviceNotificationRequest.builder()
+                                .title("Monthly")
+                                .body("This is a monthly notification.")
+                                .imageUrl("http://example.com/image.png")
+                                .data(data)
+                                .deviceToken(token.getDeviceToken())
+                                .build();
+                        try {
+                            notificationService.sendNotificationToDevice(deviceNotificationRequest);
+                        } catch (FirebaseMessagingException e) {
+                            throw new RuntimeException(e);
+                        } catch (ExecutionException e) {
+                            throw new RuntimeException(e);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
             }
-        }
         }
     }
 }

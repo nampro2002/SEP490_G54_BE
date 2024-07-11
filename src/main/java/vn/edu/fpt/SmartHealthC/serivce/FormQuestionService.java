@@ -1,6 +1,8 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResDTO.FormMonthlyResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
@@ -16,4 +18,6 @@ public interface FormQuestionService {
     FormQuestionResponseDTO deleteFormQuestion(Integer id);
 
     List<FormQuestionResponseDTO> getAllFormQuestionsMobile();
+
+    FormMonthlyResponseDTO getFormMonthlyMobile(MonthlyRecordType type);
 }
