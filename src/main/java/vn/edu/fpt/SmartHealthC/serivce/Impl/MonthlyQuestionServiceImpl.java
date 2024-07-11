@@ -331,14 +331,21 @@ import java.util.Optional;
         List<MonthlyStatisticResponseDTO> monthlyStatisticResponseDTOList = new ArrayList<>();
         List<Integer> monthlyNumbers = monthlyQuestionRepository.find3ByAppUser(appUserId);
         for (Integer month : monthlyNumbers){
-            monthlyStatisticResponseDTOList.add(getPoint(month));
+            if(month != 0){
+                monthlyStatisticResponseDTOList.add(getPoint(month));
+            }
         }
+
         return monthlyStatisticResponseDTOList;
     }
+
     @Override
-    public List<MonthlyStatisticResponseDTO> getPoint3MonthMobile() {
+    public MobileGeneralChartResponseDTO getPoint3MonthMobile() {
+        MobileGeneralChartResponseDTO mobileGeneralChartResponseDTO= new MobileGeneralChartResponseDTO();
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
-        return getPoint3Month(appUser.getId());
+        mobileGeneralChartResponseDTO.setChart3Month(getPoint3Month(appUser.getId()));
+        mobileGeneralChartResponseDTO.setFirstWeek(getPoint(0));
+        return mobileGeneralChartResponseDTO;
     }
     @Override
     public List<Integer> getList3MonthlyNumberWeb(Integer appUserId) {
@@ -378,6 +385,8 @@ import java.util.Optional;
         }
         return monthlyStatisticResponseDTOList;
     }
+
+
 
     public Float getDataByQuestionNumber(List<MonthlyAnswerResponseDTO> list,int questionNumber){
         Optional<MonthlyAnswerResponseDTO> monthlyAnswerResponseDTO = list.stream().filter(record -> record.getQuestionNumber() == questionNumber).findFirst();

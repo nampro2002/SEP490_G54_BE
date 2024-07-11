@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MobileGeneralChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyAnswerResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyNumberResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyStatisticResponseDTO;
@@ -25,7 +26,7 @@ public interface MonthlyQuestionService {
 
 
 
-    List<MonthlyStatisticResponseDTO> getPoint3MonthMobile();
+    MobileGeneralChartResponseDTO getPoint3MonthMobile();
 
     List<Integer> getList3MonthlyNumberWeb(Integer appUserId);
 
@@ -35,4 +36,5 @@ public interface MonthlyQuestionService {
     List<MonthlyStatisticResponseDTO> getPoint2MonthWeb(Integer appUserId, Integer monthNumber);
 
     List<MonthlyStatisticResponseDTO> getPoint12MonthWeb(Integer appUserId);
+
 }
