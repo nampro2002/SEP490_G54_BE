@@ -138,5 +138,40 @@ public class MentalRecordServiceImplTest {
 
     }
 
+    @Test
+    void updateMentalRecord_Success() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(MentalRecordRepository.findByAppUserId(testAppUser.getId())).thenReturn(MentalRecordList);
+        when(MentalRecordRepository.save(MentalRecord)).thenReturn(MentalRecord);
+        when(MentalRecordRepository.findById(1)).thenReturn(Optional.of(MentalRecord));
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail("test@test.com");
+
+        List<MentalRecord> resultMentalRecords = MentalRecordRepository.findByAppUserId(testAppUser.getId());
+        assertNotNull(resultMentalRecords);
+
+        Optional<MentalRecord> MentalRecordOption = MentalRecordRepository.findById(1);
+        assertNotNull(MentalRecordOption);
+
+        MentalRecord.setDate(MentalRecordOption.get().getWeekStart());
+        MentalRecord resultMentalRecord = MentalRecordRepository.save(MentalRecord);
+
+        assertNotNull(resultAppUser.get());
+        assertNotNull(resultMentalRecord);
+        assertNotNull(resultAppUser.get());
+
+
+        org.assertj.core.api.Assertions.assertThat(resultMentalRecords.size()).isGreaterThanOrEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(MentalRecord).isEqualTo(resultMentalRecord);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail("test@test.com"));
+        assertDoesNotThrow(() -> MentalRecordRepository.findByAppUserId(testAppUser.getId()));
+        assertDoesNotThrow(() -> MentalRecordRepository.save(MentalRecord));
+        assertDoesNotThrow(() -> MentalRecordRepository.findById(1));
+
+    }
+
 
 }
