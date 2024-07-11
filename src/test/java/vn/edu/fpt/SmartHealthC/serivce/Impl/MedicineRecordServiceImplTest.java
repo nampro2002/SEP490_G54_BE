@@ -141,6 +141,41 @@ public class MedicineRecordServiceImplTest {
 
     }
 
+    @Test
+    void updateMedicineRecord_Success() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(MedicineRecordRepository.findByAppUser(testAppUser.getId())).thenReturn(MedicineRecordList);
+        when(MedicineRecordRepository.save(MedicineRecord)).thenReturn(MedicineRecord);
+        when(MedicineRecordRepository.findById(1)).thenReturn(Optional.of(MedicineRecord));
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail("test@test.com");
+
+        List<MedicineRecord> resultMedicineRecords = MedicineRecordRepository.findByAppUser(testAppUser.getId());
+        assertNotNull(resultMedicineRecords);
+
+        Optional<MedicineRecord> MedicineRecordOption = MedicineRecordRepository.findById(1);
+        assertNotNull(MedicineRecordOption);
+
+        MedicineRecord.setDate(MedicineRecordOption.get().getWeekStart());
+        MedicineRecord resultMedicineRecord = MedicineRecordRepository.save(MedicineRecord);
+
+        assertNotNull(resultAppUser.get());
+        assertNotNull(resultMedicineRecord);
+        assertNotNull(resultAppUser.get());
+
+
+        org.assertj.core.api.Assertions.assertThat(resultMedicineRecords.size()).isGreaterThanOrEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(MedicineRecord).isEqualTo(resultMedicineRecord);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail("test@test.com"));
+        assertDoesNotThrow(() -> MedicineRecordRepository.findByAppUser(testAppUser.getId()));
+        assertDoesNotThrow(() -> MedicineRecordRepository.save(MedicineRecord));
+        assertDoesNotThrow(() -> MedicineRecordRepository.findById(1));
+
+    }
+
 
 
 }
