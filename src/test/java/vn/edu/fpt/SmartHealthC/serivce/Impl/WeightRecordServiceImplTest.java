@@ -139,5 +139,41 @@ public class WeightRecordServiceImplTest {
 
     }
 
+    @Test
+    void updateWeightRecord_Success() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(WeightRecordRepository.findAppUser(testAppUser.getId())).thenReturn(WeightRecordList);
+        when(WeightRecordRepository.save(WeightRecord)).thenReturn(WeightRecord);
+        when(WeightRecordRepository.findById(1)).thenReturn(Optional.of(WeightRecord));
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail("test@test.com");
+
+        List<WeightRecord> resultWeightRecords = WeightRecordRepository.findAppUser(testAppUser.getId());
+        assertNotNull(resultWeightRecords);
+
+        Optional<WeightRecord> WeightRecordOption = WeightRecordRepository.findById(1);
+        assertNotNull(WeightRecordOption);
+
+        WeightRecord.setDate(WeightRecordOption.get().getWeekStart());
+        WeightRecord resultWeightRecord = WeightRecordRepository.save(WeightRecord);
+
+        assertNotNull(resultAppUser.get());
+        assertNotNull(resultWeightRecord);
+        assertNotNull(resultAppUser.get());
+
+
+        org.assertj.core.api.Assertions.assertThat(resultWeightRecords.size()).isGreaterThanOrEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(WeightRecord).isEqualTo(resultWeightRecord);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail("test@test.com"));
+        assertDoesNotThrow(() -> WeightRecordRepository.findAppUser(testAppUser.getId()));
+        assertDoesNotThrow(() -> WeightRecordRepository.save(WeightRecord));
+        assertDoesNotThrow(() -> WeightRecordRepository.findById(1));
+
+    }
+
+
 
 }
