@@ -196,6 +196,34 @@ public class MedicineRecordServiceImplTest {
 
     }
 
+    @Test
+    void updateMedicineRecord_ACTIVITY_PLAN_NOT_FOUND() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(MedicineRecordRepository.findByAppUser(testAppUser.getId())).thenReturn(MedicineRecordList);
+        when(MedicineRecordRepository.findById(1)).thenReturn(Optional.of(MedicineRecord));
+        when(MedicineRecordRepository.save(MedicineRecord)).thenReturn(MedicineRecord);
+
+
+        Authentication mockAuthentication = Mockito.mock(Authentication.class);
+        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(mockSecurityContext);
+
+        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+        when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
+
+
+        List<MedicineRecord> resultMedicineRecords = MedicineRecordRepository.findByAppUser(testAppUser.getId());
+        assertNotNull(resultMedicineRecords);
+
+        AppException exception = assertThrows(AppException.class,
+                () -> MedicineRecordService.updateMedicineRecord(MedicineRecordDTO));
+
+        assertEquals(ErrorCode.APP_USER_NOT_FOUND, exception.getErrorCode());
+
+    }
+
 
 
 }
