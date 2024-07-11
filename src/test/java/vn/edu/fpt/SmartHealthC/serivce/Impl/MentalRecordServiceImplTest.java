@@ -192,5 +192,33 @@ public class MentalRecordServiceImplTest {
 
     }
 
+    @Test
+    void updateMentalRecord_ACTIVITY_PLAN_NOT_FOUND() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(MentalRecordRepository.findByAppUserId(testAppUser.getId())).thenReturn(MentalRecordList);
+        when(MentalRecordRepository.findById(1)).thenReturn(Optional.of(MentalRecord));
+        when(MentalRecordRepository.save(MentalRecord)).thenReturn(MentalRecord);
+
+
+        Authentication mockAuthentication = Mockito.mock(Authentication.class);
+        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(mockSecurityContext);
+
+        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+        when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
+
+
+        List<MentalRecord> resultMentalRecords = MentalRecordRepository.findByAppUserId(testAppUser.getId());
+        assertNotNull(resultMentalRecords);
+
+        AppException exception = assertThrows(AppException.class,
+                () -> MentalRecordService.updateMentalRecord(MentalRecordDTO));
+
+        assertEquals(ErrorCode.APP_USER_NOT_FOUND, exception.getErrorCode());
+
+    }
+
 
 }
