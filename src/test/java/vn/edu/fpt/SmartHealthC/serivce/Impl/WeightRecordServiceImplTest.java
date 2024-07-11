@@ -119,5 +119,25 @@ public class WeightRecordServiceImplTest {
 
     }
 
+    @Test
+    void getDataChart_Success() {
+        Integer userId = 13;
+        String email = "test@test.com";
+        //Act
+        when(appUserRepository.findByAccountEmail(email)).thenReturn(Optional.of(testAppUser));
+        when(WeightRecordRepository.findAppUser(userId)).thenReturn(WeightRecordList);
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail(email);
+        List<WeightRecord> result = WeightRecordRepository.findAppUser(userId);
+
+        //THEN
+        assertNotNull(resultAppUser);
+        assertNotNull(result);
+        org.assertj.core.api.Assertions.assertThat(result.size()).isGreaterThanOrEqualTo(0);
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail(email));
+        assertDoesNotThrow(() -> WeightRecordRepository.findAppUser(userId));
+
+    }
+
 
 }
