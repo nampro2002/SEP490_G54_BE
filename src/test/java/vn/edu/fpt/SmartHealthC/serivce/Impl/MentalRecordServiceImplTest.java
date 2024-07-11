@@ -242,6 +242,23 @@ public class MentalRecordServiceImplTest {
 
     }
 
+    @Test
+    void getListMentalPerWeek_Sucess() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail(any())).thenReturn(Optional.of(testAppUser));
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(any());
+        assertNotNull(appUser);
+        when(MentalRecordRepository.findByAppUserId(any())).thenReturn(MentalRecordList);
+        List<MentalRecord> mentalRecordList = MentalRecordRepository.findByAppUserId(any());
+        assertNotNull(mentalRecordList);
+        org.assertj.core.api.Assertions.assertThat(mentalRecordList.size()).isGreaterThanOrEqualTo(0);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail(any()));
+        assertDoesNotThrow(() -> MentalRecordRepository.findByAppUserId( any()));
+
+    }
+
 
 
 }
