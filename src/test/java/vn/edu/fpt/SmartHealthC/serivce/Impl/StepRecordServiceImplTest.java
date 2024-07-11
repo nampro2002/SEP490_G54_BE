@@ -224,6 +224,29 @@ public class StepRecordServiceImplTest {
 
     }
 
+    @Test
+    void getStepRecordById_appUserID_Notfound() {
+
+        StepRecordCreateDTO StepRecord = new StepRecordCreateDTO();
+
+        Authentication mockAuthentication = Mockito.mock(Authentication.class);
+        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(mockSecurityContext);
+
+        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+        when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
+
+        // Mock empty user retrieval (Optional.empty())
+        when(appUserRepository.findByAccountEmail("Test@gmail.com")).thenReturn(Optional.empty());
+
+        // Assert the expected exception with specific error code
+        AppException exception = assertThrows(AppException.class, () -> StepRecordService.getStepRecordById(any()));
+
+        assertEquals(ErrorCode.STEP_RECORD_NOT_FOUND, exception.getErrorCode());
+
+    }
+
+
 
 
 
