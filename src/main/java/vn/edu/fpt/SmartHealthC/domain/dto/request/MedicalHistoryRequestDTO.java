@@ -22,6 +22,6 @@ public class MedicalHistoryRequestDTO {
     private String name;
     @NotNull(message = "missing typeMedicalHistory")
     private TypeMedicalHistory type;
-
+    private String imageUrl;
     private boolean isDeleted = false;
 }

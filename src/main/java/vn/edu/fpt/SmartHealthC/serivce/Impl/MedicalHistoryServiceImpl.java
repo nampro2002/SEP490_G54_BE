@@ -34,6 +34,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                 .builder()
                 .name(medicalHistoryRequestDTO.getName())
                 .type(medicalHistoryRequestDTO.getType())
+                .imageUrl(medicalHistoryRequestDTO.getImageUrl())
                 .isDeleted(false)
                 .build();
         medicalHistory =  medicalHistoryRepository.save(medicalHistory);
@@ -66,6 +67,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                 .builder()
                 .id(medicalHistory.get().getId())
                 .name(medicalHistory.get().getName())
+                .imageUrl(medicalHistory.get().getImageUrl())
                 .type(medicalHistory.get().getType())
                 .build();
         return medicalHistoryResDTO;
@@ -85,6 +87,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                     .builder()
                     .id(medicalHistory.getId())
                     .name(medicalHistory.getName())
+                    .imageUrl(medicalHistory.getImageUrl())
                     .type(medicalHistory.getType())
                     .build();
             medicalHistoryResDTOList.add(medicalHistoryResDTO);
@@ -102,12 +105,15 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         MedicalHistory medicalHistory = getMedicalHistoryEntityById(id);
         medicalHistory.setName(medicalHistoryRequestDTO.getName());
         medicalHistory.setType(medicalHistoryRequestDTO.getType());
+        medicalHistory.setImageUrl(medicalHistoryRequestDTO.getImageUrl());
+
         medicalHistory.setDeleted(medicalHistoryRequestDTO.isDeleted());
         medicalHistoryRepository.save(medicalHistory);
         MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
                 .builder()
                 .id(medicalHistory.getId())
                 .name(medicalHistory.getName())
+                .imageUrl(medicalHistory.getImageUrl())
                 .type(medicalHistory.getType())
                 .build();
         return medicalHistoryResDTO;
@@ -136,6 +142,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
             MedicalHistoryResDTO medicalHistoryResDTO = MedicalHistoryResDTO
                     .builder()
                     .id(medicalHistory.getId())
+                    .imageUrl(medicalHistory.getImageUrl())
                     .name(medicalHistory.getName())
                     .type(medicalHistory.getType())
                     .build();

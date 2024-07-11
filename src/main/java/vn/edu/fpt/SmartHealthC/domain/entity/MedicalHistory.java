@@ -21,6 +21,8 @@ public class MedicalHistory {
     private String name;
 
     @Enumerated(EnumType.STRING)
+
+    private String imageUrl;
     private TypeMedicalHistory type;
 
     @OneToMany(mappedBy = "conditionId")
