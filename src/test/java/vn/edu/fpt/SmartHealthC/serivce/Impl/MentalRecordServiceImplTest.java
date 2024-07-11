@@ -220,5 +220,28 @@ public class MentalRecordServiceImplTest {
 
     }
 
+    @Test
+    void getListMentalPerWeek_appUserID_Notfound() {
+
+        MentalRecordCreateDTO MentalRecord = new MentalRecordCreateDTO();
+
+        Authentication mockAuthentication = Mockito.mock(Authentication.class);
+        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(mockSecurityContext);
+
+        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+        when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
+
+        // Mock empty user retrieval (Optional.empty())
+        when(appUserRepository.findByAccountEmail("Test@gmail.com")).thenReturn(Optional.empty());
+
+        // Assert the expected exception with specific error code
+        AppException exception = assertThrows(AppException.class, () -> MentalRecordService.getListMentalPerWeek("2024/17/08"));
+
+        assertEquals(ErrorCode.APP_USER_NOT_FOUND, exception.getErrorCode());
+
+    }
+
+
 
 }
