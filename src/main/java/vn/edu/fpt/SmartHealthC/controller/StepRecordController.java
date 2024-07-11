@@ -75,7 +75,7 @@ public class StepRecordController {
                         .build()).getBody();
     }
 
-    @PutMapping("/new")
+    @PutMapping("/update-cont")
     public ApiResponse<Void> updateStepRecordNEW(@RequestBody @Valid StepRecordUpdateContinuousDTO stepRecordDTO) throws ParseException {
         stepRecordService.updateStepRecordNEW(stepRecordDTO);
         return ResponseEntity.status(HttpStatus.OK)

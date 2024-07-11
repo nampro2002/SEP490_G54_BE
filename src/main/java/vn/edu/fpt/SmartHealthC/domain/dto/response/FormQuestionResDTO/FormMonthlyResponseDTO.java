@@ -1,22 +1,18 @@
-package vn.edu.fpt.SmartHealthC.domain.dto.response;
+package vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResDTO;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FormQuestionResponseDTO {
-    private Integer id;
-    private String question;
+public class FormMonthlyResponseDTO {
     private MonthlyRecordType type;
-    private int questionNumber;
+    private List<FormMonthlyQuestionDTO> formMonthlyQuestionDTOList;
 }
-
-

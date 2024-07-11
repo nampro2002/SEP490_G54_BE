@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
 
 @Entity
@@ -17,6 +18,6 @@ public class FormQuestion {
 
     private String question;
     @Enumerated(EnumType.STRING)
-    private TypeQuestion type;
+    private MonthlyRecordType type;
     private int questionNumber;
 }

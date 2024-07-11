@@ -6,7 +6,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResDTO.FormMonthlyQuestionDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResDTO.FormMonthlyResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
@@ -146,4 +149,25 @@ public class FormQuestionServiceImpl implements FormQuestionService {
         }
         return formQuestionResponseDTOS;
     }
+
+    @Override
+    public FormMonthlyResponseDTO getFormMonthlyMobile(MonthlyRecordType type) {
+        List<FormQuestion> formQuestionList = formQuestionRepository.findRecordByType(type);
+            List<FormMonthlyQuestionDTO> formMonthlyResponseDTOS = new ArrayList<>();
+            for (FormQuestion formQuestion : formQuestionList) {
+                FormMonthlyQuestionDTO formMonthlyResponseDTO = FormMonthlyQuestionDTO
+                        .builder()
+                        .question(formQuestion.getQuestion())
+                        .questionNumber(formQuestion.getQuestionNumber())
+                        .build();
+                formMonthlyResponseDTOS.add(formMonthlyResponseDTO);
+            }
+        FormMonthlyResponseDTO formMonthlyResponseDTO = FormMonthlyResponseDTO
+                .builder()
+                .type(type)
+                .formMonthlyQuestionDTOList(formMonthlyResponseDTOS)
+                .build();
+        return formMonthlyResponseDTO;
+    }
+
 }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
 
 @Data
@@ -17,7 +18,7 @@ public class FormQuestionRequestDTO {
     @NotBlank(message = "missing question")
     private String question;
     @NotNull(message = "missing type")
-    private TypeQuestion type;
+    private MonthlyRecordType type;
     @NotNull(message = "missing questionNumber")
     private Integer questionNumber;
 }

@@ -24,7 +24,7 @@ public class MonthlyQuestionController {
     private MonthlyQuestionService monthlyQuestionService;
 
     @PostMapping
-    public ApiResponse<Void> create40MonthlyQuestion(@RequestBody @Valid List<MonthlyQuestionDTO> monthlyQuestionDTO) {
+    public ApiResponse<Void> createMonthlyAnswer(@RequestBody @Valid List<MonthlyQuestionDTO> monthlyQuestionDTO) {
         monthlyQuestionService.createAnswers(monthlyQuestionDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<Void>builder()
