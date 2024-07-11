@@ -36,7 +36,7 @@ import java.util.Optional;
         Integer lastMonth = monthlyQuestionRepository.findByAppUser(appUser.get().getId());
         MonthlyRecord monthlyRecord = MonthlyRecord.builder()
                 .appUserId(appUser.get())
-                .monthNumber(lastMonth == null ? 1 : lastMonth+1)
+                .monthNumber(lastMonth == null ? 0 : lastMonth+1)
                 .monthlyRecordType(MonthlyRecordType.NEW_MONTH_MARK)
                 .build();
         monthlyQuestionRepository.save(monthlyRecord);
