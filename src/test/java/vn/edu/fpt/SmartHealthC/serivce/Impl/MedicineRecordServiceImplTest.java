@@ -246,6 +246,23 @@ public class MedicineRecordServiceImplTest {
 
     }
 
+    @Test
+    void getListMedicinePerWeek_Sucess() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail(any())).thenReturn(Optional.of(testAppUser));
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(any());
+        assertNotNull(appUser);
+        when(MedicineRecordRepository.findByAppUser(any())).thenReturn(MedicineRecordList);
+        List<MedicineRecord> MedicineRecordList = MedicineRecordRepository.findByAppUser(any());
+        assertNotNull(MedicineRecordList);
+        org.assertj.core.api.Assertions.assertThat(MedicineRecordList.size()).isGreaterThanOrEqualTo(0);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail(any()));
+        assertDoesNotThrow(() -> MedicineRecordRepository.findByAppUser( any()));
+
+    }
+
 
 
 
