@@ -18,6 +18,7 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.NotificationSettingRepository;
 import vn.edu.fpt.SmartHealthC.repository.RefreshTokenRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
+import vn.edu.fpt.SmartHealthC.serivce.MonthlyQuestionService;
 import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 import vn.edu.fpt.SmartHealthC.serivce.WeeklyReviewService;
 import vn.edu.fpt.SmartHealthC.serivce.Impl.NotificationServiceImpl;
@@ -46,6 +47,8 @@ public class MonthlyJob implements Job {
     private TriggerExecutionService triggerExecutionService;
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
+    @Autowired
+    private MonthlyQuestionService monthlyQuestionService;
 
 
     @Override
@@ -74,6 +77,7 @@ public class MonthlyJob implements Job {
         if(daysBetween % 7 == 6 && daysBetween % 4 == 2){
             NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(userWeekStart.getAppUser().getAccountId().getId(), TypeNotification.MONTHLY_REPORT_NOTIFICATION);
             System.out.println("Send notification to user: " + userWeekStart.getAppUser().getId());
+            monthlyQuestionService.createNewMonthMark(userWeekStart.getAppUser().getId());
             if(notificationSetting.isStatus()){
                 List<RefreshToken> refreshToken = refreshTokenRepository.findRecordByAccountId(userWeekStart.getAppUser().getAccountId().getId());
                 for (RefreshToken token : refreshToken){

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
 
 @Data
@@ -14,7 +15,7 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
 public class FormQuestionResponseDTO {
     private Integer id;
     private String question;
-    private TypeQuestion type;
+    private MonthlyRecordType type;
     private int questionNumber;
 }
 
