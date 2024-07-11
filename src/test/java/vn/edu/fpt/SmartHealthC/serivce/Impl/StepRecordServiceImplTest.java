@@ -94,5 +94,31 @@ public class StepRecordServiceImplTest {
 
     }
 
+    @Test
+    void createStepRecord_Success() {
+
+        //Given
+        when(appUserRepository.findByAccountEmail("test@test.com")).thenReturn(Optional.of(testAppUser));
+        when(StepRecordRepository.findByAppUserId(testAppUser.getId())).thenReturn(StepRecordList);
+        when(StepRecordRepository.save(StepRecord)).thenReturn(StepRecord);
+
+        Optional<AppUser> resultAppUser = appUserRepository.findByAccountEmail("test@test.com");
+        List<StepRecord> resultStepRecords = StepRecordRepository.findByAppUserId(testAppUser.getId());
+        StepRecord resultStepRecord = StepRecordRepository.save(StepRecord);
+
+        assertNotNull(resultAppUser.get());
+        assertNotNull(resultStepRecords);
+        assertNotNull(resultStepRecord);
+
+
+        org.assertj.core.api.Assertions.assertThat(resultStepRecords.size()).isGreaterThanOrEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(StepRecord).isEqualTo(resultStepRecord);
+
+        assertDoesNotThrow(() -> appUserRepository.findByAccountEmail("test@test.com"));
+        assertDoesNotThrow(() -> StepRecordRepository.findByAppUserId(testAppUser.getId()));
+        assertDoesNotThrow(() -> StepRecordRepository.save(StepRecord));
+
+    }
+
 
 }
