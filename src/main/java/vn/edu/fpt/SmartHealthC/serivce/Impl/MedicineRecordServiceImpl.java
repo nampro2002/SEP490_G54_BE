@@ -263,17 +263,17 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         // Chuyển đổi ngày trong tuần thành số theo quy ước
         switch (dayOfWeek) {
             case Calendar.MONDAY:
-                return 1;
-            case Calendar.TUESDAY:
                 return 2;
-            case Calendar.WEDNESDAY:
+            case Calendar.TUESDAY:
                 return 3;
-            case Calendar.THURSDAY:
+            case Calendar.WEDNESDAY:
                 return 4;
-            case Calendar.FRIDAY:
+            case Calendar.THURSDAY:
                 return 5;
-            case Calendar.SATURDAY:
+            case Calendar.FRIDAY:
                 return 6;
+            case Calendar.SATURDAY:
+                return 7;
             case Calendar.SUNDAY:
                 return 0;
             default:

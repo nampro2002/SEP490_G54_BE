@@ -370,8 +370,8 @@ import java.util.Optional;
         return getPoint2Month(appUserId,monthNumber);
     }
     @Override
-    public List<MonthlyStatisticResponseDTO> getPoint12MonthWeb(Integer appUserId, Integer monthNumber) {
-        List<Integer> monthlyNumbers = monthlyQuestionRepository.find12ByAppUserAndMonthNumber(appUserId,monthNumber);
+    public List<MonthlyStatisticResponseDTO> getPoint12MonthWeb(Integer appUserId) {
+        List<Integer> monthlyNumbers = monthlyQuestionRepository.find12ByAppUser(appUserId);
         List<MonthlyStatisticResponseDTO> monthlyStatisticResponseDTOList = new ArrayList<>();
         for (Integer month : monthlyNumbers){
             monthlyStatisticResponseDTOList.add(getPoint(month));
