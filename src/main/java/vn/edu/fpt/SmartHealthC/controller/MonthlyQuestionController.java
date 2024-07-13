@@ -64,14 +64,15 @@ public class MonthlyQuestionController {
     }
 
     //Lấy câu trả lời theo tháng
-    @GetMapping("/mobile/get-answer/{monthNumber}")
+    @GetMapping("/mobile/get-answer/{monthNumber}/{type}")
     public ApiResponse<List<MonthlyAnswerResponseDTO>> getMobileListAnswer(
             @PathVariable int monthNumber,
+            @PathVariable String type
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MonthlyAnswerResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.getMobileListAnswer(monthNumber))
+                        .result(monthlyQuestionService.getMobileListAnswer(monthNumber,type))
                         .build()).getBody();
     }
     @GetMapping("/web/get-answer/{userId}/{monthNumber}/{type}")

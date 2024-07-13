@@ -10,6 +10,8 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyRecord;
+import vn.edu.fpt.SmartHealthC.exception.AppException;
+import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MonthlyQuestionRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
@@ -80,8 +82,14 @@ import java.util.Optional;
     public List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber,String type) {
         List<MonthlyAnswerResponseDTO> monthlyAnswerResponseDTOList = new ArrayList<>();
         List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(userId,monthNumber);
+        MonthlyRecordType monthlyRecordType;
+        try {
+            monthlyRecordType = MonthlyRecordType.valueOf(type.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new AppException(ErrorCode.MONTHLY_TYPE_NOT_FOUND);
+        }
         for (MonthlyRecord record : monthlyNumbers) {
-            if(record.getMonthlyRecordType().equals(MonthlyRecordType.valueOf(type))){
+            if(record.getMonthlyRecordType().equals(monthlyRecordType)){
                 MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                         .questionNumber(record.getQuestionNumber())
                         .question(record.getQuestion())
@@ -96,11 +104,18 @@ import java.util.Optional;
     }
 
     @Override
-    public List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber) {
+    public List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber, String type) {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         List<MonthlyAnswerResponseDTO> monthlyAnswerResponseDTOList = new ArrayList<>();
         List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUser.getId(),monthNumber);
+        MonthlyRecordType monthlyRecordType;
+        try {
+            monthlyRecordType = MonthlyRecordType.valueOf(type.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new AppException(ErrorCode.MONTHLY_TYPE_NOT_FOUND);
+        }
         for (MonthlyRecord record : monthlyNumbers) {
+            if(record.getMonthlyRecordType().equals(monthlyRecordType)){
                 MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                         .questionNumber(record.getQuestionNumber())
                         .question(record.getQuestion())
@@ -108,6 +123,7 @@ import java.util.Optional;
                         .answer(record.getAnswer())
                         .build();
                 monthlyAnswerResponseDTOList.add(monthlyNumberResponseDTO);
+            }
         }
         return monthlyAnswerResponseDTOList;
     }
