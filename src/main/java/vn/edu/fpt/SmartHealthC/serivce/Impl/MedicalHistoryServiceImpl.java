@@ -76,7 +76,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     @Override
     public ResponsePaging<List<MedicalHistoryResDTO>> getAllMedicalHistory(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicalHistory> pagedResult = medicalHistoryRepository.findAllNotDeleted(paging, search);
+        Page<MedicalHistory> pagedResult = medicalHistoryRepository.findAllNotDeleted(paging, search.toLowerCase());
         List<MedicalHistory> medicalHistories= new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicalHistories = pagedResult.getContent();

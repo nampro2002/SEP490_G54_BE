@@ -67,6 +67,9 @@ public class MonthlyJob implements Job {
 //                .weekStart(weeklyReviewService.findSmallestWeekStart(appUser))
 //                .build();
         for (UserWeekStart userWeekStart : userWeekStarts) {
+            if(userWeekStart.getWeekStart() == null) {
+                continue;
+            }
             Instant instant = userWeekStart.getWeekStart().toInstant();
             // Convert Instant to LocalDateTime considering system default zone
             LocalDate localDateTime = LocalDate.ofInstant(instant, ZoneId.systemDefault());

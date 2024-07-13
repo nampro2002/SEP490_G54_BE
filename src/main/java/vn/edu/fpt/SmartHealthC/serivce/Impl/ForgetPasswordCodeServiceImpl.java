@@ -19,9 +19,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Optional;
-import java.util.TimeZone;
+import java.util.*;
 
 @Service
 public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService {
@@ -104,7 +102,7 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         if (account.isEmpty()) {
             throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
         }
-        String newPassword = emailService.generateRandomCode(10);
+        String newPassword = generateRandomPassword(8);
         String encodedPassword = passwordEncoder.encode(newPassword);
         String message = "Mật khâu mới của bạn là  : " +newPassword;
 
@@ -119,5 +117,37 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         account.get().setPassword(encodedPassword);
         accountRepository.save(account.get());
         return "Cập nhật mật khẩu mới thành công";
+    }
+
+    private String generateRandomPassword(int length) {
+        final String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        final String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
+        final String DIGITS = "0123456789";
+        final String SPECIAL_CHARS = "@$!%*?&";
+        final SecureRandom random = new SecureRandom();
+
+        StringBuilder password = new StringBuilder(length);
+        List<Character> passwordChars = new ArrayList<>();
+
+        // Ensure each type of character is present at least once
+        passwordChars.add(UPPERCASE.charAt(random.nextInt(UPPERCASE.length())));
+        passwordChars.add(LOWERCASE.charAt(random.nextInt(LOWERCASE.length())));
+        passwordChars.add(DIGITS.charAt(random.nextInt(DIGITS.length())));
+        passwordChars.add(SPECIAL_CHARS.charAt(random.nextInt(SPECIAL_CHARS.length())));
+
+        // Fill the rest of the password length with random characters
+        String allChars = UPPERCASE + LOWERCASE + DIGITS + SPECIAL_CHARS;
+        for (int i = 4; i < length; i++) {
+            passwordChars.add(allChars.charAt(random.nextInt(allChars.length())));
+        }
+
+        // Shuffle to prevent any predictable sequence
+        Collections.shuffle(passwordChars);
+
+        for (char c : passwordChars) {
+            password.append(c);
+        }
+
+        return password.toString();
     }
 }

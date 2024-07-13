@@ -72,7 +72,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     @Override
     public ResponsePaging<List<MedicineTypeResponseDTO>> getAllMedicineTypes(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicineType> pagedResult = medicineTypeRepository.findAllNotDeleted(paging, search);
+        Page<MedicineType> pagedResult = medicineTypeRepository.findAllNotDeleted(paging, search.toLowerCase());
         List<MedicineType> medicineTypeList= new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicineTypeList = pagedResult.getContent();
