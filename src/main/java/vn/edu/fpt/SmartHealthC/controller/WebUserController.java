@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserUpdateRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WebUserResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserMedicalHistory;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
@@ -46,12 +48,12 @@ public class WebUserController {
                         .build()).getBody();
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<WebUser> updateWebUser(@PathVariable Integer id, @RequestBody @Valid WebUserRequestDTO webUserRequestDTO) {
+    @PutMapping()
+    public ApiResponse<WebUserResponseDTO> updateWebUser(@RequestBody @Valid WebUserUpdateRequestDTO webUserRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<WebUser>builder()
+                .body(ApiResponse.<WebUserResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(webUserService.updateWebUser(webUserRequestDTO, id))
+                        .result(webUserService.updateWebUser(webUserRequestDTO))
                         .build()).getBody();
     }
 

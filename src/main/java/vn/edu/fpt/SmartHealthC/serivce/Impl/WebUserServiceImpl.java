@@ -1,8 +1,13 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserUpdateRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WebUserResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -51,13 +56,29 @@ public class WebUserServiceImpl implements WebUserService {
     }
 
     @Override
-    public WebUser updateWebUser(WebUserRequestDTO webUserRequestDTO, Integer id) {
+    public WebUserResponseDTO updateWebUser(WebUserUpdateRequestDTO webUserRequestDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Optional<WebUser> appUser = webUserRepository.findByEmail(email);
+        if (appUser.isEmpty()) {
+            throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
+        }
+        Integer id = appUser.get().getId();
         WebUser webUser = getWebUserById(id);
         webUser.setDob(webUserRequestDTO.getDob());
         webUser.setGender(webUserRequestDTO.getGender());
-        webUser.setUserName(webUserRequestDTO.getUsername());
+        webUser.setUserName(webUserRequestDTO.getName());
         webUser.setPhoneNumber(webUserRequestDTO.getPhoneNumber());
-        return webUserRepository.save(webUser);
+        webUser = webUserRepository.save(webUser);
+        return WebUserResponseDTO.builder()
+                .accountId(webUser.getAccountId().getId())
+                .email(webUser.getAccountId().getEmail())
+                .webUserId(webUser.getId())
+                .name(webUser.getUserName())
+                .phoneNumber(webUser.getPhoneNumber())
+                .gender(webUser.isGender())
+                .dob(webUser.getDob()).build();
     }
 
 /*    @Override

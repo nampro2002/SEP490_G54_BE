@@ -59,7 +59,9 @@ public class ApplicationConfig {
     @PostConstruct
     public void init(){
         // Thiết lập múi giờ mặc định
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        //asia ho chi minh
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+//        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 
     @Bean

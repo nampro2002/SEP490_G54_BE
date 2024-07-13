@@ -99,11 +99,12 @@ public enum ErrorCode {
     ACCOUNT_NOT_ACTIVATED("Account not activated", HttpStatus.NOT_ACCEPTABLE),
     NULL_ANSWER("Answer is null", HttpStatus.BAD_REQUEST),
     USER_CREATED("User created successfully", HttpStatus.CREATED),
+    DOCTOR_CREATED("Doctor created successfully", HttpStatus.CREATED),
     STAFF_CREATED("Staff created successfully", HttpStatus.CREATED),
     WRONG_OLD_PASSWORD("Wrong old password", HttpStatus.BAD_REQUEST),
     ACCOUNT_DELETED("Account has been deleted", HttpStatus.BAD_REQUEST),
     ACCOUNT_ACTIVATED("Account has been activated", HttpStatus.BAD_REQUEST),
-    WEB_USER_FULL("Web user is full 10 patient", HttpStatus.BAD_REQUEST),
+    LOGOUT_SUCCESS("Logout success", HttpStatus.OK),
     ;
 
     ErrorCode(String message, HttpStatusCode statusCode) {

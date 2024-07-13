@@ -10,18 +10,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.DoctorRegisterDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.RegisterDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.RefreshTokenResponseDto;
-import vn.edu.fpt.SmartHealthC.domain.entity.Account;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.RefreshToken;
+import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.*;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
-import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.AuthService;
 import vn.edu.fpt.SmartHealthC.serivce.EmailService;
 import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
@@ -46,6 +44,7 @@ public class AuthServiceImpl implements AuthService {
     private final EmailService  emailService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final NotificationService notificationService;
+    private final WebUserRepository webUserRepository;
     @Override
     public AuthenticationResponseDto login(LoginDto request) throws ParseException {
         Optional<Account> optionalUser = accountRepository.findAccountByEmail(request.getEmail());
@@ -145,16 +144,57 @@ public class AuthServiceImpl implements AuthService {
                 .cic(request.getCic())
                 .build();
         newAppUserInfo = appUserRepository.save(newAppUserInfo);
-//        for(Integer i : request.getListMedicalHistory()){
-//            MedicalHistory medicalHistory = medicalHistoryRepository.findById(i)
-//                    .orElseThrow();
-//            UserMedicalHistory userMedicalHistory  = UserMedicalHistory
-//                    .builder()
-//                    .appUserId(newAppUserInfo)
-//                    .conditionId(medicalHistory)
-//                    .build();
-//            userMedicalHistoryRepository.save(userMedicalHistory);
-//        }
+        for(Integer i : request.getListMedicalHistory()){
+            MedicalHistory medicalHistory = medicalHistoryRepository.findById(i)
+                    .orElseThrow();
+            UserMedicalHistory userMedicalHistory  = UserMedicalHistory
+                    .builder()
+                    .appUserId(newAppUserInfo)
+                    .conditionId(medicalHistory)
+                    .build();
+            userMedicalHistoryRepository.save(userMedicalHistory);
+        }
+    }
+
+    @Override
+    public void registerDoctor(DoctorRegisterDto request) {
+        Optional<Account> existingAccount = accountRepository.findByEmail(request.getEmail());
+
+        if(existingAccount.isPresent()) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        Account newAccount = Account.builder()
+                .email(request.getEmail())
+                .password(encodedPassword)
+                .type(TypeAccount.DOCTOR)
+                .isActive(false)
+                .build();
+        newAccount = accountRepository.save(newAccount);
+        WebUser newWebUserInfo = WebUser.builder()
+                .accountId(newAccount)
+                .userName(request.getName())
+                .dob(request.getDob())
+                .gender(request.getGender())
+                .phoneNumber(request.getPhoneNumber())
+                .build();
+        newWebUserInfo = webUserRepository.save(newWebUserInfo);
+    }
+
+    @Override
+    public void logout(HttpServletRequest request) {
+
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String accessToken;
+        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+        accessToken = authHeader.substring(7);
+        Optional<RefreshToken> refreshTokenFilter = refreshTokenRepository.findRecordByAcToken(accessToken);
+        if(refreshTokenFilter.isEmpty()) {
+            throw new AppException(ErrorCode.ACCESS_TOKEN_NOT_EXIST);
+        }
+        refreshTokenRepository.delete(refreshTokenFilter.get());
     }
 
     @Override
@@ -231,6 +271,7 @@ public class AuthServiceImpl implements AuthService {
                 .refreshToken(refreshTokenNewString)
                 .build();
     }
+
 
 
 }
