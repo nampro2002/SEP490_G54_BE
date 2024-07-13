@@ -86,9 +86,12 @@ public class WebUserController {
     }
 
 // delete  at account controller
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteWebUser(@PathVariable Integer id) {
-//        webUserService.deleteWebUser(id);
-//        return ResponseEntity.noContent().build();
-//    }
+    @DeleteMapping("/{id}")
+    public ApiResponse<WebUserResponseDTO> deleteWebUser(@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<WebUserResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(webUserService.deleteWebUser(id))
+                        .build()).getBody();
+    }
 }

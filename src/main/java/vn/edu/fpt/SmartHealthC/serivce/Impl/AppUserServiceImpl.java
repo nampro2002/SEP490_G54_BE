@@ -130,30 +130,17 @@ public class AppUserServiceImpl implements AppUserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         WebUser webUser = webUserService.getWebUserByEmail(email);
-        Pageable paging = PageRequest.of(pageNo, 5);
-        Page<AppUser> pagedResult = appUserRepository.findAllByUserId(webUser.getId(), search.toLowerCase(), paging);
         List<AppUser> appUserList = new ArrayList<>();
+        Pageable paging = PageRequest.of(pageNo, 5);
+        Page<AppUser> pagedResult;
+        if (webUser.getAccountId().getType() == TypeAccount.MEDICAL_SPECIALIST) {
+            pagedResult = appUserRepository.findAllByUserId(webUser.getId(), search.toLowerCase(), paging);
+        } else {
+            pagedResult = appUserRepository.findAllActiveAndNotDeletedPaging(search.toLowerCase(), paging);
+        }
         if (pagedResult.hasContent()) {
             appUserList = pagedResult.getContent();
         }
-        //change this function from stream to for loop
-//        List<AppUserResponseDTO> list = new ArrayList<>();
-//        for (AppUser record : appUserList) {
-//            if(record.getName().toLowerCase().contains(search.toLowerCase())){
-//                AppUserResponseDTO dto = new AppUserResponseDTO();
-//                dto.setAccountId(record.getAccountId().getId());
-//                dto.setEmail(record.getAccountId().getEmail());
-//                dto.setAppUserId(record.getId());
-//                dto.setName(record.getName());
-//                dto.setHospitalNumber(record.getHospitalNumber());
-//                dto.setDob(record.getDob());
-//                dto.setGender(record.isGender());
-//                dto.setPhoneNumber(record.getPhoneNumber());
-//                list.add(dto);
-//            }
-//        }
-
-
         List<AppUserResponseDTO> appUserResponseDTOList = appUserList.stream()
                 .map(record -> {
                     AppUserResponseDTO dto = new AppUserResponseDTO();

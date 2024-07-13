@@ -21,4 +21,6 @@ public interface WebUserService {
    ResponsePaging<List<WebUserResponseDTO>> getListMsAdminNotDelete(Integer pageNo, String search);
 
     WebUserResponseDTO getDetailCurrentWebUser();
+
+    WebUserResponseDTO deleteWebUser(Integer id);
 }

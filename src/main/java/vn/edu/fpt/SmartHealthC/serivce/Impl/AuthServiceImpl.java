@@ -183,7 +183,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(HttpServletRequest request) {
-
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String accessToken;
         if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
