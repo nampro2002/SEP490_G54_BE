@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.DoctorRegisterDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.RefreshTokenRequestDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.RegisterDto;
@@ -46,7 +47,25 @@ public class AuthController {
                         .message(ErrorCode.USER_CREATED.getMessage())
                         .build()).getBody();
     }
-
+    @PostMapping("/register-doctor")
+    public ApiResponse<?> registerDoctor(
+            @RequestBody @Valid DoctorRegisterDto request) {
+        authService.registerDoctor(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<AuthenticationResponseDto>builder()
+                        .code(HttpStatus.CREATED.value())
+                        .message(ErrorCode.DOCTOR_CREATED.getMessage())
+                        .build()).getBody();
+    }
+    @GetMapping("/logout")
+    public ApiResponse<?> registerDoctor(HttpServletRequest request) {
+        authService.logout(request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<AuthenticationResponseDto>builder()
+                        .code(HttpStatus.OK.value())
+                        .message(ErrorCode.LOGOUT_SUCCESS.getMessage())
+                        .build()).getBody();
+    }
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponseDto> login(
             @RequestBody @Valid LoginDto request) throws ParseException {

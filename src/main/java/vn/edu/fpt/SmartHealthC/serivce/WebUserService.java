@@ -2,6 +2,8 @@ package vn.edu.fpt.SmartHealthC.serivce;
 
 import org.springframework.data.jpa.repository.Query;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserUpdateRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WebUserResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 
 import java.util.List;
@@ -12,7 +14,7 @@ public interface WebUserService {
     WebUser getWebUserById(Integer id);
 
     List<WebUser> getAllWebUsers();
-    WebUser updateWebUser(WebUserRequestDTO webUser, Integer id);
+    WebUserResponseDTO updateWebUser(WebUserUpdateRequestDTO webUser);
     List<WebUser> getAllUnDeletedMS();
     WebUser getWebUserByEmail(String email);
 }
