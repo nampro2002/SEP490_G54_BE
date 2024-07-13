@@ -346,6 +346,223 @@ import java.util.Optional;
         }
         return new MonthlyStatisticResponseDTO().builder().sfResponseDTO(sfResponseDTO).satResponseDTO(satResponseDTO).build();
     }
+    public MonthlyStatisticResponseDTO getPointAppUser(Integer monthNumber,Integer appUserId) {
+//        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+
+        SatResponseDTO satResponseDTO = new SatResponseDTO();
+        SFResponseDTO sfResponseDTO = new SFResponseDTO();
+
+
+        List<MonthlyAnswerResponseDTO> sat_sf_c_List = new ArrayList<>();
+        List<MonthlyAnswerResponseDTO> sat_sf_p_List = new ArrayList<>();
+        List<MonthlyAnswerResponseDTO> sat_sf_i_List = new ArrayList<>();
+        List<MonthlyAnswerResponseDTO> mentalList = new ArrayList<>();
+        List<MonthlyAnswerResponseDTO> activityList = new ArrayList<>();
+        List<MonthlyAnswerResponseDTO> dietList = new ArrayList<>();
+        List<MonthlyAnswerResponseDTO> medicineList = new ArrayList<>();
+        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUserId,monthNumber);
+        if(!monthlyNumbers.isEmpty()){
+            for (MonthlyRecord record : monthlyNumbers) {
+                if(record.getMonthlyRecordType() == MonthlyRecordType.SAT_SF_C){
+                    MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
+                            .questionNumber(record.getQuestionNumber())
+                            .question(record.getQuestion())
+                            .type(record.getMonthlyRecordType())
+                            .answer(record.getAnswer())
+                            .build();
+                    sat_sf_c_List.add(monthlyNumberResponseDTO);
+                }
+                if(record.getMonthlyRecordType() == MonthlyRecordType.SAT_SF_P){
+                    MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
+                            .questionNumber(record.getQuestionNumber())
+                            .question(record.getQuestion())
+                            .type(record.getMonthlyRecordType())
+                            .answer(record.getAnswer())
+                            .build();
+                    sat_sf_p_List.add(monthlyNumberResponseDTO);
+                }
+                if(record.getMonthlyRecordType() == MonthlyRecordType.SAT_SF_I){
+                    MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
+                            .questionNumber(record.getQuestionNumber())
+                            .question(record.getQuestion())
+                            .type(record.getMonthlyRecordType())
+                            .answer(record.getAnswer())
+                            .build();
+                    sat_sf_i_List.add(monthlyNumberResponseDTO);
+                }
+                if(record.getMonthlyRecordType() == MonthlyRecordType.SF_MENTAL){
+                    MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
+                            .questionNumber(record.getQuestionNumber())
+                            .question(record.getQuestion())
+                            .type(record.getMonthlyRecordType())
+                            .answer(record.getAnswer())
+                            .build();
+                    mentalList.add(monthlyNumberResponseDTO);
+                }
+                if(record.getMonthlyRecordType() == MonthlyRecordType.SF_ACTIVITY){
+                    MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
+                            .questionNumber(record.getQuestionNumber())
+                            .question(record.getQuestion())
+                            .type(record.getMonthlyRecordType())
+                            .answer(record.getAnswer())
+                            .build();
+                    activityList.add(monthlyNumberResponseDTO);
+                }
+                if(record.getMonthlyRecordType() == MonthlyRecordType.SF_DIET){
+                    MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
+                            .questionNumber(record.getQuestionNumber())
+                            .question(record.getQuestion())
+                            .type(record.getMonthlyRecordType())
+                            .answer(record.getAnswer())
+                            .build();
+                    dietList.add(monthlyNumberResponseDTO);
+                }
+                if(record.getMonthlyRecordType() == MonthlyRecordType.SF_MEDICATION){
+                    MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
+                            .questionNumber(record.getQuestionNumber())
+                            .question(record.getQuestion())
+                            .type(record.getMonthlyRecordType())
+                            .answer(record.getAnswer())
+                            .build();
+                    medicineList.add(monthlyNumberResponseDTO);
+                }
+            }
+            float sat_sf_c_activityPoint = (((getDataByQuestionNumber(sat_sf_c_List,1)+
+                    getDataByQuestionNumber(sat_sf_c_List,2)+
+                    getDataByQuestionNumber(sat_sf_c_List,4))/3)-1)/3*100;
+            float sat_sf_c_positivityPoint = (((getDataByQuestionNumber(sat_sf_c_List,5)+
+                    getDataByQuestionNumber(sat_sf_c_List,6)+
+                    getDataByQuestionNumber(sat_sf_c_List,7)
+                    +getDataByQuestionNumber(sat_sf_c_List,8))/4)-1)/3*100;
+            float sat_sf_c_supportPoint = (((getDataByQuestionNumber(sat_sf_c_List,3)+
+                    getDataByQuestionNumber(sat_sf_c_List,10))/2)-1)/3*100;
+            float sat_sf_c_experiencePoint = ((getDataByQuestionNumber(sat_sf_c_List,9)-1))/3*100;
+
+            float sat_sf_p_lifeValue = ((getDataByQuestionNumber(sat_sf_p_List,1)-1))/3*100;
+            float sat_sf_p_targetAndAction = (((getDataByQuestionNumber(sat_sf_p_List,2)+
+                    getDataByQuestionNumber(sat_sf_p_List,3)+
+                    getDataByQuestionNumber(sat_sf_p_List,5))/3)-1)/3*100;
+            float sat_sf_p_decision = ((((getDataByQuestionNumber(sat_sf_p_List, 4) +
+                    getDataByQuestionNumber(sat_sf_p_List, 10)) / 2) - 1) / 3) * 100;
+            float sat_sf_p_buildPlan = ((((getDataByQuestionNumber(sat_sf_p_List, 6) +
+                    getDataByQuestionNumber(sat_sf_p_List, 7)) / 2) - 1) / 3) * 100;
+            float sat_sf_p_healthyEnvironment = ((((getDataByQuestionNumber(sat_sf_p_List, 8) +
+                    getDataByQuestionNumber(sat_sf_p_List, 9)) / 2) - 1) / 3) * 100;
+
+            float sat_sf_i_e_activityPoint = ((getDataByQuestionNumber(sat_sf_i_List,6)-1))/3*100;
+            float sat_sf_i_e_activityStressPoint = ((getDataByQuestionNumber(sat_sf_i_List,2)-1))/3*100;
+            float sat_sf_i_e_activitySubstantialPoint = ((((getDataByQuestionNumber(sat_sf_i_List, 1) +
+                    getDataByQuestionNumber(sat_sf_i_List, 4) +
+                    getDataByQuestionNumber(sat_sf_i_List, 5) +
+                    getDataByQuestionNumber(sat_sf_i_List, 9)) / 4) - 1) / 3) * 100;
+            float sat_sf_i_e_energy = ((getDataByQuestionNumber(sat_sf_i_List,3)-1))/3*100;
+            float sat_sf_i_e_motivation= ((((getDataByQuestionNumber(sat_sf_i_List, 7) +
+                    getDataByQuestionNumber(sat_sf_i_List, 8)) / 4) - 1) / 3) * 100;
+            float sat_sf_i_e_planCheck= ((getDataByQuestionNumber(sat_sf_i_List,10)-1))/3*100;
+
+            float sf_mentalPoint= ((((getDataByQuestionNumber(mentalList, 1) +
+                    getDataByQuestionNumber(mentalList, 2) +
+                    getDataByQuestionNumber(mentalList, 3) +
+                    getDataByQuestionNumber(mentalList, 4) +
+                    getDataByQuestionNumber(mentalList, 5)) / 5) - 1) / 3) * 100;
+
+            float sf_activity_planPoint= ((((getDataByQuestionNumber(activityList, 1) +
+                    getDataByQuestionNumber(activityList, 2) +
+                    getDataByQuestionNumber(activityList, 3)) / 3) - 1) / 3) * 100;
+            float sf_activity_habitPoint= ((((getDataByQuestionNumber(activityList, 4) +
+                    getDataByQuestionNumber(activityList, 5) ) / 2) - 1) / 3) * 100;
+
+            float sf_diet_healthyPoint= ((((getDataByQuestionNumber(dietList, 1) +
+                    getDataByQuestionNumber(dietList, 4) +
+                    getDataByQuestionNumber(dietList, 5)) / 3) - 1) / 3) * 100;
+            float sf_diet_vegetablePoint= ((((getDataByQuestionNumber(dietList, 3) +
+                    getDataByQuestionNumber(dietList, 7)) / 2) - 1) / 3) * 100;
+            float sf_diet_habitPoint= ((((getDataByQuestionNumber(dietList, 2) +
+                    getDataByQuestionNumber(dietList, 6)) / 2) - 1) / 3) * 100;
+
+            float sf_medicine_followPlanPoint= (((getDataByQuestionNumber(medicineList, 1)) - 1) / 3) * 100;
+            float sf_medicine_habitPoint= ((((getDataByQuestionNumber(medicineList, 2) +
+                    getDataByQuestionNumber(medicineList, 3) +
+                    getDataByQuestionNumber(medicineList, 4)) / 3) - 1) / 3) * 100;
+
+
+
+            float sat_sf_c_total= 0;
+            float sat_sf_p_total= 0;
+            float sat_sf_i_total= 0;
+            for (int i = 1; i <= 10 ; i++){
+                sat_sf_c_total += getDataByQuestionNumber(sat_sf_c_List,i);
+                sat_sf_p_total += getDataByQuestionNumber(sat_sf_p_List,i);
+                sat_sf_i_total += getDataByQuestionNumber(sat_sf_i_List,i);
+            }
+            sat_sf_c_total = (((sat_sf_c_total/10)-1)/3)*100;
+            sat_sf_p_total = (((sat_sf_p_total/10)-1)/3)*100;
+            sat_sf_i_total = (((sat_sf_i_total/10)-1)/3)*100;
+            float finalSATTotal = (sat_sf_c_total+sat_sf_p_total+sat_sf_i_total)/3;
+
+            float sf_mental_modelPoint= ((((getDataByQuestionNumber(mentalList, 1) +
+                    getDataByQuestionNumber(mentalList, 2) +
+                    getDataByQuestionNumber(mentalList, 3) +
+                    getDataByQuestionNumber(mentalList, 4)+
+                    getDataByQuestionNumber(mentalList, 5)) / 5) - 1) / 3) * 100;
+            float sf_activity_modelPoint= ((((getDataByQuestionNumber(activityList, 1) +
+                    getDataByQuestionNumber(activityList, 2) +
+                    getDataByQuestionNumber(activityList, 3) +
+                    getDataByQuestionNumber(activityList, 4)+
+                    getDataByQuestionNumber(activityList, 5)) / 5) - 1) / 3) * 100;
+            float sf_diet_modelPoint= ((((getDataByQuestionNumber(dietList, 1) +
+                    getDataByQuestionNumber(dietList, 2) +
+                    getDataByQuestionNumber(dietList, 3) +
+                    getDataByQuestionNumber(dietList, 4)+
+                    getDataByQuestionNumber(dietList, 5)+
+                    getDataByQuestionNumber(dietList, 6)+
+                    getDataByQuestionNumber(dietList, 7)) / 7) - 1) / 3) * 100;
+            float sf_medicine_modelPoint= ((((getDataByQuestionNumber(dietList, 1) +
+                    getDataByQuestionNumber(dietList, 2) +
+                    getDataByQuestionNumber(dietList, 3) +
+                    getDataByQuestionNumber(dietList, 4)) / 4) - 1) / 3) * 100;
+            float finalSFTotal = (sf_mental_modelPoint+sf_activity_modelPoint+sf_diet_modelPoint+sf_medicine_modelPoint)/4;
+
+            satResponseDTO.setSat_sf_c_activityPoint(sat_sf_c_activityPoint);
+            satResponseDTO.setSat_sf_c_positivityPoint(sat_sf_c_positivityPoint);
+            satResponseDTO.setSat_sf_c_supportPoint(sat_sf_c_supportPoint);
+            satResponseDTO.setSat_sf_c_experiencePoint(sat_sf_c_experiencePoint);
+            satResponseDTO.setSat_sf_p_lifeValue(sat_sf_p_lifeValue);
+            satResponseDTO.setSat_sf_p_targetAndAction(sat_sf_p_targetAndAction);
+            satResponseDTO.setSat_sf_p_decision(sat_sf_p_decision);
+            satResponseDTO.setSat_sf_p_buildPlan(sat_sf_p_buildPlan);
+            satResponseDTO.setSat_sf_p_healthyEnvironment(sat_sf_p_healthyEnvironment);
+            satResponseDTO.setSat_sf_i_e_activityPoint(sat_sf_i_e_activityPoint);
+            satResponseDTO.setSat_sf_i_e_activityStressPoint(sat_sf_i_e_activityStressPoint);
+            satResponseDTO.setSat_sf_i_e_activitySubstantialPoint(sat_sf_i_e_activitySubstantialPoint);
+            satResponseDTO.setSat_sf_i_e_energy(sat_sf_i_e_energy);
+            satResponseDTO.setSat_sf_i_e_motivation(sat_sf_i_e_motivation);
+            satResponseDTO.setSat_sf_i_e_planCheck(sat_sf_i_e_planCheck);
+            satResponseDTO.setSat_sf_c_total(sat_sf_c_total);
+            satResponseDTO.setSat_sf_p_total(sat_sf_p_total);
+            satResponseDTO.setSat_sf_i_total(sat_sf_i_total);
+            satResponseDTO.setTotal(finalSATTotal);
+
+            sfResponseDTO.setSf_mentalPoint(sf_mentalPoint);
+            sfResponseDTO.setSf_activity_planPoint(sf_activity_planPoint);
+            sfResponseDTO.setSf_activity_habitPoint(sf_activity_habitPoint);
+            sfResponseDTO.setSf_diet_healthyPoint(sf_diet_healthyPoint);
+            sfResponseDTO.setSf_diet_vegetablePoint(sf_diet_vegetablePoint);
+            sfResponseDTO.setSf_diet_habitPoint(sf_diet_habitPoint);
+            sfResponseDTO.setSf_medicine_followPlanPoint(sf_medicine_followPlanPoint);
+            sfResponseDTO.setSf_medicine_habitPoint(sf_medicine_habitPoint);
+            sfResponseDTO.setSf_mental_modelPoint(sf_mental_modelPoint);
+            sfResponseDTO.setSf_activity_modelPoint(sf_activity_modelPoint);
+            sfResponseDTO.setSf_diet_modelPoint(sf_diet_modelPoint);
+            sfResponseDTO.setSf_medicine_modelPoint(sf_medicine_modelPoint);
+            sfResponseDTO.setTotal(finalSFTotal);
+
+            MonthlyStatisticResponseDTO monthlyStatisticResponseDTO = new MonthlyStatisticResponseDTO()
+                    .builder().sfResponseDTO(sfResponseDTO).satResponseDTO(satResponseDTO).build();
+            return monthlyStatisticResponseDTO;
+        }
+        return new MonthlyStatisticResponseDTO().builder().sfResponseDTO(sfResponseDTO).satResponseDTO(satResponseDTO).build();
+    }
 
 //    @Override
     public List<MonthlyStatisticResponseDTO> getPoint3Month(Integer appUserId) {
@@ -402,7 +619,7 @@ import java.util.Optional;
         List<Integer> monthlyNumbers = monthlyQuestionRepository.find12ByAppUser(appUserId);
         List<MonthlyStatisticResponseDTO> monthlyStatisticResponseDTOList = new ArrayList<>();
         for (Integer month : monthlyNumbers){
-            monthlyStatisticResponseDTOList.add(getPoint(month));
+            monthlyStatisticResponseDTOList.add(getPointAppUser(month,appUserId));
         }
         return monthlyStatisticResponseDTOList;
     }
