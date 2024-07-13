@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.DoctorRegisterDto;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.RefreshTokenRequestDto;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.RegisterDto;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.RefreshTokenResponseDto;
@@ -58,7 +55,7 @@ public class AuthController {
                         .build()).getBody();
     }
     @GetMapping("/logout")
-    public ApiResponse<?> registerDoctor(HttpServletRequest request) {
+    public ApiResponse<?> logout(HttpServletRequest request) {
         authService.logout(request);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()

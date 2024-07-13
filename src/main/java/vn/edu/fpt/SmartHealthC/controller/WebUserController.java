@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserUpdateRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.AccountResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WebUserResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserMedicalHistory;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
@@ -38,6 +40,15 @@ public class WebUserController {
                         .result(webUserService.getWebUserById(id))
                         .build()).getBody();
     }
+    @GetMapping("/detail")
+    public ApiResponse<WebUserResponseDTO> getDetailCurrentWebUser() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<WebUserResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(webUserService.getDetailCurrentWebUser())
+                        .build()).getBody();
+    }
+
 
     @GetMapping
     public ApiResponse<List<WebUser>> getAllWebUsers() {
@@ -57,7 +68,22 @@ public class WebUserController {
                         .build()).getBody();
     }
 
-
+    @GetMapping("/get-list-doctor")
+    public ApiResponse<ResponsePaging<List<WebUserResponseDTO>>> getListDoctorNotDelete(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ResponsePaging<List<WebUserResponseDTO>>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(webUserService.getListDoctorNotDelete(pageNo-1, search))
+                        .build()).getBody();
+    }
+    @GetMapping("/get-list-ms-admin")
+    public ApiResponse<ResponsePaging<List<WebUserResponseDTO>>> getListMsAdminNotDelete(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ResponsePaging<List<WebUserResponseDTO>>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(webUserService.getListMsAdminNotDelete(pageNo-1, search))
+                        .build()).getBody();
+    }
 
 // delete  at account controller
 //    @DeleteMapping("/{id}")

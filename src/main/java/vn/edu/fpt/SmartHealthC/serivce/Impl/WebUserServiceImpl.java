@@ -1,19 +1,26 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserUpdateRequestDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRuleResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WebUserResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
 import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +60,74 @@ public class WebUserServiceImpl implements WebUserService {
             throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
         }
         return webUser.get();
+    }
+
+    @Override
+    public ResponsePaging<List<WebUserResponseDTO>> getListDoctorNotDelete(Integer pageNo, String search) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedDoctor(paging, TypeAccount.DOCTOR, search.toLowerCase());
+        List<WebUser> webUserList = new ArrayList<>();
+        if (pagedResult.hasContent()) {
+            webUserList = pagedResult.getContent();
+        }
+        List<WebUserResponseDTO> webUserResponseDTOS = new ArrayList<>();
+        for (WebUser webUser : webUserList) {
+            webUserResponseDTOS.add(WebUserResponseDTO.builder()
+                    .accountId(webUser.getAccountId().getId())
+                    .email(webUser.getAccountId().getEmail())
+                    .webUserId(webUser.getId())
+                    .name(webUser.getUserName())
+                    .phoneNumber(webUser.getPhoneNumber()).build());
+        }
+        return ResponsePaging.<List<WebUserResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(webUserResponseDTOS)
+                .build();
+    }
+
+    @Override
+    public ResponsePaging<List<WebUserResponseDTO>> getListMsAdminNotDelete(Integer pageNo, String search) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedNotDoctor(paging, TypeAccount.DOCTOR, search.toLowerCase());
+        List<WebUser> webUserList = new ArrayList<>();
+        if (pagedResult.hasContent()) {
+            webUserList = pagedResult.getContent();
+        }
+        List<WebUserResponseDTO> webUserResponseDTOS = new ArrayList<>();
+        for (WebUser webUser : webUserList) {
+            webUserResponseDTOS.add(WebUserResponseDTO.builder()
+                    .accountId(webUser.getAccountId().getId())
+                    .email(webUser.getAccountId().getEmail())
+                    .webUserId(webUser.getId())
+                    .name(webUser.getUserName())
+                    .phoneNumber(webUser.getPhoneNumber()).build());
+        }
+        return ResponsePaging.<List<WebUserResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(webUserResponseDTOS)
+                .build();
+    }
+
+    @Override
+    public WebUserResponseDTO getDetailCurrentWebUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<WebUser> webUser = webUserRepository.findByEmail(email);
+        if (webUser.isEmpty()) {
+            throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
+        }
+        return WebUserResponseDTO.builder()
+                .accountId(webUser.get().getAccountId().getId())
+                .email(webUser.get().getAccountId().getEmail())
+                .webUserId(webUser.get().getId())
+                .name(webUser.get().getUserName())
+                .phoneNumber(webUser.get().getPhoneNumber())
+                .gender(webUser.get().isGender())
+                .dob(webUser.get().getDob()).build();
     }
 
     @Override
