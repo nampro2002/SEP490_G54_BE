@@ -168,7 +168,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(request.getEmail())
                 .password(encodedPassword)
                 .type(TypeAccount.DOCTOR)
-                .isActive(false)
+                .isActive(true)
                 .build();
         newAccount = accountRepository.save(newAccount);
         WebUser newWebUserInfo = WebUser.builder()

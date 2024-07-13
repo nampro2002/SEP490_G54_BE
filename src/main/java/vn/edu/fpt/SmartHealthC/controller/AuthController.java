@@ -58,7 +58,7 @@ public class AuthController {
                         .build()).getBody();
     }
     @GetMapping("/logout")
-    public ApiResponse<?> registerDoctor(HttpServletRequest request) {
+    public ApiResponse<?> logout(HttpServletRequest request) {
         authService.logout(request);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AuthenticationResponseDto>builder()
