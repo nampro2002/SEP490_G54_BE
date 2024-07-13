@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MobileGeneralChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyAnswerResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyNumberResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyStatisticResponseDTO;
@@ -88,13 +89,14 @@ public class MonthlyQuestionController {
 
     //lấy chart của 3 tháng gần nhất
     @GetMapping("/mobile/get-chart")
-    public ApiResponse<List<MonthlyStatisticResponseDTO>> getPoint3MonthMobile() {
+    public ApiResponse<MobileGeneralChartResponseDTO> getPoint3MonthMobile() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MonthlyStatisticResponseDTO>>builder()
+                .body(ApiResponse.<MobileGeneralChartResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(monthlyQuestionService.getPoint3MonthMobile())
                         .build()).getBody();
     }
+
     //lấy chart của 12 tháng
     @GetMapping("/web/get-chart/{appUserId}")
     public ApiResponse<List<MonthlyStatisticResponseDTO>> getPoint12MonthWeb(

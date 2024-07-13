@@ -26,6 +26,14 @@ public class ForgetPasswordCodeController {
                         .result(forgetPasswordCodeService.sendEmailCode(email))
                         .build()).getBody();
     }
+    @GetMapping("/web/email/{email}")
+    public ApiResponse<String> sendPasswordEmail(@PathVariable String email) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<String>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(forgetPasswordCodeService.sendPasswordEmail(email))
+                        .build()).getBody();
+    }
 
     @PostMapping("/email/verify")
     public ApiResponse<Boolean> verifyCodeAndChangePassword(@RequestBody @Valid ForgetPasswordCodeDTO forgetPasswordCodeDTO) throws ParseException {
