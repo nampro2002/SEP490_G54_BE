@@ -22,4 +22,6 @@ public interface StepRecordRepository extends JpaRepository<StepRecord, Integer>
 
     @Query("SELECT a FROM StepRecord a WHERE a.appUserId.id = ?1 and a.actualValue != 0  order by a.date desc limit 5")
     List<StepRecord> find5RecordByIdUser(Integer userId);
+    @Query("SELECT a FROM StepRecord a WHERE a.appUserId.id = ?1 and a.date = ?2")
+    Optional<StepRecord> findByAppUserIdAndDate(Integer id, Date today);
 }

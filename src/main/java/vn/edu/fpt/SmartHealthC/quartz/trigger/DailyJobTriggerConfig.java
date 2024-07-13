@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Date;
+import java.util.TimeZone;
+
 @Configuration
 public class DailyJobTriggerConfig {
 //    @Bean(name = "dailyJobTrigger")
@@ -28,7 +31,7 @@ public class DailyJobTriggerConfig {
 //    }
     @Bean(name = "morningTrigger")
     public Trigger morningTrigger(@Qualifier("morningJobDetail") JobDetail jobDetail) {
-        System.out.println("execute morning trigger jobBoot");
+        System.out.println("execute morning trigger jobBoot at: "+ new Date());
         try {
 //            String time = "0/10 * * * * ?";
             String time = "0 0 8 * * ?";

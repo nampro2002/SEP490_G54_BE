@@ -25,6 +25,8 @@ public interface StepRecordService {
     Boolean checkPlanExist(String weekStart) throws ParseException;
 
     void updateStepRecordNEW(StepRecordUpdateContinuousDTO stepRecordDTO) throws ParseException;
+
+    Integer getCurrentRecord() throws ParseException;
 //    Date getFirstDayOfWeek(StepRecordUpdateContinuousDTO stepRecordDTO);
 
 }

@@ -36,7 +36,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     private final RefreshTokenRepository refreshTokenRepository;
-    private final String[] allowedUrls = {"/api/auth/refresh","/api/auth/demo", "/api/auth/login"};
+    private final String[] allowedUrls = {"/api/auth/refresh","/api/auth/demo", "/api/auth/login", "/api/step-records/update-cont"};
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {

@@ -317,11 +317,30 @@ public class StepRecordServiceImpl implements StepRecordService {
                     .weekStart(getFirstDayOfWeek(stepRecordDTO.getDate()))
                     .build();
             stepRecordRepository.save(stepRecordNew);
+            System.out.println("Create new record for user " + appUser.get().getId() + " at " + stepRecordDTO.getDate() + "with value " + stepRecordDTO.getActualValue());
         } else {
             StepRecord stepRecordNew = getStepRecordById(stepRecord.get().getId());
             stepRecordNew.setActualValue(stepRecordNew.getActualValue() + stepRecordDTO.getActualValue());
             stepRecordRepository.save(stepRecordNew);
+            System.out.println("Update new record for user " + appUser.get().getId() + " at " + stepRecordDTO.getDate() + "with value " + stepRecordDTO.getActualValue());
         }
+    }
+
+    @Override
+    public Integer getCurrentRecord() throws ParseException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
+        Date today = DateUtils.getToday(formatDate);
+        Optional<StepRecord> stepRecord = stepRecordRepository.findByAppUserIdAndDate(appUser.get().getId(), today);
+        if(stepRecord.isEmpty()){
+            return 0;
+        }
+        return Math.round(stepRecord.get().getActualValue());
+
     }
 
     public Date getFirstDayOfWeek(Date date) {
