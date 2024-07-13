@@ -32,6 +32,7 @@ public enum ErrorCode {
     UNAUTHENTICATED("Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED("You do not have permission", HttpStatus.FORBIDDEN),
     APP_USER_NOT_FOUND("AppUser not found", HttpStatus.NOT_FOUND),
+    MONTHLY_TYPE_NOT_FOUND("Monthly Type not found", HttpStatus.NOT_FOUND),
     USER_WEEK1_LESSON1_NOT_FOUND("User Week1 Lesson1 not found", HttpStatus.NOT_FOUND),
     USER_WEEK_START_NOT_EXIST("User not have record about week start", HttpStatus.NOT_FOUND),
     WEB_USER_NOT_FOUND("WebUser not found", HttpStatus.NOT_FOUND),

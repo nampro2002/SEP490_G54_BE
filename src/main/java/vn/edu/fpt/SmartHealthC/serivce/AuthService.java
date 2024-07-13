@@ -24,4 +24,5 @@ public interface AuthService {
 
     void logout(HttpServletRequest request);
 
+    Boolean checkRegisterEmail(String email, String code);
 }

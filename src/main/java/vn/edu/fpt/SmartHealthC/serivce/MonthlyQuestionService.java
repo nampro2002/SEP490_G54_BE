@@ -18,9 +18,9 @@ public interface MonthlyQuestionService {
     List<MonthlyNumberResponseDTO> getList3MonthlyNumber();
 
 
-    List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber);
+    List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber,String type);
 
-    List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber);
+    List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber,String type);
 
     MonthlyStatisticResponseDTO getPoint(Integer monthNumber);
 
