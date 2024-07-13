@@ -71,7 +71,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
     @Override
     public ResponsePaging<List<MentalRuleResponseDTO>> getAllMentalRules(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MentalRule> pagedResult = mentalRuleRepository.findAllNotDeleted(paging, search);
+        Page<MentalRule> pagedResult = mentalRuleRepository.findAllNotDeleted(paging, search.toLowerCase());
         List<MentalRule> mentalRuleList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             mentalRuleList = pagedResult.getContent();

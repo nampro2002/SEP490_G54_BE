@@ -23,4 +23,5 @@ public interface AuthService {
     void registerDoctor(DoctorRegisterDto request);
 
     void logout(HttpServletRequest request);
+
 }
