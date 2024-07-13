@@ -65,7 +65,7 @@ public class WebUserServiceImpl implements WebUserService {
     @Override
     public ResponsePaging<List<WebUserResponseDTO>> getListDoctorNotDelete(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedDoctor(paging, TypeAccount.DOCTOR, search.toLowerCase());
+        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedDoctor(TypeAccount.DOCTOR, paging);
         List<WebUser> webUserList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             webUserList = pagedResult.getContent();
@@ -90,7 +90,7 @@ public class WebUserServiceImpl implements WebUserService {
     @Override
     public ResponsePaging<List<WebUserResponseDTO>> getListMsAdminNotDelete(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedNotDoctor(paging, TypeAccount.DOCTOR, search.toLowerCase());
+        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedNotDoctor(TypeAccount.DOCTOR, paging);
         List<WebUser> webUserList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             webUserList = pagedResult.getContent();
@@ -156,10 +156,17 @@ public class WebUserServiceImpl implements WebUserService {
                 .dob(webUser.getDob()).build();
     }
 
-/*    @Override
-    public WebUser deleteWebUser(Integer id) {
-        WebUser webUser = webUserRepository.findById(id);
-        webUserRepository.deleteById(id);
-        return webUser;
-    }*/
+    @Override
+    public WebUserResponseDTO deleteWebUser(Integer id) {
+        WebUser webUser = getWebUserById(id);
+        webUser.getAccountId().setDeleted(true);
+        webUser = webUserRepository.save(webUser);
+        return WebUserResponseDTO.builder()
+                .accountId(webUser.getAccountId().getId())
+                .email(webUser.getAccountId().getEmail())
+                .webUserId(webUser.getId())
+                .name(webUser.getUserName())
+                .phoneNumber(webUser.getPhoneNumber()).build();
+
+    }
 }
