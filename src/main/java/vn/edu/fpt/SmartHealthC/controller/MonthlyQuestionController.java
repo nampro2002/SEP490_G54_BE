@@ -66,7 +66,7 @@ public class MonthlyQuestionController {
     //Lấy câu trả lời theo tháng
     @GetMapping("/mobile/get-answer/{monthNumber}")
     public ApiResponse<List<MonthlyAnswerResponseDTO>> getMobileListAnswer(
-            @PathVariable int monthNumber
+            @PathVariable int monthNumber,
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MonthlyAnswerResponseDTO>>builder()
@@ -74,15 +74,16 @@ public class MonthlyQuestionController {
                         .result(monthlyQuestionService.getMobileListAnswer(monthNumber))
                         .build()).getBody();
     }
-    @GetMapping("/web/get-answer/{userId}/{monthNumber}")
+    @GetMapping("/web/get-answer/{userId}/{monthNumber}/{type}")
     public ApiResponse<List<MonthlyAnswerResponseDTO>> getWebListAnswer(
             @PathVariable int userId,
-            @PathVariable int monthNumber
+            @PathVariable int monthNumber,
+               @PathVariable String type
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MonthlyAnswerResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.getWebListAnswer(userId,monthNumber))
+                        .result(monthlyQuestionService.getWebListAnswer(userId,monthNumber,type))
                         .build()).getBody();
     }
 

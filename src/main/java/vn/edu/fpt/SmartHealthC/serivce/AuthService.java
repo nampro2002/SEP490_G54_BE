@@ -23,4 +23,6 @@ public interface AuthService {
     void registerDoctor(DoctorRegisterDto request);
 
     void logout(HttpServletRequest request);
+
+    Boolean checkRegisterEmail(String email, String code);
 }

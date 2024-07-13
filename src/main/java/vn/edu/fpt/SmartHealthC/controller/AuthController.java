@@ -85,6 +85,16 @@ public class AuthController {
                         .result(authService.sendEmailCode(email))
                         .build()).getBody();
     }
+    @GetMapping("/check-register-email/{email}/{code}")
+    public ApiResponse<Boolean> checkRegisterEmail(
+            @PathVariable String email,
+            @PathVariable String code) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(authService.checkRegisterEmail(email,code))
+                        .build()).getBody();
+    }
 
     @GetMapping("/refresh-token/{token}")
     public ApiResponse<RefreshTokenResponseDto> refreshToken(

@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
@@ -75,17 +77,20 @@ import java.util.Optional;
     }
 
     @Override
-    public List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber) {
+    public List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber,String type) {
         List<MonthlyAnswerResponseDTO> monthlyAnswerResponseDTOList = new ArrayList<>();
         List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(userId,monthNumber);
         for (MonthlyRecord record : monthlyNumbers) {
-            MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
-                    .questionNumber(record.getQuestionNumber())
-                    .question(record.getQuestion())
-                    .type(record.getMonthlyRecordType())
-                    .answer(record.getAnswer())
-                    .build();
-            monthlyAnswerResponseDTOList.add(monthlyNumberResponseDTO);
+            if(record.getMonthlyRecordType().equals(MonthlyRecordType.valueOf(type))){
+                MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
+                        .questionNumber(record.getQuestionNumber())
+                        .question(record.getQuestion())
+                        .type(record.getMonthlyRecordType())
+                        .answer(record.getAnswer())
+                        .build();
+                monthlyAnswerResponseDTOList.add(monthlyNumberResponseDTO);
+            }
+
         }
         return monthlyAnswerResponseDTOList;
     }
@@ -96,13 +101,13 @@ import java.util.Optional;
         List<MonthlyAnswerResponseDTO> monthlyAnswerResponseDTOList = new ArrayList<>();
         List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUser.getId(),monthNumber);
         for (MonthlyRecord record : monthlyNumbers) {
-            MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
-                    .questionNumber(record.getQuestionNumber())
-                    .question(record.getQuestion())
-                    .type(record.getMonthlyRecordType())
-                    .answer(record.getAnswer())
-                    .build();
-            monthlyAnswerResponseDTOList.add(monthlyNumberResponseDTO);
+                MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
+                        .questionNumber(record.getQuestionNumber())
+                        .question(record.getQuestion())
+                        .type(record.getMonthlyRecordType())
+                        .answer(record.getAnswer())
+                        .build();
+                monthlyAnswerResponseDTOList.add(monthlyNumberResponseDTO);
         }
         return monthlyAnswerResponseDTOList;
     }
