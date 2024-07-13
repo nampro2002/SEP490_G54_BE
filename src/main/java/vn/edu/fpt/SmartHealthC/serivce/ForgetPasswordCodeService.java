@@ -8,4 +8,6 @@ public interface ForgetPasswordCodeService {
     String sendEmailCode(String email) throws ParseException;
 
     boolean verifyAndChangePassword(ForgetPasswordCodeDTO forgetPasswordCodeDTO) throws ParseException;
+
+    String sendPasswordEmail(String email);
 }

@@ -227,6 +227,34 @@ public class AccountServiceImpl implements AccountService {
                 .build();
     }
 
+    @Override
+    public List<AccountResponseDTO> getListDoctorNotDelete() {
+        List<Account> accountList = accountRepository.getListDoctorNotDelete();
+        return accountList.stream()
+                .map(record -> {
+                    AccountResponseDTO dto = new AccountResponseDTO();
+                    dto.setEmail(record.getEmail());
+                    dto.setType(record.getType());
+                    dto.setIsActive(record.isActive());
+                    return dto;
+                })
+                .toList();
+    }
+
+    @Override
+    public List<AccountResponseDTO> getListMsAdminNotDelete() {
+        List<Account> accountList = accountRepository.getListMsAdminNotDelete();
+        return accountList.stream()
+                .map(record -> {
+                    AccountResponseDTO dto = new AccountResponseDTO();
+                    dto.setEmail(record.getEmail());
+                    dto.setType(record.getType());
+                    dto.setIsActive(record.isActive());
+                    return dto;
+                })
+                .toList();
+    }
+
 //
 //    public List<AccountResponseDTO> getAllAccountAppUser() {
 //        List<Account> accountList =  accountRepository.findAllAccountAppUser(TypeAccount.USER);

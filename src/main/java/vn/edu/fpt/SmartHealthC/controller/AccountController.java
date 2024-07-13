@@ -111,4 +111,21 @@ public class AccountController {
                         .result(accountService.deleteAccount(id))
                         .build()).getBody();
     }
+
+    @GetMapping("/get-list-doctor")
+    public ApiResponse<List<AccountResponseDTO>> getListDoctorNotDelete() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<AccountResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(accountService.getListDoctorNotDelete())
+                        .build()).getBody();
+    }
+    @GetMapping("/get-list-ms-admin")
+    public ApiResponse<List<AccountResponseDTO>> getListMsAdminNotDelete() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<AccountResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(accountService.getListMsAdminNotDelete())
+                        .build()).getBody();
+    }
 }

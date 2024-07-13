@@ -97,4 +97,27 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         forgetPasswordCodeRepository.delete(forgetPasswordCode.get());
         return true;
     }
+
+    @Override
+    public String sendPasswordEmail(String email) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+        if (account.isEmpty()) {
+            throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
+        }
+        String newPassword = emailService.generateRandomCode(10);
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        String message = "Mật khâu mới của bạn là  : " +newPassword;
+
+        boolean result =  emailService.sendMail(
+                email,
+                "Mật khẩu mới",
+                message
+        );
+        if(result == false){
+            throw new AppException(ErrorCode.SEND_EMAIL_FAIL);
+        }
+        account.get().setPassword(encodedPassword);
+        accountRepository.save(account.get());
+        return "Cập nhật mật khẩu mới thành công";
+    }
 }

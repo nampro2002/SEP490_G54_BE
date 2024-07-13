@@ -23,6 +23,12 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query("SELECT a FROM Account a")
     List<Account> findAllNotDeleted();
 
+    @Query("SELECT a FROM Account a WHERE a.isDeleted = false AND a.type = 'DOCTOR'")
+    List<Account> getListDoctorNotDelete();
+
+    @Query("SELECT a FROM Account a WHERE a.isDeleted = false AND a.type != 'DOCTOR'  AND a.type != 'USER'")
+    List<Account> getListMsAdminNotDelete();
+
     //find all account type = USER &  account.isactive = true & isDeleted = false
     @Query("SELECT a FROM Account a WHERE a.type = ?1 AND a.isActive = true AND a.isDeleted = false")
     List<Account> findAllAccountAppUser(TypeAccount type);
