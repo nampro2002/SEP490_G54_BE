@@ -45,8 +45,9 @@ public class WeightRecordServiceImpl implements WeightRecordService {
     @Transactional
     @Override
     public WeightRecord createWeightRecord(WeightRecordDTO weightRecordDTO) throws ParseException {
+
         WeightRecord weightRecord =  WeightRecord.builder()
-                .weekStart(weightRecordDTO.getWeekStart())
+                .weekStart(DateUtils.normalizeDate(formatDate,formatDate.format(weightRecordDTO.getWeekStart())))
                 .weight(weightRecordDTO.getWeight())
                 .date(weightRecordDTO.getDate()).build();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -19,6 +19,7 @@ import vn.edu.fpt.SmartHealthC.repository.CardinalRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
 import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -45,7 +46,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                 .Cholesterol(CardinalRecordDTO.getCholesterol())
                 .BloodSugar(CardinalRecordDTO.getBloodSugar())
                 .HBA1C(CardinalRecordDTO.getHba1c())
-                .weekStart(CardinalRecordDTO.getWeekStart())
+                .weekStart(DateUtils.normalizeDate(formatDate,formatDate.format(CardinalRecordDTO.getWeekStart())))
                 .date(CardinalRecordDTO.getDate())
                 .timeMeasure(CardinalRecordDTO.getTimeMeasure()).build();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

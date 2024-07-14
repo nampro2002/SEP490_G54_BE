@@ -47,14 +47,14 @@ public class WeeklyReviewController {
                         .build()).getBody();
     }
 
-    @GetMapping("/web/review/{weekstart}")
-    public ApiResponse<WeekReview> returnReviewForWeekDate(@PathVariable String weekstart) throws ParseException {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<WeekReview>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(weeklyReviewService.getWebDataReviewForWeek(weekstart))
-                        .build()).getBody();
-    }
+//    @GetMapping("/web/review/{weekstart}")
+//    public ApiResponse<WeekReview> returnReviewForWeekDate(@PathVariable String weekstart) throws ParseException {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<WeekReview>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(weeklyReviewService.getWebDataReviewForWeek(weekstart))
+//                        .build()).getBody();
+//    }
     @GetMapping("/mobile/review/{weekstart}")
     public ApiResponse<WeeklyReviewResponseDTO> returnMobileReviewForWeekDate(@PathVariable String weekstart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)

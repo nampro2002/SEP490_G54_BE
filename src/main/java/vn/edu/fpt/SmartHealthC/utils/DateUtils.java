@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 @Component
 public class DateUtils {
@@ -15,4 +16,9 @@ public class DateUtils {
             Date date = formatDate.parse(dateStr);
             return date;
         }
+    public static Date normalizeDate(SimpleDateFormat formatDate,String date) throws ParseException {
+        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return formatDate.parse(date);
+    }
+
 }

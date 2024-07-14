@@ -82,7 +82,7 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
             }
             ActivityRecord activityRecord =  ActivityRecord.builder()
                     .actualDuration(0f)
-                    .weekStart(activityRecordDTO.getWeekStart()).build();
+                    .weekStart(DateUtils.normalizeDate(formatDate,weekStartStr)).build();
             activityRecord.setAppUserId(appUser.get());
             activityRecord.setPlanType(activityRecordDTO.getPlanType());
             if (activityRecordDTO.getSchedule().contains(dayIndexMap.get(count))) {

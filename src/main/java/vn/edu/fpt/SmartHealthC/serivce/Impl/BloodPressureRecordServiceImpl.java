@@ -43,7 +43,7 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
         BloodPressureRecord bloodPressureRecord = BloodPressureRecord.builder()
                 .diastole(bloodPressureRecordDTO.getDiastole())
                 .systole(bloodPressureRecordDTO.getSystole())
-                .weekStart(bloodPressureRecordDTO.getWeekStart())
+                .weekStart(DateUtils.normalizeDate(formatDate,formatDate.format(bloodPressureRecordDTO.getWeekStart())))
                 .date(bloodPressureRecordDTO.getDate()).build();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();

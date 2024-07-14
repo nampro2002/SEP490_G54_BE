@@ -80,7 +80,7 @@ public class StepRecordServiceImpl implements StepRecordService {
             StepRecord stepRecord = StepRecord.builder()
                     .plannedStepPerDay(stepRecordDTO.getPlannedStepPerDay())
                     .actualValue(0f)
-                    .weekStart(stepRecordDTO.getWeekStart())
+                    .weekStart(DateUtils.normalizeDate(formatDate,weekStartStr))
                     .date(dateCalculate).build();
             stepRecord.setAppUserId(appUser.get());
             stepRecordRepository.save(stepRecord);

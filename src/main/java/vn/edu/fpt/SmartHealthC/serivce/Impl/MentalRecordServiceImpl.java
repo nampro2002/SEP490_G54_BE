@@ -89,7 +89,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
             dateCalculate = calculateDate(mentalRecordDTO.getWeekStart(), count);
             for (Integer id : mentalRecordDTO.getMentalRuleId()) {
                 MentalRecord mentalRecord =  MentalRecord.builder()
-                        .weekStart(mentalRecordDTO.getWeekStart())
+                        .weekStart(DateUtils.normalizeDate(formatDate,weekStartStr))
                         .date(dateCalculate)
                         .build();
                 mentalRecord.setAppUserId(appUser.get());

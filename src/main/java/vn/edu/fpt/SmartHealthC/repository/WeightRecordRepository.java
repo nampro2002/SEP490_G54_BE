@@ -24,6 +24,9 @@ public interface WeightRecordRepository extends JpaRepository<WeightRecord, Inte
     @Query("SELECT w FROM WeightRecord w WHERE  w.appUserId.id = ?1")
     List<WeightRecord> findAppUser( Integer userId);
 
+    @Query("SELECT w FROM WeightRecord w WHERE  w.appUserId.id = ?1 and  w.weekStart = ?2")
+    List<WeightRecord> findAppUserAndWeekStart( Integer userId,Date date);
+
     @Query("SELECT a FROM WeightRecord a WHERE a.appUserId.id = ?1 and a.weight > 0   order by a.date desc limit 5")
     List<WeightRecord> find5RecordByIdUser(Integer userId);
 }
