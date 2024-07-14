@@ -45,6 +45,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final NotificationService notificationService;
     private final WebUserRepository webUserRepository;
+    private final CodeRepository codeRepository;
     @Override
     public AuthenticationResponseDto login(LoginDto request) throws ParseException {
         Optional<Account> optionalUser = accountRepository.findAccountByEmail(request.getEmail());
@@ -197,14 +198,31 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public Boolean checkRegisterEmail(String email, String code) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+        if (account.isPresent()) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+        Optional<Code> codeRegister = codeRepository.findByEmailAndCode(email,code);
+        if (codeRegister.isEmpty()) {
+            throw new AppException(ErrorCode.CODE_INVALID);
+        }else{
+            return true;
+        }
+    }
+
+    @Override
     public String sendEmailCode(String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         if (account.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
-        String codeVerify = emailService.generateRandomCode(6);
-        String message = "Code xác thực email đăng ký của bạn là : " +codeVerify;
 
+        String codeVerify = emailService.generateRandomCode(6);
+        Code code = new Code().builder()
+                .email(email).code(codeVerify).build();
+        codeRepository.save(code);
+        String message = "Code xác thực email đăng ký của bạn là : " +codeVerify;
         boolean result =  emailService.sendMail(
                 email,
                 "MÃ XÁC THỰC EMAIL",
@@ -213,7 +231,7 @@ public class AuthServiceImpl implements AuthService {
         if(result == false){
             throw new AppException(ErrorCode.SEND_EMAIL_FAIL);
         }
-        return codeVerify;
+        return "Gửi mã xác thực email thành công";
     }
 
     @Override

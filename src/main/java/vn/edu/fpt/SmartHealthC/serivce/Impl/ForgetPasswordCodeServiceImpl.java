@@ -9,6 +9,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.ForgetPasswordCode;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
+import vn.edu.fpt.SmartHealthC.repository.CodeRepository;
 import vn.edu.fpt.SmartHealthC.repository.ForgetPasswordCodeRepository;
 import vn.edu.fpt.SmartHealthC.serivce.EmailService;
 import vn.edu.fpt.SmartHealthC.serivce.ForgetPasswordCodeService;
@@ -32,6 +33,8 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
     private  PasswordEncoder passwordEncoder;
     @Autowired
     private ForgetPasswordCodeRepository forgetPasswordCodeRepository;
+    @Autowired
+    private CodeRepository codeRepository;
 
     @Override
     public String sendEmailCode(String email) throws ParseException {
@@ -63,7 +66,7 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
                 .accountId(account.get())
                 .expiredDate(formatDate.parse(stringFormatedDate)).build();
         forgetPasswordCodeRepository.save(forgetPasswordCode);
-        return codeVerify;
+        return "Gửi mã xác thức quên mật khẩu thành công";
     }
 
     @Override
