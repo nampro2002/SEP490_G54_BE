@@ -4,8 +4,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
-import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
@@ -129,8 +127,8 @@ import java.util.Optional;
     }
 
     @Override
-    public MonthlyStatisticResponseDTO getPoint(Integer monthNumber) {
-        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+    public MonthlyStatisticResponseDTO getPoint(Integer monthNumber, Integer appUser) {
+//        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
 
         SatResponseDTO satResponseDTO = new SatResponseDTO();
         SFResponseDTO sfResponseDTO = new SFResponseDTO();
@@ -143,7 +141,7 @@ import java.util.Optional;
         List<MonthlyAnswerResponseDTO> activityList = new ArrayList<>();
         List<MonthlyAnswerResponseDTO> dietList = new ArrayList<>();
         List<MonthlyAnswerResponseDTO> medicineList = new ArrayList<>();
-        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUser.getId(),monthNumber);
+        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUser,monthNumber);
         if(!monthlyNumbers.isEmpty()){
             for (MonthlyRecord record : monthlyNumbers) {
                 if(record.getMonthlyRecordType() == MonthlyRecordType.SAT_SF_C){
@@ -353,7 +351,7 @@ import java.util.Optional;
         List<Integer> monthlyNumbers = monthlyQuestionRepository.find3ByAppUser(appUserId);
         for (Integer month : monthlyNumbers){
             if(month != 0){
-                monthlyStatisticResponseDTOList.add(getPoint(month));
+                monthlyStatisticResponseDTOList.add(getPoint(month,appUserId));
             }
         }
 
@@ -365,7 +363,7 @@ import java.util.Optional;
         MobileGeneralChartResponseDTO mobileGeneralChartResponseDTO= new MobileGeneralChartResponseDTO();
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         mobileGeneralChartResponseDTO.setChart3Month(getPoint3Month(appUser.getId()));
-        mobileGeneralChartResponseDTO.setFirstWeek(getPoint(0));
+        mobileGeneralChartResponseDTO.setFirstWeek(getPoint(0,appUser.getId()));
         return mobileGeneralChartResponseDTO;
     }
     @Override
@@ -384,7 +382,7 @@ import java.util.Optional;
         List<Integer> monthlyNumbers = monthlyQuestionRepository.find2ByAppUserAndMonthNumber(appUserId,monthNumber);
         List<MonthlyStatisticResponseDTO> monthlyStatisticResponseDTOList = new ArrayList<>();
         for (Integer month : monthlyNumbers){
-            monthlyStatisticResponseDTOList.add(getPoint(month));
+            monthlyStatisticResponseDTOList.add(getPoint(month,appUserId));
         }
         return monthlyStatisticResponseDTOList;
     }
@@ -402,7 +400,7 @@ import java.util.Optional;
         List<Integer> monthlyNumbers = monthlyQuestionRepository.find12ByAppUser(appUserId);
         List<MonthlyStatisticResponseDTO> monthlyStatisticResponseDTOList = new ArrayList<>();
         for (Integer month : monthlyNumbers){
-            monthlyStatisticResponseDTOList.add(getPoint(month));
+            monthlyStatisticResponseDTOList.add(getPoint(month,appUserId));
         }
         return monthlyStatisticResponseDTOList;
     }

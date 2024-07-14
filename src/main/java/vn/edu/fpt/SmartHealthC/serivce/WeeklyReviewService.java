@@ -15,17 +15,19 @@ public interface WeeklyReviewService {
 
     List<Date> getListWeekStart(Integer id) throws ParseException;
 
-//    WeeklyReviewResponseDTO getDataReviewForWeek(Integer id,String weekstart) throws ParseException;
+
+    //    WeeklyReviewResponseDTO getDataReviewForWeek(Integer id,String weekstart) throws ParseException;
     Date findSmallestWeekStart(AppUser appUser);
     Date findSmallestWeekStartForJob(AppUser appUser);
     WeekReview getWebDataReviewForWeek(String weekstart) throws ParseException;
     WeeklyReviewResponseDTO getMobileDataReviewForWeek(String weekstart) throws ParseException;
-    void saveDataReviewForWeek(String weekStart) throws ParseException;
+    void saveDataReviewForWeek(Integer appUserId,String weekStart) throws ParseException;
 
     WeeklyMoblieChartResponseDTO getMobileChartReviewForWeek() throws ParseException;
 
-    List<Date> getMobileListWeekStart() throws ParseException;
+//    List<Date> getMobileListWeekStart() throws ParseException;
 
     WeekCheckPlanResponseDTO checkWeeklyPlanExist(String weekStart) throws ParseException;
 
+    List<Date> get5NearestWeekStart() throws ParseException;
 }

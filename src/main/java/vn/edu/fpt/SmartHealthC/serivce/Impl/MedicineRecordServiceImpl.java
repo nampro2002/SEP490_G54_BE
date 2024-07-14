@@ -95,7 +95,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             for(Date date : medicineRecordCreateDTO.getSchedule()){
 
                 MedicineRecord medicineRecord = MedicineRecord.builder()
-                        .weekStart(medicineRecordCreateDTO.getWeekStart())
+                        .weekStart(DateUtils.normalizeDate(formatDate,formatDate.format(medicineRecordCreateDTO.getWeekStart())))
                         .build();
                 medicineRecord.setAppUserId(appUser.get());
                 medicineRecord.setMedicineType(medicineType.get());

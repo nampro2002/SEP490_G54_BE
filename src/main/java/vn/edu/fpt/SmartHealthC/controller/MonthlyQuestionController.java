@@ -33,15 +33,15 @@ public class MonthlyQuestionController {
                         .result(null)
                         .build()).getBody();
     }
-    @PostMapping("/test")
-    public ApiResponse<Void> createMonthlyQuestion() {
-        monthlyQuestionService.createNewMonthMark(13);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.<Void>builder()
-                        .code(HttpStatus.CREATED.value())
-                        .result(null)
-                        .build()).getBody();
-    }
+//    @PostMapping("/test")
+//    public ApiResponse<Void> createMonthlyQuestion() {
+//        monthlyQuestionService.createNewMonthMark(13);
+//        return ResponseEntity.status(HttpStatus.CREATED)
+//                .body(ApiResponse.<Void>builder()
+//                        .code(HttpStatus.CREATED.value())
+//                        .result(null)
+//                        .build()).getBody();
+//    }
 
     //Lấy 3 tháng gần nhất w.monthlyRecordType = 'NEW_MONTH_MARK' (chưa trả lời)
     @GetMapping("/mobile/list-month-number")

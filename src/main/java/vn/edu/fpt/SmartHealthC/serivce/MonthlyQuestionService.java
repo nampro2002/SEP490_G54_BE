@@ -22,9 +22,8 @@ public interface MonthlyQuestionService {
 
     List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber,String type);
 
-    MonthlyStatisticResponseDTO getPoint(Integer monthNumber);
 
-
+    MonthlyStatisticResponseDTO getPoint(Integer monthNumber, Integer appUser);
 
     MobileGeneralChartResponseDTO getPoint3MonthMobile();
 

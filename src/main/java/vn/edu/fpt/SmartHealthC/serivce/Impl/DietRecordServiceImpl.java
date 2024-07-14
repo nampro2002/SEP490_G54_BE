@@ -89,7 +89,7 @@ public class DietRecordServiceImpl implements DietRecordService {
             DietRecord dietRecord =  DietRecord.builder()
                     .dishPerDay(dietRecordDTO.getDishPerDay())
                     .actualValue(0.f)
-                    .weekStart(dietRecordDTO.getWeekStart())
+                    .weekStart(DateUtils.normalizeDate(formatDate,weekStartStr))
                     .date(dateCalculate).build();
 
             dietRecord.setAppUserId(appUser.get());
