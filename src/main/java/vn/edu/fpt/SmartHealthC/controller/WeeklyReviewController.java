@@ -43,9 +43,18 @@ public class WeeklyReviewController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<Date>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(weeklyReviewService.getMobileListWeekStart())
+                        .result(weeklyReviewService.get5NearestWeekStart())
                         .build()).getBody();
     }
+
+//    @GetMapping("/mobile/all-list")
+//    public ApiResponse<List<Date>> allList() throws ParseException {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<List<Date>>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(weeklyReviewService.allList())
+//                        .build()).getBody();
+//    }
 
 //    @GetMapping("/web/review/{weekstart}")
 //    public ApiResponse<WeekReview> returnReviewForWeekDate(@PathVariable String weekstart) throws ParseException {

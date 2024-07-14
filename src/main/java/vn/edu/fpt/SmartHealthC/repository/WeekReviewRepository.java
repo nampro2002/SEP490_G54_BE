@@ -14,6 +14,7 @@ public interface WeekReviewRepository extends JpaRepository<WeekReview, Integer>
     @Query("SELECT s FROM WeekReview s WHERE s.appUserId.id = ?1 and s.weekStart = ?2 order by  s.weekStart limit 1")
     Optional<WeekReview> find1ByAppUserIdAndWeekStart(Integer userId,Date weekStart);
 
+
     @Query("SELECT s FROM WeekReview s WHERE s.appUserId.id = ?1 order by s.weekStart desc limit 1 ")
     Optional<WeekReview> findNearestWeekStart(Integer userId);
     @Query("SELECT s.weekStart FROM WeekReview s WHERE s.appUserId.id = ?1 order by s.weekStart desc ")

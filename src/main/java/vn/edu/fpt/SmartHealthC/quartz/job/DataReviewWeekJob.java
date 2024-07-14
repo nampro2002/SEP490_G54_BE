@@ -38,12 +38,12 @@ public class DataReviewWeekJob implements Job {
         Date weekStart = getFirstDayOfWeek(date);
         //parse weekStart to String
 //        throw new RuntimeException("Test");
-        String weekStartStr = simpleDateFormat.format(weekStart);
-        try {
-            weeklyReviewService.saveDataReviewForWeek(weekStartStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        String weekStartStr = simpleDateFormat.format(weekStart);
+//        try {
+//            weeklyReviewService.saveDataReviewForWeek(weekStartStr);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public Date getFirstDayOfWeek(Date date) {

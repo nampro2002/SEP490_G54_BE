@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -19,6 +20,24 @@ public class DateUtils {
     public static Date normalizeDate(SimpleDateFormat formatDate,String date) throws ParseException {
         formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
         return formatDate.parse(date);
+    }
+
+    public static Date getFirstDayOfWeek(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        // Set the first day of the week to Monday
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        // Get the current day of the week
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        // Calculate the difference to Monday
+        int diff = Calendar.MONDAY - dayOfWeek;
+        // If the current day is Sunday, adjust the difference
+        if (dayOfWeek == Calendar.SUNDAY) {
+            diff = -6;
+        }
+        // Add the difference to the calendar date
+        calendar.add(Calendar.DAY_OF_MONTH, diff);
+        return calendar.getTime();
     }
 
 }
