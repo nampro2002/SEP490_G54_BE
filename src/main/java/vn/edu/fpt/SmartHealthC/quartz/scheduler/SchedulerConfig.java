@@ -75,7 +75,7 @@ public class SchedulerConfig {
             scheduler.scheduleJob(eveningJobDetail, eveningTrigger);
             scheduler.scheduleJob(sundayEveningJobDetail, sundayEveningTrigger);
             scheduler.scheduleJob(mondayMorningJobDetail, mondayMorningTrigger);
-            scheduler.scheduleJob(dataReviewWeekJobDetail, dataWeekReviewTrigger);
+//            scheduler.scheduleJob(dataReviewWeekJobDetail, dataWeekReviewTrigger);
             scheduler.start();
         } catch (SchedulerException e) {
             e.printStackTrace();
