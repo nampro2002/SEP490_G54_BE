@@ -1,0 +1,2564 @@
+[33mcommit 9faf5fb963b8cd9d301fd38ff4d22a1a1f93b8fb[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mbachduc[m[33m)[m
+Merge: 92bdb52 e20d9a5
+Author: Bach Duc <bsd03rd>
+Date:   Mon Jul 15 21:35:32 2024 +0700
+
+    Merge branch 'master' into bachduc
+
+[33mcommit 92bdb52b672e0d5f9a40e513016536840a3601fc[m
+Author: Bach Duc <bsd03rd>
+Date:   Mon Jul 15 21:35:27 2024 +0700
+
+    Add api create weekly review
+
+[33mcommit e20d9a5be9aac62dba8d737a15d8a91e3f4fb2e5[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Merge: 7b89c63 7958712
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jul 14 20:06:48 2024 +0700
+
+    Merge pull request #101 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit 795871282959dfdd520927e62c663759db55a4d3[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jul 14 15:47:50 2024 +0700
+
+    Fix logic weekly review
+
+[33mcommit abac7943c324da4d49f1bf609f21c6c8561c5a56[m
+Merge: 3a28041 7b89c63
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jul 14 14:42:25 2024 +0700
+
+    Merge branch 'master' into dev-kien
+
+[33mcommit 3a2804196ba09dd7efbd348820dcfb175b304025[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jul 14 14:42:11 2024 +0700
+
+    Fix format date dto
+
+[33mcommit 7b89c6323f54f619ef6198035f023442007ca531[m
+Merge: 1bb6c6b db8fbdc
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jul 14 13:12:34 2024 +0700
+
+    Merge pull request #100 from nampro2002/dev-nam
+    
+    update trigger, add missing dob
+
+[33mcommit db8fbdc51274fe974b7090ae31bb9c919619ecff[m[33m ([m[1;31morigin/dev-nam[m[33m)[m
+Merge: 020de6e 1bb6c6b
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jul 14 13:08:05 2024 +0700
+
+    merge master to dev-nam
+
+[33mcommit 020de6e11004f2ced8ab215cf3ddd0038f1d59c3[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jul 14 13:06:15 2024 +0700
+
+    update trigger, add missing dob
+
+[33mcommit 8136bde34ed6cde77ed89a0e7d9841034652ec16[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jul 14 00:24:02 2024 +0700
+
+    Fix get point of monthly question service
+
+[33mcommit 2cc8acf6d16f8df23b159f5c2601beff78444bc6[m
+Merge: 9f6fa85 1bb6c6b
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jul 13 23:56:23 2024 +0700
+
+    Merge branch 'master' into dev-kien
+
+[33mcommit 9f6fa85fbfee60afd022505e327eb7c338a7a3a4[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jul 13 23:56:06 2024 +0700
+
+    Fix logic monthly question
+
+[33mcommit 1bb6c6bde82894defddb658a62a78aa24c83897e[m
+Merge: e070ecf d08a8c7
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jul 13 23:26:22 2024 +0700
+
+    Merge pull request #99 from nampro2002/dev-nam
+    
+    fix list appuser by role
+
+[33mcommit d08a8c71e67a690c599a64547f7cd4a5600f8f26[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sat Jul 13 23:25:40 2024 +0700
+
+    fix list appuser by role
+
+[33mcommit e070ecff9691cd75fee1176c2e5bfaad3f7a2112[m
+Merge: a2f72b4 0e5b2b0
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jul 13 22:45:14 2024 +0700
+
+    Merge pull request #98 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit 0e5b2b06020e29918edb0e41a04c22545147cf41[m
+Merge: c6c37ad a2f72b4
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jul 13 22:44:34 2024 +0700
+
+    resovle conflig
+
+[33mcommit c6c37add108b1db6409056677a1a4a6a19288c66[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jul 13 22:34:56 2024 +0700
+
+    Fix logic monthly question
+
+[33mcommit 7ab1a0634b97c7f667341a34c7608a8bba05fe71[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jul 13 22:13:06 2024 +0700
+
+    Fix api verify email when register and logic of monthlyy question for web
+
+[33mcommit a2f72b47b2f2f993a32fd96d3bd67b91f702279d[m
+Merge: 4db03e2 7575385
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jul 13 21:53:29 2024 +0700
+
+    Merge pull request #97 from nampro2002/dev-nam
+    
+    update api forgetpassword, get list doctor
+
+[33mcommit 7575385da3ba7181a0f0638710d7ce0018c1d424[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sat Jul 13 21:52:11 2024 +0700
+
+    update api forgetpassword, get list doctor
+
+[33mcommit 4db03e2375ba56d6f216ff7c560c94915f1bc241[m
+Merge: 5d016f7 fefe83a
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jul 13 17:12:28 2024 +0700
+
+    Merge pull request #96 from nampro2002/dev-nam
+    
+    update api get doctor and staff, api detail webuser
+
+[33mcommit fefe83a9adc489c5a30429ce4d836cc75b7b83db[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sat Jul 13 17:11:36 2024 +0700
+
+    update api get doctor and staff, api detail webuser
+
+[33mcommit 5d016f76d8d45bc654fa0635e810b12150a8a1b5[m
+Merge: 417ca03 91c2e1b
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jul 13 15:06:44 2024 +0700
+
+    Merge pull request #95 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 91c2e1b0f8a37bba14e838c34e6a1f96f3083551[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sat Jul 13 15:06:05 2024 +0700
+
+    add api logout, register doctor, update webuser
+
+[33mcommit 417ca033bbfe400a8805b5ae9543b5c0c1ecbb0c[m
+Merge: eb0c514 8628ce7
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jul 13 14:56:21 2024 +0700
+
+    Merge pull request #93 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit 8628ce7c1401d8a472c3dadf9fe3ec8327e0fd94[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jul 13 13:46:07 2024 +0700
+
+    add api forget password for web ,get list doctor and ms/admin , add flyway change refresh token
+
+[33mcommit e1b7e2ba7bf7a5233bb01bf46a932c55cd8672bd[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sat Jul 13 13:02:47 2024 +0700
+
+    update api for step record
+
+[33mcommit 05d6a6dc2ba95c8057359fad752a4256f1b0a09f[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jul 11 21:39:43 2024 +0700
+
+    Fix entity medical history
+
+[33mcommit d75aa8fb4a56ab0a9d5a54d7871789ab33c1d51c[m
+Merge: e07c59e eb0c514
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jul 11 21:34:50 2024 +0700
+
+    Merge branch 'master' into dev-kien
+
+[33mcommit e07c59ee42d03bdb694bc31f7c37add3cb02c943[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jul 11 21:34:44 2024 +0700
+
+    Add flyway alter medical history and fix service , dto , dto reqest
+
+[33mcommit 27feaa824ac24b8cd33cc12d7c1697eb97db56ea[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jul 11 21:26:46 2024 +0700
+
+    Add logic get chart for first week
+
+[33mcommit eb0c5143ee5c1443bd8ae3f8745a07854a8991ca[m
+Merge: ee70ed1 d6b06db
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jul 11 17:02:11 2024 +0700
+
+    Merge pull request #92 from nampro2002/dev-nam
+    
+    fix start month for monthlyservice
+
+[33mcommit d6b06db022f574855ecba47a1234922167943be5[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jul 11 17:01:23 2024 +0700
+
+    fix start month for monthlyservice
+
+[33mcommit ee70ed1b5b083e870b3b65656825d26455df08d5[m
+Merge: 3587cb7 75a01ad
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jul 11 16:23:58 2024 +0700
+
+    Merge pull request #89 from nampro2002/bachduc
+    
+    Add Test Case for Mental Record ,MedicineRecordServiceImpl , StepRecordServiceImpl, WeightRecordServiceImpl, WeeklyReviewServiceImpl
+
+[33mcommit 3587cb7730b9659dd435ee3e077b13341da7896d[m
+Merge: 6bff850 27e3305
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jul 11 16:23:27 2024 +0700
+
+    Merge pull request #91 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 27e33052ec3862a8a25c65be4eba19768f3a9b2e[m
+Merge: b74541f 6bff850
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jul 11 16:22:01 2024 +0700
+
+    Merge branch 'master' into dev-nam
+
+[33mcommit b74541f26b31dbd30d7c0468a77fcdad16b2de21[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jul 11 16:21:22 2024 +0700
+
+    update api get form question
+
+[33mcommit 6bff85083c838be5ffe582e4f2603607b0d5f116[m
+Merge: 012e1dd f52f1b4
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jul 11 16:15:59 2024 +0700
+
+    Merge pull request #90 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit f52f1b4c2117654dbad0ad1a267ed388d516b0c6[m
+Merge: 940a386 012e1dd
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jul 11 16:10:44 2024 +0700
+
+    Merge branch 'master' into dev-kien
+
+[33mcommit 940a38609782228861a542bc6ae1aece00baa5b9[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jul 11 16:10:27 2024 +0700
+
+    Fix logic monthly question
+
+[33mcommit 5e6b332f55b840737f3bed4febd4699824253315[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jul 11 15:37:48 2024 +0700
+
+    add V13 flyway, fix formquestion entity
+
+[33mcommit 75a01ad800de4a8b80015e6512f9ce06bcd17c3c[m[33m ([m[1;31morigin/bachduc[m[33m)[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:57:57 2024 +0700
+
+    Add Test Case For WeeklyReviewServiceImpl
+
+[33mcommit e6253d9540e030e8815536bc76cf3afe1e371b5c[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:25:37 2024 +0700
+
+    Add Test Case getAllWeightRecords_Success
+
+[33mcommit 3c0fe3e0135725e6f92997b929afb6181fcba60a[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:25:26 2024 +0700
+
+    Add Test Case updateWeightRecord_Success
+
+[33mcommit e692531199058f93b6ed178451f6faf07f8e69d4[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:25:12 2024 +0700
+
+    Add Test Case getDataChart_Success
+
+[33mcommit 2e99d819c37aee3f01e97fa21ccfaa475df9458f[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:24:58 2024 +0700
+
+    Add Test Case createWeightRecord_Success
+
+[33mcommit e0e518a84f8a48059d58c587156296f5bbcd43ad[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:24:28 2024 +0700
+
+    Add Test Case createWeightRecord_appUserID_Notfound
+
+[33mcommit 33e6809078d2c7f9cd86941477c69cd514b7d9e1[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:14:56 2024 +0700
+
+    Create WeightRecordServiceImplTest
+
+[33mcommit 7717bfcd150b521e1242e9a5d90981988f36f8af[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:08:58 2024 +0700
+
+    Add Test Case getListStepPerWeek_Sucess
+
+[33mcommit 192329ec8b6955014e85b68af9ab5b0b90a67683[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:08:45 2024 +0700
+
+    Add Test Case getStepRecordById_appUserID_Notfound
+
+[33mcommit 3e7b448f5702d9a6f55aed94c9d2000d654c2cb2[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:08:26 2024 +0700
+
+    Add Test Case updateStepRecord_ACTIVITY_PLAN_NOT_FOUND
+
+[33mcommit 7954f03958a19912296a3ceafa7bece8db5e3e72[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:06:34 2024 +0700
+
+    Add Test Case updateStepRecord_Success
+
+[33mcommit 53b6894801ce7ba76f80cd6caed0193bbf83cb1c[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:06:22 2024 +0700
+
+    Add Test Case getDataChart_Success
+
+[33mcommit 68e3073e715d2baa88429334197dd88e167eb8d6[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:06:08 2024 +0700
+
+    Add Test Case createStepRecord_Success
+
+[33mcommit ae0d8084ba313f19c312397f38452e3ddc4c851f[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 14:05:53 2024 +0700
+
+    Add Test Case createStepRecord_appUserID_Notfound
+
+[33mcommit 7a038ed8bfbf3dece24169ec524b1b92328c5328[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 13:56:55 2024 +0700
+
+    Create StepRecordServiceImplTest
+
+[33mcommit 66f1945dfeb45b93ba75628b1424664e2bf46666[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 13:45:49 2024 +0700
+
+    Add Test Case getListMedicinePerWeek_Sucess
+
+[33mcommit a8eb0c91c2b793435a3b0ce92a592f033b97a60e[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 13:45:29 2024 +0700
+
+    Add Test Case getMedicinePerDay_appUserID_Notfound
+
+[33mcommit 259c82608d57fbcb2f4c9f74233dd2801252bd69[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 13:45:07 2024 +0700
+
+    Add Test Case updateMedicineRecord_ACTIVITY_PLAN_NOT_FOUND
+
+[33mcommit a268b0ca1f204a69b3d3a76ae3e115a74aec6af7[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 13:44:48 2024 +0700
+
+    Add Test Case getAllMedicineRecords_Success
+
+[33mcommit 360af974925c309571b7e732962de8aac5faf9a2[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 13:44:29 2024 +0700
+
+    Add Test Case updateMedicineRecord_Success
+
+[33mcommit 406aaaf81383a7a919bbf7c10c1f7512bfb652b7[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 13:44:06 2024 +0700
+
+    Add Test Case getDataChart_Success
+
+[33mcommit b5a3cd6fd7fbb308800adb93078c859ed7e05fa5[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 13:43:45 2024 +0700
+
+    Add Test Case createMedicineRecord_Success
+
+[33mcommit 605b4fa4ddf7f84f7c61a8fd881228d795dcc89a[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 13:43:24 2024 +0700
+
+    Add Test Case createMedicineRecord_appUserID_Notfound
+
+[33mcommit 098ca40caa1ba6a0c6e594d26e2dbe5247e2cf2c[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 13:33:29 2024 +0700
+
+    Create MedicineRecordServiceImplTest
+
+[33mcommit bada0565ab746c161c16a59de309cfd811eaad3b[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 09:16:43 2024 +0700
+
+    Add Test Case getListMentalPerWeek_Sucess
+
+[33mcommit c49e2b5202e54cb32929fc1e578a0b616eecae2c[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 09:16:07 2024 +0700
+
+    Add Test Case getListMentalPerWeek_appUserID_Notfound
+
+[33mcommit 48abdfdf6f1eea7a27b96f26dad575bbb4614e31[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 09:15:29 2024 +0700
+
+    Add Test Case updateMentalRecord_ACTIVITY_PLAN_NOT_FOUND
+
+[33mcommit 970cf2fa4a1dd616b2f4facc0990d35f3127d8f7[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 09:14:57 2024 +0700
+
+    Add Test Case getAllMentalRecords_Success
+
+[33mcommit 689bd54493121a414b2e9a3ab279aa110cc984eb[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 08:59:24 2024 +0700
+
+    Add Test Case updateMentalRecord_Success
+
+[33mcommit a6ceca6d2a23b470126462b68410f60896c57b86[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 08:58:49 2024 +0700
+
+    Add Test Case getDataChart_Success
+
+[33mcommit e3620c39729d1f7077feb9ada48986da4d02f61e[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 08:58:11 2024 +0700
+
+    Add Test Case createMentalRecord_Success
+
+[33mcommit e370b37bf137d4c60bc77396fdfd11cfb3f533c1[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 08:57:24 2024 +0700
+
+    Creat Test Case createMentalRecord_appUserID_Notfound
+
+[33mcommit 3b152a1fd2ee9fa0aa218bcdaf9bb25440cdbf13[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Thu Jul 11 08:42:17 2024 +0700
+
+    Creat MentalRecordServiceImplTest
+
+[33mcommit 0a7f8549f159ac1ad32c291db88a9685fa009bd7[m
+Merge: c5de74c 012e1dd
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jul 10 23:11:20 2024 +0700
+
+    Merge branch 'master' into dev-nam
+
+[33mcommit 012e1ddda16193c8474bd7f1b22953e6b5a2b2b3[m
+Merge: 5b11c5f c38b055
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jul 10 22:55:51 2024 +0700
+
+    Merge pull request #88 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit c5de74c2a233d1ef0c52679f606bfd2f3bf57a6d[m
+Merge: 619d053 5b11c5f
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jul 10 22:48:20 2024 +0700
+
+    Merge branch 'master' into dev-nam
+
+[33mcommit 619d05359262f124953604887a0c6c9c1626f41f[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jul 10 22:46:06 2024 +0700
+
+    update security config, pathapi
+
+[33mcommit 7419070ecd8a1106055b91834daf346cd06eeb20[m
+Merge: c38b055 5b11c5f
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jul 10 15:37:23 2024 +0700
+
+    Merge branch 'master' into dev-kien
+
+[33mcommit 5b11c5f36e6ba793c7a6b42da5ac049e14e73b09[m
+Merge: 51259bb d795666
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jul 10 15:37:03 2024 +0700
+
+    Merge pull request #87 from nampro2002/bachduc
+    
+    Add Test Case for Diet Record
+
+[33mcommit c38b055a876f1a8191294388471e21cbf04c4d69[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jul 10 15:16:29 2024 +0700
+
+    Add monthly question , fix cardinal and medicine response
+
+[33mcommit 7ce9180ae32ace1ce7196a0ef8818911676481f1[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jul 10 10:39:21 2024 +0700
+
+    Add api monthly question
+
+[33mcommit d7956662af4dabb81376c8135df46a13bf877002[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Wed Jul 10 09:44:36 2024 +0700
+
+    Add getDishPlan_Sucess
+
+[33mcommit 4be9cca7273045895d220b300f3bcf85356bd2bb[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Wed Jul 10 09:41:26 2024 +0700
+
+    Add getDishPlan_appUserID_Notfound
+
+[33mcommit 9187b8642c3332692c4ea83d06a20817f37d5c45[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Wed Jul 10 09:36:20 2024 +0700
+
+    Add getDataChart_Success
+
+[33mcommit 5e896c4dc21485916747e22bdb2a121d90cc5c85[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Wed Jul 10 09:34:02 2024 +0700
+
+    Create updateDietRecord_Success
+
+[33mcommit f6908059129a3ae6fb4b40c3af6b6be5b92c008c[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Wed Jul 10 09:33:13 2024 +0700
+
+    Create createDietRecord_Success
+
+[33mcommit e0475d1b25db7ddd0b35175665a3a3a720c6c6d3[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Wed Jul 10 09:32:40 2024 +0700
+
+    Create createDietRecord_appUserID_Notfound
+
+[33mcommit eb106ee2b6d6a00580e64ca63554a74aae7c33cc[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Wed Jul 10 09:29:10 2024 +0700
+
+    Create DietRecordServiceImplTest
+
+[33mcommit 519eeda3ac6360139e15ceb7e6c8d4ad02bd6fa9[m
+Merge: bfe2029 51259bb
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jul 9 21:12:50 2024 +0700
+
+    Fix logic weekly review and data chart
+
+[33mcommit bfe2029c53b118a15cda509e1b22f547394a400a[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jul 9 13:37:45 2024 +0700
+
+    Fix logic lesson for  user week1 information
+
+[33mcommit 51259bb2191c0596fb9786bfb0424d38ae253aa6[m
+Merge: 4ad67aa a72fcd0
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jul 9 13:37:28 2024 +0700
+
+    Merge pull request #85 from nampro2002/bachduc
+    
+    Add Test Case for  Cardinal Record
+
+[33mcommit 4ad67aa21c03e9b258cb9b0dfb53f95a49f9a085[m
+Merge: f96b254 8b8450f
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jul 9 13:36:43 2024 +0700
+
+    Merge pull request #86 from nampro2002/dev-nam
+    
+    fix job weekly review & job monthly
+
+[33mcommit 8b8450fbf930960bc9897861b02d938b0da4ea65[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Tue Jul 9 13:36:03 2024 +0700
+
+    fix job weekly review & job monthly
+
+[33mcommit a72fcd068aa5e7197803635f3da4287635c40f8e[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Tue Jul 9 10:32:14 2024 +0700
+
+    Add Test Case getDataChart_appUserID_Notfound
+
+[33mcommit 40c40c479f85dc6450a962b8d7744652aa3a6525[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Tue Jul 9 10:29:19 2024 +0700
+
+    Add Test Case getDataChart_Success
+
+[33mcommit 0ac017a72ce7cd2b34bed6452952e0fc3953a48e[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Tue Jul 9 10:25:12 2024 +0700
+
+    Add Test Case getAllCardinalRecords_Sucess
+
+[33mcommit 84daaeb86f613b82c6060d5348e573cf2b7b6088[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Tue Jul 9 10:16:55 2024 +0700
+
+    Add Test Case createCardinalRecord_CARDINAL_TYPE_DAY_EXIST
+
+[33mcommit d26d5472935aa8e5ea3c968743a057760d5d50f2[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Tue Jul 9 09:07:34 2024 +0700
+
+    Add Test Case createCardinalRecord_Success
+
+[33mcommit e9cd9eed5295785f2b8695a60336457d7ee1aef4[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Tue Jul 9 08:53:57 2024 +0700
+
+    Add Test Case createCardinalRecord_appUserID_Notfound
+
+[33mcommit 05a6f345d37b2b25d3e1cda38c5e6c3cc44790cc[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Tue Jul 9 08:45:03 2024 +0700
+
+    Create Cardinal Record Service Test
+
+[33mcommit 4cfb7be7601ab66d0a067fa5eb0a2d9b14af69ce[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jul 8 23:48:25 2024 +0700
+
+    Fix logic return list week start
+
+[33mcommit f96b2542cdc021ec91ae04ea976ff0c5f88b1daf[m
+Merge: 4691f49 436e2ed
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jul 8 23:03:42 2024 +0700
+
+    Merge pull request #84 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 436e2ed4c0acb043792223d93d52020a25011dab[m
+Merge: 77ebcfe 4691f49
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jul 8 23:03:09 2024 +0700
+
+    Merge branch 'master' into dev-nam
+
+[33mcommit 77ebcfec01ba4394093daf3ad20e9a6e4647fb8a[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jul 8 23:02:49 2024 +0700
+
+    hot fix notification setting
+
+[33mcommit 1832e3f5e99866e43847278c88306180cf17d59e[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jul 8 23:01:32 2024 +0700
+
+    Add logic lesson  for user week information
+
+[33mcommit 4691f49813a4af5eabecca9c6aac4594242e98f4[m
+Merge: c9ca63b d5de0a1
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jul 8 21:57:33 2024 +0700
+
+    Merge pull request #83 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit d5de0a1019ee504fc854208b1284eab27d580bbb[m
+Merge: b8917df c9ca63b
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jul 8 21:56:16 2024 +0700
+
+    Resolve conflig
+
+[33mcommit c9ca63b6785876d8c3c2832e73a04fed350cbade[m
+Merge: bca86d9 1d1c860
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jul 8 21:25:57 2024 +0700
+
+    Merge pull request #82 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 1d1c860db64022ce534c7d91e386b6e7d52ae137[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jul 8 21:25:04 2024 +0700
+
+    comment function is error
+
+[33mcommit b8917df52e934ae3ad782c08b1352dae25eb005b[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jul 8 21:20:36 2024 +0700
+
+    Fix user week1 information service
+
+[33mcommit 0018fba3290f6d5c8136ce8b30fed42032720235[m
+Merge: 30a9cf7 bca86d9
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jul 8 21:14:51 2024 +0700
+
+    Merge branch 'master' into dev-nam
+
+[33mcommit 30a9cf77007cf96e70df202a10f0c0ddc3ce736b[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jul 8 21:14:34 2024 +0700
+
+    fix Notification status
+
+[33mcommit bca86d9361108fb935cfab23001e2fe19bbc50c8[m
+Merge: b27b7e9 97ce493
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jul 8 16:21:10 2024 +0700
+
+    Merge pull request #80 from nampro2002/bachduc
+    
+    Add test_case ActivityRecord
+
+[33mcommit b27b7e998cd218e7c2be17cfde3a805fede242da[m
+Merge: 7db3aa4 275553e
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jul 8 16:19:39 2024 +0700
+
+    Merge pull request #81 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 275553e7766b83919f4456a27602bb2a0a6bf205[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jul 8 16:18:11 2024 +0700
+
+    fix data review job, add flyway v8,v9
+
+[33mcommit 842b946bc43af0d92faa6134937db6c4a218646c[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jul 8 13:22:09 2024 +0700
+
+    Fix logic weekly review mobile
+
+[33mcommit f320793be2210b63d4e01ef42915618727c99436[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jul 8 10:12:32 2024 +0700
+
+    add job at 7.45PM Sunday
+
+[33mcommit 97ce49326ede1095ac8fefd9163712cf85678f44[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Mon Jul 8 09:21:27 2024 +0700
+
+    Add test_case updateActivityRecord(ACTIVITY_PLAN_NOT_FOUND)
+
+[33mcommit 059221160d5baf95303773ac512b5750e5d7614d[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Mon Jul 8 08:32:07 2024 +0700
+
+    Add test_case getAllActivityRecords_Success
+
+[33mcommit 6109e2a0bf282e2307302effde43dd2d50dc40ac[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Mon Jul 8 08:16:53 2024 +0700
+
+    Add test_case updateActivityRecord_Success
+
+[33mcommit 7db3aa47fb9d27bc0b3a8d94468cbfd6d1d925b1[m
+Merge: e06ebce e8ee50d
+Author: bsd03rd <87514294+bsd03rd@users.noreply.github.com>
+Date:   Mon Jul 8 07:38:34 2024 +0700
+
+    Merge pull request #79 from nampro2002/bachduc
+    
+    Bachduc
+
+[33mcommit e8ee50da499b2449fdfe96384124202d583a3341[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Mon Jul 8 07:36:22 2024 +0700
+
+    Add test_case getDataChart_Success
+
+[33mcommit d2d3cdb52004d4df6bff77284a31d7cf2d668ad4[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Mon Jul 8 07:05:41 2024 +0700
+
+    Add test_case createActivityRecord_Success
+
+[33mcommit a3f1b00a1502d1ad4426bd2359d9260c111b7fd7[m
+Merge: 0c36f26 e06ebce
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Mon Jul 8 06:27:23 2024 +0700
+
+    Adding new test case for ActivityRecordServiceImplTest : createActivityRecord_appUserID_Notfound
+
+[33mcommit e4dcede9f941de79958b90cad2cce9036acb5d47[m
+Merge: cc16d46 e06ebce
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jul 8 01:23:58 2024 +0700
+
+    Merge branch 'master' into dev-kien
+
+[33mcommit cc16d46ec79052098237ff1506e613e6ef6e87dd[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jul 8 01:23:16 2024 +0700
+
+    Fix response dto for mobild weekly review by week start
+
+[33mcommit e06ebce42331757cd6c0d88dfb661671c34ff413[m
+Merge: 5cc2e79 f7ba536
+Author: K1EL2002 <94553932+ntkien021411@users.noreply.github.com>
+Date:   Sun Jul 7 21:46:54 2024 +0700
+
+    Merge pull request #78 from nampro2002/dev-kien
+    
+    Add bloodpressure test and create user week1 information service
+
+[33mcommit f7ba5360aab7e9c499625149a1773f0b3b8e0418[m
+Merge: 6a4c233 5cc2e79
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jul 7 21:46:12 2024 +0700
+
+    Resolve conflig
+
+[33mcommit 6a4c233a18eaa60f1de0f0b439d8139c3b32bf22[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jul 7 21:44:21 2024 +0700
+
+    Add bloodpressure test and create user week1 information service
+
+[33mcommit 0c36f26b73f8c45d4ad0be2dbdcb52422cb23632[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Sun Jul 7 18:22:48 2024 +0700
+
+    Adding new test case for ActivityRecordServiceImplTest : createActivityRecord_appUserID_Notfound
+
+[33mcommit 50d9929e4dbf171adff47e1e07f02f248cc28dbb[m
+Merge: 6d85cd6 5cc2e79
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jul 7 17:32:38 2024 +0700
+
+    merge master to dev-nam
+
+[33mcommit 6d85cd60c0173512249b3506251d0196f8fde2cd[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jul 7 17:29:23 2024 +0700
+
+    fix api step record
+
+[33mcommit 5cc2e798d6ac2844df9c3e55032d5f7ae48b7d2b[m
+Merge: 19752ef 6824a73
+Author: bsd03rd <87514294+bsd03rd@users.noreply.github.com>
+Date:   Sun Jul 7 15:25:02 2024 +0700
+
+    Merge pull request #77 from nampro2002/bachduc
+    
+    Adding new Test Service : ActivityRecordServiceImplTest
+
+[33mcommit 6824a73b198100aeb8521c7c71829b4b3ceb9b6e[m
+Author: bsd03rd <bsd03rd@gmail.com>
+Date:   Sun Jul 7 15:21:13 2024 +0700
+
+    Adding new Test Service : ActivityRecordServiceImplTest
+
+[33mcommit 19752ef8b288e50f0fec08e559c92626bd0faee4[m
+Merge: 1646e22 fb78f3e
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jul 7 10:59:32 2024 +0700
+
+    Merge pull request #76 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit fb78f3eb3f3bbf9a5914d69a47ecf0d1dbecc2f7[m
+Merge: 1e00813 1646e22
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jul 7 10:56:54 2024 +0700
+
+    Merge branch 'master' into dev-kien
+
+[33mcommit 1646e2276f7c8fe59db82a4e90ef336b7367f3dc[m
+Merge: cdeb616 7bfded5
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jul 7 10:56:39 2024 +0700
+
+    Merge pull request #75 from nampro2002/dev-nam
+    
+    hot fix activate account
+
+[33mcommit 1e00813cccc337ee81ec456f5e3966919d1b88b0[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jul 7 10:56:36 2024 +0700
+
+    Add api check weekly plan exist
+
+[33mcommit 7bfded58b59460a36880fe6e449de06ce246fb81[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jul 7 10:56:08 2024 +0700
+
+    hot fix activate account
+
+[33mcommit cdeb6168e349bd436a12e6e8c7b7f55099be92df[m
+Merge: 3b2064c 086fe8a
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jul 7 09:50:10 2024 +0700
+
+    Merge pull request #74 from nampro2002/dev-nam
+    
+    hot fix register request doctor
+
+[33mcommit 086fe8aa978da08caaba1b5b1e74f0bdfbeebdda[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jul 7 09:49:24 2024 +0700
+
+    hot fix register request doctor
+
+[33mcommit 3b2064c35eb3f757e2f6e88efdf590953734b09e[m
+Merge: 190713d 3577a2b
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jul 6 21:35:50 2024 +0700
+
+    Merge pull request #73 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 3577a2bad855c5f1cece0913d5a4b606352ed24b[m
+Merge: 3bf41ad 190713d
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sat Jul 6 21:31:37 2024 +0700
+
+    Merge branch 'master' into dev-nam
+
+[33mcommit 3bf41ad557d3fb3d0e00f3962c0fa4ea8ac37e80[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sat Jul 6 21:31:02 2024 +0700
+
+    change config google-service, add api medicalappointment
+
+[33mcommit f972b2ee4f0cd3ae34c767e5e0531e67b6132da3[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jul 6 17:19:30 2024 +0700
+
+    Fix logic and method for mobile get list week start
+
+[33mcommit 58eede7494d5f80e0179a195f00503e97e8dbfdc[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jul 6 17:09:46 2024 +0700
+
+    Add api get list week start for mobile
+
+[33mcommit e2bbaf03df3623189317e27b54ea6379a2b3f967[m
+Merge: 2d51b1e 190713d
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jul 6 16:41:39 2024 +0700
+
+    Merge branch 'master' into dev-kien
+
+[33mcommit 2d51b1e5a2e2c1c4028ad095a7571033b0f9355c[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jul 6 16:41:18 2024 +0700
+
+    Change status code account not active and run unit test
+
+[33mcommit 190713dd5cf8c673fce177c5b362c66abad3457d[m
+Merge: d18a74b 9889f92
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jul 6 12:27:09 2024 +0700
+
+    Merge pull request #72 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit 9889f922ec0216f47dc896a1e8fc339751c6aeb6[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Fri Jul 5 23:26:38 2024 +0700
+
+    Fix login service
+
+[33mcommit ac7674b21eabc21341f6a86648853b69efb6da33[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Fri Jul 5 15:10:51 2024 +0700
+
+    Add api for screen weekly review mobile and change db week review
+
+[33mcommit bd94978af943370e27478315dd4b676c7a8a6ecd[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jul 3 15:31:27 2024 +0700
+
+    Fix logic mental data chart , not get day have 0 point
+
+[33mcommit dce6e11237ea2c590ca9929a5c1757bb8d0cdf2c[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jul 3 13:24:01 2024 +0700
+
+    Fix logic update medicine plan
+
+[33mcommit 7b824ab0e568fb04993dec9e5a44f5e1393c5be4[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jul 3 11:45:49 2024 +0700
+
+    Hot fix logic activity chart
+
+[33mcommit d18a74b9218abcbfec97a6b018ef849451455b87[m
+Merge: e51b7bf d926a01
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jul 3 10:57:03 2024 +0700
+
+    Merge pull request #71 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit d926a01e9bef4a945ffb03bb66e249ba387090d4[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jul 3 10:55:39 2024 +0700
+
+    add @Preauthorize
+
+[33mcommit 954cf888d378fa9cf792242f1d338dc99d02edd5[m
+Merge: 07053e3 e51b7bf
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jul 3 09:43:56 2024 +0700
+
+    merge master to dev-nam
+
+[33mcommit e51b7bf74ccc55025b12efc634178c3181a83469[m
+Merge: d98df1c 6fc3640
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jul 3 09:39:10 2024 +0700
+
+    Merge pull request #70 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit 07053e3dc91467ce6f7e70a77abd34f1cc0262a9[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jul 3 09:09:32 2024 +0700
+
+    config api, flyway, syncfunction, setting function for notification
+
+[33mcommit 6fc364007369a17442bdd047c209dabfbbe86dcd[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jul 2 22:04:26 2024 +0700
+
+    Fix logic diet , step service data chart
+
+[33mcommit 2742e4194467a5d9f724abb17b294e10f95fea0f[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jul 2 21:49:58 2024 +0700
+
+    Hot fix null record database
+
+[33mcommit 83f773978c0496ff06649978f09b5bdb2c7077c6[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jul 2 20:20:43 2024 +0700
+
+    Fix service logic of data chart medicine
+
+[33mcommit 80c5bc8aa2d7799a00574283d5e929c7582218dc[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jul 2 17:19:42 2024 +0700
+
+    Fix checkplan api and add service logic for user-week1-information
+
+[33mcommit dcb0148c13f814a13706b41fd6cf48417cd31b40[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jul 2 13:28:00 2024 +0700
+
+    Hot fix medicine create plan - check duplicate medicine
+
+[33mcommit b8a22effdbf930245c057c5f0e2186b23e28da0e[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jul 2 13:03:27 2024 +0700
+
+    Hot fix api create medicine plan
+
+[33mcommit d98df1cb4df6ce5d3695619d9cf7d1331ee2f839[m
+Merge: 18c13af 23051a1
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jul 2 11:16:35 2024 +0700
+
+    Merge pull request #69 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit 23051a1077f9bbd6b5eb36d296786b1b29f9433e[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jul 1 21:00:39 2024 +0700
+
+    add service for lesson user-week1-ìnformation
+
+[33mcommit 3bb224114055595dcd1423d61f48ae19f749543b[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jul 1 20:57:31 2024 +0700
+
+    Create api for lesson and change medicine response
+
+[33mcommit 54f52c15009a2c091627396566be742eab698238[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jul 1 20:42:02 2024 +0700
+
+    map quartz job with firebase notification
+
+[33mcommit 7d2ec9decc93afc081e752d0590909453894d2ce[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jul 1 15:05:22 2024 +0700
+
+    Create entity user_week1_infomation and fix auth service
+
+[33mcommit edffabe610f9db7e9f131c81ec39403af1448207[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 30 15:19:16 2024 +0700
+
+    base notification & quartz job
+
+[33mcommit d68ceca8fc7ded5d73a64a6582d0d2be9815b127[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 30 12:03:01 2024 +0700
+
+    Fix api weight for chart
+
+[33mcommit 627c2333b5ed494faada68deffc24f51ecc58226[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jun 29 15:42:43 2024 +0700
+
+    Fix api week review , create week review table
+
+[33mcommit 18c13afb90df0b4102f7570b1f6bd430d12dfc39[m
+Merge: f43b1e6 e5e5686
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jun 27 21:03:24 2024 +0700
+
+    Merge pull request #68 from nampro2002/dev-nam
+    
+    hot fix find user not assign
+
+[33mcommit e5e5686e859dcef3be944919dc7851fcf8684bad[m
+Merge: 53e563b f43b1e6
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jun 27 21:03:11 2024 +0700
+
+    Merge branch 'master' into dev-nam
+
+[33mcommit f43b1e6bd563a4ff478a14223c7be7a1c3a40454[m
+Merge: 7245140 0a771bb
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jun 27 18:26:39 2024 +0700
+
+    Merge pull request #67 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit 0a771bbd3ed3ec6ef2a1e9a0768eafb268dab9c8[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jun 27 17:49:26 2024 +0700
+
+    Change return type of service update
+
+[33mcommit 9e966407ea764454990a20373b9b7db073e011bf[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jun 27 17:41:45 2024 +0700
+
+    Add flyway and api checkinput date and chart fot activity , blood pressure , cardinal , diet,mental,medicine,step,weight
+
+[33mcommit 8b6c7c2db3701e2e1f95e09e52c7d0dfaa9560ee[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jun 27 13:08:37 2024 +0700
+
+    Add api get medicine and diet plan per day
+
+[33mcommit 53e563bc7cd60d1ab6038e66259937fd76b53f4a[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jun 27 12:15:34 2024 +0700
+
+    hot fix find user not assign
+
+[33mcommit 8569ff51954ea0c362c303b12734c0aa301e552e[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jun 27 11:21:20 2024 +0700
+
+    Add check app user in service
+
+[33mcommit 8d057d5266d8073450c7c7af20bf9076b78b58f0[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jun 27 10:58:30 2024 +0700
+
+    Fix flow in service
+
+[33mcommit ace969a7056db38ee80beffeb53c3199a45d8477[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jun 27 10:52:10 2024 +0700
+
+     fix flow in service and return of function
+
+[33mcommit 72451405db4290f4d7ea6de08705bc44b6f11f42[m
+Merge: 445d17a 1bd992e
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jun 26 21:09:55 2024 +0700
+
+    Merge pull request #66 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 1bd992eb9261bc113771f7e274c26d90780583fd[m
+Merge: 3da079e 445d17a
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jun 26 21:09:05 2024 +0700
+
+    merge master to dev-nam
+
+[33mcommit 445d17a30de2c976cd3e3cd4688df23ea69713d5[m
+Merge: 8fc54e2 d17e667
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jun 26 21:03:31 2024 +0700
+
+    Merge pull request #65 from nampro2002/dev-kien
+    
+    Add api data chart for activity,diet,medicine,step,weight
+
+[33mcommit d17e6671118dbca5c76f59eb91451c9bf5407d3a[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jun 26 16:38:30 2024 +0700
+
+    Fix flyway
+
+[33mcommit b98296e333c360229632070c26c8868c6130b6d5[m
+Merge: 0e596fd 8fc54e2
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jun 26 16:35:34 2024 +0700
+
+    Merge branch 'master' into dev-kien
+
+[33mcommit 0e596fd9f0cdd49da7ed3e2d0b2d91b4e717ba0e[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jun 26 16:35:13 2024 +0700
+
+    Add api data chart for activity,diet,medicine,step,weight
+
+[33mcommit 3da079eb89c0d41b73e86e5cec38feff0c65d474[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jun 26 16:14:27 2024 +0700
+
+    change name for weekly record function
+
+[33mcommit be256ea4df3e128442683d2a25938fbdbcdb099c[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jun 26 14:21:35 2024 +0700
+
+    fix error code expired jwt
+
+[33mcommit 8fc54e2fe482277b9059f4abe02047dd54dada2f[m
+Merge: ecd8c25 c3c19a8
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jun 26 13:07:38 2024 +0700
+
+    Merge pull request #64 from nampro2002/dev-kien
+    
+    Add api create a list plan medicine and get mental rule per week and data chart  for cardinal , mental , bloodpresure
+
+[33mcommit c3c19a82b564067990de321389e9cd98782e7cff[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jun 26 12:45:28 2024 +0700
+
+    Add api create a list plan medicine and get mental rule per week
+
+[33mcommit 0324824422005a0be15d88ec317b1724d76b0c11[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jun 26 12:01:23 2024 +0700
+
+    Add api data chart for cardinal , mental , bloodpresure
+
+[33mcommit ecd8c2514c6f083f47f692755d6afbf4eada569e[m
+Merge: ccca22f b23c4b5
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jun 24 22:39:09 2024 +0700
+
+    Merge pull request #63 from nampro2002/dev-kien
+    
+    Add api for plan medicine history
+
+[33mcommit b23c4b5dcc517f568e50339fa28b9d200710ecce[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jun 24 22:35:28 2024 +0700
+
+    Add api for plan medicine history
+
+[33mcommit 6c1c413bfca6f31e2bd4e849c0dfcde0e89d0b2e[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jun 24 21:21:09 2024 +0700
+
+    Add api for data chart bloodpressure
+
+[33mcommit ccca22f430052c7272bc58736ce7fcc57d4acd94[m
+Merge: 14e3640 ee67333
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jun 24 21:02:15 2024 +0700
+
+    Merge pull request #62 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit ee67333ce5845b9b9070d3951cc376f156ec222a[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jun 24 20:59:59 2024 +0700
+
+    add api for patient controller
+
+[33mcommit 14e3640344235ae2c65b5b3992a3957ce0bd3d66[m
+Merge: 8e6af57 416694c
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jun 24 13:02:07 2024 +0700
+
+    Merge pull request #61 from nampro2002/dev-kien
+    
+    Fix Date Time Zone
+
+[33mcommit 416694cab681a23245a6bf2acb9a42c71b984509[m
+Merge: 66ed0bd 8e6af57
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jun 24 12:33:42 2024 +0700
+
+    Merge branch 'master' into dev-kien
+
+[33mcommit 66ed0bd3dabb30380df480285cb19473357e7b9c[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jun 24 12:32:02 2024 +0700
+
+    Fix Date Time Zone
+
+[33mcommit 25235b28a47e64e6fb59190fce9a319faab5c82f[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 23 23:22:44 2024 +0700
+
+    add patient controller
+
+[33mcommit ac67449be0cdf98aaf78f97f213a18c75c6c95e9[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 23 22:55:32 2024 +0700
+
+    add list register-req doctor
+
+[33mcommit 1c5fe57de2129572a957539cbfe8a91367b415e6[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 23 22:23:27 2024 +0700
+
+    remove limit assign, find user activated
+
+[33mcommit 8e6af57124ac0a610772f94984d64f12864388fa[m
+Merge: 86c16e9 c564ea9
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jun 22 17:01:31 2024 +0700
+
+    Merge pull request #60 from nampro2002/dev-kien
+    
+    Fix dto api for planning screen and api for input data every day screen
+
+[33mcommit c564ea9b35bf91ea0b92a693e5cf48c7cfcad6a7[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jun 22 16:28:50 2024 +0700
+
+    Fix dto api for planning screen and api for input data every day
+
+[33mcommit 86c16e9d61de058f06cfbfd2afa31386768ea8c9[m
+Merge: 1433a9e 3022594
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Fri Jun 21 19:13:58 2024 +0700
+
+    Merge pull request #59 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit 3022594b25ecd0f6eedc2512c5732f3a1799a159[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jun 20 21:42:40 2024 +0700
+
+    Fix logic api for planning screen
+
+[33mcommit 1433a9e3cdf5a451a60d85a6b1cc57f9e2ec9262[m
+Merge: faa045c 78a0154
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jun 20 20:44:36 2024 +0700
+
+    Merge pull request #58 from nampro2002/dev-nam
+    
+    fix auth service
+
+[33mcommit 1c2800f7bfb22ded35a35aabe5c6cce9cfe76321[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Thu Jun 20 20:43:09 2024 +0700
+
+    Fix api cho planning screen
+
+[33mcommit 78a0154a356340efb89ae5752734667fc33b1ae3[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jun 20 20:18:53 2024 +0700
+
+    fix auth service
+
+[33mcommit faa045c7303fd23a8268929d171896248365a7c6[m
+Merge: 520d1ae 3962ce8
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jun 19 21:11:45 2024 +0700
+
+    Merge pull request #57 from nampro2002/dev-nam
+    
+    fix create data by user loggedin
+
+[33mcommit 3962ce8fbee5de481779233e9b98ba2479dca1f2[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jun 19 18:37:43 2024 +0700
+
+    fix create data by user loggedin
+
+[33mcommit 520d1aee7839fc34aa22165fae94da7e280ca110[m
+Merge: 4239f03 3c21363
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jun 18 17:16:49 2024 +0700
+
+    Merge pull request #56 from nampro2002/dev-nam
+    
+    hot fix get medicalappointment mobile
+
+[33mcommit 3c213637c381dd87960fca14aa1c5f990d0eef55[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Tue Jun 18 17:15:15 2024 +0700
+
+    hot fix get medicalappointment mobile
+
+[33mcommit 4239f03fba6572363a493ed015cfe666c0595496[m
+Merge: c20eaf3 3cb4cc6
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jun 18 14:36:28 2024 +0700
+
+    Merge pull request #55 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 3cb4cc64fb472494120730cd38ad3757f64de250[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Tue Jun 18 14:35:53 2024 +0700
+
+    hot fix get by user loggedin question, medicalappointment
+
+[33mcommit 4396b75d89c0e1ce51b18549a901f0991a790ff0[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jun 17 22:00:10 2024 +0700
+
+    hotfix auth service
+
+[33mcommit c20eaf3f003c78a2dc213da0dc3eabbeb897823e[m
+Merge: 9fda3e2 de4cbd7
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jun 17 21:25:06 2024 +0700
+
+    Merge pull request #54 from nampro2002/dev-nam
+    
+    hot fix medical appointment
+
+[33mcommit de4cbd75a6d38f15a96e347f91f27d7b1392c272[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jun 17 21:24:33 2024 +0700
+
+    hot fix medical appointment
+
+[33mcommit 9fda3e2bf3ea757074845298e79a3719d2aa471f[m
+Merge: 78ee40d 34b6f64
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jun 17 21:17:42 2024 +0700
+
+    Merge pull request #53 from nampro2002/dev-kien
+    
+    Delete file notused
+
+[33mcommit 34b6f644ad78981f0541a8d1688c4106c6a33c8a[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jun 17 15:42:36 2024 +0700
+
+    Delete file notused
+
+[33mcommit 78ee40d2e4b29a80345065e8497c53eb0948839a[m
+Merge: eedc6f6 e2c098e
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jun 17 14:39:24 2024 +0700
+
+    Merge pull request #52 from nampro2002/dev-nam
+    
+    hot fix bug test integration, fix assign return dto, fix question get…
+
+[33mcommit e2c098e43f30c6e357332b010c9689b58c827993[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jun 17 14:38:03 2024 +0700
+
+    hot fix bug test integration, fix assign return dto, fix question get user loggedin
+
+[33mcommit eedc6f6466977edfc29f202d33211fc985c55921[m
+Merge: a119e2a d7872a1
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jun 17 14:30:01 2024 +0700
+
+    Merge pull request #51 from nampro2002/dev-nam
+    
+    fix test: Formquestion-mentalRule-MonthlyQuestion-refreshToken
+
+[33mcommit d7872a12caa25373ab31524aa1da07852a92c424[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jun 17 13:06:52 2024 +0700
+
+    fix test: Formquestion-mentalRule-MonthlyQuestion-refreshToken
+
+[33mcommit a119e2a8726911718fe4aef3202dafdbebb953fa[m
+Merge: e4242bc 0ac1e2a
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jun 17 12:57:47 2024 +0700
+
+    Merge pull request #50 from nampro2002/dev-nam
+    
+    Refresh token hot-fix
+
+[33mcommit 0ac1e2a5d579fd27d661419e6d56f4bb8211eae4[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jun 17 12:56:56 2024 +0700
+
+    Refresh token hot-fix
+
+[33mcommit e4242bcda0b94ebd54d85022de3ff2944f627b59[m
+Merge: e204125 b0a3d5f
+Author: PhongPhamj <phongvupham1110@gmail.com>
+Date:   Mon Jun 17 00:47:17 2024 +0700
+
+    Merge pull request #49 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit b0a3d5f182668404f5d92f850feab8389ce9c40d[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 16 23:00:13 2024 +0700
+
+    fix cors & remove check duplicate token
+
+[33mcommit 2535504a2d4bd347bae4414227250dee0c82b0de[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 16 22:59:29 2024 +0700
+
+    Fix Test DTO WebUserController PUT: web-users/{id}
+
+[33mcommit 0a0f3eab36b08432f264dd64faded35b5d83319b[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 16 22:58:45 2024 +0700
+
+    Fix url api PUT: questions/answer/{id}
+
+[33mcommit e1726b8cc7de36bd372e850392e634234535e716[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 16 22:57:11 2024 +0700
+
+    Fix soft deleted for MentalRuleController DELETE: mental-rules/{id}
+
+[33mcommit 2ecda61a31531037c3592ac3c8e9fa0c9df76e7e[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 16 22:56:30 2024 +0700
+
+    Fix Test dto for MonthlyQuestionController(POST: monthly-question || PUT : monthly-question/{id}
+
+[33mcommit a960a8c22f08b3c030fe84b950ae9a9dec3da912[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 16 22:54:51 2024 +0700
+
+    Fix refresh token
+
+[33mcommit 20e50025a6c18d13dbd57c8bd582491834e36359[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 16 22:54:07 2024 +0700
+
+    Fix expire time of code forget password
+
+[33mcommit ffe748f32dc79fcbe89c418d593c46f34b306260[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 16 22:52:58 2024 +0700
+
+    Fix flyway history
+
+[33mcommit 3848ecd2a7092b3a48ec18cce90b5941daa1e10b[m
+Merge: 828d294 e204125
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 16 22:51:10 2024 +0700
+
+    Resolve conflig
+
+[33mcommit 828d2949ded5c470a0acef266fb4bb695918f79a[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 16 22:45:21 2024 +0700
+
+    fix init flyway and security config
+
+[33mcommit dc4b70b404b29e8e5e60058d0b6b14613b90ca84[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 16 22:44:25 2024 +0700
+
+    Update AccountController.java
+
+[33mcommit e2041253c2953551e264c202abb7224522249884[m
+Merge: 24e4f56 3643a4d
+Author: PhongPhamj <phongvupham1110@gmail.com>
+Date:   Sun Jun 16 22:36:06 2024 +0700
+
+    Merge pull request #48 from nampro2002/Dev-Phonq
+    
+    Update database and request Dtos
+
+[33mcommit 3643a4d7a7d11bfe6f969e3c5226b085bbde8eb0[m[33m ([m[1;31morigin/Dev-Phonq[m[33m)[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Sun Jun 16 22:34:52 2024 +0700
+
+    Update database and request Dtos
+
+[33mcommit 24e4f56498876124720f2280af64284e40c63190[m
+Merge: 6f6db14 3d7e3ed
+Author: PhongPhamj <phongvupham1110@gmail.com>
+Date:   Sun Jun 16 21:33:01 2024 +0700
+
+    Merge pull request #47 from nampro2002/Dev-Phonq
+    
+    Update Authentication, reconstruct database
+
+[33mcommit 3d7e3ed2750a46308b436a23eaee57d45fc26eb3[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Sun Jun 16 21:32:06 2024 +0700
+
+    Update Authentication, reconstruct database
+
+[33mcommit 6f6db1493107f24a2d8edc000611803d658154bd[m
+Merge: e4cf60b b598aaf
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 16 14:11:27 2024 +0700
+
+    Merge pull request #46 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit b598aaf48fda32ebc61de26f026f45196a503c8f[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 16 14:10:55 2024 +0700
+
+    Fix refresh token
+
+[33mcommit fe397b9d97c195e0489c7fce8a74361d047a8a33[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 16 14:07:38 2024 +0700
+
+    resolve conflict
+
+[33mcommit 816d84d2c3c46c80ebc29828dab7a323294d7ef7[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 16 14:05:24 2024 +0700
+
+    Add refreshtoken and flyway , fix api change password
+
+[33mcommit e4cf60b4ff333499009625f0230d448b3840c341[m
+Merge: 84bf4e4 f20b327
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 16 03:17:25 2024 +0700
+
+    Merge pull request #45 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit f20b327e029254e8f4053d7c5048df0ffce887a6[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 16 03:16:49 2024 +0700
+
+    modified all mapping, config security
+
+[33mcommit 63fdd8ec4f6626c17151f03ea77f3b547f68ec4f[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 16 03:11:13 2024 +0700
+
+    change path variable to get userloggedin
+
+[33mcommit 84bf4e4b86d96111970a1cdc4107dca40344206f[m
+Merge: 9161b03 f35e724
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 16 02:54:52 2024 +0700
+
+    Merge pull request #44 from nampro2002/dev-kien
+    
+    add @Valid controller
+
+[33mcommit f35e7248c259c40cda7fcdffaf997b42f35b8359[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jun 15 22:17:35 2024 +0700
+
+    add @Valid controller
+
+[33mcommit 9161b0340daf37a0aac551faa9fa4e30ab05fc1a[m
+Merge: 7a6452c b561989
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jun 15 21:45:34 2024 +0700
+
+    Merge pull request #43 from nampro2002/dev-kien
+    
+    Dev kien
+
+[33mcommit b561989ba3ded1431e9535f06344a775b2022267[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jun 15 21:42:05 2024 +0700
+
+    add @Valid controller
+
+[33mcommit fab0d2a8c72a677bf72f3ee18608e77b0a14e2d6[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jun 15 21:41:29 2024 +0700
+
+    Add @Valid for controller
+
+[33mcommit eea3148610ec738f4b227178b07a26ecfcfc7876[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jun 15 21:40:38 2024 +0700
+
+    Add regex for update password
+
+[33mcommit 0dae6f046e0923cb51e0ce32a7ea2f326540fbc3[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jun 15 21:39:55 2024 +0700
+
+    regex dto and update flyway v7
+
+[33mcommit 7a6452c78214c0685a2d6ec63cd40a2645d82a84[m
+Merge: faeb0b2 943da79
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jun 15 21:24:31 2024 +0700
+
+    Merge pull request #42 from nampro2002/Dev-Phonq
+    
+    Dev phonq
+
+[33mcommit 943da79208d9beb2130cfe4a2fed40510992d230[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Sat Jun 15 16:52:18 2024 +0700
+
+    fix flyway, add api medical appointment
+
+[33mcommit 9ee6c3d88ac20ef4820032c9ad63615d0262ec1c[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Sat Jun 15 15:59:26 2024 +0700
+
+    Modify entity Medical Appointment, update database
+
+[33mcommit faeb0b2806ee38798401c30fd544b8dce9431ccf[m
+Merge: 8980f11 c0650a5
+Author: PhongPhamj <phongvupham1110@gmail.com>
+Date:   Sat Jun 15 15:56:38 2024 +0700
+
+    Merge pull request #41 from nampro2002/dev-kien
+    
+    add search for 'other' api
+
+[33mcommit c0650a5ce1c34ec476b429b8dba4c832e29fac2c[m
+Merge: 1c6026d 8980f11
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jun 15 12:08:55 2024 +0700
+
+    resolve conflig
+
+[33mcommit 1c6026d43c482b02f44ba8d4ac7faaac467c6f76[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sat Jun 15 12:03:36 2024 +0700
+
+    add search for 'other' api
+
+[33mcommit 8980f11d5fd7f0742ccfd5dcee59951c2514eb09[m
+Merge: 273c30e 7cf52f3
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jun 15 09:48:40 2024 +0700
+
+    Merge pull request #40 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 7cf52f30f784d8320094eefdef6390fc91c2177c[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sat Jun 15 09:46:21 2024 +0700
+
+    Merge branch 'master' into Dev-nam
+
+[33mcommit 72c26d60a0c36c0928cf5f0b9862180bf000314b[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sat Jun 15 09:44:30 2024 +0700
+
+    Fix method check email duplicate
+
+[33mcommit 15a0d391faa8f26ec6c09460a6254399362032a5[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sat Jun 15 09:42:50 2024 +0700
+
+    Add flyway alter all table , change varchar to nvarchar. Create api send mail
+
+[33mcommit 273c30e174938fa090623afd2c5ebfd8138088a6[m
+Merge: e29a8e3 adfd5eb
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sat Jun 15 00:38:47 2024 +0700
+
+    Merge pull request #39 from nampro2002/Dev-Phonq
+    
+    Add API, modify getall now only get undeleted
+
+[33mcommit adfd5eb443a4227b4e323386cfb1e16266d63cd6[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Fri Jun 14 23:54:56 2024 +0700
+
+    Add API, modify getall now only get undeleted
+
+[33mcommit e29a8e3b95bece0b7d5aee0f251a0f5944091fcc[m
+Merge: c3bb067 0b2ca8f
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Fri Jun 14 23:35:29 2024 +0700
+
+    Merge pull request #38 from nampro2002/dev-kien
+    
+    fix weight response string, split medical api in dashboard, add paging to medical appointment
+
+[33mcommit 0b2ca8f63125cea4a682913a86393e9ed5829528[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Fri Jun 14 23:33:24 2024 +0700
+
+    Add error code
+
+[33mcommit 687e2afa50ce1e7bd0d0b731d359079c482b5a13[m
+Merge: 5632272 c3bb067
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Fri Jun 14 23:23:55 2024 +0700
+
+    Merge branch 'master' into dev-kien
+
+[33mcommit 56322722e3781fdd1aa2fa4f87d292a7f83431d9[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Fri Jun 14 23:23:48 2024 +0700
+
+    fix weight response string, split medical api in dashboard, add paging to medical appointment
+
+[33mcommit c3bb0672aed6516d0c4fdd9abe93fcab0867f79e[m
+Merge: 106873c 78b07e1
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Fri Jun 14 14:34:05 2024 +0700
+
+    Merge pull request #37 from nampro2002/dev-kien
+    
+    Add 1 service and api for weekly review controller
+
+[33mcommit 78b07e124a814dbc9235a836c54941b1a5ed4d3f[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Fri Jun 14 14:13:54 2024 +0700
+
+    Add 1 service and api for weekly review controller
+
+[33mcommit 106873c6b43dc09ab39e998e015a3ef240b30502[m
+Merge: 24ea7df 56e03a7
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Fri Jun 14 03:59:16 2024 +0700
+
+    Merge pull request #36 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 56e03a790b11bbe578d891506e0d9153e27276ea[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Fri Jun 14 03:58:41 2024 +0700
+
+    Add controller-service-repository for weekly review of user
+
+[33mcommit 03fdd8f5dec7f0ff7d0d6bca3c3e48e35b26c9ce[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Fri Jun 14 03:51:47 2024 +0700
+
+    Merge branch 'master' into dev-nam
+
+[33mcommit 24ea7dfeec6d77c750863036d021b78664e31b22[m
+Merge: 70007f8 0c30314
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Fri Jun 14 01:37:25 2024 +0700
+
+    Merge pull request #35 from nampro2002/Dev-Phonq
+    
+    Dev phonq
+
+[33mcommit 0c30314f69eca58e7896700c8b2b406845e1b220[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Fri Jun 14 01:32:03 2024 +0700
+
+    fix api medicalhistory
+
+[33mcommit 7936b5aebdabc5525bd93d6ec50957496117a342[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Fri Jun 14 01:17:33 2024 +0700
+
+    add component pagingresponse
+
+[33mcommit 48f3feec282d2ba59aa67665aa0b4254785ea6a5[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Fri Jun 14 00:57:37 2024 +0700
+
+    Modify Dtos, add paging and search, modify monthly_record and medicine record
+
+[33mcommit 70007f8c3d69086e14db276d8e707fec096f1037[m
+Merge: 9014593 aeb94ce
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Fri Jun 14 00:44:52 2024 +0700
+
+    Merge pull request #34 from nampro2002/dev-kien
+    
+    create staff -> return void, create dietrecord return list
+
+[33mcommit aeb94cecfd07bd20661d6001affc99188d46f954[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Fri Jun 14 00:19:21 2024 +0700
+
+    create staff -> return void, create dietrecord return list
+
+[33mcommit 901459382abc4e2308f62e5e9659fde837e88ee2[m
+Merge: d170ce0 e4ea339
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Fri Jun 14 00:15:55 2024 +0700
+
+    Merge pull request #33 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit e4ea3397d16ac4fcfa4953123b6630e6857a8fd5[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jun 13 21:40:40 2024 +0700
+
+    Drop field unused tables with flyway and delete entity rule_for_plan , medicinef_type_plan in code
+
+[33mcommit 0d0f3f1adc2f36e4179773f8678fc62ae9695a5b[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jun 13 12:27:58 2024 +0700
+
+    Drop unused tables, alter field mental record
+
+[33mcommit df76db4ec8d91d5281640f5bfb9ad299fa54aa7b[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jun 13 12:18:26 2024 +0700
+
+    Config flyway monthly record
+
+[33mcommit feb554360b8a2961714cab20f2d510c60353fc90[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jun 13 12:10:05 2024 +0700
+
+    Merge branch 'master' into dev-nam
+
+[33mcommit a443930d626854eba62db8925fc62e5d053798d8[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jun 13 12:06:27 2024 +0700
+
+    add remove answer, add dto response for formquestion, lesson
+
+[33mcommit d170ce01220a7523a9d9d71ccbf861cf1bc02cd2[m
+Merge: 50de4b4 762c0db
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jun 13 11:49:38 2024 +0700
+
+    Merge pull request #32 from nampro2002/Dev-Phonq
+    
+    Dev phonq
+
+[33mcommit 762c0db37c87034b76610d1429ae05f139d0b8c4[m
+Merge: 00afa72 50de4b4
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Thu Jun 13 11:46:52 2024 +0700
+
+    resolve conflicts
+
+[33mcommit 00afa72a555c9d8ece9047db3a43f555316847d8[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Thu Jun 13 11:42:31 2024 +0700
+
+    Edit entities, requestDTOs, services of Entity
+
+[33mcommit 50de4b47440c70bae595baa43e89810e3d6a9a0c[m
+Merge: e8832c4 7df582d
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jun 12 15:20:22 2024 +0700
+
+    Merge pull request #31 from nampro2002/dev-nam
+    
+    blood pressure, weight record, question
+
+[33mcommit 7df582d0ea36e02189a602bd1249cf34476418c2[m
+Merge: be43f81 e8832c4
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jun 12 15:20:14 2024 +0700
+
+    Merge branch 'master' into dev-nam
+
+[33mcommit be43f81d42df730d05c795ae5e40f9d8dcc9f2b5[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jun 12 15:18:52 2024 +0700
+
+    blood pressure, weight record, question
+
+[33mcommit e8832c495210345f103184fcc5df85f9b8746945[m
+Merge: 7be651e 9750e5f
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jun 12 15:14:27 2024 +0700
+
+    Merge pull request #30 from nampro2002/Dev-Phonq
+    
+    Fix Cardinal
+
+[33mcommit 9750e5f2fb0a556dc156d076dd4af85d4a7da005[m
+Merge: 8a79b0b 7be651e
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jun 12 15:07:07 2024 +0700
+
+    Merge branch 'master' into Dev-Phonq
+
+[33mcommit 7be651eed4faf78def9f4562ca35d36e12d7c9fc[m
+Merge: 5840531 14c75a5
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jun 12 15:06:04 2024 +0700
+
+    Merge pull request #29 from nampro2002/dev-kien
+    
+    fix Dashboard controller ,paging
+
+[33mcommit 8a79b0bb11c5203ea35d24f0036a5e33e761a717[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Wed Jun 12 13:28:48 2024 +0700
+
+    add sort for Cardinal
+
+[33mcommit 29d3925f1028aa51c7cb657a2404bf70d10d3c1c[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Wed Jun 12 13:07:02 2024 +0700
+
+    Fix Cardinal
+
+[33mcommit 14c75a5c453a205f77e758aa14eb6228aa7e6af8[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jun 12 12:03:16 2024 +0700
+
+    fix paging
+
+[33mcommit ff45287dce04fe51e60aed373fcdf01dcea9bcd8[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Wed Jun 12 12:01:46 2024 +0700
+
+    fix Dashboard controller
+
+[33mcommit 58405315a37e0a54705a5ec6fb2442eccc46a62d[m
+Merge: 1500c04 9286ac7
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jun 12 00:08:23 2024 +0700
+
+    Merge pull request #28 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 9286ac719031047b51200094c22be61e75a60f4a[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jun 12 00:05:52 2024 +0700
+
+    update paging
+
+[33mcommit 028cdb0c136de420f361ad665a7b7770d91e31db[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Wed Jun 12 00:01:34 2024 +0700
+
+    getAllNumeralRecords
+
+[33mcommit 1500c04361185696c11a82a4d3d7bc63ce800b00[m
+Merge: c36a4e0 c5c680f
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jun 11 23:48:46 2024 +0700
+
+    Merge pull request #27 from nampro2002/dev-kien
+    
+    Add send code through email for forgetPassword , Add config flyway for db
+
+[33mcommit c5c680fb5542f99d4772f8af92d1ae2cea2edb3a[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jun 11 22:11:57 2024 +0700
+
+    Add config flyway for db
+
+[33mcommit 3785aa35bbd7d2f0ad8294a192524ddb705128be[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jun 11 22:01:33 2024 +0700
+
+    Add send code through email for forgetPassword
+
+[33mcommit c36a4e02bfaad16ce8c5774f21dcc9f6c08861b1[m
+Merge: 8917b9b fb2d9d6
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jun 11 21:51:17 2024 +0700
+
+    Merge pull request #25 from nampro2002/Dev-Phonq
+    
+    create paging and search for dashboard api, create list & detail for …
+
+[33mcommit fb2d9d65dd5e2e669f2bc208ad9f896295adcb89[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Tue Jun 11 21:48:30 2024 +0700
+
+    create paging and search for dashboard api, create list & detail for appuser api
+
+[33mcommit 8917b9bc81264f005bc9b5df6a2eada65498a2c6[m
+Merge: b69c6cf 34b2062
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jun 11 18:34:44 2024 +0700
+
+    Merge pull request #24 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 34b20624c5a0a5c05089c6e627ba004347d69286[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Tue Jun 11 18:34:08 2024 +0700
+
+    modified config
+
+[33mcommit 59b215775030f1829489bf9256ad4834c61e8081[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Tue Jun 11 18:30:46 2024 +0700
+
+    comment swagger- fix dashboard controller
+
+[33mcommit f04efcc1e4e1b1eb544ecd4f7fae6c4aa31f2c23[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Tue Jun 11 18:25:37 2024 +0700
+
+    Merge branch 'master' into dev-nam
+
+[33mcommit 80b663830bb022c448423d47749a3fb53ff504cc[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Tue Jun 11 18:21:18 2024 +0700
+
+    fix toString excudle
+
+[33mcommit b69c6cf2751c3dca0a47a813e6f942ebcd167ff8[m
+Merge: 00a829a 5ce7b8f
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jun 11 18:10:07 2024 +0700
+
+    Merge pull request #23 from nampro2002/dev-kien
+    
+    Fix requestMatchers for Swagger
+
+[33mcommit 5ce7b8f7816b45b02fc3bc258b43538059633a74[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jun 11 15:42:23 2024 +0700
+
+    Fix requestMatchers for Swagger
+
+[33mcommit 00a829acfe96a1526bfef100f5afd10afc1b1c48[m
+Merge: bff05d7 f7b67ab
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jun 11 15:40:06 2024 +0700
+
+    Merge pull request #22 from nampro2002/dev-kien
+    
+    Add Swagger into project
+
+[33mcommit f7b67ab525b3a9abb15d1706defc26410dd328d0[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jun 11 15:31:28 2024 +0700
+
+    Add Swagger into project
+
+[33mcommit bff05d79819bd53a7bb764cf7f30f66a8f5de1c7[m
+Merge: af2f608 58b1ec0
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jun 11 14:53:40 2024 +0700
+
+    Merge pull request #21 from nampro2002/Dev-Phonq
+    
+    add dashboard controller, response dto , fix @OnetoOne -> @OneToMany
+
+[33mcommit 58b1ec0f32cb16edbdbc82e9076a6b5c29bbe6fb[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Tue Jun 11 12:27:11 2024 +0700
+
+    add dashboard controller, response dto , fix @OnetoOne -> @OneToMany
+
+[33mcommit af2f6084c18e889223c5f60b422a7d05a4b75ac5[m
+Merge: e847804 1090a27
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jun 10 20:44:28 2024 +0700
+
+    Merge pull request #20 from nampro2002/dev-kien
+    
+    fix controller response to Apiresponse, update class serivceImpl for …
+
+[33mcommit 1090a279ffcfc7d19e5fe3e5079ba6304aa24bc9[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Mon Jun 10 15:15:14 2024 +0700
+
+    fix controller response to Apiresponse, update class serivceImpl for entity
+
+[33mcommit e847804cf6d26886711f4b6b240380ed71c2ff52[m
+Merge: 9030059 0d0001b
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jun 10 14:29:25 2024 +0700
+
+    Merge pull request #19 from nampro2002/Dev-Phonq
+    
+    fix update function
+
+[33mcommit 0d0001be108e37f7c8aef63f01ecc8c48b10328f[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Sun Jun 9 22:46:54 2024 +0700
+
+    fix update function
+
+[33mcommit 90300598997dd6f71caa58eaf2fa540c5bc95e00[m
+Merge: 5c3009f a76541d
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 9 20:19:35 2024 +0700
+
+    Merge pull request #18 from nampro2002/dev-nam
+    
+    update acitvity record
+
+[33mcommit a76541d2d505e5f4fb6f216e62072e99321d81ed[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 9 20:05:22 2024 +0700
+
+    update acitvity record
+
+[33mcommit 5c3009fd36043c12dd7b81019b27f880368d25a9[m
+Merge: c2d2d50 4e2fcc2
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 9 15:45:05 2024 +0700
+
+    Merge pull request #17 from nampro2002/dev-nam
+    
+    handle exception level filter
+
+[33mcommit 4e2fcc2c67299d35532106012f7d14b6c76b7ec8[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 9 15:44:19 2024 +0700
+
+    handle exception level filter
+
+[33mcommit c2d2d50273616fc680a8a7eea378c5fc90ad29a2[m
+Merge: 769a081 b0585d8
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 9 15:36:43 2024 +0700
+
+    Merge pull request #16 from nampro2002/dev-kien
+    
+    config cors, fix Id uppercase, fix controller response to Apiresponse…
+
+[33mcommit b0585d81d260043a379873fdfb681d5c03b6f652[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 9 14:35:53 2024 +0700
+
+    config cors, fix Id uppercase, fix controller response to Apiresponse, update class serivceImpl for entity
+
+[33mcommit 769a08169161a950f0f62fc0bac8c7a58b73d93d[m
+Merge: 4684cce d56156e
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 9 12:22:23 2024 +0700
+
+    Merge pull request #15 from nampro2002/Dev-Phonq
+    
+    update authentication response dto + role
+
+[33mcommit d56156ebd6b177f762be970e5c746f60b63715fb[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Sat Jun 8 13:27:24 2024 +0700
+
+    update authentication response dto + role
+
+[33mcommit 4684cce4fa70d136e72296bca42e7fa86207d007[m
+Merge: 05b269e ba2f4bc
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Fri Jun 7 18:19:12 2024 +0700
+
+    Merge pull request #14 from nampro2002/dev-nam
+    
+    merge master to dev-nam responseAPI - regex
+
+[33mcommit ba2f4bc6244b40a322ee41085945e55d4c818a25[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Fri Jun 7 18:18:32 2024 +0700
+
+    merge master to dev-nam responseAPI - regex
+
+[33mcommit 05b269e87ec0cc673611b91b5cf78224185cc67a[m
+Merge: 7e6f8e2 f708a98
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Fri Jun 7 17:39:48 2024 +0700
+
+    Merge pull request #13 from nampro2002/dev-kien
+    
+    Change DTO in controller
+
+[33mcommit f708a9852bdcc7d9517580feed02b2fd831e369d[m
+Merge: d7a0d8c 7e6f8e2
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Fri Jun 7 13:59:16 2024 +0700
+
+    Resolve conflig
+
+[33mcommit d7a0d8ce869b7f52fde4acf05d47affe72f27d12[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Fri Jun 7 13:49:11 2024 +0700
+
+    Change DTO in controller
+
+[33mcommit 7e6f8e255052b34f24e8d057affc575b488e9854[m
+Merge: ae5eef6 1f39505
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jun 6 22:26:56 2024 +0700
+
+    Merge pull request #12 from nampro2002/Dev-Phonq
+    
+    change dir DTOs, Add validation for ActivityRecord
+
+[33mcommit 1f39505f6383830a69a51d04e22c5aa6fd3ddfb6[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Thu Jun 6 22:25:30 2024 +0700
+
+    change dir DTOs, Add validation for ActivityRecord
+
+[33mcommit ae5eef69f661b53c84f47ff576bd3a1ee7572aab[m
+Merge: 46d6d12 5210fae
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jun 6 18:08:47 2024 +0700
+
+    Merge pull request #11 from nampro2002/dev-nam
+    
+    update medicalhistory entity, update api response, update validation
+
+[33mcommit 5210faee981da7bae3fa1297db6b27b02f9d68f1[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jun 6 18:07:58 2024 +0700
+
+    update medicalhistory entity, update api response, update validation
+
+[33mcommit 46d6d12cf1dc670eafd40aef7c548cc58767cd4e[m
+Merge: 626b3a5 26626fa
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Thu Jun 6 14:17:19 2024 +0700
+
+    Merge pull request #10 from nampro2002/dev-nam
+    
+    Dev nam
+
+[33mcommit 26626fa910f3426a9b19fd5f7d7cddd4245783a6[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jun 6 14:16:30 2024 +0700
+
+    fix application properties
+
+[33mcommit f409b04f5606da1691119e1f470fb5e98d498bf4[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jun 6 14:15:51 2024 +0700
+
+    merge master to dev-nam
+
+[33mcommit 32f371a485641f9560f6885a7f44fabccb919a45[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Thu Jun 6 14:14:26 2024 +0700
+
+    api response+ global handle exception + login/register for user and staff
+
+[33mcommit 626b3a5023909abf8d06130eb182fa03badc9f0b[m
+Merge: a1069a6 68257ef
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Wed Jun 5 00:58:33 2024 +0700
+
+    Merge pull request #9 from nampro2002/dev-kien
+    
+    Add controller-repository-service
+
+[33mcommit 68257ef6b3b5f624b0fa8a59920ca7b9bd17c570[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jun 4 23:25:42 2024 +0700
+
+    Add controller-repository-service for MedicineTypePlan,RuleForPlan,MonthlyQuestion,SF_Record,SAT_SF_P_Record,ChronicDisease,SAT_SF_I_Record,SAT_SF_C_Record,NumeralRecord
+
+[33mcommit a1069a646ca0e04dc55658a006056b1d9846f59a[m
+Merge: 8d8a38a 16cfa21
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jun 4 15:32:59 2024 +0700
+
+    Merge pull request #8 from nampro2002/dev-kien
+    
+    configure basic security
+
+[33mcommit 16cfa21968231182f2e7270ab43b2b23854b6b88[m
+Merge: a2f4a69 8d8a38a
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jun 4 15:31:05 2024 +0700
+
+    Resolved merge conflicts
+
+[33mcommit a2f4a69755942082be8c552aabc06aa0e9a418cf[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Tue Jun 4 15:19:28 2024 +0700
+
+    configure basic security
+
+[33mcommit 8d8a38a1b322e3d3f2e6e2942c7bd0588476e186[m
+Merge: c8e68cd 6d68a53
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Tue Jun 4 12:29:48 2024 +0700
+
+    Merge pull request #7 from nampro2002/Dev-Phonq
+    
+    Add controller-repository-service for entities
+
+[33mcommit 6d68a53722fa1505128396f9d8d9108205d4ba95[m
+Merge: ceaa070 c8e68cd
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Tue Jun 4 00:54:26 2024 +0700
+
+    Resolved merge conflicts
+
+[33mcommit ceaa0700365ee334834423cabad9a509429534bd[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Tue Jun 4 00:36:55 2024 +0700
+
+    Add controller-repository-service for entities
+
+[33mcommit c8e68cd57e3dc079cd1e5178fbad1a1ce72f9919[m
+Merge: 48c7024 0cf2000
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Mon Jun 3 20:53:08 2024 +0700
+
+    Merge pull request #6 from nampro2002/dev-nam
+    
+    Add controller-serivce-repository for StepRecord, FAQ and FormQuestio…
+
+[33mcommit 0cf20000f9476baa3affc0fd2af15b06987b1e3b[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Mon Jun 3 20:49:08 2024 +0700
+
+    Add controller-serivce-repository for StepRecord, FAQ and FormQuestion, repository for AppUser Change name field in entity and add service annotation
+
+[33mcommit 48c7024810fd10caa1b00d6821d2127b7bcf1c02[m
+Merge: 7a955c1 25ef768
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 2 20:51:20 2024 +0700
+
+    Merge pull request #5 from nampro2002/dev-kien
+    
+    controller-serivce-repository for some entity
+
+[33mcommit 25ef768a5b7a6829f0fa7f9b12d222fa017b251f[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 2 20:43:17 2024 +0700
+
+    add annotation for class
+
+[33mcommit ecfc046a0fd2ed525884e2071ee3b3a94451c8ce[m
+Author: Nguyen Trung Kien <ntkien651@gmail.com>
+Date:   Sun Jun 2 20:37:32 2024 +0700
+
+    controller-serivce-repository for some entity
+
+[33mcommit 7a955c1ef2af9c602a8ffa66caa2f6c98703f42c[m
+Merge: ecc76e6 832a854
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 2 20:29:39 2024 +0700
+
+    Merge pull request #4 from nampro2002/Dev-Phonq
+    
+    Add Layers
+
+[33mcommit 832a85423dfc69f04991022154e2dbc6693aaca7[m
+Author: PhonqPham <phongvupham1110@gmail.com>
+Date:   Sun Jun 2 20:08:00 2024 +0700
+
+    Add Layers
+
+[33mcommit ecc76e66c0a6a7fed713f9f0d477d9d304534e4f[m
+Merge: 0ad60a1 5a8154a
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 2 03:40:09 2024 +0700
+
+    Merge pull request #3 from nampro2002/dev-nam
+    
+    add field: IsUsed, config FetchType & Cascade in Entity, fix invalid …
+
+[33mcommit 5a8154af22e9a2a7fbf36e370979af7bec593a7d[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 2 03:38:17 2024 +0700
+
+    add field: IsUsed, config FetchType & Cascade in Entity, fix invalid name
+
+[33mcommit 0ad60a1b7f0d8f8e672b896a87b1582437619324[m
+Merge: 234c107 eae6989
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 2 03:36:38 2024 +0700
+
+    Merge pull request #2 from nampro2002/dev-nam
+    
+    change file name from MedicalRecord to MedicalHistory
+
+[33mcommit eae6989449e5c29ca5600133d06fb989e032393a[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 2 03:35:47 2024 +0700
+
+    change file name from MedicalRecord to MedicalHistory
+
+[33mcommit 234c107d13e1552391fb612223a0fda1c8f36fe7[m
+Merge: b20b274 3689fbf
+Author: nampro2002 <76611554+nampro2002@users.noreply.github.com>
+Date:   Sun Jun 2 03:33:15 2024 +0700
+
+    Merge pull request #1 from nampro2002/dev-nam
+    
+    Init Entity for Database
+
+[33mcommit 3689fbf2d88e64524a6a16222254f6841d068eb4[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 2 03:32:24 2024 +0700
+
+    Init Entity for Database
+
+[33mcommit b20b274774ed3188cbae58b673cda800360bd402[m
+Author: nampro2002 <nampro2k2@gmail.com>
+Date:   Sun Jun 2 03:26:54 2024 +0700
+
+    init project
