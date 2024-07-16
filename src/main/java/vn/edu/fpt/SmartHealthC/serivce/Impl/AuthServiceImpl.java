@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -13,6 +14,7 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DoctorRegisterDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.RegisterDto;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.NotificationSubscriptionRequest;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.RefreshTokenResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
@@ -41,26 +43,27 @@ public class AuthServiceImpl implements AuthService {
     private final MedicalHistoryRepository medicalHistoryRepository;
     private final UserMedicalHistoryRepository userMedicalHistoryRepository;
     private final AppUserRepository appUserRepository;
-    private final EmailService  emailService;
+    private final EmailService emailService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final NotificationService notificationService;
     private final WebUserRepository webUserRepository;
     private final CodeRepository codeRepository;
+
     @Override
     public AuthenticationResponseDto login(LoginDto request) throws ParseException {
         Optional<Account> optionalUser = accountRepository.findAccountByEmail(request.getEmail());
-        if(optionalUser.isEmpty()) {
+        if (optionalUser.isEmpty()) {
             throw new AppException(ErrorCode.CREDENTIAL_INVALID);
         }
-        if(optionalUser.get().isDeleted()) {
+        if (optionalUser.get().isDeleted()) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
-        if(optionalUser.get().isActive() == false) {
+        if (optionalUser.get().isActive() == false) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_ACTIVATED);
         }
         Account existingUser = optionalUser.get();
         //check password
-        if(!passwordEncoder.matches(request.getPassword(), existingUser.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), existingUser.getPassword())) {
             throw new AppException(ErrorCode.CREDENTIAL_INVALID);
         }
         authenticationManager.authenticate(
@@ -89,9 +92,9 @@ public class AuthServiceImpl implements AuthService {
                 .accountId(optionalUser.get())
                 .deviceToken(request.getDeviceToken())
                 .build();
+        cleanRefreshToken(optionalUser.get().getId(), request.getDeviceToken());
         refreshTokenRepository.save(refreshTokenCreate);
-        cleanRefreshToken(optionalUser.get().getId());
-        if(optionalUser.get().getType().equals(TypeAccount.USER) && optionalUser.get().isActive()){
+        if (optionalUser.get().getType().equals(TypeAccount.USER) && optionalUser.get().isActive()) {
             notificationService.updateStatusNotification(request.getEmail(), request.getDeviceToken());
         }
         return AuthenticationResponseDto.builder()
@@ -104,18 +107,10 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    public void cleanRefreshToken(Integer accountId) throws ParseException {
-    //find all record of this account in table refresh_token, if refreshExpiryTime < now, delete it
-        List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordByAccountId(accountId);
-        LocalDateTime now = LocalDateTime.now();
-        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String stringFormatedDate = now.format(formatter);
-        //Check expires refresh token
-        for(RefreshToken refreshToken : refreshTokenList){
-            if(formatDate.parse(stringFormatedDate).after(refreshToken.getRefreshExpiryTime())){
-                refreshTokenRepository.delete(refreshToken);
-            }
+    public void cleanRefreshToken(Integer accountId, String deviceToken) throws ParseException {
+        List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordBydDeviceToken( deviceToken);
+        for (RefreshToken refreshToken : refreshTokenList) {
+            refreshTokenRepository.delete(refreshToken);
         }
     }
 
@@ -123,7 +118,7 @@ public class AuthServiceImpl implements AuthService {
     public void register(RegisterDto request) {
         Optional<Account> existingAccount = accountRepository.findByEmail(request.getEmail());
 
-        if(existingAccount.isPresent()) {
+        if (existingAccount.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
         String encodedPassword = passwordEncoder.encode(request.getPassword());
@@ -145,10 +140,10 @@ public class AuthServiceImpl implements AuthService {
                 .cic(request.getCic())
                 .build();
         newAppUserInfo = appUserRepository.save(newAppUserInfo);
-        for(Integer i : request.getListMedicalHistory()){
+        for (Integer i : request.getListMedicalHistory()) {
             MedicalHistory medicalHistory = medicalHistoryRepository.findById(i)
                     .orElseThrow();
-            UserMedicalHistory userMedicalHistory  = UserMedicalHistory
+            UserMedicalHistory userMedicalHistory = UserMedicalHistory
                     .builder()
                     .appUserId(newAppUserInfo)
                     .conditionId(medicalHistory)
@@ -161,7 +156,7 @@ public class AuthServiceImpl implements AuthService {
     public void registerDoctor(DoctorRegisterDto request) {
         Optional<Account> existingAccount = accountRepository.findByEmail(request.getEmail());
 
-        if(existingAccount.isPresent()) {
+        if (existingAccount.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
         String encodedPassword = passwordEncoder.encode(request.getPassword());
@@ -169,7 +164,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(request.getEmail())
                 .password(encodedPassword)
                 .type(TypeAccount.DOCTOR)
-                .isActive(true)
+                .isActive(false)
                 .build();
         newAccount = accountRepository.save(newAccount);
         WebUser newWebUserInfo = WebUser.builder()
@@ -186,15 +181,28 @@ public class AuthServiceImpl implements AuthService {
     public void logout(HttpServletRequest request) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String accessToken;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         accessToken = authHeader.substring(7);
         Optional<RefreshToken> refreshTokenFilter = refreshTokenRepository.findRecordByAcToken(accessToken);
-        if(refreshTokenFilter.isEmpty()) {
+        if (refreshTokenFilter.isEmpty()) {
             throw new AppException(ErrorCode.ACCESS_TOKEN_NOT_EXIST);
         }
         refreshTokenRepository.delete(refreshTokenFilter.get());
+        try {
+            unSubTopic(refreshTokenFilter.get().getDeviceToken(), "daily");
+            unSubTopic(refreshTokenFilter.get().getDeviceToken(), "mondayam");
+            unSubTopic(refreshTokenFilter.get().getDeviceToken(), "sundaypm");
+        } catch (FirebaseMessagingException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    public void unSubTopic(String deviceToken, String topicName) throws FirebaseMessagingException {
+        NotificationSubscriptionRequest notificationSubscriptionRequest = NotificationSubscriptionRequest.builder().deviceToken(deviceToken).topicName(topicName).build();
+        notificationService.unsubscribeDeviceFromTopic(notificationSubscriptionRequest);
     }
 
     @Override
@@ -203,10 +211,10 @@ public class AuthServiceImpl implements AuthService {
         if (account.isPresent()) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
-        Optional<Code> codeRegister = codeRepository.findByEmailAndCode(email,code);
+        Optional<Code> codeRegister = codeRepository.findByEmailAndCode(email, code);
         if (codeRegister.isEmpty()) {
             throw new AppException(ErrorCode.CODE_INVALID);
-        }else{
+        } else {
             return true;
         }
     }
@@ -222,13 +230,13 @@ public class AuthServiceImpl implements AuthService {
         Code code = new Code().builder()
                 .email(email).code(codeVerify).build();
         codeRepository.save(code);
-        String message = "Code xác thực email đăng ký của bạn là : " +codeVerify;
-        boolean result =  emailService.sendMail(
+        String message = "Code xác thực email đăng ký của bạn là : " + codeVerify;
+        boolean result = emailService.sendMail(
                 email,
                 "MÃ XÁC THỰC EMAIL",
                 message
         );
-        if(result == false){
+        if (result == false) {
             throw new AppException(ErrorCode.SEND_EMAIL_FAIL);
         }
         return "Gửi mã xác thực email thành công";
@@ -238,7 +246,7 @@ public class AuthServiceImpl implements AuthService {
     public RefreshTokenResponseDto refreshToken(String refreshToken, HttpServletRequest request, HttpServletResponse response) throws ParseException {
         //Check refresh token
         Optional<RefreshToken> refreshTokenFilter = refreshTokenRepository.findRecordByReToken(refreshToken);
-        if(refreshTokenFilter.isEmpty()) {
+        if (refreshTokenFilter.isEmpty()) {
             throw new AppException(ErrorCode.REFRESH_TOKEN_NOT_EXIST);
         }
         LocalDateTime now = LocalDateTime.now();
@@ -250,18 +258,18 @@ public class AuthServiceImpl implements AuthService {
             throw new AppException(ErrorCode.REFRESH_TOKEN_EXPIRED);
         }
         Optional<Account> optionalUser = accountRepository.findById(refreshTokenFilter.get().getAccountId().getId());
-        if(optionalUser.isEmpty()) {
+        if (optionalUser.isEmpty()) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
 
         //Check token request và refresh có là cùng thuộc 1 người
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshTokenHeader;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         refreshTokenHeader = authHeader.substring(7);
-        if(!refreshTokenHeader.equals(refreshTokenFilter.get().getAccessToken())){
+        if (!refreshTokenHeader.equals(refreshTokenFilter.get().getAccessToken())) {
             throw new AppException(ErrorCode.TOKEN_NOT_OWNED);
         }
 
@@ -288,7 +296,6 @@ public class AuthServiceImpl implements AuthService {
                 .refreshToken(refreshTokenNewString)
                 .build();
     }
-
 
 
 }

@@ -53,10 +53,10 @@ public class SchedulerConfig {
     private JobDetail medicalReminderJobDetail;
 
     @Autowired
-    private JobDetail dataReviewWeekJobDetail;
+    private JobDetail medicineJobDetail;
 
     @Autowired
-    private Trigger dataWeekReviewTrigger;
+    private Trigger medicineJobTrigger;
 
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean() {
@@ -75,7 +75,7 @@ public class SchedulerConfig {
             scheduler.scheduleJob(eveningJobDetail, eveningTrigger);
             scheduler.scheduleJob(sundayEveningJobDetail, sundayEveningTrigger);
             scheduler.scheduleJob(mondayMorningJobDetail, mondayMorningTrigger);
-//            scheduler.scheduleJob(dataReviewWeekJobDetail, dataWeekReviewTrigger);
+            scheduler.scheduleJob(medicineJobDetail, medicineJobTrigger);
             scheduler.start();
         } catch (SchedulerException e) {
             e.printStackTrace();

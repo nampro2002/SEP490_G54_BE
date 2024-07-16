@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @Transactional
 @Service
-  public class MonthlyQuestionServiceImpl implements MonthlyQuestionService {
+public class MonthlyQuestionServiceImpl implements MonthlyQuestionService {
 
     @Autowired
     private MonthlyQuestionRepository monthlyQuestionRepository;
@@ -40,7 +40,7 @@ import java.util.Optional;
         Integer lastMonth = monthlyQuestionRepository.findByAppUser(appUser.get().getId());
         MonthlyRecord monthlyRecord = MonthlyRecord.builder()
                 .appUserId(appUser.get())
-                .monthNumber(lastMonth == null ? 0 : lastMonth+1)
+                .monthNumber(lastMonth == null ? 0 : lastMonth + 1)
                 .monthlyRecordType(MonthlyRecordType.NEW_MONTH_MARK)
                 .build();
         monthlyQuestionRepository.save(monthlyRecord);
@@ -68,28 +68,30 @@ import java.util.Optional;
         List<MonthlyNumberResponseDTO> monthlyNumberResponseDTOList = new ArrayList<>();
         List<Integer> monthlyNumbers = monthlyQuestionRepository.find3ByAppUser(appUser.getId());
         for (Integer monthNumber : monthlyNumbers) {
-            boolean isAnswered= monthlyQuestionRepository.countMonthNumberByAppUser(appUser.getId(),monthNumber) > 1;
-          MonthlyNumberResponseDTO monthlyNumberResponseDTO = new MonthlyNumberResponseDTO().builder()
-                  .monthNumber(monthNumber)
-                  .isAnswered(isAnswered)
-                  .build();
+            boolean isAnswered = monthlyQuestionRepository.countMonthNumberByAppUser(appUser.getId(), monthNumber) > 1;
+            MonthlyNumberResponseDTO monthlyNumberResponseDTO = new MonthlyNumberResponseDTO().builder()
+                    .monthNumber(monthNumber)
+                    .isAnswered(isAnswered)
+                    .build();
             monthlyNumberResponseDTOList.add(monthlyNumberResponseDTO);
         }
         return monthlyNumberResponseDTOList;
     }
 
     @Override
-    public List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber,String type) {
+    public List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber, String type) {
         List<MonthlyAnswerResponseDTO> monthlyAnswerResponseDTOList = new ArrayList<>();
-        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(userId,monthNumber);
+        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(userId, monthNumber);
         MonthlyRecordType monthlyRecordType;
         try {
             monthlyRecordType = MonthlyRecordType.valueOf(type.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new AppException(ErrorCode.MONTHLY_TYPE_NOT_FOUND);
+//            throw new AppException(ErrorCode.MONTHLY_TYPE_NOT_FOUND);
+            //    ??
+            throw new AppException(ErrorCode.NOT_FOUND);
         }
         for (MonthlyRecord record : monthlyNumbers) {
-            if(record.getMonthlyRecordType().equals(monthlyRecordType)){
+            if (record.getMonthlyRecordType().equals(monthlyRecordType)) {
                 MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                         .questionNumber(record.getQuestionNumber())
                         .question(record.getQuestion())
@@ -107,15 +109,17 @@ import java.util.Optional;
     public List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber, String type) {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         List<MonthlyAnswerResponseDTO> monthlyAnswerResponseDTOList = new ArrayList<>();
-        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUser.getId(),monthNumber);
+        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUser.getId(), monthNumber);
         MonthlyRecordType monthlyRecordType;
         try {
             monthlyRecordType = MonthlyRecordType.valueOf(type.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new AppException(ErrorCode.MONTHLY_TYPE_NOT_FOUND);
+            //throw new AppException(ErrorCode.MONTHLY_TYPE_NOT_FOUND);
+            throw new AppException(ErrorCode.NOT_FOUND);
+
         }
         for (MonthlyRecord record : monthlyNumbers) {
-            if(record.getMonthlyRecordType().equals(monthlyRecordType)){
+            if (record.getMonthlyRecordType().equals(monthlyRecordType)) {
                 MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                         .questionNumber(record.getQuestionNumber())
                         .question(record.getQuestion())
@@ -143,10 +147,10 @@ import java.util.Optional;
         List<MonthlyAnswerResponseDTO> activityList = new ArrayList<>();
         List<MonthlyAnswerResponseDTO> dietList = new ArrayList<>();
         List<MonthlyAnswerResponseDTO> medicineList = new ArrayList<>();
-        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUser.getId(),monthNumber);
-        if(!monthlyNumbers.isEmpty()){
+        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUser.getId(), monthNumber);
+        if (!monthlyNumbers.isEmpty()) {
             for (MonthlyRecord record : monthlyNumbers) {
-                if(record.getMonthlyRecordType() == MonthlyRecordType.SAT_SF_C){
+                if (record.getMonthlyRecordType() == MonthlyRecordType.SAT_SF_C) {
                     MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                             .questionNumber(record.getQuestionNumber())
                             .question(record.getQuestion())
@@ -155,7 +159,7 @@ import java.util.Optional;
                             .build();
                     sat_sf_c_List.add(monthlyNumberResponseDTO);
                 }
-                if(record.getMonthlyRecordType() == MonthlyRecordType.SAT_SF_P){
+                if (record.getMonthlyRecordType() == MonthlyRecordType.SAT_SF_P) {
                     MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                             .questionNumber(record.getQuestionNumber())
                             .question(record.getQuestion())
@@ -164,7 +168,7 @@ import java.util.Optional;
                             .build();
                     sat_sf_p_List.add(monthlyNumberResponseDTO);
                 }
-                if(record.getMonthlyRecordType() == MonthlyRecordType.SAT_SF_I){
+                if (record.getMonthlyRecordType() == MonthlyRecordType.SAT_SF_I) {
                     MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                             .questionNumber(record.getQuestionNumber())
                             .question(record.getQuestion())
@@ -173,7 +177,7 @@ import java.util.Optional;
                             .build();
                     sat_sf_i_List.add(monthlyNumberResponseDTO);
                 }
-                if(record.getMonthlyRecordType() == MonthlyRecordType.SF_MENTAL){
+                if (record.getMonthlyRecordType() == MonthlyRecordType.SF_MENTAL) {
                     MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                             .questionNumber(record.getQuestionNumber())
                             .question(record.getQuestion())
@@ -182,7 +186,7 @@ import java.util.Optional;
                             .build();
                     mentalList.add(monthlyNumberResponseDTO);
                 }
-                if(record.getMonthlyRecordType() == MonthlyRecordType.SF_ACTIVITY){
+                if (record.getMonthlyRecordType() == MonthlyRecordType.SF_ACTIVITY) {
                     MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                             .questionNumber(record.getQuestionNumber())
                             .question(record.getQuestion())
@@ -191,7 +195,7 @@ import java.util.Optional;
                             .build();
                     activityList.add(monthlyNumberResponseDTO);
                 }
-                if(record.getMonthlyRecordType() == MonthlyRecordType.SF_DIET){
+                if (record.getMonthlyRecordType() == MonthlyRecordType.SF_DIET) {
                     MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                             .questionNumber(record.getQuestionNumber())
                             .question(record.getQuestion())
@@ -200,7 +204,7 @@ import java.util.Optional;
                             .build();
                     dietList.add(monthlyNumberResponseDTO);
                 }
-                if(record.getMonthlyRecordType() == MonthlyRecordType.SF_MEDICATION){
+                if (record.getMonthlyRecordType() == MonthlyRecordType.SF_MEDICATION) {
                     MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                             .questionNumber(record.getQuestionNumber())
                             .question(record.getQuestion())
@@ -210,21 +214,21 @@ import java.util.Optional;
                     medicineList.add(monthlyNumberResponseDTO);
                 }
             }
-            float sat_sf_c_activityPoint = (((getDataByQuestionNumber(sat_sf_c_List,1)+
-                    getDataByQuestionNumber(sat_sf_c_List,2)+
-                    getDataByQuestionNumber(sat_sf_c_List,4))/3)-1)/3*100;
-            float sat_sf_c_positivityPoint = (((getDataByQuestionNumber(sat_sf_c_List,5)+
-                    getDataByQuestionNumber(sat_sf_c_List,6)+
-                    getDataByQuestionNumber(sat_sf_c_List,7)
-                    +getDataByQuestionNumber(sat_sf_c_List,8))/4)-1)/3*100;
-            float sat_sf_c_supportPoint = (((getDataByQuestionNumber(sat_sf_c_List,3)+
-                    getDataByQuestionNumber(sat_sf_c_List,10))/2)-1)/3*100;
-            float sat_sf_c_experiencePoint = ((getDataByQuestionNumber(sat_sf_c_List,9)-1))/3*100;
+            float sat_sf_c_activityPoint = (((getDataByQuestionNumber(sat_sf_c_List, 1) +
+                    getDataByQuestionNumber(sat_sf_c_List, 2) +
+                    getDataByQuestionNumber(sat_sf_c_List, 4)) / 3) - 1) / 3 * 100;
+            float sat_sf_c_positivityPoint = (((getDataByQuestionNumber(sat_sf_c_List, 5) +
+                    getDataByQuestionNumber(sat_sf_c_List, 6) +
+                    getDataByQuestionNumber(sat_sf_c_List, 7)
+                    + getDataByQuestionNumber(sat_sf_c_List, 8)) / 4) - 1) / 3 * 100;
+            float sat_sf_c_supportPoint = (((getDataByQuestionNumber(sat_sf_c_List, 3) +
+                    getDataByQuestionNumber(sat_sf_c_List, 10)) / 2) - 1) / 3 * 100;
+            float sat_sf_c_experiencePoint = ((getDataByQuestionNumber(sat_sf_c_List, 9) - 1)) / 3 * 100;
 
-            float sat_sf_p_lifeValue = ((getDataByQuestionNumber(sat_sf_p_List,1)-1))/3*100;
-            float sat_sf_p_targetAndAction = (((getDataByQuestionNumber(sat_sf_p_List,2)+
-                    getDataByQuestionNumber(sat_sf_p_List,3)+
-                    getDataByQuestionNumber(sat_sf_p_List,5))/3)-1)/3*100;
+            float sat_sf_p_lifeValue = ((getDataByQuestionNumber(sat_sf_p_List, 1) - 1)) / 3 * 100;
+            float sat_sf_p_targetAndAction = (((getDataByQuestionNumber(sat_sf_p_List, 2) +
+                    getDataByQuestionNumber(sat_sf_p_List, 3) +
+                    getDataByQuestionNumber(sat_sf_p_List, 5)) / 3) - 1) / 3 * 100;
             float sat_sf_p_decision = ((((getDataByQuestionNumber(sat_sf_p_List, 4) +
                     getDataByQuestionNumber(sat_sf_p_List, 10)) / 2) - 1) / 3) * 100;
             float sat_sf_p_buildPlan = ((((getDataByQuestionNumber(sat_sf_p_List, 6) +
@@ -232,79 +236,78 @@ import java.util.Optional;
             float sat_sf_p_healthyEnvironment = ((((getDataByQuestionNumber(sat_sf_p_List, 8) +
                     getDataByQuestionNumber(sat_sf_p_List, 9)) / 2) - 1) / 3) * 100;
 
-            float sat_sf_i_e_activityPoint = ((getDataByQuestionNumber(sat_sf_i_List,6)-1))/3*100;
-            float sat_sf_i_e_activityStressPoint = ((getDataByQuestionNumber(sat_sf_i_List,2)-1))/3*100;
+            float sat_sf_i_e_activityPoint = ((getDataByQuestionNumber(sat_sf_i_List, 6) - 1)) / 3 * 100;
+            float sat_sf_i_e_activityStressPoint = ((getDataByQuestionNumber(sat_sf_i_List, 2) - 1)) / 3 * 100;
             float sat_sf_i_e_activitySubstantialPoint = ((((getDataByQuestionNumber(sat_sf_i_List, 1) +
                     getDataByQuestionNumber(sat_sf_i_List, 4) +
                     getDataByQuestionNumber(sat_sf_i_List, 5) +
                     getDataByQuestionNumber(sat_sf_i_List, 9)) / 4) - 1) / 3) * 100;
-            float sat_sf_i_e_energy = ((getDataByQuestionNumber(sat_sf_i_List,3)-1))/3*100;
-            float sat_sf_i_e_motivation= ((((getDataByQuestionNumber(sat_sf_i_List, 7) +
+            float sat_sf_i_e_energy = ((getDataByQuestionNumber(sat_sf_i_List, 3) - 1)) / 3 * 100;
+            float sat_sf_i_e_motivation = ((((getDataByQuestionNumber(sat_sf_i_List, 7) +
                     getDataByQuestionNumber(sat_sf_i_List, 8)) / 4) - 1) / 3) * 100;
-            float sat_sf_i_e_planCheck= ((getDataByQuestionNumber(sat_sf_i_List,10)-1))/3*100;
+            float sat_sf_i_e_planCheck = ((getDataByQuestionNumber(sat_sf_i_List, 10) - 1)) / 3 * 100;
 
-            float sf_mentalPoint= ((((getDataByQuestionNumber(mentalList, 1) +
+            float sf_mentalPoint = ((((getDataByQuestionNumber(mentalList, 1) +
                     getDataByQuestionNumber(mentalList, 2) +
                     getDataByQuestionNumber(mentalList, 3) +
                     getDataByQuestionNumber(mentalList, 4) +
                     getDataByQuestionNumber(mentalList, 5)) / 5) - 1) / 3) * 100;
 
-            float sf_activity_planPoint= ((((getDataByQuestionNumber(activityList, 1) +
+            float sf_activity_planPoint = ((((getDataByQuestionNumber(activityList, 1) +
                     getDataByQuestionNumber(activityList, 2) +
                     getDataByQuestionNumber(activityList, 3)) / 3) - 1) / 3) * 100;
-            float sf_activity_habitPoint= ((((getDataByQuestionNumber(activityList, 4) +
-                    getDataByQuestionNumber(activityList, 5) ) / 2) - 1) / 3) * 100;
+            float sf_activity_habitPoint = ((((getDataByQuestionNumber(activityList, 4) +
+                    getDataByQuestionNumber(activityList, 5)) / 2) - 1) / 3) * 100;
 
-            float sf_diet_healthyPoint= ((((getDataByQuestionNumber(dietList, 1) +
+            float sf_diet_healthyPoint = ((((getDataByQuestionNumber(dietList, 1) +
                     getDataByQuestionNumber(dietList, 4) +
                     getDataByQuestionNumber(dietList, 5)) / 3) - 1) / 3) * 100;
-            float sf_diet_vegetablePoint= ((((getDataByQuestionNumber(dietList, 3) +
+            float sf_diet_vegetablePoint = ((((getDataByQuestionNumber(dietList, 3) +
                     getDataByQuestionNumber(dietList, 7)) / 2) - 1) / 3) * 100;
-            float sf_diet_habitPoint= ((((getDataByQuestionNumber(dietList, 2) +
+            float sf_diet_habitPoint = ((((getDataByQuestionNumber(dietList, 2) +
                     getDataByQuestionNumber(dietList, 6)) / 2) - 1) / 3) * 100;
 
-            float sf_medicine_followPlanPoint= (((getDataByQuestionNumber(medicineList, 1)) - 1) / 3) * 100;
-            float sf_medicine_habitPoint= ((((getDataByQuestionNumber(medicineList, 2) +
+            float sf_medicine_followPlanPoint = (((getDataByQuestionNumber(medicineList, 1)) - 1) / 3) * 100;
+            float sf_medicine_habitPoint = ((((getDataByQuestionNumber(medicineList, 2) +
                     getDataByQuestionNumber(medicineList, 3) +
                     getDataByQuestionNumber(medicineList, 4)) / 3) - 1) / 3) * 100;
 
 
-
-            float sat_sf_c_total= 0;
-            float sat_sf_p_total= 0;
-            float sat_sf_i_total= 0;
-            for (int i = 1; i <= 10 ; i++){
-                sat_sf_c_total += getDataByQuestionNumber(sat_sf_c_List,i);
-                sat_sf_p_total += getDataByQuestionNumber(sat_sf_p_List,i);
-                sat_sf_i_total += getDataByQuestionNumber(sat_sf_i_List,i);
+            float sat_sf_c_total = 0;
+            float sat_sf_p_total = 0;
+            float sat_sf_i_total = 0;
+            for (int i = 1; i <= 10; i++) {
+                sat_sf_c_total += getDataByQuestionNumber(sat_sf_c_List, i);
+                sat_sf_p_total += getDataByQuestionNumber(sat_sf_p_List, i);
+                sat_sf_i_total += getDataByQuestionNumber(sat_sf_i_List, i);
             }
-            sat_sf_c_total = (((sat_sf_c_total/10)-1)/3)*100;
-            sat_sf_p_total = (((sat_sf_p_total/10)-1)/3)*100;
-            sat_sf_i_total = (((sat_sf_i_total/10)-1)/3)*100;
-            float finalSATTotal = (sat_sf_c_total+sat_sf_p_total+sat_sf_i_total)/3;
+            sat_sf_c_total = (((sat_sf_c_total / 10) - 1) / 3) * 100;
+            sat_sf_p_total = (((sat_sf_p_total / 10) - 1) / 3) * 100;
+            sat_sf_i_total = (((sat_sf_i_total / 10) - 1) / 3) * 100;
+            float finalSATTotal = (sat_sf_c_total + sat_sf_p_total + sat_sf_i_total) / 3;
 
-            float sf_mental_modelPoint= ((((getDataByQuestionNumber(mentalList, 1) +
+            float sf_mental_modelPoint = ((((getDataByQuestionNumber(mentalList, 1) +
                     getDataByQuestionNumber(mentalList, 2) +
                     getDataByQuestionNumber(mentalList, 3) +
-                    getDataByQuestionNumber(mentalList, 4)+
+                    getDataByQuestionNumber(mentalList, 4) +
                     getDataByQuestionNumber(mentalList, 5)) / 5) - 1) / 3) * 100;
-            float sf_activity_modelPoint= ((((getDataByQuestionNumber(activityList, 1) +
+            float sf_activity_modelPoint = ((((getDataByQuestionNumber(activityList, 1) +
                     getDataByQuestionNumber(activityList, 2) +
                     getDataByQuestionNumber(activityList, 3) +
-                    getDataByQuestionNumber(activityList, 4)+
+                    getDataByQuestionNumber(activityList, 4) +
                     getDataByQuestionNumber(activityList, 5)) / 5) - 1) / 3) * 100;
-            float sf_diet_modelPoint= ((((getDataByQuestionNumber(dietList, 1) +
+            float sf_diet_modelPoint = ((((getDataByQuestionNumber(dietList, 1) +
                     getDataByQuestionNumber(dietList, 2) +
                     getDataByQuestionNumber(dietList, 3) +
-                    getDataByQuestionNumber(dietList, 4)+
-                    getDataByQuestionNumber(dietList, 5)+
-                    getDataByQuestionNumber(dietList, 6)+
+                    getDataByQuestionNumber(dietList, 4) +
+                    getDataByQuestionNumber(dietList, 5) +
+                    getDataByQuestionNumber(dietList, 6) +
                     getDataByQuestionNumber(dietList, 7)) / 7) - 1) / 3) * 100;
-            float sf_medicine_modelPoint= ((((getDataByQuestionNumber(dietList, 1) +
+            float sf_medicine_modelPoint = ((((getDataByQuestionNumber(dietList, 1) +
                     getDataByQuestionNumber(dietList, 2) +
                     getDataByQuestionNumber(dietList, 3) +
                     getDataByQuestionNumber(dietList, 4)) / 4) - 1) / 3) * 100;
-            float finalSFTotal = (sf_mental_modelPoint+sf_activity_modelPoint+sf_diet_modelPoint+sf_medicine_modelPoint)/4;
+            float finalSFTotal = (sf_mental_modelPoint + sf_activity_modelPoint + sf_diet_modelPoint + sf_medicine_modelPoint) / 4;
 
             satResponseDTO.setSat_sf_c_activityPoint(sat_sf_c_activityPoint);
             satResponseDTO.setSat_sf_c_positivityPoint(sat_sf_c_positivityPoint);
@@ -347,12 +350,12 @@ import java.util.Optional;
         return new MonthlyStatisticResponseDTO().builder().sfResponseDTO(sfResponseDTO).satResponseDTO(satResponseDTO).build();
     }
 
-//    @Override
+    //    @Override
     public List<MonthlyStatisticResponseDTO> getPoint3Month(Integer appUserId) {
         List<MonthlyStatisticResponseDTO> monthlyStatisticResponseDTOList = new ArrayList<>();
         List<Integer> monthlyNumbers = monthlyQuestionRepository.find3ByAppUser(appUserId);
-        for (Integer month : monthlyNumbers){
-            if(month != 0){
+        for (Integer month : monthlyNumbers) {
+            if (month != 0) {
                 monthlyStatisticResponseDTOList.add(getPoint(month));
             }
         }
@@ -362,12 +365,13 @@ import java.util.Optional;
 
     @Override
     public MobileGeneralChartResponseDTO getPoint3MonthMobile() {
-        MobileGeneralChartResponseDTO mobileGeneralChartResponseDTO= new MobileGeneralChartResponseDTO();
+        MobileGeneralChartResponseDTO mobileGeneralChartResponseDTO = new MobileGeneralChartResponseDTO();
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         mobileGeneralChartResponseDTO.setChart3Month(getPoint3Month(appUser.getId()));
         mobileGeneralChartResponseDTO.setFirstWeek(getPoint(0));
         return mobileGeneralChartResponseDTO;
     }
+
     @Override
     public List<Integer> getList3MonthlyNumberWeb(Integer appUserId) {
         List<Integer> monthlyNumberResponseDTOList = new ArrayList<>();
@@ -379,41 +383,42 @@ import java.util.Optional;
     }
 
 
-//    @Override
+    //    @Override
     public List<MonthlyStatisticResponseDTO> getPoint2Month(Integer appUserId, Integer monthNumber) {
-        List<Integer> monthlyNumbers = monthlyQuestionRepository.find2ByAppUserAndMonthNumber(appUserId,monthNumber);
+        List<Integer> monthlyNumbers = monthlyQuestionRepository.find2ByAppUserAndMonthNumber(appUserId, monthNumber);
         List<MonthlyStatisticResponseDTO> monthlyStatisticResponseDTOList = new ArrayList<>();
-        for (Integer month : monthlyNumbers){
+        for (Integer month : monthlyNumbers) {
             monthlyStatisticResponseDTOList.add(getPoint(month));
         }
         return monthlyStatisticResponseDTOList;
     }
+
     @Override
     public List<MonthlyStatisticResponseDTO> getPoint2MonthMobile(Integer monthNumber) {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
-        return getPoint2Month(appUser.getId(),monthNumber);
+        return getPoint2Month(appUser.getId(), monthNumber);
     }
+
     @Override
     public List<MonthlyStatisticResponseDTO> getPoint2MonthWeb(Integer appUserId, Integer monthNumber) {
-        return getPoint2Month(appUserId,monthNumber);
+        return getPoint2Month(appUserId, monthNumber);
     }
+
     @Override
     public List<MonthlyStatisticResponseDTO> getPoint12MonthWeb(Integer appUserId) {
         List<Integer> monthlyNumbers = monthlyQuestionRepository.find12ByAppUser(appUserId);
         List<MonthlyStatisticResponseDTO> monthlyStatisticResponseDTOList = new ArrayList<>();
-        for (Integer month : monthlyNumbers){
+        for (Integer month : monthlyNumbers) {
             monthlyStatisticResponseDTOList.add(getPoint(month));
         }
         return monthlyStatisticResponseDTOList;
     }
 
 
-
-    public Float getDataByQuestionNumber(List<MonthlyAnswerResponseDTO> list,int questionNumber){
+    public Float getDataByQuestionNumber(List<MonthlyAnswerResponseDTO> list, int questionNumber) {
         Optional<MonthlyAnswerResponseDTO> monthlyAnswerResponseDTO = list.stream().filter(record -> record.getQuestionNumber() == questionNumber).findFirst();
         return (float) (monthlyAnswerResponseDTO.isPresent() ? monthlyAnswerResponseDTO.get().getAnswer() : 1f);
     }
-
 
 
 }

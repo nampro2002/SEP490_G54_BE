@@ -10,6 +10,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateContinuousDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CurrentStepRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepResponseChartDTO;
@@ -86,9 +87,9 @@ public class StepRecordController {
     }
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/get-current-record")
-    public ApiResponse<Integer> getCurrentRecord() throws ParseException {
+    public ApiResponse<CurrentStepRecordResponseDTO> getCurrentRecord() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Integer>builder()
+                .body(ApiResponse.<CurrentStepRecordResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(stepRecordService.getCurrentRecord())
                         .build()).getBody();

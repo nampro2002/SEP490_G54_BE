@@ -96,9 +96,12 @@ public class AccountServiceImpl implements AccountService {
         UserWeek1Information userWeek1Information = new UserWeek1Information();
 
         userWeek1Information.setAppUserId(appUser.get());
+        account = accountRepository.save(account);
+        if(account.getType().equals(TypeAccount.USER)){
         userWeek1InformationRepository.save(userWeek1Information);
-        accountRepository.save(account);
         notificationService.createRecordForAccount(account);
+        }
+
         return true;
     }
 

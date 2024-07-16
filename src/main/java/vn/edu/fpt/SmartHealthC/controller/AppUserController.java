@@ -34,15 +34,15 @@ public class AppUserController {
                         .result(appUserService.getListAppUser(pageNo -1, search))
                         .build()).getBody();
     }
-    //getAppUserById
-//    @GetMapping("/web/detail/{id}")
-//    public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailById (@PathVariable Integer id) {
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(ApiResponse.<AppUserDetailResponseDTO>builder()
-//                        .code(HttpStatus.OK.value())
-//                        .result(appUserService.getAppUserDetailById(id))
-//                        .build()).getBody();
-//    }
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR') or hasAuthority('MEDICAL_SPECIALIST')")
+    @GetMapping("/web/detail/{id}")
+    public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailById (@PathVariable Integer id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<AppUserDetailResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(appUserService.getAppUserDetailById(id))
+                        .build()).getBody();
+    }
 //    @GetMapping("mobile/detail")
 //    public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailMobile () {
 //        return ResponseEntity.status(HttpStatus.OK)

@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateContinuousDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CurrentStepRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.RecordPerDay;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepResponse;
@@ -17,6 +19,7 @@ import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.StepRecordRepository;
+import vn.edu.fpt.SmartHealthC.repository.WeightRecordRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.StepRecordService;
 import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
@@ -26,6 +29,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@Slf4j
 @Service
 public class StepRecordServiceImpl implements StepRecordService {
 
@@ -37,6 +41,8 @@ public class StepRecordServiceImpl implements StepRecordService {
     private AppUserService appUserService;
     @Autowired
     private SimpleDateFormat formatDate;
+    @Autowired
+    private WeightRecordRepository weightRecordRepository;
 
     public Date calculateDate(Date date, int plus) throws ParseException {
         // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
@@ -193,15 +199,15 @@ public class StepRecordServiceImpl implements StepRecordService {
         StepResponseChartDTO stepResponseChartDTO = new StepResponseChartDTO();
         List<StepResponse> stepResponseList = new ArrayList<>();
         for (StepRecord stepRecord : stepRecordList) {
-                    double valuePercent = stepRecord.getPlannedStepPerDay() != 0 ? ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100: 100;
-                    StepResponse stepResponse = new StepResponse();
-                    stepResponse.setValuePercent((int) valuePercent);
-                    stepResponse.setDate(stepRecord.getDate());
-                    stepResponseList.add(stepResponse);
+            double valuePercent = stepRecord.getPlannedStepPerDay() != 0 ? ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100 : 100;
+            StepResponse stepResponse = new StepResponse();
+            stepResponse.setValuePercent((int) valuePercent);
+            stepResponse.setDate(stepRecord.getDate());
+            stepResponseList.add(stepResponse);
         }
         String todayStr = formatDate.format(stepResponseList.get(0).getDate());
         Date todayDate = formatDate.parse(todayStr);
-        if(date.equals(todayDate)){
+        if (date.equals(todayDate)) {
             Integer value = (int) Math.round(stepRecordList.get(0).getActualValue());
             stepResponseChartDTO.setValueToday(value);
         }
@@ -255,12 +261,13 @@ public class StepRecordServiceImpl implements StepRecordService {
         }
         return true;
     }
+
     @Override
     public Boolean checkPlanExist(String weekStart) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
 
@@ -281,7 +288,7 @@ public class StepRecordServiceImpl implements StepRecordService {
         if (stepRecords.isEmpty()) {
             return false;
         }
-        if(stepRecords.get().getActualValue() <= 0 ){
+        if (stepRecords.get().getActualValue() <= 0) {
             return false;
         }
         return true;
@@ -293,7 +300,6 @@ public class StepRecordServiceImpl implements StepRecordService {
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
-
         String dateStr = formatDate.format(stepRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
         List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.get().getId());
@@ -327,20 +333,33 @@ public class StepRecordServiceImpl implements StepRecordService {
     }
 
     @Override
-    public Integer getCurrentRecord() throws ParseException {
+    public CurrentStepRecordResponseDTO getCurrentRecord() throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
-        Date today = DateUtils.getToday(formatDate);
-        Optional<StepRecord> stepRecord = stepRecordRepository.findByAppUserIdAndDate(appUser.get().getId(), today);
-        if(stepRecord.isEmpty()){
-            return 0;
-        }
-        return Math.round(stepRecord.get().getActualValue());
+        Integer currentValue = 0;
+        Integer planedValue = 0;
+        Integer calo = 0;
+        Float weight = 0f;
 
+        Date today = DateUtils.getToday(formatDate);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = sdf.format(today);
+        Date date = sdf.parse(formattedDate);
+        Optional<StepRecord> stepRecord = stepRecordRepository.findByAppUserIdAndDate(appUser.get().getId(), date);
+        if (!stepRecord.isEmpty()) {
+            // convert to int
+            currentValue = Math.round(stepRecord.get().getActualValue());
+        }
+        log.info("Get current record for user " + appUser.get().getId() + " at " + date);
+        CurrentStepRecordResponseDTO currentStepRecordResponseDTO = CurrentStepRecordResponseDTO.builder()
+                .currentValue(currentValue)
+                .planedValue(stepRecord.get().getPlannedStepPerDay())
+                .build();
+        return currentStepRecordResponseDTO;
     }
 
     public Date getFirstDayOfWeek(Date date) {

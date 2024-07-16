@@ -10,6 +10,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.WeightRecord;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface WeightRecordRepository extends JpaRepository<WeightRecord, Integer> {
     @Query("SELECT DISTINCT weekStart FROM WeightRecord WHERE appUserId.id = ?1")
@@ -26,4 +27,6 @@ public interface WeightRecordRepository extends JpaRepository<WeightRecord, Inte
 
     @Query("SELECT a FROM WeightRecord a WHERE a.appUserId.id = ?1 and a.weight > 0   order by a.date desc limit 5")
     List<WeightRecord> find5RecordByIdUser(Integer userId);
+    @Query("SELECT a FROM WeightRecord a WHERE a.appUserId.id = ?1 order by a.date desc limit 1")
+    Optional<WeightRecord> findNewestRecord(Integer id);
 }

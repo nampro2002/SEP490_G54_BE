@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
+import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 
 import java.util.Date;
 import java.util.List;
@@ -19,4 +20,6 @@ public interface MedicineRecordRepository extends JpaRepository<MedicineRecord, 
     List<MedicineRecord> findByWeekStartMedicineAppUser(Date date, Integer userId,Integer medicine);
     @Query("SELECT m FROM MedicineRecord m WHERE m.date = ?1 AND m.appUserId.id = ?2 AND m.medicineType.id = ?3 ")
     Optional<MedicineRecord> findByDateAndMedicine(Date date, Integer userId, Integer medicine);
+    @Query("SELECT m FROM MedicineRecord m WHERE m.date = ?1 order by m.id desc LIMIT 1")
+    List<MedicineRecord> findByTime(Date date);
 }
