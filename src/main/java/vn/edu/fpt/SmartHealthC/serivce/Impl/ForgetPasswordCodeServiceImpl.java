@@ -74,8 +74,7 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
     public boolean verifyAndChangePassword(ChangePasswordCodeDTO changePasswordCodeDTO) throws ParseException {
         Optional<Account> account = accountRepository.findByEmail(changePasswordCodeDTO.getEmail());
         if (account.isEmpty()) {
-//            throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
-            return false;
+            throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
         }
         account.get().setPassword(passwordEncoder.encode(changePasswordCodeDTO.getPassword()));
         accountRepository.save(account.get());
