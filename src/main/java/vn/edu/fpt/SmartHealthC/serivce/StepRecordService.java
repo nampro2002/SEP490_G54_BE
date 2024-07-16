@@ -3,7 +3,7 @@ package vn.edu.fpt.SmartHealthC.serivce;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateContinuousDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepCount;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CurrentStepRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
@@ -27,9 +27,6 @@ public interface StepRecordService {
 
     void updateStepRecordNEW(StepRecordUpdateContinuousDTO stepRecordDTO) throws ParseException;
 
-    Integer getCurrentRecord() throws ParseException;
-
-    StepCount getStepCountToday() throws ParseException;
-//    Date getFirstDayOfWeek(StepRecordUpdateContinuousDTO stepRecordDTO);
+    CurrentStepRecordResponseDTO getCurrentRecord() throws ParseException;
 
 }

@@ -82,6 +82,7 @@ import java.util.stream.IntStream;
     public List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber,String type) {
         return getAnswerByMonthNumberAndAppUser(monthNumber , type , userId);
     }
+
     @Override
     public List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber, String type) {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);

@@ -580,4 +580,8 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         }
         return true;
     }
+//    public List<MedicineRecord> getRecordByDateTime() throws ParseException {
+//        Date date = DateUtils.getToday(formatDate);
+//        return medicineRecordRepository.findByDate(date);
+//    }
 }

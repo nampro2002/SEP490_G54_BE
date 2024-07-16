@@ -53,9 +53,10 @@ public class ApplicationConfig {
     @Bean
     public SimpleDateFormat utcFormatter() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        formatter.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         return formatter;
     }
+    //forjob
     @PostConstruct
     public void init(){
         // Thiết lập múi giờ mặc định
