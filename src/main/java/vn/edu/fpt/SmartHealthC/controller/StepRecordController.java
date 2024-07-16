@@ -12,6 +12,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.CurrentStepRecordResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicineResponseChartDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepCount;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
@@ -94,6 +95,16 @@ public class StepRecordController {
                         .result(stepRecordService.getCurrentRecord())
                         .build()).getBody();
     }
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/get-step-count-today")
+    public ApiResponse<StepCount> getStepCountToday() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<StepCount>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(stepRecordService.getStepCountToday())
+                        .build()).getBody();
+    }
+
 //    @GetMapping("/getmonday")
 //    public ApiResponse<Date> getmonday(@RequestBody @Valid StepRecordUpdateContinuousDTO stepRecordDTO) throws ParseException {
 //        return ResponseEntity.status(HttpStatus.OK)

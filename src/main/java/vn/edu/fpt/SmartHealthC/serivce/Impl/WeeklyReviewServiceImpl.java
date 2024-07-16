@@ -1,8 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeActivity;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.*;
@@ -12,12 +11,15 @@ import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.*;
 import vn.edu.fpt.SmartHealthC.serivce.*;
 import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-
+@Transactional
 @Service
 public class WeeklyReviewServiceImpl implements WeeklyReviewService {
 
@@ -72,12 +74,12 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         return weekReviews;
     }
 
-    @Override
-    public List<Date> getMobileListWeekStart() throws ParseException {
-        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
-        List<Date> weekReviews = weekReviewRepository.findListWeekStart(appUser.getId());
-        return weekReviews;
-    }
+//    @Override
+//    public List<Date> getMobileListWeekStart() throws ParseException {
+//        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+//        List<Date> weekReviews = weekReviewRepository.findListWeekStart(appUser.getId());
+//        return weekReviews;
+//    }
 
     @Override
     public WeekCheckPlanResponseDTO checkWeeklyPlanExist(String weekStart) throws ParseException {
@@ -99,37 +101,52 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         );
         return weekCheckPlanResponseDTO;
     }
-//    public Date calculateDate(Date sourceDate, int plus) throws ParseException {
-//        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(sourceDate);
-//        // Cộng thêm một ngày
-//        calendar.add(Calendar.DAY_OF_MONTH, plus);
-//        // Trả về Date sau khi cộng thêm ngày
-//        return calendar.getTime();
-//    }
 
     @Override
-    public WeekReview getWebDataReviewForWeek(String weekStart) throws ParseException {
+    public List<Date> get5NearestWeekStart() throws ParseException {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Date smallestWeekStart = findSmallestWeekStart(appUser);
+        Date thisMonday = DateUtils.getFirstDayOfWeek(DateUtils.getToday(formatDate));
+        List<Date> listWeekStartToNow = new ArrayList<>();
+        boolean status = true;
+        while (status){
+            if(smallestWeekStart.before(thisMonday)) {
+                listWeekStartToNow.add(smallestWeekStart);
+            }else{
+                status = false;
+            }
+            smallestWeekStart = calculateDate(smallestWeekStart,7);
+        }
+        // Sắp xếp danh sách theo thứ tự giảm dần
+        Collections.sort(listWeekStartToNow, new Comparator<Date>() {
+            @Override
+            public int compare(Date d1, Date d2) {
+                return d2.compareTo(d1); // Đảo ngược thứ tự để sắp xếp giảm dần
+            }
+        });
+        List<Date> top5Dates = listWeekStartToNow.subList(0, Math.min(5, listWeekStartToNow.size()));
+        return top5Dates;
+    }
+
+    public Date calculateDate(Date sourceDate, int plus) throws ParseException {
+        // Tạo một đối tượng Calendar và set ngày tháng từ đối tượng Date đầu vào
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sourceDate);
+        // Cộng thêm một ngày
+        calendar.add(Calendar.DAY_OF_MONTH, plus);
+        // Trả về Date sau khi cộng thêm ngày
+        return calendar.getTime();
+    }
+
+    @Override
+    public WeekReview getWebDataReviewForWeek(Integer id , String weekStart) throws ParseException {
         //week start for filter
         Date weekStartFilter = formatDate.parse(weekStart);
-        List<WeekReview> weekReviews = weekReviewRepository.findByAppUserId(appUser.getId());
-        Optional<WeekReview> weekReviewExist = weekReviews.stream()
-                .filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return recordWeekStart.equals(weekStartFilter);
-                    } catch (ParseException e) {
-                        return false;
-                    }
-                })
-                .findFirst();
-        if (weekReviewExist.isEmpty()) {
+        Optional<WeekReview> weekReviews = weekReviewRepository.find1ByAppUserIdAndWeekStart(id,weekStartFilter);
+        if (weekReviews.isEmpty()) {
             throw new AppException(ErrorCode.WEEK_REVIEW_NOT_EXIST);
         }
-        return weekReviewExist.get();
+        return weekReviews.get();
     }
 
     @Override
@@ -137,18 +154,8 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         //week start for filter
         Date weekStartFilter = formatDate.parse(weekStart);
-        List<WeekReview> weekReviews = weekReviewRepository.findByAppUserId(appUser.getId());
-        Optional<WeekReview> weekReviewExist = weekReviews.stream()
-                .filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return recordWeekStart.equals(weekStartFilter);
-                    } catch (ParseException e) {
-                        return false;
-                    }
-                })
-                .findFirst();
+        Optional<WeekReview> weekReviewExist = weekReviewRepository.find1ByAppUserIdAndWeekStart(appUser.getId(),weekStartFilter);
+
         if (weekReviewExist.isEmpty()) {
             throw new AppException(ErrorCode.WEEK_REVIEW_NOT_EXIST);
         }
@@ -173,18 +180,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 .build();
 
         //Tìm danh sách thuốc theo tuần
-        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.getId());
-        List<MedicineRecord> medicineRecordListByWeekStart = medicineRecordList.stream()
-                .filter(item -> {
-                    String itemDateStr = formatDate.format(item.getWeekStart());
-                    try {
-                        Date itemDate = formatDate.parse(itemDateStr);
-                        return itemDate.equals(weekStartFilter);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                }).toList();
+        List<MedicineRecord> medicineRecordListByWeekStart = medicineRecordRepository.findByAppUserAndWeekStart(appUser.getId(),weekStartFilter);
         if (medicineRecordListByWeekStart.isEmpty()) {
             responseDTO.setMedicineDateDone(0);
             responseDTO.setMedicineDateTotal(0);
@@ -254,62 +250,27 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                         (activityPerWeekResponseDTO.getLightPLanActivity() * 0);
         responseDTO.setActivityPoint(activityActualPoint != 0 ? (int) ((double) activityActualPoint / activityPlanPoint * 100) : -1);
 
-        Optional<DietRecord> dietRecord = dietRecordRepository.findAll().stream()
-                .filter(item -> {
-                    String itemDateStr = formatDate.format(item.getWeekStart());
-                    try {
-                        Date itemDate = formatDate.parse(itemDateStr);
-                        return itemDate.equals(weekStartFilter) && item.getAppUserId() == appUser;
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                })
-                .findFirst();
+        List<DietRecord> dietRecord = dietRecordRepository.findByAppUserAndDate(appUser.getId(),weekStartFilter);
         if (dietRecord.isEmpty()) {
             responseDTO.setDietPoint(-1);
-
         } else {
-            responseDTO.setDietPoint((int) ((double) responseDTO.getAverageDietRecordPerWeek() / dietRecord.get().getDishPerDay() * 100));
+            responseDTO.setDietPoint((int) ((double) responseDTO.getAverageDietRecordPerWeek() / dietRecord.get(0).getDishPerDay() * 100));
         }
 
         int medicinePoint = (int) ((double) responseDTO.getMedicineDateDone() / responseDTO.getMedicineDateTotal() * 100);
         responseDTO.setMedicinePoint(responseDTO.getMedicineDateDone() != 0 ? medicinePoint : -1);
 
 
-        Optional<StepRecord> stepRecord = stepRecordRepository.findAll().stream()
-                .filter(item -> {
-                    String itemDateStr = formatDate.format(item.getWeekStart());
-                    try {
-                        Date itemDate = formatDate.parse(itemDateStr);
-                        return itemDate.equals(weekStartFilter) && item.getAppUserId() == appUser;
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                })
-                .findFirst();
+        List<StepRecord> stepRecord = stepRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(),weekStartFilter);
         if (stepRecord.isEmpty()) {
             responseDTO.setStepPoint(-1);
         } else {
-            int stepPoint = (int) ((double) responseDTO.getAverageStepRecordPerWeek() / stepRecord.get().getPlannedStepPerDay() * 100);
+            int stepPoint = (int) ((double) responseDTO.getAverageStepRecordPerWeek() / stepRecord.get(0).getPlannedStepPerDay() * 100);
             responseDTO.setStepPoint(responseDTO.getAverageStepRecordPerWeek() != 0 ? stepPoint : 0);
         }
 
-
         if (responseDTO.getAverageWeightRecordPerWeek() != 0) {
-            List<WeightRecord> weightRecord = weightRecordRepository.findAll().stream()
-                    .filter(item -> {
-                        String itemDateStr = formatDate.format(item.getWeekStart());
-                        try {
-                            Date itemDate = formatDate.parse(itemDateStr);
-                            return itemDate.equals(weekStartFilter) && item.getAppUserId() == appUser;
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                            return false;
-                        }
-                    })
-                    .toList();
+            List<WeightRecord> weightRecord = weightRecordRepository.findAppUserAndWeekStart(appUser.getId(),weekStartFilter);
             int countBMI = 0;
             int total = weightRecord.size();
             if (weightRecord.isEmpty()) {
@@ -343,10 +304,46 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     public static Boolean checkBMI(double bmi) {
         return (bmi >= 15 && bmi <= 25);
     }
-
+    public boolean CheckSundayAfter8PM() {
+        LocalDateTime now = LocalDateTime.now();
+        // Check if it's Sunday and the hour is greater than 20 (8 PM)
+                if (now.getDayOfWeek() == DayOfWeek.SUNDAY && now.getHour() > 20) {
+                return true;
+        }
+                return false;
+    }
     @Override
     public WeeklyMoblieChartResponseDTO getMobileChartReviewForWeek() throws ParseException {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        //Tìm thứ 2 của tuần hiện tại
+        Date smallestWeekStart = findSmallestWeekStart(appUser);
+        Date thisMonday = DateUtils.getFirstDayOfWeek(DateUtils.getToday(formatDate));
+        List<Date> listWeekStartToNow = new ArrayList<>();
+        //Tìm tất cả weekStart theo user
+        List<Date> listWeekStartWeekReview = weekReviewRepository.findListWeekStart(appUser.getId());
+        boolean status = true;
+        //Thêm weekStart dựa trên weekstart nhỏ nhất cho tới tuần trước tuần hiện tại
+        // ví dụ tuần này 15/7 thì chỉ đến 8/7
+        while (status){
+            if(smallestWeekStart.before(thisMonday)) {
+                listWeekStartToNow.add(smallestWeekStart);
+            }else{
+                status = false;
+            }
+            smallestWeekStart = calculateDate(smallestWeekStart,7);
+        }
+        //Nếu trong db mà chưa có weekstart dựa theo listWeekStartToNow thì thêm weekStart vào
+        for (Date date : listWeekStartToNow) {
+            if(!listWeekStartWeekReview.contains(date)) {
+                saveDataReviewForWeek(appUser.getId(),formatDate.format(date));
+            }
+        }
+        //Nếu ngày hôm nay là chủ nhật và sau 8h thì mới thêm tuần này vào
+        if(CheckSundayAfter8PM()){
+            saveDataReviewForWeek(appUser.getId(),formatDate.format(thisMonday));
+        }
+
+        //Lấy ra 5 tuần gần nhất
         List<WeekReview> weekReviews = weekReviewRepository.find5NearestWeekStart(appUser.getId());
         WeeklyMoblieChartResponseDTO response = new WeeklyMoblieChartResponseDTO();
         for (WeekReview weekReview : weekReviews) {
@@ -359,96 +356,15 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     public double calculateTotalPointOfWeek(AppUser appUser,Date weekStart) throws ParseException {
 
         //Lấy danh sách theo User
-        List<ActivityRecord> activityRecordList = activityRecordRepository.findRecordByIdUser(appUser.getId());
-        List<BloodPressureRecord> bloodPressureRecordList = bloodPressureRecordRepository.findAllByUserId(appUser.getId());
-        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByAppUserId(appUser.getId());
-        List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.getId());
-        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.getId());
-        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserId(appUser.getId());
-        List<StepRecord> stepRecordExist = stepRecordRepository.findByAppUserId(appUser.getId());
-        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUser(appUser.getId());
+        List<ActivityRecord> activityRecordList = activityRecordRepository.findByWeekStart(weekStart,appUser.getId());
+        List<BloodPressureRecord> bloodPressureRecordList = bloodPressureRecordRepository.findByWeekStart(weekStart,appUser.getId());
+        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByWeekStart(weekStart,appUser.getId());
+        List<DietRecord> dietRecordList = dietRecordRepository.findByWeekStart(weekStart,appUser.getId());
+        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUserAndWeekStart(appUser.getId(),weekStart);
+        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(),weekStart);
+        List<StepRecord> stepRecordExist = stepRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(),weekStart);
+        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUserAndWeekStart(appUser.getId(),weekStart);
 
-        //Lấy theo weekStart
-        activityRecordList = activityRecordList.stream().filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return weekStart.equals(recordWeekStart);
-                    } catch (ParseException e) {
-                        return false;
-                    }
-                })
-                .toList();
-        bloodPressureRecordList = bloodPressureRecordList.stream().filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return weekStart.equals(recordWeekStart);
-                    } catch (ParseException e) {
-                        return false;
-                    }
-                })
-                .toList();
-        cardinalRecordList = cardinalRecordList.stream().filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return weekStart.equals(recordWeekStart);
-                    } catch (ParseException e) {
-                        return false;
-                    }
-                })
-                .toList();
-        dietRecordList = dietRecordList.stream().filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return weekStart.equals(recordWeekStart);
-                    } catch (ParseException e) {
-                        return false;
-                    }
-                })
-                .toList();
-        medicineRecordList = medicineRecordList.stream().filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return weekStart.equals(recordWeekStart);
-                    } catch (ParseException e) {
-                        return false;
-                    }
-                })
-                .toList();
-        mentalRecordList = mentalRecordList.stream().filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return weekStart.equals(recordWeekStart);
-                    } catch (ParseException e) {
-                        return false;
-                    }
-                })
-                .toList();
-        stepRecordExist = stepRecordExist.stream().filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return weekStart.equals(recordWeekStart);
-                    } catch (ParseException e) {
-                        return false;
-                    }
-                })
-                .toList();
-        weightRecordList = weightRecordList.stream().filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return weekStart.equals(recordWeekStart);
-                    } catch (ParseException e) {
-                        return false;
-                    }
-                })
-                .toList();
         //tính điểm thành phần
         double mentalPercentage = (double) mentalRecordList.stream().filter(record -> record.getStatus() != null).count() / 21 * 100;
         double activityPercentage = (double) activityRecordList.stream().filter(record -> record.getActualType() != null).count() / 7 * 100;
@@ -464,24 +380,9 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         for (CardinalRecord record : cardinalRecordList) {
             String recordDateStr = formatDate.format(record.getDate());
             Date recordDate = formatDate.parse(recordDateStr);
-//            boolean dataNullExists = cardinalRecordList.stream()
-//                    .anyMatch(item -> {
-//                        String itemDateStr = formatDate.format(item.getDate());
-//                        try {
-//                            Date itemDate = formatDate.parse(itemDateStr);
-//                            return itemDate.equals(recordDate)
-//                                    ;
-//                        } catch (ParseException e) {
-//                            e.printStackTrace();
-//                            return false;
-//                        }
-//                    });
-            // ko có value nào bị null
-//                if (dataNullExists == false) {
             if (!uniqueDates.contains(recordDate)) {
                 uniqueDates.add(recordDate);
             }
-//                }
         }
 
         //Count not null theo date
@@ -580,31 +481,20 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     }
 
     @Override
-    public void saveDataReviewForWeek(String weekStart) throws ParseException {
+    public void saveDataReviewForWeek(Integer appUserId, String weekStart) throws ParseException {
         WeekReview weekReview = new WeekReview();
-
-        //user da active, notdeleted,
-        List<AppUser> appUserList = appUserRepository.findAllActiveAndNotDeleted();
-        for (AppUser appUser : appUserList) {
+        Optional<AppUser> appUser = appUserRepository.findById(appUserId);
+        if(appUser.isEmpty()){
+            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        }
             //week start for filter
             Date weekStartFilter = formatDate.parse(weekStart);
-            List<WeekReview> weekReviews = weekReviewRepository.findByAppUserId(appUser.getId());
-            Optional<WeekReview> weekReviewExist = weekReviews.stream()
-                    .filter(record -> {
-                        String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                        try {
-                            Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                            return recordWeekStart.equals(weekStartFilter);
-                        } catch (ParseException e) {
-                            return false;
-                        }
-                    })
-                    .findFirst();
-            if (!weekReviewExist.isPresent()) {
-                weekReview.setAppUserId(appUser);
+            Optional<WeekReview> weekReviews = weekReviewRepository.find1ByAppUserIdAndWeekStart(appUserId,weekStartFilter);
+            if (weekReviews.isEmpty()) {
+                weekReview.setAppUserId(appUser.get());
                 weekReview.setWeekStart(weekStartFilter);
                 //Average cardinal per week
-                CardinalPerWeekResponseDTO cardinalPerWeekResponseDTO = getAverageCardinalPerWeek(appUser, weekStartFilter);
+                CardinalPerWeekResponseDTO cardinalPerWeekResponseDTO = getAverageCardinalPerWeek(appUser.get(), weekStartFilter);
                 weekReview.setHba1cTotalRecord(cardinalPerWeekResponseDTO.getHba1cTotalRecord());
                 weekReview.setHba1cSafeRecord(cardinalPerWeekResponseDTO.getHba1cSafeRecord());
                 weekReview.setCholesterolTotalRecord(cardinalPerWeekResponseDTO.getCholesterolTotalRecord());
@@ -613,41 +503,36 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 weekReview.setBloodSugarSafeRecord(cardinalPerWeekResponseDTO.getBloodSugarSafeRecord());
 
                 //Average bloodPressure per week
-                BloodPressurePerWeekResponseDTO bloodPressurePerWeekResponseDTO = getAverageBloodPressurePerWeek(appUser, weekStartFilter);
+                BloodPressurePerWeekResponseDTO bloodPressurePerWeekResponseDTO = getAverageBloodPressurePerWeek(appUser.get(), weekStartFilter);
                 weekReview.setTotalBloodPressureRecord(bloodPressurePerWeekResponseDTO.getTotalRecord());
                 weekReview.setSafeBloodPressureRecord(bloodPressurePerWeekResponseDTO.getSafeRecord());
                 //Average Weight per week
-                weekReview.setAverageWeightRecordPerWeek(getAverageWeightPerWeek(appUser, weekStartFilter));
+                weekReview.setAverageWeightRecordPerWeek(getAverageWeightPerWeek(appUser.get(), weekStartFilter));
                 //Average Mental per week
-                weekReview.setAverageMentalRecordPerWeek(getMentalPerWeek(appUser, weekStartFilter));
+                weekReview.setAverageMentalRecordPerWeek(getMentalPerWeek(appUser.get(), weekStartFilter));
                 //Review Activity per week
-                ActivityPerWeekResponseDTO activityPerWeekResponseDTO = getActivityPerWeek(appUser, weekStartFilter);
+                ActivityPerWeekResponseDTO activityPerWeekResponseDTO = getActivityPerWeek(appUser.get(), weekStartFilter);
                 weekReview.setHeavyActivity(activityPerWeekResponseDTO.getHeavyActivity());
                 weekReview.setMediumActivity(activityPerWeekResponseDTO.getMediumActivity());
                 weekReview.setLightActivity(activityPerWeekResponseDTO.getLightActivity());
                 //Average diet per week
-                weekReview.setAverageDietRecordPerWeek(getAverageDietPerWeek(appUser, weekStartFilter));
+                weekReview.setAverageDietRecordPerWeek(getAverageDietPerWeek(appUser.get(), weekStartFilter));
                 //get Done and Total medicine per week
-                MedicinePerWeekResponseDTO medicinePerWeekResponseDTO = getMedicinePerWeek(appUser, weekStartFilter);
+                MedicinePerWeekResponseDTO medicinePerWeekResponseDTO = getMedicinePerWeek(appUser.get(), weekStartFilter);
                 weekReview.setMedicineRecordDone(medicinePerWeekResponseDTO.getMedicineRecordDone());
                 weekReview.setMedicineRecordTotal(medicinePerWeekResponseDTO.getMedicineRecordTotal());
                 //Average step per week
-                weekReview.setAverageStepRecordPerWeek(getAverageStepPerWeek(appUser, weekStartFilter));
+                weekReview.setAverageStepRecordPerWeek(getAverageStepPerWeek(appUser.get(), weekStartFilter));
                 //Total point per week
-                weekReview.setTotalPoint((int) calculateTotalPointOfWeek(appUser, weekStartFilter));
+                weekReview.setTotalPoint((int) calculateTotalPointOfWeek(appUser.get(), weekStartFilter));
                 weekReviewRepository.save(weekReview);
             }
-        }
     }
 
 
     private CardinalPerWeekResponseDTO getAverageCardinalPerWeek(AppUser appUser, Date weekStart) {
         CardinalPerWeekResponseDTO responseDTO = new CardinalPerWeekResponseDTO();
-        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findAll().stream()
-                .filter(
-                        record -> formatDate.format(record.getWeekStart()).equals(formatDate.format(weekStart))
-                                && record.getAppUserId() == appUser)
-                .collect(Collectors.toList());
+        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByWeekStart(weekStart,appUser.getId());
         int hba1c = 0;
         int cholesterol = 0;
         int bloodSugar = 0;
@@ -687,11 +572,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
 
     private BloodPressurePerWeekResponseDTO getAverageBloodPressurePerWeek(AppUser appUser, Date weekStart) {
         BloodPressurePerWeekResponseDTO responseDTO = new BloodPressurePerWeekResponseDTO();
-        List<BloodPressureRecord> bloodPressureRecordList = bloodPressureRecordRepository.findAll().stream()
-                .filter(
-                        record -> formatDate.format(record.getWeekStart()).equals(formatDate.format(weekStart))
-                                && record.getAppUserId() == appUser)
-                .collect(Collectors.toList());
+        List<BloodPressureRecord> bloodPressureRecordList = bloodPressureRecordRepository.findByWeekStart(weekStart,appUser.getId());
         int count = 0;
         if (bloodPressureRecordList.isEmpty()) {
             responseDTO.setSafeRecord(0);
@@ -714,11 +595,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     }
 
     private int getAverageWeightPerWeek(AppUser appUser, Date weekStart) {
-        List<WeightRecord> weightRecordList = weightRecordRepository.findAll().stream()
-                .filter(
-                        record -> formatDate.format(record.getWeekStart()).equals(formatDate.format(weekStart))
-                                && record.getAppUserId() == appUser)
-                .collect(Collectors.toList());
+        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUserAndWeekStart(appUser.getId(),weekStart);
         double sum = 0;
         for (WeightRecord record : weightRecordList) {
             sum += record.getWeight();
@@ -731,11 +608,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     }
 
     private int getMentalPerWeek(AppUser appUser, Date weekStart) {
-        List<MentalRecord> mentalRecordList = mentalRecordRepository.findAll().stream()
-                .filter(
-                        record -> formatDate.format(record.getWeekStart()).equals(formatDate.format(weekStart))
-                                && record.getAppUserId() == appUser && record.getStatus() != null)
-                .collect(Collectors.toList());
+        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(),weekStart);
         double sum = 0;
         for (MentalRecord record : mentalRecordList) {
             if (record.getStatus() == true) {
@@ -751,11 +624,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
 
     private ActivityPerWeekResponseDTO getActivityPerWeek(AppUser appUser, Date weekStart) {
         ActivityPerWeekResponseDTO responseDTO = new ActivityPerWeekResponseDTO();
-        List<ActivityRecord> activityRecordList = activityRecordRepository.findAll().stream()
-                .filter(
-                        record -> formatDate.format(record.getWeekStart()).equals(formatDate.format(weekStart))
-                                && record.getAppUserId() == appUser)
-                .collect(Collectors.toList());
+        List<ActivityRecord> activityRecordList = activityRecordRepository.findByWeekStart(weekStart,appUser.getId());
         int heavy = 0;
         int medium = 0;
         int light = 0;
@@ -787,11 +656,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     }
 
     private int getAverageDietPerWeek(AppUser appUser, Date weekStart) {
-        List<DietRecord> dietRecordList = dietRecordRepository.findAll().stream()
-                .filter(
-                        record -> formatDate.format(record.getWeekStart()).equals(formatDate.format(weekStart))
-                                && record.getAppUserId() == appUser)
-                .collect(Collectors.toList());
+        List<DietRecord> dietRecordList = dietRecordRepository.findByWeekStart(weekStart,appUser.getId());
         double sum = 0;
         for (DietRecord record : dietRecordList) {
             sum += record.getActualValue();
@@ -805,11 +670,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
 
     private MedicinePerWeekResponseDTO getMedicinePerWeek(AppUser appUser, Date weekStart) {
         MedicinePerWeekResponseDTO responseDTO = new MedicinePerWeekResponseDTO();
-        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findAll().stream()
-                .filter(
-                        record -> formatDate.format(record.getWeekStart()).equals(formatDate.format(weekStart))
-                                && record.getAppUserId() == appUser && record.getStatus() != null)
-                .collect(Collectors.toList());
+        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUserAndWeekStart(appUser.getId(),weekStart);
         int count = 0;
         if (medicineRecordList.isEmpty()) {
             responseDTO.setMedicineRecordTotal(0);
@@ -826,11 +687,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     }
 
     private int getAverageStepPerWeek(AppUser appUser, Date weekStart) {
-        List<StepRecord> stepRecordList = stepRecordRepository.findAll().stream()
-                .filter(
-                        record -> formatDate.format(record.getWeekStart()).equals(formatDate.format(weekStart))
-                                && record.getAppUserId() == appUser)
-                .collect(Collectors.toList());
+        List<StepRecord> stepRecordList = stepRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(),weekStart);
         double sum = 0;
         for (StepRecord record : stepRecordList) {
             sum += record.getActualValue();

@@ -213,8 +213,8 @@ public class AuthServiceImpl implements AuthService {
         }
         Optional<Code> codeRegister = codeRepository.findByEmailAndCode(email, code);
         if (codeRegister.isEmpty()) {
-            throw new AppException(ErrorCode.CODE_INVALID);
-        } else {
+            return false;
+        }else{
             return true;
         }
     }
@@ -258,18 +258,18 @@ public class AuthServiceImpl implements AuthService {
             throw new AppException(ErrorCode.REFRESH_TOKEN_EXPIRED);
         }
         Optional<Account> optionalUser = accountRepository.findById(refreshTokenFilter.get().getAccountId().getId());
-        if (optionalUser.isEmpty()) {
+        if(optionalUser.isEmpty()) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
 
         //Check token request và refresh có là cùng thuộc 1 người
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshTokenHeader;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         refreshTokenHeader = authHeader.substring(7);
-        if (!refreshTokenHeader.equals(refreshTokenFilter.get().getAccessToken())) {
+        if(!refreshTokenHeader.equals(refreshTokenFilter.get().getAccessToken())){
             throw new AppException(ErrorCode.TOKEN_NOT_OWNED);
         }
 
@@ -296,6 +296,7 @@ public class AuthServiceImpl implements AuthService {
                 .refreshToken(refreshTokenNewString)
                 .build();
     }
+
 
 
 }

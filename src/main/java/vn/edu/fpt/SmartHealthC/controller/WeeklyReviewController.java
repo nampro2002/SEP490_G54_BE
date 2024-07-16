@@ -22,6 +22,17 @@ public class WeeklyReviewController {
     @Autowired
     private WeeklyReviewService weeklyReviewService;
 
+        @PostMapping("/create-weekly-review/{appUserId}/{weekstart}")
+    public ApiResponse<Void> createWeeklyReview(@PathVariable Integer appUserId,@PathVariable String weekstart) throws ParseException {
+        weeklyReviewService.saveDataReviewForWeek(appUserId,weekstart);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Void>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(null)
+                        .build()).getBody();
+    }
+
+    //Lấy data tuần gần nhất
     @GetMapping("/web/week-date/{appUserId}")
     public ApiResponse<WeekReview> returnWeekDate(@PathVariable Integer appUserId) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -30,6 +41,7 @@ public class WeeklyReviewController {
                         .result(weeklyReviewService.getDataOfNearestWeek(appUserId))
                         .build()).getBody();
     }
+    //Lấy danh sách weekStart
     @GetMapping("/web/week-starts/{appUserId}")
     public ApiResponse<List<Date>> returnListWeekStart(@PathVariable Integer appUserId) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -38,21 +50,31 @@ public class WeeklyReviewController {
                         .result(weeklyReviewService.getListWeekStart(appUserId))
                         .build()).getBody();
     }
+    //Lấy list 5 tuần gần nhất
     @GetMapping("/mobile/week-starts")
     public ApiResponse<List<Date>> returnMobileListWeekStart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<Date>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(weeklyReviewService.getMobileListWeekStart())
+                        .result(weeklyReviewService.get5NearestWeekStart())
                         .build()).getBody();
     }
 
-    @GetMapping("/web/review/{weekstart}")
-    public ApiResponse<WeekReview> returnReviewForWeekDate(@PathVariable String weekstart) throws ParseException {
+//    @GetMapping("/mobile/all-list")
+//    public ApiResponse<List<Date>> allList() throws ParseException {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.<List<Date>>builder()
+//                        .code(HttpStatus.OK.value())
+//                        .result(weeklyReviewService.allList())
+//                        .build()).getBody();
+//    }
+
+    @GetMapping("/web/review/{appUserId}/{weekstart}")
+    public ApiResponse<WeekReview> returnReviewForWeekDate(@PathVariable Integer appUserId,@PathVariable String weekstart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<WeekReview>builder()
                         .code(HttpStatus.OK.value())
-                        .result(weeklyReviewService.getWebDataReviewForWeek(weekstart))
+                        .result(weeklyReviewService.getWebDataReviewForWeek(appUserId,weekstart))
                         .build()).getBody();
     }
     @GetMapping("/mobile/review/{weekstart}")

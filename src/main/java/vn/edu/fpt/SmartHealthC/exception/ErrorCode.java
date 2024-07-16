@@ -38,6 +38,7 @@ public enum ErrorCode {
     WEB_USER_NOT_VALID("WebUser not valid", HttpStatus.BAD_REQUEST),
     BPS_NOT_FOUND("bps not found", HttpStatus.BAD_REQUEST),
     NOT_FOUND("Not found", HttpStatus.BAD_REQUEST),
+    MONTHLY_TYPE_NOT_FOUND("Monthly Question Type not found", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED("User not existed", HttpStatus.BAD_REQUEST),
     BLOOD_PRESSURE_NOT_FOUND("Blood pressure not found", HttpStatus.BAD_REQUEST),
     DIET_RECORD_NOT_FOUND("Diet record not found", HttpStatus.BAD_REQUEST),

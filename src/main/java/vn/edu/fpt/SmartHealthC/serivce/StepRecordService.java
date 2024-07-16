@@ -28,6 +28,8 @@ public interface StepRecordService {
     void updateStepRecordNEW(StepRecordUpdateContinuousDTO stepRecordDTO) throws ParseException;
 
     CurrentStepRecordResponseDTO getCurrentRecord() throws ParseException;
+
+    StepRecord getStepCountToday() throws ParseException;
 //    Date getFirstDayOfWeek(StepRecordUpdateContinuousDTO stepRecordDTO);
 
 }
