@@ -73,7 +73,8 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
     public boolean verifyAndChangePassword(ForgetPasswordCodeDTO forgetPasswordCodeDTO) throws ParseException {
         Optional<Account> account = accountRepository.findByEmail(forgetPasswordCodeDTO.getEmail());
         if (account.isEmpty()) {
-            throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
+//            throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
+            return false;
         }
         Optional<ForgetPasswordCode> forgetPasswordCode = forgetPasswordCodeRepository.findRecordByCodeAndAccount(
                 account.get() , forgetPasswordCodeDTO.getCode());
@@ -90,7 +91,8 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         Date expiredDate = formatDate.parse(expiresDate);
 
         if (formatDate.parse(stringFormatedDate).after(expiredDate)) {
-            throw new AppException(ErrorCode.CODE_EXPIRED);
+//            throw new AppException(ErrorCode.CODE_EXPIRED);
+            return false;
         }
         account.get().setPassword(passwordEncoder.encode(forgetPasswordCodeDTO.getPassword()));
         accountRepository.save(account.get());
