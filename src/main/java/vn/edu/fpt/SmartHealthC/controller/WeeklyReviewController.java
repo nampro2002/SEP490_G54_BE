@@ -32,6 +32,7 @@ public class WeeklyReviewController {
                         .build()).getBody();
     }
 
+    //Lấy data tuần gần nhất
     @GetMapping("/web/week-date/{appUserId}")
     public ApiResponse<WeekReview> returnWeekDate(@PathVariable Integer appUserId) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -40,6 +41,7 @@ public class WeeklyReviewController {
                         .result(weeklyReviewService.getDataOfNearestWeek(appUserId))
                         .build()).getBody();
     }
+    //Lấy danh sách weekStart
     @GetMapping("/web/week-starts/{appUserId}")
     public ApiResponse<List<Date>> returnListWeekStart(@PathVariable Integer appUserId) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
@@ -48,6 +50,7 @@ public class WeeklyReviewController {
                         .result(weeklyReviewService.getListWeekStart(appUserId))
                         .build()).getBody();
     }
+    //Lấy list 5 tuần gần nhất
     @GetMapping("/mobile/week-starts")
     public ApiResponse<List<Date>> returnMobileListWeekStart() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
