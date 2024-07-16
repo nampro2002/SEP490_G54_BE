@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateContinuousDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.StepRecordUpdateDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.RecordPerDay;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepRecordResListDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepResponse;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.StepResponseChartDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.StepRecordListResDTO.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -77,11 +74,12 @@ public class StepRecordServiceImpl implements StepRecordService {
                 break;
             }
             dateCalculate = calculateDate(stepRecordDTO.getWeekStart(), count);
+            String dateCalculateStr = formatDate.format(dateCalculate);
             StepRecord stepRecord = StepRecord.builder()
                     .plannedStepPerDay(stepRecordDTO.getPlannedStepPerDay())
                     .actualValue(0f)
                     .weekStart(DateUtils.normalizeDate(formatDate,weekStartStr))
-                    .date(dateCalculate).build();
+                    .date(DateUtils.normalizeDate(formatDate,dateCalculateStr)).build();
             stepRecord.setAppUserId(appUser.get());
             stepRecordRepository.save(stepRecord);
             count++;
@@ -173,7 +171,7 @@ public class StepRecordServiceImpl implements StepRecordService {
 
         StepRecord stepRecordUpdate = getStepRecordById(stepRecord.get().getId());
         stepRecordUpdate.setActualValue(stepRecordDTO.getActualValue());
-        stepRecordUpdate.setDate(stepRecordDTO.getDate());
+        stepRecordUpdate.setDate(DateUtils.normalizeDate(formatDate, formatDate.format(stepRecordDTO.getDate())));
         stepRecordRepository.save(stepRecordUpdate);
     }
 
@@ -341,6 +339,20 @@ public class StepRecordServiceImpl implements StepRecordService {
         }
         return Math.round(stepRecord.get().getActualValue());
 
+    }
+
+    @Override
+    public StepCount getStepCountToday() throws ParseException {
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Date today = DateUtils.getToday(formatDate);
+        Optional<StepRecord> stepRecord = stepRecordRepository.findByAppUserIdAndDate(appUser.getId(), today);
+        if(stepRecord.isEmpty()){
+            new StepCount().builder().stepCount(0).planStepCount(0).build();
+        }
+        int stepCountValue = Math.round(stepRecord.get().getActualValue());
+        return new StepCount().builder()
+                .stepCount(stepCountValue)
+                .planStepCount(stepRecord.get().getPlannedStepPerDay()).build();
     }
 
     public Date getFirstDayOfWeek(Date date) {

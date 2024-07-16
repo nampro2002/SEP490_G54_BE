@@ -14,6 +14,9 @@ public interface MentalRecordRepository extends JpaRepository<MentalRecord, Inte
     @Query("SELECT m FROM MentalRecord m WHERE m.appUserId.id = ?1 AND m.date = ?2")
     List<MentalRecord> findByAppUserIdAndDate(Integer userId, Date date);
 
+    @Query("SELECT m FROM MentalRecord m WHERE m.appUserId.id = ?1 AND m.weekStart = ?2")
+    List<MentalRecord> findByAppUserIdAndWeekStart(Integer userId, Date date);
+
     @Query("SELECT m FROM MentalRecord m WHERE  m.appUserId.id = ?1")
     List<MentalRecord> findByAppUserId(Integer userId);
 

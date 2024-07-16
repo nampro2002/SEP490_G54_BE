@@ -19,6 +19,7 @@ public interface CardinalRecordRepository extends JpaRepository<CardinalRecord, 
     @Query("SELECT c FROM CardinalRecord c WHERE c.weekStart = ?1 AND c.appUserId.id = ?2")
     List<CardinalRecord> findByWeekStart( Date record, Integer userId);
 
+
     @Query("SELECT c FROM CardinalRecord c WHERE c.date = ?1 AND c.appUserId.id = ?2 AND c.timeMeasure = ?3")
     List<CardinalRecord> findByDateAndTimeMeasure(Date date, Integer userId, TypeTimeMeasure timeMeasure);
 
