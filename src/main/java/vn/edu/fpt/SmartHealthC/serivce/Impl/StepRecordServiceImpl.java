@@ -88,8 +88,8 @@ public class StepRecordServiceImpl implements StepRecordService {
             StepRecord stepRecord = StepRecord.builder()
                     .plannedStepPerDay(stepRecordDTO.getPlannedStepPerDay())
                     .actualValue(0f)
-                    .weekStart(DateUtils.normalizeDate(formatDate,weekStartStr))
-                    .date(DateUtils.normalizeDate(formatDate,dateCalculateStr)).build();
+                    .weekStart(DateUtils.normalizeDate(formatDate, weekStartStr))
+                    .date(DateUtils.normalizeDate(formatDate, dateCalculateStr)).build();
             stepRecord.setAppUserId(appUser.get());
             stepRecordRepository.save(stepRecord);
             count++;
@@ -201,15 +201,15 @@ public class StepRecordServiceImpl implements StepRecordService {
         StepResponseChartDTO stepResponseChartDTO = new StepResponseChartDTO();
         List<StepResponse> stepResponseList = new ArrayList<>();
         for (StepRecord stepRecord : stepRecordList) {
-                    double valuePercent = stepRecord.getPlannedStepPerDay() != 0 ? ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100: 100;
-                    StepResponse stepResponse = new StepResponse();
-                    stepResponse.setValuePercent((int) valuePercent);
-                    stepResponse.setDate(stepRecord.getDate());
-                    stepResponseList.add(stepResponse);
+            double valuePercent = stepRecord.getPlannedStepPerDay() != 0 ? ((double) stepRecord.getActualValue() / stepRecord.getPlannedStepPerDay()) * 100 : 100;
+            StepResponse stepResponse = new StepResponse();
+            stepResponse.setValuePercent((int) valuePercent);
+            stepResponse.setDate(stepRecord.getDate());
+            stepResponseList.add(stepResponse);
         }
         String todayStr = formatDate.format(stepResponseList.get(0).getDate());
         Date todayDate = formatDate.parse(todayStr);
-        if(date.equals(todayDate)){
+        if (date.equals(todayDate)) {
             Integer value = (int) Math.round(stepRecordList.get(0).getActualValue());
             stepResponseChartDTO.setValueToday(value);
         }
@@ -263,12 +263,13 @@ public class StepRecordServiceImpl implements StepRecordService {
         }
         return true;
     }
+
     @Override
     public Boolean checkPlanExist(String weekStart) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
 
@@ -289,7 +290,7 @@ public class StepRecordServiceImpl implements StepRecordService {
         if (stepRecords.isEmpty()) {
             return false;
         }
-        if(stepRecords.get().getActualValue() <= 0 ){
+        if (stepRecords.get().getActualValue() <= 0) {
             return false;
         }
         return true;
@@ -344,8 +345,6 @@ public class StepRecordServiceImpl implements StepRecordService {
         }
         Integer currentValue = 0;
         Integer planedValue = 0;
-        Integer calo = 0;
-        Float weight = 0f;
 
         Date today = DateUtils.getToday(formatDate);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -355,28 +354,16 @@ public class StepRecordServiceImpl implements StepRecordService {
         if (!stepRecord.isEmpty()) {
             // convert to int
             currentValue = Math.round(stepRecord.get().getActualValue());
+            planedValue = stepRecord.get().getPlannedStepPerDay();
         }
         log.info("Get current record for user " + appUser.get().getId() + " at " + date);
         CurrentStepRecordResponseDTO currentStepRecordResponseDTO = CurrentStepRecordResponseDTO.builder()
                 .currentValue(currentValue)
-                .planedValue(stepRecord.get().getPlannedStepPerDay())
+                .planedValue(planedValue)
                 .build();
         return currentStepRecordResponseDTO;
     }
 
-    @Override
-    public StepCount getStepCountToday() throws ParseException {
-        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
-        Date today = DateUtils.getToday(formatDate);
-        Optional<StepRecord> stepRecord = stepRecordRepository.findByAppUserIdAndDate(appUser.getId(), today);
-        if(stepRecord.isEmpty()){
-            new StepCount().builder().stepCount(0).planStepCount(0).build();
-        }
-        int stepCountValue = Math.round(stepRecord.get().getActualValue());
-        return new StepCount().builder()
-                .stepCount(stepCountValue)
-                .planStepCount(stepRecord.get().getPlannedStepPerDay()).build();
-    }
 
     public Date getFirstDayOfWeek(Date date) {
         Calendar calendar = Calendar.getInstance();

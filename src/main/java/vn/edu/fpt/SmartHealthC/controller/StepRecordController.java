@@ -95,15 +95,6 @@ public class StepRecordController {
                         .result(stepRecordService.getCurrentRecord())
                         .build()).getBody();
     }
-    @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/get-step-count-today")
-    public ApiResponse<StepCount> getStepCountToday() throws ParseException {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<StepCount>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(stepRecordService.getStepCountToday())
-                        .build()).getBody();
-    }
 
 //    @GetMapping("/getmonday")
 //    public ApiResponse<Date> getmonday(@RequestBody @Valid StepRecordUpdateContinuousDTO stepRecordDTO) throws ParseException {

@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class CurrentStepRecordResponseDTO {
     private Integer currentValue;
     private Integer planedValue;
-    private Integer calo;
 }
