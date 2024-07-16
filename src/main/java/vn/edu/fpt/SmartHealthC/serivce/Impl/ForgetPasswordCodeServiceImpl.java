@@ -73,12 +73,14 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
     public boolean verifyAndChangePassword(ForgetPasswordCodeDTO forgetPasswordCodeDTO) throws ParseException {
         Optional<Account> account = accountRepository.findByEmail(forgetPasswordCodeDTO.getEmail());
         if (account.isEmpty()) {
-            throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
+//            throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
+            return false;
         }
         Optional<ForgetPasswordCode> forgetPasswordCode = forgetPasswordCodeRepository.findRecordByCodeAndAccount(
                 account.get() , forgetPasswordCodeDTO.getCode());
         if (forgetPasswordCode.isEmpty()) {
-            throw new AppException(ErrorCode.CODE_INVALID);
+//            throw new AppException(ErrorCode.CODE_INVALID);
+            return false;
         }
         LocalDateTime now = LocalDateTime.now();
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -89,7 +91,8 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         Date expiredDate = formatDate.parse(expiresDate);
 
         if (formatDate.parse(stringFormatedDate).after(expiredDate)) {
-            throw new AppException(ErrorCode.CODE_EXPIRED);
+//            throw new AppException(ErrorCode.CODE_EXPIRED);
+            return false;
         }
 //        System.out.printf(forgetPasswordCode.get().getExpiredDate().toString());
 //        System.out.println(stringFormatedDate);
