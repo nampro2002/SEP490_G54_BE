@@ -205,7 +205,7 @@ public class AuthServiceImpl implements AuthService {
         }
         Optional<Code> codeRegister = codeRepository.findByEmailAndCode(email,code);
         if (codeRegister.isEmpty()) {
-            throw new AppException(ErrorCode.CODE_INVALID);
+            return false;
         }else{
             return true;
         }
