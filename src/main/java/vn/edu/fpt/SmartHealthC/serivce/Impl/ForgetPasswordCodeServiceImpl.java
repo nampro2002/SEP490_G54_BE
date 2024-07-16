@@ -94,8 +94,6 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
 //            throw new AppException(ErrorCode.CODE_EXPIRED);
             return false;
         }
-//        System.out.printf(forgetPasswordCode.get().getExpiredDate().toString());
-//        System.out.println(stringFormatedDate);
         account.get().setPassword(passwordEncoder.encode(forgetPasswordCodeDTO.getPassword()));
         accountRepository.save(account.get());
         forgetPasswordCodeRepository.delete(forgetPasswordCode.get());
