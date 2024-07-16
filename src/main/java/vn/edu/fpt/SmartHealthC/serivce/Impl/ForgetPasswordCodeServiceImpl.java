@@ -78,7 +78,8 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         Optional<ForgetPasswordCode> forgetPasswordCode = forgetPasswordCodeRepository.findRecordByCodeAndAccount(
                 account.get() , forgetPasswordCodeDTO.getCode());
         if (forgetPasswordCode.isEmpty()) {
-            throw new AppException(ErrorCode.CODE_INVALID);
+//            throw new AppException(ErrorCode.CODE_INVALID);
+            return false;
         }
         LocalDateTime now = LocalDateTime.now();
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -91,8 +92,6 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         if (formatDate.parse(stringFormatedDate).after(expiredDate)) {
             throw new AppException(ErrorCode.CODE_EXPIRED);
         }
-//        System.out.printf(forgetPasswordCode.get().getExpiredDate().toString());
-//        System.out.println(stringFormatedDate);
         account.get().setPassword(passwordEncoder.encode(forgetPasswordCodeDTO.getPassword()));
         accountRepository.save(account.get());
         forgetPasswordCodeRepository.delete(forgetPasswordCode.get());

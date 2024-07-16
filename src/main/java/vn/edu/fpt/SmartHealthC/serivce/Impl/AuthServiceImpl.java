@@ -201,7 +201,7 @@ public class AuthServiceImpl implements AuthService {
     public Boolean checkRegisterEmail(String email, String code) {
         Optional<Account> account = accountRepository.findByEmail(email);
         if (account.isPresent()) {
-            return false;
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
         Optional<Code> codeRegister = codeRepository.findByEmailAndCode(email,code);
         if (codeRegister.isEmpty()) {
