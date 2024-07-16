@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MobileScreen2MonthChartSATResponseDTO {
 
+//   private int month;
    private SatScreen2MonthResponseDTO satResponseDTO;
 }

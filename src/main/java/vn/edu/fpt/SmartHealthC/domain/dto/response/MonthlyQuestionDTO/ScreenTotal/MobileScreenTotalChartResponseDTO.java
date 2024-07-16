@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MobileScreenTotalChartResponseDTO {
-
    private MonthlyStatisticScreenTotalResponseDTO firstWeek;
 
    private List<MonthlyStatisticScreenTotalResponseDTO> chart3Month;
