@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MonthlyStatisticScreenTotalResponseDTO {
-
+//    private int month;
     private SatScreenTotalResponseDTO satResponseDTO;
     private SFScreenTotalResponseDTO sfResponseDTO;
 }

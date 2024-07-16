@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.serivce.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.ChangePasswordCodeDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.ForgetPasswordCodeDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.ForgetPasswordCode;
@@ -70,31 +71,13 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
     }
 
     @Override
-    public boolean verifyAndChangePassword(ForgetPasswordCodeDTO forgetPasswordCodeDTO) throws ParseException {
-        Optional<Account> account = accountRepository.findByEmail(forgetPasswordCodeDTO.getEmail());
+    public boolean verifyAndChangePassword(ChangePasswordCodeDTO changePasswordCodeDTO) throws ParseException {
+        Optional<Account> account = accountRepository.findByEmail(changePasswordCodeDTO.getEmail());
         if (account.isEmpty()) {
             throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
         }
-        Optional<ForgetPasswordCode> forgetPasswordCode = forgetPasswordCodeRepository.findRecordByCodeAndAccount(
-                account.get() , forgetPasswordCodeDTO.getCode());
-        if (forgetPasswordCode.isEmpty()) {
-//            throw new AppException(ErrorCode.CODE_INVALID);
-            return false;
-        }
-        LocalDateTime now = LocalDateTime.now();
-        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String stringFormatedDate = now.format(formatter);
-
-        String expiresDate = formatDate.format(forgetPasswordCode.get().getExpiredDate());
-        Date expiredDate = formatDate.parse(expiresDate);
-
-        if (formatDate.parse(stringFormatedDate).after(expiredDate)) {
-            throw new AppException(ErrorCode.CODE_EXPIRED);
-        }
-        account.get().setPassword(passwordEncoder.encode(forgetPasswordCodeDTO.getPassword()));
+        account.get().setPassword(passwordEncoder.encode(changePasswordCodeDTO.getPassword()));
         accountRepository.save(account.get());
-        forgetPasswordCodeRepository.delete(forgetPasswordCode.get());
         return true;
     }
 
@@ -119,6 +102,33 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         account.get().setPassword(encodedPassword);
         accountRepository.save(account.get());
         return "Cập nhật mật khẩu mới thành công";
+    }
+
+    @Override
+    public Boolean checkEmailCodeInvalid(ForgetPasswordCodeDTO forgetPasswordCodeDTO) throws ParseException {
+        Optional<Account> account = accountRepository.findByEmail(forgetPasswordCodeDTO.getEmail());
+        if (account.isEmpty()) {
+            throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
+//            return false;
+        }
+        Optional<ForgetPasswordCode> forgetPasswordCode = forgetPasswordCodeRepository.findRecordByCodeAndAccount(
+                account.get() , forgetPasswordCodeDTO.getCode());
+        if (forgetPasswordCode.isEmpty()) {
+//            throw new AppException(ErrorCode.CODE_INVALID);
+            return false;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String stringFormatedDate = now.format(formatter);
+        String expiresDate = formatDate.format(forgetPasswordCode.get().getExpiredDate());
+        Date expiredDate = formatDate.parse(expiresDate);
+        if (formatDate.parse(stringFormatedDate).after(expiredDate)) {
+            throw new AppException(ErrorCode.CODE_EXPIRED);
+//            return false;
+        }
+        forgetPasswordCodeRepository.delete(forgetPasswordCode.get());
+        return true;
     }
 
     private String generateRandomPassword(int length) {

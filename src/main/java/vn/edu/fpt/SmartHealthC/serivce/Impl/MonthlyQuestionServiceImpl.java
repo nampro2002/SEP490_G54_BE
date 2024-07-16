@@ -78,34 +78,16 @@ import java.util.Optional;
 
     @Override
     public List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber,String type) {
-        List<MonthlyAnswerResponseDTO> monthlyAnswerResponseDTOList = new ArrayList<>();
-        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(userId,monthNumber);
-        MonthlyRecordType monthlyRecordType;
-        try {
-            monthlyRecordType = MonthlyRecordType.valueOf(type.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new AppException(ErrorCode.MONTHLY_TYPE_NOT_FOUND);
-        }
-        for (MonthlyRecord record : monthlyNumbers) {
-            if(record.getMonthlyRecordType().equals(monthlyRecordType)){
-                MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
-                        .questionNumber(record.getQuestionNumber())
-                        .question(record.getQuestion())
-                        .type(record.getMonthlyRecordType())
-                        .answer(record.getAnswer())
-                        .build();
-                monthlyAnswerResponseDTOList.add(monthlyNumberResponseDTO);
-            }
-
-        }
-        return monthlyAnswerResponseDTOList;
+        return getAnswerByMonthNumberAndAppUser(monthNumber , type , userId);
     }
-
     @Override
     public List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber, String type) {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        return getAnswerByMonthNumberAndAppUser(monthNumber , type , appUser.getId());
+    }
+    public List<MonthlyAnswerResponseDTO> getAnswerByMonthNumberAndAppUser(int monthNumber, String type , int appUserId) {
         List<MonthlyAnswerResponseDTO> monthlyAnswerResponseDTOList = new ArrayList<>();
-        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUser.getId(),monthNumber);
+        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUserId,monthNumber);
         MonthlyRecordType monthlyRecordType;
         try {
             monthlyRecordType = MonthlyRecordType.valueOf(type.toUpperCase());
@@ -125,6 +107,8 @@ import java.util.Optional;
         }
         return monthlyAnswerResponseDTOList;
     }
+
+
 
     @Override
     public MonthlyStatisticResponseDTO getPoint(Integer monthNumber, Integer appUser) {
@@ -339,10 +323,14 @@ import java.util.Optional;
             sfResponseDTO.setTotal(finalSFTotal);
 
             MonthlyStatisticResponseDTO monthlyStatisticResponseDTO = new MonthlyStatisticResponseDTO()
-                    .builder().sfResponseDTO(sfResponseDTO).satResponseDTO(satResponseDTO).build();
+                    .builder()
+//                    .month(monthNumber)
+                    .sfResponseDTO(sfResponseDTO).satResponseDTO(satResponseDTO).build();
             return monthlyStatisticResponseDTO;
         }
-        return new MonthlyStatisticResponseDTO().builder().sfResponseDTO(sfResponseDTO).satResponseDTO(satResponseDTO).build();
+        return new MonthlyStatisticResponseDTO().builder()
+//                .month(monthNumber)
+                .sfResponseDTO(sfResponseDTO).satResponseDTO(satResponseDTO).build();
     }
 
 //    @Override

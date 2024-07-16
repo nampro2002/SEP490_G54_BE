@@ -139,26 +139,14 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     }
 
     @Override
-    public WeekReview getWebDataReviewForWeek(String weekStart) throws ParseException {
-        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+    public WeekReview getWebDataReviewForWeek(Integer id , String weekStart) throws ParseException {
         //week start for filter
         Date weekStartFilter = formatDate.parse(weekStart);
-        List<WeekReview> weekReviews = weekReviewRepository.findByAppUserId(appUser.getId());
-        Optional<WeekReview> weekReviewExist = weekReviews.stream()
-                .filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return recordWeekStart.equals(weekStartFilter);
-                    } catch (ParseException e) {
-                        return false;
-                    }
-                })
-                .findFirst();
-        if (weekReviewExist.isEmpty()) {
+        Optional<WeekReview> weekReviews = weekReviewRepository.find1ByAppUserIdAndWeekStart(id,weekStartFilter);
+        if (weekReviews.isEmpty()) {
             throw new AppException(ErrorCode.WEEK_REVIEW_NOT_EXIST);
         }
-        return weekReviewExist.get();
+        return weekReviews.get();
     }
 
     @Override
@@ -327,11 +315,15 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     @Override
     public WeeklyMoblieChartResponseDTO getMobileChartReviewForWeek() throws ParseException {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        //Tìm thứ 2 của tuần hiện tại
         Date smallestWeekStart = findSmallestWeekStart(appUser);
         Date thisMonday = DateUtils.getFirstDayOfWeek(DateUtils.getToday(formatDate));
         List<Date> listWeekStartToNow = new ArrayList<>();
+        //Tìm tất cả weekStart theo user
         List<Date> listWeekStartWeekReview = weekReviewRepository.findListWeekStart(appUser.getId());
         boolean status = true;
+        //Thêm weekStart dựa trên weekstart nhỏ nhất cho tới tuần trước tuần hiện tại
+        // ví dụ tuần này 15/7 thì chỉ đến 8/7
         while (status){
             if(smallestWeekStart.before(thisMonday)) {
                 listWeekStartToNow.add(smallestWeekStart);
@@ -340,15 +332,18 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             }
             smallestWeekStart = calculateDate(smallestWeekStart,7);
         }
+        //Nếu trong db mà chưa có weekstart dựa theo listWeekStartToNow thì thêm weekStart vào
         for (Date date : listWeekStartToNow) {
             if(!listWeekStartWeekReview.contains(date)) {
                 saveDataReviewForWeek(appUser.getId(),formatDate.format(date));
             }
         }
+        //Nếu ngày hôm nay là chủ nhật và sau 8h thì mới thêm tuần này vào
         if(CheckSundayAfter8PM()){
             saveDataReviewForWeek(appUser.getId(),formatDate.format(thisMonday));
         }
 
+        //Lấy ra 5 tuần gần nhất
         List<WeekReview> weekReviews = weekReviewRepository.find5NearestWeekStart(appUser.getId());
         WeeklyMoblieChartResponseDTO response = new WeeklyMoblieChartResponseDTO();
         for (WeekReview weekReview : weekReviews) {
