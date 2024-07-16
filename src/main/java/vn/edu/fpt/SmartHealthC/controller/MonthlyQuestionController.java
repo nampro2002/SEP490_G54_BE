@@ -4,16 +4,18 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MobileGeneralChartResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.MobileScreen2MonthChartSATResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.MobileScreen2MonthChartSFResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.MobileScreenTotalChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyAnswerResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyNumberResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyStatisticResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyRecord;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.MonthlyStatisticScreenTotalResponseDTO;
 import vn.edu.fpt.SmartHealthC.serivce.MonthlyQuestionService;
+import vn.edu.fpt.SmartHealthC.utils.FormatDTOUtils;
 
 import java.util.List;
 
@@ -90,48 +92,74 @@ public class MonthlyQuestionController {
 
 
     //lấy chart của 3 tháng gần nhất
-    @GetMapping("/mobile/get-chart")
-    public ApiResponse<MobileGeneralChartResponseDTO> getPoint3MonthMobile() {
+    //Screen total
+    @GetMapping("/mobile/screen-total/get-chart")
+    public ApiResponse<MobileScreenTotalChartResponseDTO> getScreenTotalPoint3MonthMobile() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<MobileGeneralChartResponseDTO>builder()
+                .body(ApiResponse.<MobileScreenTotalChartResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.getPoint3MonthMobile())
+                        .result(FormatDTOUtils.formatMobileScreenTotal(monthlyQuestionService.getPoint3MonthMobile()))
                         .build()).getBody();
     }
 
     //lấy chart của 12 tháng
-    @GetMapping("/web/get-chart/{appUserId}")
-    public ApiResponse<List<MonthlyStatisticResponseDTO>> getPoint12MonthWeb(
+    //Screen total
+    @GetMapping("/web/screen-total/get-chart/{appUserId}")
+    public ApiResponse<List<MonthlyStatisticScreenTotalResponseDTO>> getPoint12MonthWeb(
             @PathVariable Integer appUserId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MonthlyStatisticResponseDTO>>builder()
+                .body(ApiResponse.<List<MonthlyStatisticScreenTotalResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.getPoint12MonthWeb(appUserId))
+                        .result(FormatDTOUtils.formatWebScreenTotal(monthlyQuestionService.getPoint12MonthWeb(appUserId)))
                         .build()).getBody();
     }
+
     //Lấy chart chi tiết của 2 tháng gần với tháng nhập vào
-    @GetMapping("/mobile/get-detail/{monthNumber}")
-    public ApiResponse<List<MonthlyStatisticResponseDTO>> getPoint2MonthMobile( @PathVariable Integer monthNumber) {
+    //Screen 2 month sat
+    @GetMapping("/mobile/screen-2-month-sat/get-detail/{monthNumber}")
+    public ApiResponse<List<MobileScreen2MonthChartSATResponseDTO>> getPoint2MonthMobileSAT(@PathVariable Integer monthNumber) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MonthlyStatisticResponseDTO>>builder()
+                .body(ApiResponse.<List<MobileScreen2MonthChartSATResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.getPoint2MonthMobile(monthNumber))
+                        .result(FormatDTOUtils.formatMobileScreen2MonthSAT(monthlyQuestionService.getPoint2MonthMobile(monthNumber)))
                         .build()).getBody();
 
     }
-    @GetMapping("/web/get-2-month/{appUserId}/{monthNumber}")
-    public ApiResponse<List<MonthlyStatisticResponseDTO>> getPoint2MonthWeb(
+    //Screen 2 month sf
+    @GetMapping("/mobile/screen-2-month-sf/get-detail/{monthNumber}")
+    public ApiResponse<List<MobileScreen2MonthChartSFResponseDTO>> getPoint2MonthMobileSF(@PathVariable Integer monthNumber) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MobileScreen2MonthChartSFResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(FormatDTOUtils.formatMobileScreen2MonthSF(monthlyQuestionService.getPoint2MonthMobile(monthNumber)))
+                        .build()).getBody();
+
+    }
+    //Screen 2 month sat
+    @GetMapping("/web/screen-2-month-sat/{appUserId}/{monthNumber}")
+    public ApiResponse<List<MobileScreen2MonthChartSATResponseDTO>> getPoint2MonthWebSAT(
             @PathVariable Integer appUserId,
             @PathVariable Integer monthNumber) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MonthlyStatisticResponseDTO>>builder()
+                .body(ApiResponse.<List<MobileScreen2MonthChartSATResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.getPoint2MonthWeb(appUserId,monthNumber))
+                        .result(FormatDTOUtils.formatMobileScreen2MonthSAT(monthlyQuestionService.getPoint2MonthWeb(appUserId,monthNumber)))
                         .build()).getBody();
 
     }
+    //Screen 2 month sf
+    @GetMapping("/web/screen-2-month-sf/{appUserId}/{monthNumber}")
+    public ApiResponse<List<MobileScreen2MonthChartSFResponseDTO>> getPoint2MonthWebSF(
+            @PathVariable Integer appUserId,
+            @PathVariable Integer monthNumber) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MobileScreen2MonthChartSFResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(FormatDTOUtils.formatMobileScreen2MonthSF(monthlyQuestionService.getPoint2MonthWeb(appUserId,monthNumber)))
+                        .build()).getBody();
 
+    }
 
 
 }

@@ -22,6 +22,16 @@ public class WeeklyReviewController {
     @Autowired
     private WeeklyReviewService weeklyReviewService;
 
+        @PostMapping("/create-weekly-review/{appUserId}/{weekstart}")
+    public ApiResponse<Void> createWeeklyReview(@PathVariable Integer appUserId,@PathVariable String weekstart) throws ParseException {
+        weeklyReviewService.saveDataReviewForWeek(appUserId,weekstart);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Void>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(null)
+                        .build()).getBody();
+    }
+
     @GetMapping("/web/week-date/{appUserId}")
     public ApiResponse<WeekReview> returnWeekDate(@PathVariable Integer appUserId) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
