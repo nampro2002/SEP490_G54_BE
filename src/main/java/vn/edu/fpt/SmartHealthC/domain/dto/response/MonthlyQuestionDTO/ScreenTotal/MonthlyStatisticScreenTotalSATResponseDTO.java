@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MonthlyStatisticScreenTotalResponseDTO {
+public class MonthlyStatisticScreenTotalSATResponseDTO {
     private int month;
     private SatScreenTotalResponseDTO satResponseDTO;
-    private SFScreenTotalResponseDTO sfResponseDTO;
 }

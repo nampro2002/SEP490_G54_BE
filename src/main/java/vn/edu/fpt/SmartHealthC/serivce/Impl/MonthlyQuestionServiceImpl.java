@@ -19,6 +19,8 @@ import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Transactional
 @Service
@@ -324,12 +326,12 @@ import java.util.Optional;
 
             MonthlyStatisticResponseDTO monthlyStatisticResponseDTO = new MonthlyStatisticResponseDTO()
                     .builder()
-//                    .month(monthNumber)
+                    .month(monthNumber)
                     .sfResponseDTO(sfResponseDTO).satResponseDTO(satResponseDTO).build();
             return monthlyStatisticResponseDTO;
         }
         return new MonthlyStatisticResponseDTO().builder()
-//                .month(monthNumber)
+                .month(monthNumber)
                 .sfResponseDTO(sfResponseDTO).satResponseDTO(satResponseDTO).build();
     }
 
@@ -381,7 +383,11 @@ import java.util.Optional;
     }
     @Override
     public List<MonthlyStatisticResponseDTO> getPoint2MonthWeb(Integer appUserId, Integer monthNumber) {
-        return getPoint2Month(appUserId,monthNumber);
+        List<MonthlyStatisticResponseDTO> monthlyStatisticResponseDTOList = getPoint2Month(appUserId,monthNumber);
+        List<MonthlyStatisticResponseDTO> reversedList = IntStream.rangeClosed(1, monthlyStatisticResponseDTOList.size())
+                .mapToObj(i -> monthlyStatisticResponseDTOList.get(monthlyStatisticResponseDTOList.size() - i))
+                .collect(Collectors.toList());
+        return reversedList;
     }
     @Override
     public List<MonthlyStatisticResponseDTO> getPoint12MonthWeb(Integer appUserId) {
@@ -390,7 +396,10 @@ import java.util.Optional;
         for (Integer month : monthlyNumbers){
             monthlyStatisticResponseDTOList.add(getPoint(month,appUserId));
         }
-        return monthlyStatisticResponseDTOList;
+        List<MonthlyStatisticResponseDTO> reversedList = IntStream.rangeClosed(1, monthlyStatisticResponseDTOList.size())
+                .mapToObj(i -> monthlyStatisticResponseDTOList.get(monthlyStatisticResponseDTOList.size() - i))
+                .collect(Collectors.toList());
+        return reversedList;
     }
 
 

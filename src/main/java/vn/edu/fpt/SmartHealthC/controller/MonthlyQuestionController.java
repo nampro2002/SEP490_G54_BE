@@ -14,6 +14,8 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyAns
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyNumberResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyStatisticResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.MonthlyStatisticScreenTotalResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.MonthlyStatisticScreenTotalSATResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.MonthlyStatisticScreenTotalSFResponseDTO;
 import vn.edu.fpt.SmartHealthC.serivce.MonthlyQuestionService;
 import vn.edu.fpt.SmartHealthC.utils.FormatDTOUtils;
 
@@ -104,14 +106,24 @@ public class MonthlyQuestionController {
 
     //lấy chart của 12 tháng
     //Screen total
-    @GetMapping("/web/screen-total/get-chart/{appUserId}")
-    public ApiResponse<List<MonthlyStatisticScreenTotalResponseDTO>> getPoint12MonthWeb(
+    @GetMapping("/web/screen-total-sat/get-chart/{appUserId}")
+    public ApiResponse<List<MonthlyStatisticScreenTotalSATResponseDTO>> getPoint12MonthWebSAT(
             @PathVariable Integer appUserId
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<List<MonthlyStatisticScreenTotalResponseDTO>>builder()
+                .body(ApiResponse.<List<MonthlyStatisticScreenTotalSATResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(FormatDTOUtils.formatWebScreenTotal(monthlyQuestionService.getPoint12MonthWeb(appUserId)))
+                        .result(FormatDTOUtils.formatWebScreenTotalSAT(monthlyQuestionService.getPoint12MonthWeb(appUserId)))
+                        .build()).getBody();
+    }
+    @GetMapping("/web/screen-total-sf/get-chart/{appUserId}")
+    public ApiResponse<List<MonthlyStatisticScreenTotalSFResponseDTO>> getPoint12MonthWebSF(
+            @PathVariable Integer appUserId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<List<MonthlyStatisticScreenTotalSFResponseDTO>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(FormatDTOUtils.formatWebScreenTotalSF(monthlyQuestionService.getPoint12MonthWeb(appUserId)))
                         .build()).getBody();
     }
 

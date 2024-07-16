@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MobileScreen2MonthChartSFResponseDTO {
-//   private int month;
+   private int month;
    private SFScreen2MonthResponseDTO sfResponseDTO;
 }

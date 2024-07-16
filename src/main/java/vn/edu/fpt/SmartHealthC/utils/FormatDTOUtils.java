@@ -7,10 +7,8 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Mon
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.MobileScreen2MonthChartSFResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.SFScreen2MonthResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.SatScreen2MonthResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.MobileScreenTotalChartResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.MonthlyStatisticScreenTotalResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.SFScreenTotalResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.SatScreenTotalResponseDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +31,7 @@ public class FormatDTOUtils {
                 .sf_medicine_modelPoint(mobileGeneralChartResponseDTO.getFirstWeek().getSfResponseDTO().getSf_medicine_modelPoint())
                 .build();
         MonthlyStatisticScreenTotalResponseDTO firstWeek = new MonthlyStatisticScreenTotalResponseDTO().builder()
-//                .month(mobileGeneralChartResponseDTO.getFirstWeek().getMonth())
+                .month(mobileGeneralChartResponseDTO.getFirstWeek().getMonth())
         .satResponseDTO(satScreenTotalResponseDTO).sfResponseDTO(sfScreenTotalResponseDTO)
         .build();
         mobileScreenTotalChartResponseDTO.setFirstWeek(firstWeek);
@@ -52,7 +50,7 @@ public class FormatDTOUtils {
                     .sf_medicine_modelPoint(record.getSfResponseDTO().getSf_medicine_modelPoint())
                     .build();
             MonthlyStatisticScreenTotalResponseDTO itemList3Month = new MonthlyStatisticScreenTotalResponseDTO().builder()
-//                    .month(record.getMonth())
+                    .month(record.getMonth())
                     .satResponseDTO(satItemScreenTotalResponseDTO).sfResponseDTO(sfSItemScreenTotalResponseDTO)
                     .build();
             chart3Month.add(itemList3Month);
@@ -61,24 +59,36 @@ public class FormatDTOUtils {
     return mobileScreenTotalChartResponseDTO;
     }
 
-    public static List<MonthlyStatisticScreenTotalResponseDTO> formatWebScreenTotal(List<MonthlyStatisticResponseDTO> data){
+    public static List<MonthlyStatisticScreenTotalSFResponseDTO> formatWebScreenTotalSF(List<MonthlyStatisticResponseDTO> data){
         //List 12 month
-        List<MonthlyStatisticScreenTotalResponseDTO> chart12Month = new ArrayList<>();
+        List<MonthlyStatisticScreenTotalSFResponseDTO> chart12Month = new ArrayList<>();
         for(MonthlyStatisticResponseDTO record : data){
-            SatScreenTotalResponseDTO satItemScreenTotalResponseDTO = new SatScreenTotalResponseDTO().builder()
-                    .sat_sf_c_total(record.getSatResponseDTO().getSat_sf_c_total())
-                    .sat_sf_p_total(record.getSatResponseDTO().getSat_sf_p_total())
-                    .sat_sf_i_total(record.getSatResponseDTO().getSat_sf_i_total())
-                    .build();
             SFScreenTotalResponseDTO sfSItemScreenTotalResponseDTO = new SFScreenTotalResponseDTO().builder()
                     .sf_mental_modelPoint(record.getSfResponseDTO().getSf_mental_modelPoint())
                     .sf_activity_modelPoint(record.getSfResponseDTO().getSf_activity_modelPoint())
                     .sf_diet_modelPoint(record.getSfResponseDTO().getSf_diet_modelPoint())
                     .sf_medicine_modelPoint(record.getSfResponseDTO().getSf_medicine_modelPoint())
                     .build();
-            MonthlyStatisticScreenTotalResponseDTO itemList3Month = new MonthlyStatisticScreenTotalResponseDTO().builder()
-//                    .month(record.getMonth())
-                    .satResponseDTO(satItemScreenTotalResponseDTO).sfResponseDTO(sfSItemScreenTotalResponseDTO)
+            MonthlyStatisticScreenTotalSFResponseDTO itemList3Month = new MonthlyStatisticScreenTotalSFResponseDTO().builder()
+                    .month(record.getMonth())
+                    .sfResponseDTO(sfSItemScreenTotalResponseDTO)
+                    .build();
+            chart12Month.add(itemList3Month);
+        }
+        return chart12Month;
+    }
+    public static List<MonthlyStatisticScreenTotalSATResponseDTO> formatWebScreenTotalSAT(List<MonthlyStatisticResponseDTO> data){
+        //List 12 month
+        List<MonthlyStatisticScreenTotalSATResponseDTO> chart12Month = new ArrayList<>();
+        for(MonthlyStatisticResponseDTO record : data){
+            SatScreenTotalResponseDTO satItemScreenTotalResponseDTO = new SatScreenTotalResponseDTO().builder()
+                    .sat_sf_c_total(record.getSatResponseDTO().getSat_sf_c_total())
+                    .sat_sf_p_total(record.getSatResponseDTO().getSat_sf_p_total())
+                    .sat_sf_i_total(record.getSatResponseDTO().getSat_sf_i_total())
+                    .build();
+            MonthlyStatisticScreenTotalSATResponseDTO itemList3Month = new MonthlyStatisticScreenTotalSATResponseDTO().builder()
+                    .month(record.getMonth())
+                    .satResponseDTO(satItemScreenTotalResponseDTO)
                     .build();
             chart12Month.add(itemList3Month);
         }
@@ -110,7 +120,7 @@ public class FormatDTOUtils {
                     .build();
 
             MobileScreen2MonthChartSATResponseDTO itemList3Month = new MobileScreen2MonthChartSATResponseDTO().builder()
-//                    .month(record.getMonth())
+                    .month(record.getMonth())
                     .satResponseDTO(satItemScreen2MonthResponseDTO)
                     .build();
             chart2Month.add(itemList3Month);
@@ -136,7 +146,7 @@ public class FormatDTOUtils {
                     .sf_medicine_habitPoint(record.getSfResponseDTO().getSf_medicine_habitPoint())
                     .build();
             MobileScreen2MonthChartSFResponseDTO itemList3Month = new MobileScreen2MonthChartSFResponseDTO().builder()
-//                    .month(record.getMonth())
+                    .month(record.getMonth())
                     .sfResponseDTO(sfSItemScreen2MonthResponseDTO)
                     .build();
             chart2Month.add(itemList3Month);
