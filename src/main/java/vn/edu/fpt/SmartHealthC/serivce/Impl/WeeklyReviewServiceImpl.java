@@ -353,6 +353,27 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         return response;
     }
 
+//    @Override
+//    public List<Date> allList() throws ParseException {
+//        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+//        //Tìm thứ 2 của tuần hiện tại
+//        Date smallestWeekStart = findSmallestWeekStart(appUser);
+//        Date thisMonday = DateUtils.getFirstDayOfWeek(DateUtils.getToday(formatDate));
+//        List<Date> listWeekStartToNow = new ArrayList<>();
+//        boolean status = true;
+//        //Thêm weekStart dựa trên weekstart nhỏ nhất cho tới tuần trước tuần hiện tại
+//        // ví dụ tuần này 15/7 thì chỉ đến 8/7
+//        while (status){
+//            if(smallestWeekStart.before(thisMonday)) {
+//                listWeekStartToNow.add(smallestWeekStart);
+//            }else{
+//                status = false;
+//            }
+//            smallestWeekStart = calculateDate(smallestWeekStart,7);
+//        }
+//        return listWeekStartToNow;
+//    }
+
     public double calculateTotalPointOfWeek(AppUser appUser,Date weekStart) throws ParseException {
 
         //Lấy danh sách theo User
@@ -439,7 +460,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 countBloodSugarNotNull++;
             }
         }
-        //tính điểm thành phần
+        //tính điểm tần suất sử dụng
         double hba1ctPercentage = (double) countHba1cNotNull / 7 * 100;
         double cholesterolPercentage = (double) countCholesterolNotNull / 7 * 100;
         double bloodSugarPercentage = (double) countBloodSugarNotNull / 7 * 100;
@@ -473,7 +494,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             return 3;
         } else if (percentage >= 50) {
             return 2;
-        } else if (percentage >= 0) {
+        } else if (percentage > 0) {
             return 1;
         } else {
             return 0;
@@ -611,7 +632,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(),weekStart);
         double sum = 0;
         for (MentalRecord record : mentalRecordList) {
-            if (record.getStatus() == true) {
+            if ( record.getStatus() != null && record.getStatus() == true ) {
                 sum += 1;
             }
         }
