@@ -139,14 +139,42 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     }
 
     @Override
-    public WeekReview getWebDataReviewForWeek(Integer id , String weekStart) throws ParseException {
+    public WeeklyReviewWebResponseDTO getWebDataReviewForWeek(Integer id, String weekStart) throws ParseException {
         //week start for filter
         Date weekStartFilter = formatDate.parse(weekStart);
-        Optional<WeekReview> weekReviews = weekReviewRepository.find1ByAppUserIdAndWeekStart(id,weekStartFilter);
+        Optional<WeekReview> weekReviews = weekReviewRepository.find1ByAppUserIdAndWeekStart(id, weekStartFilter);
         if (weekReviews.isEmpty()) {
             throw new AppException(ErrorCode.WEEK_REVIEW_NOT_EXIST);
         }
-        return weekReviews.get();
+        WeeklyReviewWebResponseDTO responseDTO = new WeeklyReviewWebResponseDTO().builder()
+                .weekStart(weekReviews.get().getWeekStart())
+                .cardinalPerWeek(new CardinalPerWeekResponseDTO().builder()
+                        .hba1cTotalRecord(weekReviews.get().getHba1cTotalRecord())
+                        .hba1cSafeRecord(weekReviews.get().getHba1cSafeRecord())
+                        .cholesterolTotalRecord(weekReviews.get().getCholesterolTotalRecord())
+                        .cholesterolSafeRecord(weekReviews.get().getCholesterolSafeRecord())
+                        .bloodSugarTotalRecord(weekReviews.get().getBloodSugarTotalRecord())
+                        .bloodSugarSafeRecord(weekReviews.get().getBloodSugarSafeRecord())
+                        .build())
+                .bloodPressurePerWeek(new BloodPressurePerWeekResponseDTO().builder()
+                        .totalRecord(weekReviews.get().getTotalBloodPressureRecord())
+                        .safeRecord(weekReviews.get().getSafeBloodPressureRecord())
+                        .build())
+                .averageWeightRecordPerWeek(weekReviews.get().getAverageWeightRecordPerWeek())
+                .averageMentalRecordPerWeek(weekReviews.get().getAverageMentalRecordPerWeek())
+                .activityRecordPerWeek(new ActivityPerWeekWebResponseDTO().builder()
+                        .heavyActivity(weekReviews.get().getHeavyActivity())
+                        .mediumActivity(weekReviews.get().getMediumActivity())
+                        .lightActivity(weekReviews.get().getLightActivity())
+                        .build())
+                .averageDietRecordPerWeek(weekReviews.get().getAverageDietRecordPerWeek())
+                .medicineRecordPerWeek(new MedicinePerWeekResponseDTO().builder()
+                        .medicineRecordDone(weekReviews.get().getMedicineRecordDone())
+                        .medicineRecordTotal(weekReviews.get().getMedicineRecordTotal())
+                        .build())
+                .averageStepRecordPerWeek(weekReviews.get().getAverageStepRecordPerWeek())
+                .build();
+        return responseDTO;
     }
 
     @Override
@@ -377,14 +405,14 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     public double calculateTotalPointOfWeek(AppUser appUser,Date weekStart) throws ParseException {
 
         //Lấy danh sách theo User
-        List<ActivityRecord> activityRecordList = activityRecordRepository.findByWeekStart(weekStart,appUser.getId());
-        List<BloodPressureRecord> bloodPressureRecordList = bloodPressureRecordRepository.findByWeekStart(weekStart,appUser.getId());
-        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByWeekStart(weekStart,appUser.getId());
-        List<DietRecord> dietRecordList = dietRecordRepository.findByWeekStart(weekStart,appUser.getId());
-        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUserAndWeekStart(appUser.getId(),weekStart);
-        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(),weekStart);
-        List<StepRecord> stepRecordExist = stepRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(),weekStart);
-        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUserAndWeekStart(appUser.getId(),weekStart);
+        List<ActivityRecord> activityRecordList = activityRecordRepository.findByWeekStart(weekStart, appUser.getId());
+        List<BloodPressureRecord> bloodPressureRecordList = bloodPressureRecordRepository.findByWeekStart(weekStart, appUser.getId());
+        List<CardinalRecord> cardinalRecordList = cardinalRecordRepository.findByWeekStart(weekStart, appUser.getId());
+        List<DietRecord> dietRecordList = dietRecordRepository.findByWeekStart(weekStart, appUser.getId());
+        List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUserAndWeekStart(appUser.getId(), weekStart);
+        List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(), weekStart);
+        List<StepRecord> stepRecordExist = stepRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(), weekStart);
+        List<WeightRecord> weightRecordList = weightRecordRepository.findAppUserAndWeekStart(appUser.getId(), weekStart);
 
         //tính điểm thành phần
         double mentalPercentage = (double) mentalRecordList.stream().filter(record -> record.getStatus() != null).count() / 21 * 100;
@@ -460,7 +488,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 countBloodSugarNotNull++;
             }
         }
-        //tính điểm tần suất sử dụng
+        //tính điểm thành phần
         double hba1ctPercentage = (double) countHba1cNotNull / 7 * 100;
         double cholesterolPercentage = (double) countCholesterolNotNull / 7 * 100;
         double bloodSugarPercentage = (double) countBloodSugarNotNull / 7 * 100;
@@ -494,7 +522,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             return 3;
         } else if (percentage >= 50) {
             return 2;
-        } else if (percentage > 0) {
+        } else if (percentage >= 0) {
             return 1;
         } else {
             return 0;
@@ -632,7 +660,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(),weekStart);
         double sum = 0;
         for (MentalRecord record : mentalRecordList) {
-            if ( record.getStatus() != null && record.getStatus() == true ) {
+            if (record.getStatus() == true) {
                 sum += 1;
             }
         }
@@ -680,7 +708,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         List<DietRecord> dietRecordList = dietRecordRepository.findByWeekStart(weekStart,appUser.getId());
         double sum = 0;
         for (DietRecord record : dietRecordList) {
-            sum += record.getActualValue() == null ? 0 : record.getActualValue();
+            sum += record.getActualValue();
         }
         int result = (int) (sum / 7);
         if (dietRecordList.isEmpty()) {

@@ -8,6 +8,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeekCheckPlanResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyMoblieChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyReviewResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyReviewWebResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeekReview;
 import vn.edu.fpt.SmartHealthC.serivce.WeeklyReviewService;
 
@@ -70,9 +71,9 @@ public class WeeklyReviewController {
 //    }
 
     @GetMapping("/web/review/{appUserId}/{weekstart}")
-    public ApiResponse<WeekReview> returnReviewForWeekDate(@PathVariable Integer appUserId,@PathVariable String weekstart) throws ParseException {
+    public ApiResponse<WeeklyReviewWebResponseDTO> returnReviewForWeekDate(@PathVariable Integer appUserId, @PathVariable String weekstart) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<WeekReview>builder()
+                .body(ApiResponse.<WeeklyReviewWebResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(weeklyReviewService.getWebDataReviewForWeek(appUserId,weekstart))
                         .build()).getBody();

@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class    MentalRecordUpdateDTO {
+public class MentalRecordUpdateDTO {
 
     @NotNull(message = "missing date")
     private Date date;
