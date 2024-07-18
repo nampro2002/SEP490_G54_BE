@@ -3,10 +3,8 @@ package vn.edu.fpt.SmartHealthC.utils;
 import org.springframework.stereotype.Component;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MobileGeneralChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyStatisticResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.MobileScreen2MonthChartSATResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.MobileScreen2MonthChartSFResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.SFScreen2MonthResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.SatScreen2MonthResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.SAT.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.ScreenTotal.MonthlyStatisticScreenTotalResponseDTO;
 
@@ -93,6 +91,191 @@ public class FormatDTOUtils {
             chart12Month.add(itemList3Month);
         }
         return chart12Month;
+    }
+    public static List<MobileScreen2MonthChartSATUpgradeResponseDTO> formatWebScreen2MonthSAT(List<MonthlyStatisticResponseDTO> data){
+        //List 2 month
+        List<MobileScreen2MonthChartSATUpgradeResponseDTO> list2Month = new ArrayList<>();
+       //Screen1
+        List<ScreenResponseDTO> listScreen1 = new ArrayList<>();
+        listScreen1.add(new ScreenResponseDTO().builder()
+                        .left(data.get(0).getSatResponseDTO().getSat_sf_c_total())
+                        .right(data.get(1).getSatResponseDTO().getSat_sf_c_total())
+                .build());
+        listScreen1.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_p_total())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_p_total())
+                .build());
+        listScreen1.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_i_total())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_i_total())
+                .build());
+        list2Month.add(new MobileScreen2MonthChartSATUpgradeResponseDTO().builder()
+                        .screenNumber(1)
+                        .list(listScreen1)
+                .build());
+        //Screen2
+        List<ScreenResponseDTO> listScreen2 = new ArrayList<>();
+        listScreen2.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_c_activityPoint())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_c_activityPoint())
+                .build());
+        listScreen2.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_c_positivityPoint())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_c_positivityPoint())
+                .build());
+        listScreen2.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_c_supportPoint())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_c_supportPoint())
+                .build());
+        listScreen2.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_c_experiencePoint())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_c_experiencePoint())
+                .build());
+        list2Month.add(new MobileScreen2MonthChartSATUpgradeResponseDTO().builder()
+                .screenNumber(2)
+                .list(listScreen2)
+                .build());
+        //Screen3
+        List<ScreenResponseDTO> listScreen3 = new ArrayList<>();
+        listScreen3.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_p_lifeValue())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_p_lifeValue())
+                .build());
+        listScreen3.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_p_targetAndAction())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_p_targetAndAction())
+                .build());
+        listScreen3.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_p_decision())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_p_decision())
+                .build());
+        listScreen3.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_p_buildPlan())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_p_buildPlan())
+                .build());
+        listScreen3.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_p_healthyEnvironment())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_p_healthyEnvironment())
+                .build());
+        list2Month.add(new MobileScreen2MonthChartSATUpgradeResponseDTO().builder()
+                .screenNumber(3)
+                .list(listScreen3)
+                .build());
+        //Screen4
+        List<ScreenResponseDTO> listScreen4 = new ArrayList<>();
+        listScreen4.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_i_e_activityPoint())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_i_e_activityPoint())
+                .build());
+        listScreen4.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_i_e_activityStressPoint())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_i_e_activityStressPoint())
+                .build());
+        listScreen4.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_i_e_activitySubstantialPoint())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_i_e_activitySubstantialPoint())
+                .build());
+        listScreen4.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_i_e_energy())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_i_e_energy())
+                .build());
+        listScreen4.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_i_e_motivation())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_i_e_motivation())
+                .build());
+        listScreen4.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSatResponseDTO().getSat_sf_i_e_planCheck())
+                .right(data.get(1).getSatResponseDTO().getSat_sf_i_e_planCheck())
+                .build());
+        list2Month.add(new MobileScreen2MonthChartSATUpgradeResponseDTO().builder()
+                .screenNumber(4)
+                .list(listScreen4)
+                .build());
+        return list2Month;
+    }
+    public static List<MobileScreen2MonthChartSATUpgradeResponseDTO> formatWebScreen2MonthSF(List<MonthlyStatisticResponseDTO> data){
+        //List 2 month
+        List<MobileScreen2MonthChartSATUpgradeResponseDTO> list2Month = new ArrayList<>();
+        //Screen1
+        List<ScreenResponseDTO> listScreen1 = new ArrayList<>();
+        listScreen1.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_mental_modelPoint())
+                .right(data.get(1).getSfResponseDTO().getSf_mental_modelPoint())
+                .build());
+        listScreen1.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_activity_habitPoint())
+                .right(data.get(1).getSfResponseDTO().getSf_activity_habitPoint())
+                .build());
+        listScreen1.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_diet_modelPoint())
+                .right(data.get(1).getSfResponseDTO().getSf_diet_modelPoint())
+                .build());
+        listScreen1.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_medicine_modelPoint())
+                .right(data.get(1).getSfResponseDTO().getSf_medicine_modelPoint())
+                .build());
+        list2Month.add(new MobileScreen2MonthChartSATUpgradeResponseDTO().builder()
+                .screenNumber(1)
+                .list(listScreen1)
+                .build());
+        //Screen2
+        List<ScreenResponseDTO> listScreen2 = new ArrayList<>();
+        listScreen2.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_mentalPoint())
+                .right(data.get(1).getSfResponseDTO().getSf_mentalPoint())
+                .build());
+        list2Month.add(new MobileScreen2MonthChartSATUpgradeResponseDTO().builder()
+                .screenNumber(2)
+                .list(listScreen2)
+                .build());
+        //Screen3
+        List<ScreenResponseDTO> listScreen3 = new ArrayList<>();
+        listScreen3.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_activity_planPoint())
+                .right(data.get(1).getSfResponseDTO().getSf_activity_planPoint())
+                .build());
+        listScreen3.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_activity_habitPoint())
+                .right(data.get(1).getSfResponseDTO().getSf_activity_habitPoint())
+                .build());
+        list2Month.add(new MobileScreen2MonthChartSATUpgradeResponseDTO().builder()
+                .screenNumber(3)
+                .list(listScreen3)
+                .build());
+        //Screen4
+        List<ScreenResponseDTO> listScreen4 = new ArrayList<>();
+        listScreen4.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_diet_healthyPoint())
+                .right(data.get(1).getSfResponseDTO().getSf_diet_healthyPoint())
+                .build());
+        listScreen4.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_diet_vegetablePoint())
+                .right(data.get(1).getSfResponseDTO().getSf_diet_vegetablePoint())
+                .build());
+        listScreen4.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_diet_habitPoint())
+                .right(data.get(1).getSfResponseDTO().getSf_diet_habitPoint())
+                .build());
+        list2Month.add(new MobileScreen2MonthChartSATUpgradeResponseDTO().builder()
+                .screenNumber(4)
+                .list(listScreen4)
+                .build());
+        //Screen5
+        List<ScreenResponseDTO> listScreen5 = new ArrayList<>();
+        listScreen5.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_medicine_followPlanPoint())
+                .right(data.get(1).getSfResponseDTO().getSf_medicine_followPlanPoint())
+                .build());
+        listScreen5.add(new ScreenResponseDTO().builder()
+                .left(data.get(0).getSfResponseDTO().getSf_medicine_habitPoint())
+                .right(data.get(1).getSfResponseDTO().getSf_medicine_habitPoint())
+                .build());
+
+        list2Month.add(new MobileScreen2MonthChartSATUpgradeResponseDTO().builder()
+                .screenNumber(5)
+                .list(listScreen5)
+                .build());
+        return list2Month;
     }
     public static List<MobileScreen2MonthChartSATResponseDTO> formatMobileScreen2MonthSAT(List<MonthlyStatisticResponseDTO> data){
         //List 2 month
