@@ -25,6 +25,6 @@ public interface DietRecordRepository extends JpaRepository<DietRecord, Integer>
 
     @Query("SELECT d FROM DietRecord d WHERE d.appUserId.id = ?1 and d.weekStart = ?2")
     List<DietRecord> findByAppUserAndDate( Integer userId,Date date);
-    @Query("SELECT a FROM DietRecord a WHERE a.appUserId.id = ?1 and a.actualValue != 0  order by a.date desc limit 5")
+    @Query("SELECT a FROM DietRecord a WHERE a.appUserId.id = ?1 and a.actualValue != null  order by a.date desc limit 5")
     List<DietRecord> find5RecordByIdUser(Integer userId);
 }

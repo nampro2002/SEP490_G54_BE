@@ -680,7 +680,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         List<DietRecord> dietRecordList = dietRecordRepository.findByWeekStart(weekStart,appUser.getId());
         double sum = 0;
         for (DietRecord record : dietRecordList) {
-            sum += record.getActualValue();
+            sum += record.getActualValue() == null ? 0 : record.getActualValue();
         }
         int result = (int) (sum / 7);
         if (dietRecordList.isEmpty()) {
