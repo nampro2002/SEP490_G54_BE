@@ -57,8 +57,6 @@ public class DietRecordServiceImpl implements DietRecordService {
         if(appUser.isEmpty()){
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
-
-
         String weekStartStr= formatDate.format(dietRecordDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
         List<DietRecord> dietPlanExist = dietRecordRepository.findByAppUser(appUser.get().getId());
@@ -88,7 +86,6 @@ public class DietRecordServiceImpl implements DietRecordService {
             dateCalculate = calculateDate(dietRecordDTO.getWeekStart(), count);
             DietRecord dietRecord =  DietRecord.builder()
                     .dishPerDay(dietRecordDTO.getDishPerDay())
-                    .actualValue(0.f)
                     .weekStart(DateUtils.normalizeDate(formatDate,weekStartStr))
                     .date(dateCalculate).build();
 
@@ -176,7 +173,6 @@ public class DietRecordServiceImpl implements DietRecordService {
             throw new AppException(ErrorCode.DIET_DAY_NOT_FOUND);
         }
 
-
         DietRecord dietRecordUpdate =getDietRecordById(dietRecord.get().getId());
         dietRecordUpdate.setDate(dietRecordDTO.getDate());
         dietRecordUpdate.setActualValue(dietRecordDTO.getActualValue());
@@ -198,10 +194,10 @@ public class DietRecordServiceImpl implements DietRecordService {
         DietResponseChartDTO dietResponseChartDTO = new DietResponseChartDTO();
         List<DietResponse> dietResponseList = new ArrayList<>();
         for (DietRecord dietRecord : dietRecordList) {
-                    Integer value = (int) Math.round(dietRecord.getActualValue());
+                    Integer value = (int) Math.round(dietRecord.getActualValue() == null ? 0 : dietRecord.getActualValue());
                     DietResponse dietResponse = new DietResponse().builder()
                             .date(dietRecord.getDate()).value(value).build();
-                    sumValue+=dietRecord.getActualValue();
+                    sumValue+=dietRecord.getActualValue() == null ? 0 : dietRecord.getActualValue();
                     dietResponseList.add(dietResponse);
             }
         //sắp xếp tăng dần theo date
@@ -227,13 +223,17 @@ public class DietRecordServiceImpl implements DietRecordService {
         Date today = new Date();
         String dateStr= formatDate.format(today);
         Date date = formatDate.parse(dateStr);
+        Date weekStartNow = formatDate.parse(weekStart);
+        System.out.println(weekStartNow);
         List<DietRecord> dietRecordList = dietRecordRepository.findByAppUser(appUser.get().getId());
         Optional<DietRecord> dietRecord = dietRecordList.stream()
                 .filter(record -> {
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
                     String recordDateStr = formatDate.format(record.getDate());
                     try {
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
                         Date recordDate = formatDate.parse(recordDateStr);
-                        return recordDate.equals(date);
+                        return recordDate.equals(date) && recordWeekStart.equals(weekStartNow);
                     } catch (ParseException e) {
                         return false;
                     }
@@ -278,7 +278,7 @@ public class DietRecordServiceImpl implements DietRecordService {
         return false;
         }
         // có mà hôm nay chưa nhập
-        if (dietRecord.get().getActualValue() == 0) {
+        if (dietRecord.get().getActualValue() == null) {
 //            throw new AppException(ErrorCode.DIET_DAY_DATA_EMPTY);
         return false;
         }
