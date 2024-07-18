@@ -18,11 +18,11 @@ import java.util.Date;
 @Builder
 public class WebUserRequestDTO {
     @NotBlank(message = "Email is mandatory")
-    @Pattern(regexp = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", message = "Email should be valid")
+    @Pattern(regexp = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$", message = "Email should be valid")
     private String email;
     @NotBlank(message = "Password is mandatory")
     @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*\\W)[A-Za-z\\d\\W]{8,}$",
             message = "Password must be minimum 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
     )
     private String password;
@@ -32,7 +32,10 @@ public class WebUserRequestDTO {
     private Date dob;
     @NotNull(message = "missing gender")
     private Boolean gender;
-    @NotBlank(message = "missing phoneNumber")
+    @Pattern(
+            regexp = "^0\\d{8,10}$",
+            message = "Phone number must start with 0 and has 8-10 digits following"
+    )
     private String phoneNumber;
     @NotNull(message = "missing typeAccount")
     private TypeAccount typeAccount;

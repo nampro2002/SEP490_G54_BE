@@ -56,7 +56,11 @@ public class AppUserServiceImpl implements AppUserService {
         dto.setDob(appUser.getDob());
         dto.setGender(appUser.isGender());
         dto.setPhoneNumber(appUser.getPhoneNumber());
-        dto.setMsName(appUser.getWebUser().getUserName());
+        if (appUser.getWebUser() != null) {
+            dto.setMsName(appUser.getWebUser().getUserName());
+        }else{
+            dto.setMsName("not assigned yet");
+        }
         StringBuilder chronicDiseases = new StringBuilder();
         appUser.getUserMedicalHistoryList().forEach(userMedicalHistory -> {
             if (!userMedicalHistory.getConditionId().getType().equals(TypeMedicalHistory.OTHERS)

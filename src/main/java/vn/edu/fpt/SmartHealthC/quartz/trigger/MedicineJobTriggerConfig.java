@@ -18,7 +18,7 @@ public class MedicineJobTriggerConfig {
             return TriggerBuilder.newTrigger().forJob(jobDetail)
                     .withIdentity("medicineJob", "JOB_GROUP")
                     .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                            .withIntervalInMinutes(10)
+                            .withIntervalInMinutes(1)
                             .repeatForever())
                     .build();
         }catch (Exception e){
