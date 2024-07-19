@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.quartz.job;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -15,6 +16,7 @@ import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
+@Slf4j
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class SundayEveningJob  implements Job {
@@ -36,11 +38,14 @@ public class SundayEveningJob  implements Job {
         try {
             notificationService.sendPushNotificationToTopic(topicNotificationRequest);
         } catch (FirebaseMessagingException e) {
-            throw new RuntimeException(e);
+//                throw new RuntimeException(e);
+            log.error("RuntimeException", e);
         } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+            log.error("ExecutionException", e);
+//                throw new RuntimeException(e);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            log.error("InterruptedException", e);
+//                throw new RuntimeException(e);
         }
     }
 }
