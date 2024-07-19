@@ -19,14 +19,7 @@ public class UserWeek1InformationController {
     @Autowired
     private UserWeek1InformationService userWeek1InformationService;
 
-    @GetMapping("/unlocked-lessons")
-    public  ApiResponse<Integer> getUnlockedLessons() throws ParseException {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Integer>builder()
-                        .code(HttpStatus.OK.value())
-                        .result(userWeek1InformationService.getUnlockedLessons())
-                        .build()).getBody();
-    }
+
 
     @GetMapping("/lesson1")
     public ApiResponse<Lesson1DTO> getLesson1() throws ParseException {

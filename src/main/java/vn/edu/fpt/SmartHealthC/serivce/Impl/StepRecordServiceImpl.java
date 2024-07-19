@@ -290,7 +290,7 @@ public class StepRecordServiceImpl implements StepRecordService {
         if (stepRecords.isEmpty()) {
             return false;
         }
-        if (stepRecords.get().getActualValue() <= 0) {
+        if (stepRecords.get().getPlannedStepPerDay() <= 0) {
             return false;
         }
         return true;

@@ -13,7 +13,12 @@ import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.UserLessonRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.UserLessonService;
+import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +31,8 @@ public class UserLessonServiceImpl implements UserLessonService {
     private AppUserRepository appUserRepository;
     @Autowired
     private AppUserService appUserService;
+    @Autowired
+    private SimpleDateFormat simpleDateFormat;
 
     @Override
     public UserLesson createUserLesson(UserLessonDTO userLessonDTO) {
@@ -71,5 +78,22 @@ public class UserLessonServiceImpl implements UserLessonService {
         UserLesson userLesson = getUserLessonById(id);
         userLessonRepository.deleteById(id);
         return userLesson;
+    }
+
+    @Override
+    public Integer getUnlockedLessons() throws ParseException {
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+
+        Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
+        if(userLesson.isEmpty()){
+            return 1;
+        }
+        Date lastDate = userLesson.get().getLessonDate();
+        Date today = DateUtils.getToday(simpleDateFormat);
+        if(today.after(lastDate)){
+            return userLesson.get().getLesson() < 7 ?userLesson.get().getLesson() +1:
+                    userLesson.get().getLesson();
+        }
+        return Math.min(userLesson.get().getLesson(), 7);
     }
 }

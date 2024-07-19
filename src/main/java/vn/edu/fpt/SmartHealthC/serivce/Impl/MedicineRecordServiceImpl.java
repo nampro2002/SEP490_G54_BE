@@ -53,16 +53,16 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
 
-        // Kiểm tra trùng lặp MedicineTypeId
-        HashSet<Integer> checkDuplicate = new HashSet<>();
-        for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList) {
-            int uniqueIdentifier = medicineRecordCreateDTO.getMedicineTypeId();
-                if (checkDuplicate.contains(uniqueIdentifier)) {
-                    throw new AppException(ErrorCode.MEDICINE_TYPE_LIST_DUPLICATE);
-                }else{
-                    checkDuplicate.add(uniqueIdentifier);
-                }
-        }
+//        // Kiểm tra trùng lặp MedicineTypeId
+//        HashSet<Integer> checkDuplicate = new HashSet<>();
+//        for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList) {
+//            int uniqueIdentifier = medicineRecordCreateDTO.getMedicineTypeId();
+//                if (checkDuplicate.contains(uniqueIdentifier)) {
+//                    throw new AppException(ErrorCode.MEDICINE_TYPE_LIST_DUPLICATE);
+//                }else{
+//                    checkDuplicate.add(uniqueIdentifier);
+//                }
+//        }
 
         for (MedicineRecordCreateDTO medicineRecordCreateDTO : medicineRecordDTOList){
             //Check plan với week start và type medicine có trong tuần chưa
