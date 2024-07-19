@@ -30,5 +30,7 @@ public interface WeeklyReviewService {
 
     WeekCheckPlanResponseDTO checkWeeklyPlanExist(String weekStart) throws ParseException;
 
+    Integer checkWhichPlansMade(String weekStart) throws ParseException;
+
     List<Date> get5NearestWeekStart() throws ParseException;
 }

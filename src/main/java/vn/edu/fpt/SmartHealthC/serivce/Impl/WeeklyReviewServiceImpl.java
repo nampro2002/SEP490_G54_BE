@@ -103,6 +103,19 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
     }
 
     @Override
+    public Integer checkWhichPlansMade(String weekStart) throws ParseException {
+        WeekCheckPlanResponseDTO weekCheckPlanResponseDTO = new WeekCheckPlanResponseDTO();
+        int visitedPages = 0;
+        visitedPages = activityRecordService.checkPlanExist(weekStart) ? visitedPages + 1 : visitedPages;
+        visitedPages = dietRecordService.checkPlanExist(weekStart) ? visitedPages + 1 : visitedPages;
+        visitedPages = mentalRecordService.checkPlanExist(weekStart) ? visitedPages + 1 : visitedPages;
+        visitedPages = medicineRecordService.checkPlanExist(weekStart) ? visitedPages + 1 : visitedPages;
+        visitedPages = stepRecordService.checkPlanExist(weekStart) ? visitedPages + 1 : visitedPages;
+        visitedPages = visitedPages == 0 ? -1 : visitedPages;
+        return visitedPages;
+    }
+
+    @Override
     public List<Date> get5NearestWeekStart() throws ParseException {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         Date smallestWeekStart = findSmallestWeekStart(appUser);
