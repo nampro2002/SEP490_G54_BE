@@ -28,5 +28,5 @@ public interface UserWeek1InformationService {
     Lesson7DTO getLesson7();
     void setLesson7( Lesson7DTO lesson7DTO) throws ParseException;
 
-    Integer getUnlockedLessons() throws ParseException;
+//    Integer getUnlockedLessons() throws ParseException;
 }

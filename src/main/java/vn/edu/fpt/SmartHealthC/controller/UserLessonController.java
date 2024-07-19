@@ -11,6 +11,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 import vn.edu.fpt.SmartHealthC.serivce.UserLessonService;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,15 @@ public class UserLessonController {
                 .body(ApiResponse.<UserLesson>builder()
                         .code(HttpStatus.CREATED.value())
                         .result(userLessonService.createUserLesson(userLessonDTO))
+                        .build()).getBody();
+    }
+
+    @GetMapping("/unlocked-lessons")
+    public  ApiResponse<Integer> getUnlockedLessons() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Integer>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(userLessonService.getUnlockedLessons())
                         .build()).getBody();
     }
 
