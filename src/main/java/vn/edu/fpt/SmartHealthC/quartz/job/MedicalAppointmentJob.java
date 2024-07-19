@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.quartz.job;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -26,7 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
+@Slf4j
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class MedicalAppointmentJob implements Job {
@@ -69,11 +70,14 @@ public class MedicalAppointmentJob implements Job {
                     try {
                         notificationService.sendNotificationToDevice(deviceNotificationRequest);
                     } catch (FirebaseMessagingException e) {
-                        throw new RuntimeException(e);
+//                throw new RuntimeException(e);
+                        log.error("RuntimeException", e);
                     } catch (ExecutionException e) {
-                        throw new RuntimeException(e);
+                        log.error("ExecutionException", e);
+//                throw new RuntimeException(e);
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        log.error("InterruptedException", e);
+//                throw new RuntimeException(e);
                     }
                 }
             }

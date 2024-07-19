@@ -2,6 +2,7 @@ package vn.edu.fpt.SmartHealthC.quartz.job;
 
 
 import com.google.firebase.messaging.FirebaseMessagingException;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -18,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
+@Slf4j
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class DailyEveningJob implements Job {
@@ -25,9 +27,10 @@ public class DailyEveningJob implements Job {
     private NotificationService notificationService;
     @Autowired
     private TriggerExecutionService triggerExecutionService;
+
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        if(triggerExecutionService.shouldExecuteEveningJob()){
+        if (triggerExecutionService.shouldExecuteEveningJob()) {
             System.out.println("Executing Daily Evening Job at: " + new Date());
             HashMap<String, String> data = new HashMap<>();
             data.put("key1", "value1");
@@ -41,11 +44,14 @@ public class DailyEveningJob implements Job {
             try {
                 notificationService.sendPushNotificationToTopic(topicNotificationRequest);
             } catch (FirebaseMessagingException e) {
-                throw new RuntimeException(e);
+//                throw new RuntimeException(e);
+                log.error("RuntimeException", e);
             } catch (ExecutionException e) {
-                throw new RuntimeException(e);
+                log.error("ExecutionException", e);
+//                throw new RuntimeException(e);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                log.error("InterruptedException", e);
+//                throw new RuntimeException(e);
             }
         }
     }
