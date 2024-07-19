@@ -22,7 +22,7 @@ public class RegisterDto {
     private String email;
     @NotBlank(message = "Password is mandatory")
     @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*\\W)[A-Za-z\\d\\W]{8,}$",
             message = "Password must be minimum 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
     )
     private String password;
@@ -40,8 +40,8 @@ public class RegisterDto {
     private Float weight;
     @NotBlank(message = "missing phone number")
     @Pattern(
-            regexp = "^((010-\\d{4}-\\d{4})|(0\\d{1,2}-\\d{3,4}-\\d{4}))$",
-            message = "Invalid Korean phone number"
+            regexp = "^0\\d{8,10}$",
+            message = "Phone number must start with 0 and has 8-10 digits following"
     )
     private String phoneNumber;
     private List<Integer> listMedicalHistory;

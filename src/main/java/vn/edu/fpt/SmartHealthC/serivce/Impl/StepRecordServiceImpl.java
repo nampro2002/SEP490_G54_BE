@@ -77,21 +77,21 @@ public class StepRecordServiceImpl implements StepRecordService {
         if (recordList.size() == 7) {
             throw new AppException(ErrorCode.STEP_PLAN_EXIST);
         }
-        int count = recordList.size();
+        int count = 0;
         Date dateCalculate;
-        while (true) {
-            if (count >= 7) {
-                break;
-            }
+        while (count < 7) {
             dateCalculate = calculateDate(stepRecordDTO.getWeekStart(), count);
             String dateCalculateStr = formatDate.format(dateCalculate);
-            StepRecord stepRecord = StepRecord.builder()
-                    .plannedStepPerDay(stepRecordDTO.getPlannedStepPerDay())
-                    .actualValue(0f)
-                    .weekStart(DateUtils.normalizeDate(formatDate, weekStartStr))
-                    .date(DateUtils.normalizeDate(formatDate, dateCalculateStr)).build();
-            stepRecord.setAppUserId(appUser.get());
-            stepRecordRepository.save(stepRecord);
+            Optional<StepRecord> stepRecordOptional = stepRecordRepository.findByAppUserIdAndDate(appUser.get().getId(), dateCalculate);
+            if (!stepRecordOptional.isPresent()) {
+                StepRecord stepRecord = StepRecord.builder()
+                        .plannedStepPerDay(stepRecordDTO.getPlannedStepPerDay())
+                        .actualValue(0f)
+                        .weekStart(DateUtils.normalizeDate(formatDate, weekStartStr))
+                        .date(DateUtils.normalizeDate(formatDate, dateCalculateStr)).build();
+                stepRecord.setAppUserId(appUser.get());
+                stepRecordRepository.save(stepRecord);
+            }
             count++;
         }
         recordList = stepRecordRepository.findByAppUserIdAndWeekStart(appUser.get().getId(), weekStart);

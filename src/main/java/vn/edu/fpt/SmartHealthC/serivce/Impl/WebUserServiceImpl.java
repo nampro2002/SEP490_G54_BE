@@ -76,6 +76,8 @@ public class WebUserServiceImpl implements WebUserService {
                     .accountId(webUser.getAccountId().getId())
                     .email(webUser.getAccountId().getEmail())
                     .webUserId(webUser.getId())
+                    .role(webUser.getAccountId().getType())
+                    .dob(webUser.getDob())
                     .name(webUser.getUserName())
                     .phoneNumber(webUser.getPhoneNumber()).build());
         }
@@ -102,6 +104,7 @@ public class WebUserServiceImpl implements WebUserService {
                     .email(webUser.getAccountId().getEmail())
                     .webUserId(webUser.getId())
                     .dob(webUser.getDob())
+                    .role(webUser.getAccountId().getType())
                     .name(webUser.getUserName())
                     .phoneNumber(webUser.getPhoneNumber()).build());
         }

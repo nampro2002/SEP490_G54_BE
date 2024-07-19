@@ -3,6 +3,7 @@ package vn.edu.fpt.SmartHealthC.serivce;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeekCheckPlanResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyMoblieChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyReviewResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.WeeklyReviewReponse.WeeklyReviewWebResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.WeekReview;
 
@@ -19,7 +20,7 @@ public interface WeeklyReviewService {
     //    WeeklyReviewResponseDTO getDataReviewForWeek(Integer id,String weekstart) throws ParseException;
     Date findSmallestWeekStart(AppUser appUser);
     Date findSmallestWeekStartForJob(AppUser appUser);
-    WeekReview getWebDataReviewForWeek(Integer id , String weekstart) throws ParseException;
+    WeeklyReviewWebResponseDTO getWebDataReviewForWeek(Integer id , String weekstart) throws ParseException;
     WeeklyReviewResponseDTO getMobileDataReviewForWeek(String weekstart) throws ParseException;
     void saveDataReviewForWeek(Integer appUserId,String weekStart) throws ParseException;
 
@@ -28,6 +29,8 @@ public interface WeeklyReviewService {
 //    List<Date> allList() throws ParseException;
 
     WeekCheckPlanResponseDTO checkWeeklyPlanExist(String weekStart) throws ParseException;
+
+    Integer checkWhichPlansMade(String weekStart) throws ParseException;
 
     List<Date> get5NearestWeekStart() throws ParseException;
 }

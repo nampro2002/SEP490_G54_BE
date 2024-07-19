@@ -33,7 +33,7 @@ public class DateUtils {
         return date;
     }
     public static Date normalizeDate(SimpleDateFormat formatDate,String date) throws ParseException {
-        formatDate.setTimeZone(TimeZone.getTimeZone("UTC"));
+        formatDate.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         return formatDate.parse(date);
     }
 
