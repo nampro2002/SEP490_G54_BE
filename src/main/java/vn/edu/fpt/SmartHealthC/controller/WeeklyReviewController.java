@@ -106,5 +106,16 @@ public class WeeklyReviewController {
                         .build()).getBody();
     }
 
+    @GetMapping("/mobile/getMadePlan/{weekStart}")
+    public ApiResponse<Integer> checkWhichPlansMade(
+            @PathVariable String weekStart
+    ) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Integer>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(weeklyReviewService.checkWhichPlansMade(weekStart))
+                        .build()).getBody();
+    }
+
 
 }
