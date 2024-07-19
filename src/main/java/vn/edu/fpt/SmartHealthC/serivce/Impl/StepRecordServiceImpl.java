@@ -257,7 +257,7 @@ public class StepRecordServiceImpl implements StepRecordService {
             return false;
         }
         // có mà chưa nhập
-        if (stepRecords.get().getActualValue() == 0) {
+        if (stepRecords.get().getPlannedStepPerDay() <= 0) {
 //            throw new AppException(ErrorCode.STEP_DAY_DATA_EMPTY);
             return false;
         }
