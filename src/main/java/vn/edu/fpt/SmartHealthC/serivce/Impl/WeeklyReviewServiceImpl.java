@@ -673,7 +673,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         List<MentalRecord> mentalRecordList = mentalRecordRepository.findByAppUserIdAndWeekStart(appUser.getId(),weekStart);
         double sum = 0;
         for (MentalRecord record : mentalRecordList) {
-            if (record.getStatus() == true) {
+            if (record.getStatus()!=null && record.getStatus() == true) {
                 sum += 1;
             }
         }
@@ -739,7 +739,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             responseDTO.setMedicineRecordDone(0);
         } else {
             for (MedicineRecord record : medicineRecordList) {
-                if (record.getStatus() == true) {
+                if (record.getStatus()!=null && record.getStatus() == true) {
                     count++;
                 }
             }
