@@ -149,11 +149,14 @@ public class WeightRecordServiceImpl implements WeightRecordService {
                 weightResponseList.add(weightResponse);
 
         }
-        String todayStr = formatDate.format(weightRecordList.get(0).getDate());
-        Date todayDate = formatDate.parse(todayStr);
-        if(date.equals(todayDate)){
-            Integer value = (int) Math.round(weightRecordList.get(0).getWeight());
-            weightResponseChartDTO.setValueToday(weightRecordList.get(0).getWeight());
+        if(!weightRecordList.isEmpty()){
+            String todayStr = formatDate.format(weightRecordList.get(0).getDate());
+            Date todayDate = formatDate.parse(todayStr);
+            if(date.equals(todayDate)){
+                weightResponseChartDTO.setValueToday(weightRecordList.get(0).getWeight());
+            }
+        }else{
+            weightResponseChartDTO.setValueToday(0.f);
         }
         //sắp xếp tăng dần theo date
         weightResponseList.sort(new Comparator<WeightResponse>() {
