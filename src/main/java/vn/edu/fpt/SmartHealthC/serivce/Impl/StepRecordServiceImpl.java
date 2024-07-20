@@ -207,12 +207,17 @@ public class StepRecordServiceImpl implements StepRecordService {
             stepResponse.setDate(stepRecord.getDate());
             stepResponseList.add(stepResponse);
         }
-        String todayStr = formatDate.format(stepResponseList.get(0).getDate());
-        Date todayDate = formatDate.parse(todayStr);
-        if (date.equals(todayDate)) {
-            Integer value = (int) Math.round(stepRecordList.get(0).getActualValue());
-            stepResponseChartDTO.setValueToday(value);
+        if(!stepRecordList.isEmpty()){
+            String todayStr = formatDate.format(stepResponseList.get(0).getDate());
+            Date todayDate = formatDate.parse(todayStr);
+            if (date.equals(todayDate)) {
+                Integer value = (int) Math.round(stepRecordList.get(0).getActualValue());
+                stepResponseChartDTO.setValueToday(value);
+            }
+        }else{
+            stepResponseChartDTO.setValueToday(0);
         }
+
         //Sắp xếp giảm dần theo date
         stepResponseList.sort(new Comparator<StepResponse>() {
             @Override

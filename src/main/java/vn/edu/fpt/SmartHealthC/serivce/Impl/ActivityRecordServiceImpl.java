@@ -223,13 +223,21 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
                         activityResponseList.add(activityResponse);
 
         }
-        Date dateToday = DateUtils.getToday(formatDate);
-        String todayStr = formatDate.format(activityRecordList.get(0).getDate());
-        Date todayDate = formatDate.parse(todayStr);
-        if(dateToday.equals(todayDate)){
-            Integer value = (int) Math.round(activityRecordList.get(0).getActualDuration());
-            activityResponseChartDTO.setDurationToday(value);
-            activityResponseChartDTO.setTypeToDay(activityRecordList.get(0).getActualType());
+        if(!activityRecordList.isEmpty()){
+            Date dateToday = DateUtils.getToday(formatDate);
+            String todayStr = formatDate.format(activityRecordList.get(0).getDate());
+            Date todayDate = formatDate.parse(todayStr);
+            if(dateToday.equals(todayDate)){
+                Integer value = (int) Math.round(activityRecordList.get(0).getActualDuration());
+                activityResponseChartDTO.setDurationToday(value);
+                activityResponseChartDTO.setTypeToDay(activityRecordList.get(0).getActualType());
+            }else{
+                activityResponseChartDTO.setDurationToday(0);
+                activityResponseChartDTO.setTypeToDay(null);
+            }
+        }else{
+            activityResponseChartDTO.setDurationToday(0);
+            activityResponseChartDTO.setTypeToDay(null);
         }
         //sắp xếp tăng dần theo date
         activityResponseList.sort(new Comparator<ActivityResponse>() {

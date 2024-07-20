@@ -172,12 +172,20 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
                     bloodPressureResponseList.add(bloodPressureResponse);
 
             }
-        String todayStr = formatDate.format(bloodPressureRecordListExits.get(0).getDate());
-        Date todayDate = formatDate.parse(todayStr);
-        if(dateToday.equals(todayDate)){
-            bloodPressureResponseChartDTO.setSystoleToday(bloodPressureRecordListExits.get(0).getSystole());
-            bloodPressureResponseChartDTO.setDiastoleToday(bloodPressureRecordListExits.get(0).getDiastole());
-        }
+            if(!bloodPressureResponseList.isEmpty()){
+                String todayStr = formatDate.format(bloodPressureRecordListExits.get(0).getDate());
+                Date todayDate = formatDate.parse(todayStr);
+                if(dateToday.equals(todayDate)){
+                    bloodPressureResponseChartDTO.setSystoleToday(bloodPressureRecordListExits.get(0).getSystole());
+                    bloodPressureResponseChartDTO.setDiastoleToday(bloodPressureRecordListExits.get(0).getDiastole());
+                }else{
+                    bloodPressureResponseChartDTO.setSystoleToday(0.f);
+                    bloodPressureResponseChartDTO.setDiastoleToday(0.f);
+                }
+            }else{
+                bloodPressureResponseChartDTO.setSystoleToday(0.f);
+                bloodPressureResponseChartDTO.setDiastoleToday(0.f);
+            }
             //sắp xếp tăng dần theo date
         bloodPressureResponseList.sort(new Comparator<BloodPressureResponse>() {
             @Override

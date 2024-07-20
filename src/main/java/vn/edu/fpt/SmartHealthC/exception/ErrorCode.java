@@ -51,6 +51,7 @@ public enum ErrorCode {
     MENTAL_PLAN_NOT_FOUND("Mental record plan not found", HttpStatus.BAD_REQUEST),
     STEP_PLAN_NOT_FOUND("Step record plan not found", HttpStatus.BAD_REQUEST),
     WEIGHT_PLAN_NOT_FOUND("Weight record plan not found", HttpStatus.BAD_REQUEST),
+    WEIGHT_PLAN_USER_NOT_FOUND("Weight record plan of user not exist", HttpStatus.BAD_REQUEST),
     WEEK_REVIEW_EXIST("Week Review exist", HttpStatus.BAD_REQUEST),
     WEEK_REVIEW_NOT_EXIST("Week Review not exist", HttpStatus.BAD_REQUEST),
 
