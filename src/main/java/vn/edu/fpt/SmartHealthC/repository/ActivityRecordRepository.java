@@ -18,7 +18,7 @@ public interface ActivityRecordRepository extends JpaRepository<ActivityRecord, 
     @Query("SELECT a FROM ActivityRecord a WHERE a.weekStart = ?1 AND a.appUserId.id = ?2")
     List<ActivityRecord> findByWeekStart( Date weekStart, Integer userId);
 
-    @Query("SELECT a FROM ActivityRecord a WHERE a.date = ?1 AND a.appUserId.id = ?2")
+    @Query("SELECT a FROM ActivityRecord a WHERE a.date = ?1 AND a.appUserId.id = ?2 order by  a.id limit 1")
     Optional<ActivityRecord> findByDate(Date date, Integer userId);
 
     @Query("SELECT a FROM ActivityRecord a WHERE a.appUserId.id = ?1")

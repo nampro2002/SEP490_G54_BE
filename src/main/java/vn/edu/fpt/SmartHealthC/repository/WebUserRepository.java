@@ -15,7 +15,7 @@ public interface WebUserRepository extends JpaRepository<WebUser, Integer> {
     @Query("SELECT w FROM WebUser w WHERE w.accountId.isDeleted = false AND w.accountId.type = 'MEDICAL_SPECIALIST'")
     List<WebUser> findAllUnDeletedMS();
 
-    @Query("SELECT w FROM WebUser w WHERE w.accountId.email = ?1")
+    @Query("SELECT w FROM WebUser w WHERE w.accountId.email = ?1 order by w.accountId.email limit 1")
     Optional<WebUser> findByEmail(String email);
 
     @Query("SELECT w FROM WebUser w WHERE w.accountId.type = ?1 AND w.accountId.isDeleted = false AND w.accountId.isActive = false ")

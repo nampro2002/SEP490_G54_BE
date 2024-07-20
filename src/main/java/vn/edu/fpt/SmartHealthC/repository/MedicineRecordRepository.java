@@ -20,7 +20,7 @@ public interface MedicineRecordRepository extends JpaRepository<MedicineRecord, 
     List<MedicineRecord> findByAppUserAndWeekStart(Integer userId,Date date);
     @Query("SELECT m FROM MedicineRecord m WHERE m.weekStart = ?1 AND m.appUserId.id = ?2 AND m.medicineType.id = ?3 ")
     List<MedicineRecord> findByWeekStartMedicineAppUser(Date date, Integer userId,Integer medicine);
-    @Query("SELECT m FROM MedicineRecord m WHERE m.date = ?1 AND m.appUserId.id = ?2 AND m.medicineType.id = ?3 ")
+    @Query("SELECT m FROM MedicineRecord m WHERE m.date = ?1 AND m.appUserId.id = ?2 AND m.medicineType.id = ?3 order by  m.id limit 1")
     Optional<MedicineRecord> findByDateAndMedicine(Date date, Integer userId, Integer medicine);
     @Query("SELECT m FROM MedicineRecord m WHERE m.date = ?1 order by m.id desc LIMIT 1")
     List<MedicineRecord> findByTime(Date date);
