@@ -296,7 +296,7 @@ public class QuestionServiceImpl implements QuestionService {
             QuestionResponseDTO dto = new QuestionResponseDTO();
             dto.setId(question.getId());
             dto.setAppUserName(question.getAppUserId().getName());
-            if (!question.getAnswer().isBlank()) {
+            if (question.getAnswer() != null  && !question.getAnswer().isBlank()) {
                 dto.setWebUserName(question.getWebUserId().getUserName());
             }
             dto.setTitle(question.getTitle());
