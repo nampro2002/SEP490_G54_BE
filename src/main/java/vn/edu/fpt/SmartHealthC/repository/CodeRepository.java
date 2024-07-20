@@ -16,6 +16,6 @@ import java.util.Optional;
 @Repository
 public interface CodeRepository extends JpaRepository<Code, Integer> {
 
-    @Query("SELECT a FROM Code a WHERE a.email = ?1 AND a.code = ?2 order by a.email limit 1")
+    @Query("SELECT a FROM Code a WHERE a.email = ?1 AND a.code = BINARY(?2) order by a.email limit 1")
     Optional<Code> findByEmailAndCode(String email,String code);
 }

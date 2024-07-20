@@ -25,7 +25,7 @@ public interface MonthlyQuestionRepository extends JpaRepository<MonthlyRecord, 
     @Query("SELECT w FROM MonthlyRecord w WHERE  w.appUserId.id = ?1 AND w.monthNumber = ?2 AND w.monthlyRecordType != 'NEW_MONTH_MARK'")
     List<MonthlyRecord> findAllByAppUserAndMonthNumber(Integer userId, Integer monthNumber);
 
-    @Query("SELECT COUNT(w.monthNumber) FROM MonthlyRecord w WHERE  w.appUserId.id = ?1 AND w.monthNumber= ?2 ")
+    @Query("SELECT COUNT(w.monthNumber) FROM MonthlyRecord w WHERE  w.appUserId.id = ?1 AND w.monthNumber= ?2 order by   w.monthNumber desc limit 1 ")
     Integer countMonthNumberByAppUser(Integer userId, Integer monthNumber);
 
 

@@ -11,10 +11,10 @@ import java.util.Optional;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Integer> {
     //find account by email deleted = false
-    @Query("SELECT a FROM RefreshToken a WHERE  a.accessToken = ?1 ")
+    @Query("SELECT a FROM RefreshToken a WHERE  a.accessToken = ?1 order by a.accessToken desc limit 1")
     Optional<RefreshToken> findRecordByAcToken(String accessToken);
 
-    @Query("SELECT a FROM RefreshToken a WHERE a.refreshToken = ?1")
+    @Query("SELECT a FROM RefreshToken a WHERE a.refreshToken = ?1 order by a.refreshToken desc limit 1")
     Optional<RefreshToken> findRecordByReToken(String refreshToken);
     @Query("SELECT a FROM RefreshToken a WHERE a.accountId.Id = ?1")
     List<RefreshToken> findRecordByAccountId(Integer accountId);
