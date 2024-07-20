@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface NotificationSettingRepository extends JpaRepository<NotificationSetting, Integer> {
     @Query("SELECT ns FROM NotificationSetting ns WHERE ns.accountId.Id = ?1")
     List<NotificationSetting> findByAccountId(Integer id);
-    @Query("SELECT ns FROM NotificationSetting ns WHERE ns.accountId.Id = ?1 AND ns.typeNotification = ?2")
+    @Query("SELECT ns FROM NotificationSetting ns WHERE ns.accountId.Id = ?1 AND ns.typeNotification = ?2 order by ns.typeNotification desc limit 1")
     Optional<NotificationSetting> findByAccountIdAndType(Integer id, TypeNotification typeNotification);
 }

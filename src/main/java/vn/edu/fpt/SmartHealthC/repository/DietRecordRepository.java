@@ -17,7 +17,7 @@ public interface DietRecordRepository extends JpaRepository<DietRecord, Integer>
     @Query("SELECT d FROM DietRecord d WHERE d.weekStart = ?1 AND d.appUserId.id = ?2")
     List<DietRecord> findByWeekStart(Date weekStart, Integer userId);
 
-    @Query("SELECT d FROM DietRecord d WHERE d.date = ?1 AND d.appUserId.id = ?2  ")
+    @Query("SELECT d FROM DietRecord d WHERE d.date = ?1 AND d.appUserId.id = ?2 order by  d.id limit 1 ")
     Optional<DietRecord> findByDate(Date date, Integer userId);
 
     @Query("SELECT d FROM DietRecord d WHERE d.appUserId.id = ?1")

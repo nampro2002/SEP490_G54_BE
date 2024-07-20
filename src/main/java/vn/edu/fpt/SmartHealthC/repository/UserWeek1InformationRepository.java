@@ -13,6 +13,6 @@ import java.util.Optional;
 
 public interface UserWeek1InformationRepository extends JpaRepository<UserWeek1Information, Integer> {
 
-    @Query("SELECT u FROM user_week1_information u WHERE u.appUserId=?1")
+    @Query("SELECT u FROM user_week1_information u WHERE u.appUserId=?1 order by u.appUserId.id desc limit 1")
     Optional<UserWeek1Information> findByAppUser(AppUser appUser);
 }

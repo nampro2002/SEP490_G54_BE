@@ -11,6 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ForgetPasswordCodeRepository extends JpaRepository<ForgetPasswordCode, Integer> {
-    @Query("SELECT a FROM ForgetPasswordCode a WHERE a.accountId = ?1 AND a.code = ?2")
+    @Query("SELECT a FROM ForgetPasswordCode a WHERE a.accountId = ?1 AND  a.code = BINARY(?2) order by a.code limit 1")
     Optional<ForgetPasswordCode> findRecordByCodeAndAccount(Account account_id , String code) ;
 }

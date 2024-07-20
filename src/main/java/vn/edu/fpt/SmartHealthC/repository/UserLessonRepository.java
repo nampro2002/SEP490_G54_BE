@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface UserLessonRepository extends JpaRepository<UserLesson, Integer> {
 
-    @Query("SELECT u FROM UserLesson u WHERE u.appUserId=?1")
+    @Query("SELECT u FROM UserLesson u WHERE u.appUserId=?1 order by u.appUserId.id desc limit 1")
     Optional<UserLesson> findByAppUser(AppUser appUser);
 }
 

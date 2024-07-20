@@ -24,11 +24,11 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
 //    @Query(value = "SELECT a.id, a.dob,a.gender,a.height,a.medical_specialist_note,a.name,a.phone_number,a.weight,a.account_id,a.cic,a.web_user_id FROM smarthealthc.app_user a left join web_user w on a.web_user_id = w.id left join account acc on w.account_id = acc.id where a.web_user_id is null or acc.is_deleted = true", nativeQuery = true)
     @Query(value = "SELECT a.id, a.dob, a.gender, a.height, a.medical_specialist_note, a.name, a.phone_number, a.weight, a.account_id, a.cic, a.web_user_id FROM account ac JOIN app_user a ON ac.id = a.account_id LEFT JOIN web_user w ON a.web_user_id = w.id LEFT JOIN account acc ON w.account_id = acc.id WHERE ac.is_active = 1 AND (a.web_user_id IS NULL OR acc.is_deleted = true) ORDER BY ac.id ASC", nativeQuery = true)
     Page<AppUser> findAllAccountUserNotAssign(Pageable paging);
-    @Query("SELECT u FROM AppUser u WHERE u.accountId.email = ?1")
+    @Query("SELECT u FROM AppUser u WHERE u.accountId.email = ?1 order by  u.id limit 1")
     Optional<AppUser> findByAccountEmail(String email);
-    @Query("SELECT u FROM AppUser u WHERE u.accountId = ?1")
+    @Query("SELECT u FROM AppUser u WHERE u.accountId = ?1 order by  u.id limit 1")
     Optional<AppUser> findByAccount(Account account);
-    @Query("SELECT u FROM AppUser u WHERE u.accountId.Id = ?1 AND u.accountId.isActive = true AND u.accountId.isDeleted = false")
+    @Query("SELECT u FROM AppUser u WHERE u.accountId.Id = ?1 AND u.accountId.isActive = true AND u.accountId.isDeleted = false order by  u.id limit 1")
     Optional<AppUser> findByIdActivated(Integer accountId);
     //deleted = false
     @Query("SELECT u FROM AppUser u WHERE u.accountId.isActive = true AND u.accountId.isDeleted = false")
