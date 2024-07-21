@@ -38,6 +38,40 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
     private AppUserService appUserService;
     @Autowired
     private SimpleDateFormat formatDate;
+
+    @Override
+    public CardinalTypeTimeMeasureDTO getTimeMeasureDone() throws ParseException {
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Date today = DateUtils.getToday(formatDate);
+        CardinalTypeTimeMeasureDTO timeMeasureDTO = new CardinalTypeTimeMeasureDTO();
+        List<CardinalRecord> cardinalRecordListExits = cardinalRecordRepository.findByAppUserId(appUser.getId());
+        for (CardinalRecord record : cardinalRecordListExits) {
+            String recordDateStr = formatDate.format(record.getDate());
+            Date recordDate = formatDate.parse(recordDateStr);
+                if(recordDate.equals(today) && record.getTimeMeasure() != null){
+                    if(record.getTimeMeasure().equals(TypeTimeMeasure.BEFORE_BREAKFAST)) {
+                        timeMeasureDTO.setBeforeBreakfast(true);
+                    }
+                    if(record.getTimeMeasure().equals(TypeTimeMeasure.AFTER_BREAKFAST)) {
+                        timeMeasureDTO.setAfterBreakfast(true);
+                    }
+                    if(record.getTimeMeasure().equals(TypeTimeMeasure.BEFORE_LUNCH)) {
+                        timeMeasureDTO.setBeforeLunch(true);
+                    }
+                    if(record.getTimeMeasure().equals(TypeTimeMeasure.AFTER_LUNCH)) {
+                        timeMeasureDTO.setAfterLunch(true);
+                    }
+                    if(record.getTimeMeasure().equals(TypeTimeMeasure.BEFORE_DINNER)) {
+                        timeMeasureDTO.setBeforeDinner(true);
+                    }
+                    if(record.getTimeMeasure().equals(TypeTimeMeasure.AFTER_DINNER)) {
+                        timeMeasureDTO.setAfterDinner(true);
+                    }
+            }
+        }
+        return timeMeasureDTO;
+    }
+
     @Transactional
     @Override
     public CardinalRecord createCardinalRecord(CardinalRecordDTO CardinalRecordDTO) throws ParseException {
@@ -432,6 +466,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         return true;
 
     }
+
 
     @Transactional
     @Override

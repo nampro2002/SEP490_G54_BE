@@ -43,6 +43,15 @@ public class AppUserController {
                         .result(appUserService.getAppUserDetailById(id))
                         .build()).getBody();
     }
+
+    @GetMapping("/mobile/get-height-weight")
+    public ApiResponse<AppUserNameHeightWeightResponseDTO> getAppUserNameHeightWeight () {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<AppUserNameHeightWeightResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(appUserService.getAppUserNameHeightWeight())
+                        .build()).getBody();
+    }
 //    @GetMapping("mobile/detail")
 //    public ApiResponse<AppUserDetailResponseDTO> getAppUserDetailMobile () {
 //        return ResponseEntity.status(HttpStatus.OK)
