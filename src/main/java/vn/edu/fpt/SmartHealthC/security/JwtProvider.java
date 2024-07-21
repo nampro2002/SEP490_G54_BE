@@ -23,12 +23,13 @@ public class JwtProvider {
     private static final String SECRET_KEY = "8479D294DDC4EA6AC7F8E317AC3CF8479D294DDC4EA6AC7F8E317AC3CF";
     private long refreshExpiration = 86400000; //  1 day
     //Generate Token
+    //5 minutes
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 3600))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
