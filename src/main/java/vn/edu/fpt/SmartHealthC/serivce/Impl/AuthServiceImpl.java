@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = UUID.randomUUID().toString();
         // Lấy thời gian hiện tại
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expiresTime = now.plusMinutes(10);
+        LocalDateTime expiresTime = now.plusDays(7);
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String stringFormatedDate = expiresTime.format(formatter);
@@ -279,7 +279,7 @@ public class AuthServiceImpl implements AuthService {
         var jwt = jwtProvider.generateToken(extraClaims, optionalUser.get());
         String refreshTokenNewString = UUID.randomUUID().toString();
         // Lấy thời gian hiện tại
-        LocalDateTime expiresTime = now.plusMinutes(5);
+        LocalDateTime expiresTime = now.plusDays(7);
         String stringFormatedDateToken = expiresTime.format(formatter);
 
 

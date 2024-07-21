@@ -73,10 +73,12 @@ public class StepRecordServiceImpl implements StepRecordService {
         String weekStartStr = formatDate.format(stepRecordDTO.getWeekStart());
         Date weekStart = formatDate.parse(weekStartStr);
         List<StepRecord> recordList = stepRecordRepository.findByAppUserIdAndWeekStart(appUser.get().getId(), weekStart);
-
-        if (recordList.size() == 7) {
-            throw new AppException(ErrorCode.STEP_PLAN_EXIST);
+        if(!recordList.isEmpty()){
+            if(recordList.get(0).getPlannedStepPerDay()>0){
+                throw new AppException(ErrorCode.STEP_PLAN_EXIST);
+            }
         }
+
         int count = 0;
         Date dateCalculate;
         while (count < 7) {
@@ -331,12 +333,12 @@ public class StepRecordServiceImpl implements StepRecordService {
                     .weekStart(getFirstDayOfWeek(stepRecordDTO.getDate()))
                     .build();
             stepRecordRepository.save(stepRecordNew);
-            System.out.println("Create new record for user " + appUser.get().getId() + " at " + stepRecordDTO.getDate() + "with value " + stepRecordDTO.getActualValue());
+            System.out.println("Create new record for user " + appUser.get().getId() + " at " + new Date() + "with value " + stepRecordDTO.getActualValue());
         } else {
             StepRecord stepRecordNew = getStepRecordById(stepRecord.get().getId());
             stepRecordNew.setActualValue(stepRecordNew.getActualValue() + stepRecordDTO.getActualValue());
             stepRecordRepository.save(stepRecordNew);
-            System.out.println("Update new record for user " + appUser.get().getId() + " at " + stepRecordDTO.getDate() + "with value " + stepRecordDTO.getActualValue());
+            System.out.println("Update new record for user " + appUser.get().getId() + " at " + new Date() + "with value " + stepRecordDTO.getActualValue());
         }
     }
 

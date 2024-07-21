@@ -49,7 +49,7 @@ public class DailyJobTriggerConfig {
     public Trigger eveningTrigger(@Qualifier("eveningJobDetail") JobDetail jobDetail) {
         System.out.println("execute evening trigger jobBoot");
         try {
-//            String time = "0/10 * * * * ?";
+//            String Rtime = "0/10 * * * * ?";
             String time = "0 0 20 * * ?";
             return TriggerBuilder.newTrigger().forJob(jobDetail)
                     .withIdentity("daily_evening", "JOB_GROUP")
