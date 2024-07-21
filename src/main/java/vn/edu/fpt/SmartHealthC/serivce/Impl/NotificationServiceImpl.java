@@ -146,7 +146,6 @@ public class NotificationServiceImpl implements NotificationService {
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
-        List<RefreshToken> refreshToken = refreshTokenRepository.findRecordByAccountId(appUser.get().getAccountId().getId());
         List<NotificationSetting> notificationSettingList = notificationSettingRepository.findByAccountId(appUser.get().getAccountId().getId());
         for (NotificationSetting notificationSetting : notificationSettingList) {
             if (notificationSetting.getTypeNotification().equals(TypeNotification.DAILY_NOTIFICATION)) {
