@@ -280,69 +280,51 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                 throw new IllegalArgumentException("Invalid day of week: " + dayOfWeek);
         }
     }
+    private static Date truncateTime(Date date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.parse(sdf.format(date));
+    }
     @Override
     public List<MedicinePLanResponseDTO> getAllMedicinePlans(String weekStart) throws ParseException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
-        if(appUser.isEmpty()){
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
-        }
 
-        //Ngày hôm nay
-        Date today = new Date();
-        String dateTodayStr= formatDate.format(today);
-        Date dateToday = formatDate.parse(dateTodayStr);
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
 
         Date weekStartPlan = formatDate.parse(weekStart);
-        List<MedicineRecord> planExist = medicineRecordRepository.findByAppUser(appUser.get().getId());
-        // Lọc các bản ghi theo weekStart và lấy các ID loại thuốc không bị trùng
-        Set<MedicineType> uniqueMedicineTypeIds = planExist
-                .stream()
-                .filter(record -> {
-                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                    try {
-                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                        return recordWeekStart.equals(weekStartPlan);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                })
-                .map(MedicineRecord::getMedicineType)
-                .collect(Collectors.toSet());
+        List<MedicineRecord> weekPlan= medicineRecordRepository.findByAppUserAndWeekStart(appUser.getId(),weekStartPlan);
+        Map<String, List<MedicineRecord>> filteredSchedules = new HashMap<>();
 
-        List<MedicinePLanResponseDTO> medicinePLanResponseDTOList = new ArrayList<>();
-
-        for (MedicineType type : uniqueMedicineTypeIds) {
-            List<MedicineRecord> planPerMedicine = medicineRecordRepository.findByAppUser(appUser.get().getId())
-                    .stream()
-                    .filter(record -> {
-                        String recordWeekStartStr = formatDate.format(record.getWeekStart());
-                        try {
-                            Date recordWeekStart = formatDate.parse(recordWeekStartStr);
-                            return recordWeekStart.equals(weekStartPlan)
-                                    && record.getMedicineType().getId().equals(type.getId());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                            return false;
-                        }
-                    }).collect(Collectors.toList());
-            MedicinePLanResponseDTO medicinePLanResponseDTO = new MedicinePLanResponseDTO();
-            medicinePLanResponseDTO.setMedicineTypeId(type.getId());
-            medicinePLanResponseDTO.setMedicineTitle(type.getTitle());
-            for (MedicineRecord record : planPerMedicine) {
-                medicinePLanResponseDTO.setTime(getTime(record.getDate()));
-                medicinePLanResponseDTO.getWeekday().add(getDayOfWeek(record.getDate()));
-                medicinePLanResponseDTO.getWeekTime().add(record.getDate());
-                medicinePLanResponseDTO.getIndexDay().add(getDayOfWeekNumber(record.getDate()));
+        for (MedicineRecord medicineRecord : weekPlan) {
+            String key = medicineRecord.getMedicineType().getId() + ";" + getTime(medicineRecord.getDate());
+            if (!filteredSchedules.containsKey(key)) {
+                filteredSchedules.put(key, new ArrayList<>());
             }
-            medicinePLanResponseDTOList.add(medicinePLanResponseDTO);
+            filteredSchedules.get(key).add(medicineRecord);
         }
-        return medicinePLanResponseDTOList.stream()
-                .sorted((record1, record2) -> record1.getMedicineTypeId().compareTo(record2.getMedicineTypeId()))
-                .collect(Collectors.toList());
+        List<MedicinePLanResponseDTO> medicinePlanResponseDTOList = new ArrayList<>();
+        for (Map.Entry<String, List<MedicineRecord>> entry : filteredSchedules.entrySet()){
+            String[] keyParts = entry.getKey().split(";");
+            String type = keyParts[0];
+            String time = keyParts[1];
+            List<MedicineRecord> medicineRecordsByTimeAndType = entry.getValue();
+            MedicinePLanResponseDTO medicinePLanResponseDTO2 = new MedicinePLanResponseDTO();
+            medicinePLanResponseDTO2.setMedicineTypeId(Integer.parseInt(type));
+            Optional<MedicineType> medicineType = medicineTypeRepository.findById(Integer.parseInt(type));
+            medicinePLanResponseDTO2.setMedicineTitle(medicineType.get().getTitle());
+            medicinePLanResponseDTO2.setTime(time);
+            for (MedicineRecord medicineRecord : medicineRecordsByTimeAndType) {
+                medicinePLanResponseDTO2.getWeekday().add(getDayOfWeek(medicineRecord.getDate()));
+                medicinePLanResponseDTO2.getWeekTime().add(medicineRecord.getDate());
+                medicinePLanResponseDTO2.getIndexDay().add(getDayOfWeekNumber(medicineRecord.getDate()));
+            }
+            medicinePlanResponseDTOList.add(medicinePLanResponseDTO2);
+        }
+        return medicinePlanResponseDTOList;
 
+    }
+
+    private static boolean checkTime(Date date, String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        return sdf.format(date).equals(time);
     }
 
     @Override
