@@ -13,10 +13,13 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.AppUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.UserMedicalHistory;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
+import vn.edu.fpt.SmartHealthC.repository.MedicalHistoryRepository;
+import vn.edu.fpt.SmartHealthC.repository.UserMedicalHistoryRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
 import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
@@ -32,6 +35,7 @@ public class AppUserServiceImpl implements AppUserService {
     private final AppUserRepository appUserRepository;
 
     private final WebUserService webUserService;
+    private final UserMedicalHistoryRepository userMedicalHistoryRepository;
 
     @Override
     public List<AppUser> findAll() {
@@ -207,11 +211,15 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUserNameHeightWeightResponseDTO getAppUserNameHeightWeight() {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        Optional<UserMedicalHistory> userMedicalHistory = userMedicalHistoryRepository.findByAppUser(appUser.getId());
         return  new AppUserNameHeightWeightResponseDTO()
                 .builder()
                 .name(appUser.getName())
                 .height(appUser.getHeight())
                 .weight(appUser.getWeight())
+                .medicalUser(new MedicalHistoryAppUserResponseDTO().builder()
+                        .id(userMedicalHistory.get().getConditionId().getId())
+                        .name(userMedicalHistory.get().getConditionId().getName()).build())
                 .build();
     }
 

@@ -6,19 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalHistory;
 
-import java.util.Date;
 import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppUserNameHeightWeightResponseDTO {
+public class MedicalHistoryAppUserResponseDTO {
 
-
+    private Integer id;
     private String name;
-    private Float height;
-    private Float weight;
-    private  MedicalHistoryAppUserResponseDTO medicalUser;
 
 }
