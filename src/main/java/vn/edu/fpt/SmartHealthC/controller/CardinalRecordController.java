@@ -11,6 +11,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.BloodPressureListResDTO.BloodPressureResponseChartDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CardinalChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CardinalRecordResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.CardinalRecordListResDTO.CardinalTypeTimeMeasureDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.CardinalRecord;
 import vn.edu.fpt.SmartHealthC.serivce.CardinalRecordService;
 
@@ -43,6 +44,15 @@ public class CardinalRecordController {
                 .body(ApiResponse.<CardinalChartResponseDTO>builder()
                         .code(HttpStatus.OK.value())
                         .result(cardinalRecordService.getDataChart())
+                        .build()).getBody();
+    }
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/get-time-measure-done")
+    public ApiResponse<CardinalTypeTimeMeasureDTO> getTimeMeasureDone() throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<CardinalTypeTimeMeasureDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(cardinalRecordService.getTimeMeasureDone())
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('USER')")
