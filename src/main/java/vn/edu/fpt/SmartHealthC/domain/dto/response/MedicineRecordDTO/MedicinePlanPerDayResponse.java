@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MedicinePlanPerDayResponse {
-
+    private int id;
     private int medicineId;
     private String medicineName;
     private Date date;
