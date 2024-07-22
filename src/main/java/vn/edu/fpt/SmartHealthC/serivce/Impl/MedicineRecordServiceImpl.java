@@ -156,6 +156,9 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             List<MedicineRecord> medicineRecords = medicineRecordRepository.findByDate(medicineRecord.getDate(), userId);
             int count = 0;
             for (MedicineRecord record : medicineRecords) {
+                if(record.getStatus()==null){
+                    continue;
+                }
                 if (record.getStatus()) {
                     count++;
                 }
