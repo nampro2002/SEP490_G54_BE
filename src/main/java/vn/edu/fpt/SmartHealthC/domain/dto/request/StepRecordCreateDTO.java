@@ -15,7 +15,7 @@ import java.util.Date;
 @Builder
 public class StepRecordCreateDTO {
     @NotNull(message = "missing plannedStepPerDay")
-    private int  plannedStepPerDay;
+    private Integer  plannedStepPerDay;
     @NotNull(message = "missing weekStart")
     private Date weekStart;
 
