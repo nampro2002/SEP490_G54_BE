@@ -178,9 +178,9 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         String dateStr = formatDate.format(medicineRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
 
-        // get all medicine schedules
+        // get all medicine schedules from database
         List<MedicineRecord> planExist = medicineRecordRepository.findByAppUser(user.getId());
-        // get all medicine schedules for today
+        // filter schedules for today
         List<MedicineRecord> todaysSchedules = planExist.stream()
                 .filter(record -> {
                     try {
@@ -195,9 +195,9 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         if (todaysSchedules.isEmpty()) {
             throw new AppException(ErrorCode.MEDICINE_DAY_NOT_FOUND);
         }
+
         for (MedicineRecord medicineRecord : todaysSchedules) {
             MedicineRecord medicineRecordUpdate = getMedicineRecordEntityById(medicineRecord.getId());
-            medicineRecordUpdate.setDate(medicineRecordDTO.getDate());
             if (medicineRecordDTO.getIds().contains(medicineRecord.getId())) {
                 medicineRecordUpdate.setStatus(medicineRecordDTO.getStatus());
             } else {
