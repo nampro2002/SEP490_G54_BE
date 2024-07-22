@@ -20,5 +20,5 @@ public class MedicineRecordUpdateDTO {
     @NotNull(message = "missing date")
     private Date date;
     @NotNull(message = "missing medicineTypeId")
-    private List<Integer> medicineTypeId;
+    private List<Integer> ids;
 }
