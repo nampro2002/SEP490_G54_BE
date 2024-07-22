@@ -68,7 +68,7 @@ public enum ErrorCode {
     LESSON_NOT_FOUND("Lesson not found", HttpStatus.BAD_REQUEST),
     USER_LESSON_NOT_FOUND("User lesson not found", HttpStatus.BAD_REQUEST),
     MEDICINE_NOT_FOUND("Medicine not found", HttpStatus.BAD_REQUEST),
-    MEDICINE_DAY_NOT_FOUND("Medicine type day not found", HttpStatus.BAD_REQUEST),
+    MEDICINE_DAY_NOT_FOUND("Medicine day not found", HttpStatus.BAD_REQUEST),
     MENTAL_RULE_IN_PLAN_NOT_FOUND("Mental rule in plan not found", HttpStatus.BAD_REQUEST),
     SAT_SF_C_NOT_FOUND("SAT_SF_C not found", HttpStatus.BAD_REQUEST),
     SAT_SF_I_NOT_FOUND("SAT_SF_I not found", HttpStatus.BAD_REQUEST),
