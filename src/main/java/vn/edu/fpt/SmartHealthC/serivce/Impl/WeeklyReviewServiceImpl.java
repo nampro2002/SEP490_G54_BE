@@ -430,7 +430,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
         //tính điểm thành phần
         double mentalPercentage = (double) mentalRecordList.stream().filter(record -> record.getStatus() != null).count() / 21 * 100;
         double activityPercentage = (double) activityRecordList.stream().filter(record -> record.getActualType() != null).count() / 7 * 100;
-        double dietPercentage = (double) dietRecordList.stream().filter(record -> record.getActualValue() > 0).count() / 7 * 100;
+        double dietPercentage = (double) dietRecordList.stream().filter(record -> record.getActualValue()!= null && record.getActualValue() > 0).count() / 7 * 100;
         double medicinePercentage = (double) medicineRecordList.stream().filter(record -> record.getStatus() != null).count() /
                 mentalRecordList.size() * 100;
         double stepPercentage = (double) stepRecordExist.stream().filter(record -> record.getActualValue() > 0).count() / 7 * 100;
@@ -535,7 +535,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
             return 3;
         } else if (percentage >= 50) {
             return 2;
-        } else if (percentage >= 0) {
+        } else if (percentage > 0) {
             return 1;
         } else {
             return 0;
