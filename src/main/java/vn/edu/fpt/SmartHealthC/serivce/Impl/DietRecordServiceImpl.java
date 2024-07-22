@@ -124,14 +124,14 @@ public class DietRecordServiceImpl implements DietRecordService {
             for (DietRecord dietRecord : dietRecords) {
                 RecordPerDay recordPerDay = RecordPerDay.builder()
                         .date(dietRecord.getDate())
-                        .dishPerDay(dietRecord.getActualValue())
+                        .dishPerDay(dietRecord.getActualValue() == null ? 0 : dietRecord.getActualValue())
                         .build();
                 recordPerDayList.add(recordPerDay);
                 //sortby getTimeMeasure getIndex and Date date;
                 recordPerDayList.sort(Comparator.comparing(RecordPerDay::getDate));
 
                 if (dietRecord.getDishPerDay() != null) {
-                    avgDish += dietRecord.getActualValue() ;
+                    avgDish += dietRecord.getActualValue() == null ? 0 : dietRecord.getActualValue();
                     count++;
                 }
             }

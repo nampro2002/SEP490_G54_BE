@@ -112,8 +112,6 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
             throw new AppException(ErrorCode.CARDINAL_TYPE_DAY_EXIST);
         }
 
-
-
         return cardinalRecordRepository.save(cardinalRecord);
     }
 
@@ -152,7 +150,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                 RecordPerDay recordPerDay = RecordPerDay.builder()
                         .date(cardinalRecord.getDate())
                         .timeMeasure(cardinalRecord.getTimeMeasure())
-                        .Cholesterol(cardinalRecord.getCholesterol()+"mg/DL")
+                        .Cholesterol(cardinalRecord.getCholesterol()+ "mg/DL")
                         .HBA1C(cardinalRecord.getHBA1C()+"%")
                         .BloodSugar(cardinalRecord.getBloodSugar()+"mg/DL")
                         .build();
