@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +22,7 @@ import vn.edu.fpt.SmartHealthC.serivce.QuestionService;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-
+@Slf4j
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
@@ -143,11 +144,14 @@ public class QuestionServiceImpl implements QuestionService {
                             .data(data)
                             .build());
                 } catch (FirebaseMessagingException e) {
-                    throw new RuntimeException(e);
+//                throw new RuntimeException(e);
+                    log.error("RuntimeException", e);
                 } catch (ExecutionException e) {
-                    throw new RuntimeException(e);
+                    log.error("ExecutionException", e);
+//                throw new RuntimeException(e);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    log.error("InterruptedException", e);
+//                throw new RuntimeException(e);
                 }
             });
         }

@@ -30,7 +30,7 @@ import java.util.concurrent.ExecutionException;
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class MedicineJob implements Job {
-    @Autowired
+    @Autowired  
     private NotificationService notificationService;
     @Autowired
     private TriggerExecutionService triggerExecutionService;

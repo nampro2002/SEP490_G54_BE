@@ -66,6 +66,8 @@ public class StepRecordController {
                         .result(stepRecordService.checkPlanPerDay(weekStart))
                         .build()).getBody();
     }
+
+    //Test only
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("")
     public ApiResponse<Void> updateStepRecord( @RequestBody @Valid StepRecordUpdateDTO stepRecordDTO) throws ParseException {
