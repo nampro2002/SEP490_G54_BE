@@ -311,18 +311,18 @@ import java.util.stream.IntStream;
             satResponseDTO.setSat_sf_i_total(sat_sf_i_total);
             satResponseDTO.setTotal(finalSATTotal);
 
-            sfResponseDTO.setSf_mentalPoint(sf_mentalPoint);
-            sfResponseDTO.setSf_activity_planPoint(sf_activity_planPoint);
-            sfResponseDTO.setSf_activity_habitPoint(sf_activity_habitPoint);
-            sfResponseDTO.setSf_diet_healthyPoint(sf_diet_healthyPoint);
-            sfResponseDTO.setSf_diet_vegetablePoint(sf_diet_vegetablePoint);
-            sfResponseDTO.setSf_diet_habitPoint(sf_diet_habitPoint);
-            sfResponseDTO.setSf_medicine_followPlanPoint(sf_medicine_followPlanPoint);
-            sfResponseDTO.setSf_medicine_habitPoint(sf_medicine_habitPoint);
-            sfResponseDTO.setSf_mental_modelPoint(sf_mental_modelPoint);
-            sfResponseDTO.setSf_activity_modelPoint(sf_activity_modelPoint);
-            sfResponseDTO.setSf_diet_modelPoint(sf_diet_modelPoint);
-            sfResponseDTO.setSf_medicine_modelPoint(sf_medicine_modelPoint);
+            sfResponseDTO.setSf_mentalPoint(sf_mentalPoint <= 0 ? 0 : sf_mentalPoint );
+            sfResponseDTO.setSf_activity_planPoint(sf_activity_planPoint <= 0 ? 0 : sf_activity_planPoint );
+            sfResponseDTO.setSf_activity_habitPoint(sf_activity_habitPoint <= 0 ? 0 : sf_activity_habitPoint );
+            sfResponseDTO.setSf_diet_healthyPoint(sf_diet_healthyPoint <= 0 ? 0 : sf_diet_healthyPoint );
+            sfResponseDTO.setSf_diet_vegetablePoint(sf_diet_vegetablePoint <= 0 ? 0 : sf_diet_vegetablePoint );
+            sfResponseDTO.setSf_diet_habitPoint(sf_diet_habitPoint <= 0 ? 0 : sf_diet_habitPoint );
+            sfResponseDTO.setSf_medicine_followPlanPoint(sf_medicine_followPlanPoint <= 0 ? 0 : sf_medicine_followPlanPoint );
+            sfResponseDTO.setSf_medicine_habitPoint(sf_medicine_habitPoint <= 0 ? 0 : sf_medicine_habitPoint );
+            sfResponseDTO.setSf_mental_modelPoint(sf_mental_modelPoint <= 0 ? 0 : sf_mental_modelPoint);
+            sfResponseDTO.setSf_activity_modelPoint(sf_activity_modelPoint <= 0 ? 0 : sf_activity_modelPoint);
+            sfResponseDTO.setSf_diet_modelPoint(sf_diet_modelPoint <= 0 ? 0 : sf_diet_modelPoint);
+            sfResponseDTO.setSf_medicine_modelPoint(sf_medicine_modelPoint <= 0 ? 0 : sf_medicine_modelPoint);
             sfResponseDTO.setTotal(finalSFTotal);
 
             MonthlyStatisticResponseDTO monthlyStatisticResponseDTO = new MonthlyStatisticResponseDTO()
