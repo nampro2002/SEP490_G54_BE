@@ -182,7 +182,7 @@ public class AuthServiceImpl implements AuthService {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String accessToken;
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            return;
         }
         accessToken = authHeader.substring(7);
         Optional<RefreshToken> refreshTokenFilter = refreshTokenRepository.findRecordByAcToken(accessToken);
