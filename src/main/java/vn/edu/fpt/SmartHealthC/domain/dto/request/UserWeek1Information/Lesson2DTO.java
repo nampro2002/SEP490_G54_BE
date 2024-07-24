@@ -18,9 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Lesson2DTO {
-    @NotBlank(message = "missing strength")
+//    @NotBlank(message = "missing strength")
     private String strength;
-    @NotBlank(message = "missing weakPoint")
+//    @NotBlank(message = "missing weakPoint")
     private String weakPoint;
 
 

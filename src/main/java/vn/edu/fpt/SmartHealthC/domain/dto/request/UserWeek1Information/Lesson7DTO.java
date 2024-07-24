@@ -17,21 +17,21 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Lesson7DTO {
-    @NotBlank(message = "missing whatIsHealth")
+//    @NotBlank(message = "missing whatIsHealth")
     private String whatIsHealth;
-    @NotBlank(message = "missing activityCommitment")
+//    @NotBlank(message = "missing activityCommitment")
     private String activityCommitment;
-    @NotBlank(message = "missing dietCommitment")
+//    @NotBlank(message = "missing dietCommitment")
     private String dietCommitment;
-    @NotBlank(message = "missing mentalCommitment")
+//    @NotBlank(message = "missing mentalCommitment")
     private String mentalCommitment;
-    @NotBlank(message = "missing medicineCommitment")
+//    @NotBlank(message = "missing medicineCommitment")
     private String medicineCommitment;
-    @NotBlank(message = "missing roadBlock")
+//    @NotBlank(message = "missing roadBlock")
     private String roadBlock;
-    @NotBlank(message = "missing solution")
+//    @NotBlank(message = "missing solution")
     private String solution;
-    @NotBlank(message = "missing commitment")
+//    @NotBlank(message = "missing commitment")
     private String commitment;
 
 

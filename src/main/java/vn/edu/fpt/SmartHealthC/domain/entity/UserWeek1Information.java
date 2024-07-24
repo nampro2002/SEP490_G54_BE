@@ -58,7 +58,7 @@ public class UserWeek1Information {
     private String newValues;
     private String reasonForChanging;
 
-    private String currentEmotion;
+    private Boolean currentEmotion;
     private String whyIfRealistic;
     private String whyIfNotBetterForLife;
 

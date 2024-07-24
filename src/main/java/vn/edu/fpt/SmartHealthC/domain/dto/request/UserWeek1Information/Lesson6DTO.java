@@ -16,13 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Lesson6DTO {
-    @NotNull(message = "missing noMoreThan2")
+//    @NotNull(message = "missing noMoreThan2")
     private Boolean noMoreThan2;
-    @NotNull(message = "missing todoList")
+//    @NotNull(message = "missing todoList")
     private Boolean todoList;
-    @NotNull(message = "missing noProcastinating")
+//    @NotNull(message = "missing noProcastinating")
     private Boolean noProcastinating;
-    @NotNull(message = "missing doExercises")
+//    @NotNull(message = "missing doExercises")
     private Boolean doExercises;
 
 
