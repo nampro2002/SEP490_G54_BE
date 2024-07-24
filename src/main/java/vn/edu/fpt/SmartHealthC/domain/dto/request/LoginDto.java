@@ -17,6 +17,6 @@ public class LoginDto {
     private String email;
     @NotBlank(message = "Password is mandatory")
     private String password;
-    @NotBlank(message = "Device token is mandatory")
+    @NotBlank(message = "처음 앱을 열기 전에 Wi-Fi를 켜주세요.")
     private String deviceToken;
 }

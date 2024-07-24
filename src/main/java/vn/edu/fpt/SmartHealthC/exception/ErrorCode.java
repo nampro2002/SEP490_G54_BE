@@ -29,7 +29,7 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_EXIST("Refresh token not exist", HttpStatus.BAD_REQUEST),
     ACCESS_TOKEN_NOT_EXIST("Access token not exist", HttpStatus.BAD_REQUEST),
     REFRESH_TOKEN_EXPIRED("Refresh token expired", HttpStatus.BAD_REQUEST),
-    UNAUTHENTICATED("Unauthenticated", HttpStatus.UNAUTHORIZED),
+    UNAUTHENTICATED("Unauthenticated", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED("You do not have permission", HttpStatus.FORBIDDEN),
     APP_USER_NOT_FOUND("AppUser not found", HttpStatus.BAD_REQUEST),
     USER_WEEK1_LESSON1_NOT_FOUND("User Week1 Lesson1 not found", HttpStatus.BAD_REQUEST),
