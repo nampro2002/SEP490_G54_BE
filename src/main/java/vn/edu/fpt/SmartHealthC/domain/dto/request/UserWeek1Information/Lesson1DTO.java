@@ -18,9 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Lesson1DTO {
-    @NotBlank(message = "missing intermediateGoal")
+//    @NotBlank(message = "missing intermediateGoal")
     private String intermediateGoal;
-    @NotBlank(message = "missing endOfYearGoal")
+//    @NotBlank(message = "missing endOfYearGoal")
     private String endOfYearGoal;
 
 

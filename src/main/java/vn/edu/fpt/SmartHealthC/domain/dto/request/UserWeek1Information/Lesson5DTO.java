@@ -17,11 +17,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Lesson5DTO {
-    @NotBlank(message = "missing currentEmotion")
-    private String currentEmotion;
-    @NotBlank(message = "missing whyIfRealistic")
+//    @NotBlank(message = "missing currentEmotion")
+    private boolean currentEmotion;
+//    @NotBlank(message = "missing whyIfRealistic")
     private String whyIfRealistic;
-    @NotBlank(message = "missing whyIfNotBetterForLife")
+//    @NotBlank(message = "missing whyIfNotBetterForLife")
     private String whyIfNotBetterForLife;
 
 

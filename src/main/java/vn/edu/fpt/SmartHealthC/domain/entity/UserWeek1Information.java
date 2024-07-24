@@ -58,15 +58,15 @@ public class UserWeek1Information {
     private String newValues;
     private String reasonForChanging;
 
-    private String currentEmotion;
+    private boolean currentEmotion;
     private String whyIfRealistic;
     private String whyIfNotBetterForLife;
 
 
-    private Boolean noMoreThan2;
-    private Boolean todoList;
-    private Boolean noProcastinating;
-    private Boolean doExercises;
+    private boolean noMoreThan2;
+    private boolean todoList;
+    private boolean noProcastinating;
+    private boolean doExercises;
 
     private String whatIsHealth;
     private String activityCommitment;

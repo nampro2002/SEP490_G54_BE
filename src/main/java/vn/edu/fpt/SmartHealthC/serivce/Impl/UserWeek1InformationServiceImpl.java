@@ -205,7 +205,7 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
     public Lesson5DTO getLesson5() {
         UserWeek1Information userWeek1Information = getUserWeek1Information();
         Lesson5DTO lesson5DTO = new Lesson5DTO().builder()
-                .currentEmotion(userWeek1Information.getCurrentEmotion())
+                .currentEmotion(userWeek1Information.isCurrentEmotion())
                 .whyIfRealistic(userWeek1Information.getWhyIfRealistic())
                 .whyIfNotBetterForLife(userWeek1Information.getWhyIfNotBetterForLife()).build();
         return lesson5DTO;
@@ -214,7 +214,7 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
     @Override
     public void setLesson5(Lesson5DTO lesson5DTO) throws ParseException {
         UserWeek1Information userWeek1Information = getUserWeek1Information();
-        userWeek1Information.setCurrentEmotion(lesson5DTO.getCurrentEmotion());
+        userWeek1Information.setCurrentEmotion(lesson5DTO.isCurrentEmotion());
         userWeek1Information.setWhyIfRealistic(lesson5DTO.getWhyIfRealistic());
         userWeek1Information.setWhyIfNotBetterForLife(lesson5DTO.getWhyIfNotBetterForLife());
 
@@ -239,10 +239,10 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
     public Lesson6DTO getLesson6() {
         UserWeek1Information userWeek1Information = getUserWeek1Information();
         Lesson6DTO lesson6DTO = new Lesson6DTO().builder()
-                .noMoreThan2(userWeek1Information.getNoMoreThan2())
-                .todoList(userWeek1Information.getTodoList())
-                .noProcastinating(userWeek1Information.getNoProcastinating())
-                .doExercises(userWeek1Information.getDoExercises()).build();
+                .noMoreThan2(userWeek1Information.isNoMoreThan2())
+                .todoList(userWeek1Information.isTodoList())
+                .noProcastinating(userWeek1Information.isNoProcastinating())
+                .doExercises(userWeek1Information.isDoExercises()).build();
         return lesson6DTO;
     }
 
