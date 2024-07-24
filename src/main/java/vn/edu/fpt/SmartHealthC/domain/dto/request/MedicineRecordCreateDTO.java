@@ -18,7 +18,7 @@ public class MedicineRecordCreateDTO {
     @NotNull(message = "missing weekStart")
     private Date weekStart;
     @NotNull(message = "missing medicineTypeId")
-    private int medicineTypeId;
+    private Integer medicineTypeId;
     @NotNull(message = "missing schedule")
     private List<Date> schedule;
 }

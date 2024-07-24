@@ -416,14 +416,18 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         Date today = new Date();
         String dateStr = formatDate.format(today);
         Date date = formatDate.parse(dateStr);
+        Date weekStartFind = formatDate.parse(weekStart);
         List<MedicinePlanPerDayResponse> medicinePlanPerDayResponseList = new ArrayList<>();
         List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByAppUser(appUser.get().getId());
         List<MedicineRecord> medicineRecordDayList = medicineRecordList.stream()
                 .filter(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
+                    String recordWeekStartStr = formatDate.format(record.getWeekStart());
                     try {
                         Date recordDate = formatDate.parse(recordDateStr);
-                        return recordDate.equals(date);
+                        Date recordWeekStart = formatDate.parse(recordWeekStartStr);
+                        return recordDate.equals(date)
+                                && recordWeekStart.equals(weekStartFind);
                     } catch (ParseException e) {
                         return false;
                     }

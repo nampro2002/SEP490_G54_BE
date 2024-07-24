@@ -42,6 +42,10 @@ public class UserWeek1Information {
     private String prefrerredTime;
     private String notPreferredLocation;
     private String notPreferredTime;
+    @Column(name = "close_person1_evaluation")
+    private String closePerson1Evaluation ;
+    @Column(name = "close_person2_evaluation")
+    private String closePerson2Evaluation;
 
     private Integer score10;
     private Integer score20;

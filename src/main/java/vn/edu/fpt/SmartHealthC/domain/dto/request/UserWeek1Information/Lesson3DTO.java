@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.domain.dto.request.UserWeek1Information;
 
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,10 @@ public class Lesson3DTO {
     private String notPreferredLocation;
     @NotBlank(message = "missing notPreferredTime")
     private String notPreferredTime;
+    @NotBlank(message = "missing closePerson1Evaluation")
+    private String closePerson1Evaluation ;
+    @NotBlank(message = "missing closePerson2Evaluation")
+    private String closePerson2Evaluation;
 
 
 

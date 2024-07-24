@@ -19,6 +19,6 @@ public class MedicineRecordUpdateDTO {
     private Boolean status;
     @NotNull(message = "missing date")
     private Date date;
-    @NotNull(message = "missing medicineTypeId")
+    @NotNull(message = "missing ids")
     private List<Integer> ids;
 }
