@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 public class Lesson5DTO {
 //    @NotBlank(message = "missing currentEmotion")
-    private boolean currentEmotion;
+    private Boolean currentEmotion;
 //    @NotBlank(message = "missing whyIfRealistic")
     private String whyIfRealistic;
 //    @NotBlank(message = "missing whyIfNotBetterForLife")
