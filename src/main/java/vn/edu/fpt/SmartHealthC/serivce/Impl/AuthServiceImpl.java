@@ -187,7 +187,7 @@ public class AuthServiceImpl implements AuthService {
         accessToken = authHeader.substring(7);
         Optional<RefreshToken> refreshTokenFilter = refreshTokenRepository.findRecordByAcToken(accessToken);
         if (refreshTokenFilter.isEmpty()) {
-            throw new AppException(ErrorCode.ACCESS_TOKEN_NOT_EXIST);
+            return;
         }
         refreshTokenRepository.delete(refreshTokenFilter.get());
         try {
