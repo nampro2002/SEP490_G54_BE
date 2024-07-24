@@ -119,7 +119,10 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
                 .prefrerredEnvironment(userWeek1Information.getPrefrerredEnvironment())
                 .prefrerredTime(userWeek1Information.getPrefrerredTime())
                 .notPreferredLocation(userWeek1Information.getNotPreferredLocation())
-                .notPreferredTime(userWeek1Information.getNotPreferredTime()).build();
+                .notPreferredTime(userWeek1Information.getNotPreferredTime())
+                .closePerson1Evaluation(userWeek1Information.getClosePerson1Evaluation())
+                .closePerson2Evaluation(userWeek1Information.getClosePerson2Evaluation())
+                .build();
         return lesson3DTO;
     }
 
@@ -134,6 +137,8 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
         userWeek1Information.setPrefrerredTime(lesson3DTO.getPrefrerredTime());
         userWeek1Information.setNotPreferredLocation(lesson3DTO.getNotPreferredLocation());
         userWeek1Information.setNotPreferredTime(lesson3DTO.getNotPreferredTime());
+        userWeek1Information.setClosePerson1Evaluation(lesson3DTO.getClosePerson1Evaluation());
+        userWeek1Information.setClosePerson2Evaluation(lesson3DTO.getClosePerson2Evaluation());
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
         if(userLesson.isPresent()){
