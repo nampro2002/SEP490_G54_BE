@@ -99,8 +99,8 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
             if(userLesson.get().getLesson() <2){
                 userLesson2.setLesson(2);
                 userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+                userLessonRepository.save(userLesson2);
             }
-            userLessonRepository.save(userLesson2);
         }else{
             throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
         }
@@ -147,8 +147,8 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
             if(userLesson.get().getLesson() <3){
                 userLesson2.setLesson(3);
                 userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+                userLessonRepository.save(userLesson2);
             }
-            userLessonRepository.save(userLesson2);
         }else{
             throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
         }
@@ -192,8 +192,8 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
             if(userLesson.get().getLesson() <4){
                 userLesson2.setLesson(4);
                 userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+                userLessonRepository.save(userLesson2);
             }
-            userLessonRepository.save(userLesson2);
         }else{
             throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
         }
@@ -226,8 +226,8 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
             if(userLesson.get().getLesson() <5){
                 userLesson2.setLesson(5);
                 userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+                userLessonRepository.save(userLesson2);
             }
-            userLessonRepository.save(userLesson2);
         }else{
             throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
         }
@@ -262,8 +262,8 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
             if(userLesson.get().getLesson() <6){
                 userLesson2.setLesson(6);
                 userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+                userLessonRepository.save(userLesson2);
             }
-            userLessonRepository.save(userLesson2);
         }else{
             throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
         }
@@ -306,8 +306,8 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
             if(userLesson.get().getLesson() <7){
                 userLesson2.setLesson(7);
                 userLesson2.setLessonDate(DateUtils.getToday(simpleDateFormat));
+                userLessonRepository.save(userLesson2);
             }
-            userLessonRepository.save(userLesson2);
         }else{
             throw new AppException(ErrorCode.USER_LESSON_NOT_FOUND);
         }
