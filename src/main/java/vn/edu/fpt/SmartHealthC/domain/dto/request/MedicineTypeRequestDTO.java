@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 public class MedicineTypeRequestDTO {
     @NotBlank(message = "missing title")
     private String title;
+    @NotBlank(message = "missing titleEn")
+    private String titleEn;
 
     private String description;
 

@@ -20,6 +20,7 @@ public class MedicineType {
     private Integer id;
 
     private String title;
+    private String titleEn;
     private String description;
     private boolean isDeleted;
 

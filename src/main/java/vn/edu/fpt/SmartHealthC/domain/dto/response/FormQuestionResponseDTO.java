@@ -15,6 +15,7 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
 public class FormQuestionResponseDTO {
     private Integer id;
     private String question;
+    private String questionEn;
     private MonthlyRecordType type;
     private int questionNumber;
 }

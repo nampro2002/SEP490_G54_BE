@@ -15,6 +15,8 @@ public class MentalRuleRequestDTO {
     private Integer id;
     @NotBlank(message = "missing title")
     private String title;
+    @NotBlank(message = "missing titleEn")
+    private String titleEn;
     private String description;
 //    @NotNull(message = "missing isDeleted")
 //    private boolean isDeleted;

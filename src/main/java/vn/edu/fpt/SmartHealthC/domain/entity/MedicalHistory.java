@@ -20,6 +20,8 @@ public class MedicalHistory {
 
     private String name;
 
+    private String nameEn;
+
     @Enumerated(EnumType.STRING)
     private TypeMedicalHistory type;
     private String imageUrl;

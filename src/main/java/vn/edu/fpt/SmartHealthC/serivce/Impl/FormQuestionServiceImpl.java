@@ -36,6 +36,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
         FormQuestion formQuestion = FormQuestion
                 .builder()
                 .question(formQuestionRequestDTO.getQuestion())
+                .questionEn(formQuestionRequestDTO.getQuestionEn())
                 .questionNumber(formQuestionRequestDTO.getQuestionNumber())
                 .type(formQuestionRequestDTO.getType())
                 .build();
@@ -44,6 +45,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                 .builder()
                 .id(formQuestion.getId())
                 .question(formQuestion.getQuestion())
+                .questionEn(formQuestion.getQuestionEn())
                 .questionNumber(formQuestion.getQuestionNumber())
                 .type(formQuestion.getType())
                 .build();
@@ -69,6 +71,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                 .builder()
                 .id(formQuestion.get().getId())
                 .question(formQuestion.get().getQuestion())
+                .questionEn(formQuestion.get().getQuestionEn())
                 .questionNumber(formQuestion.get().getQuestionNumber())
                 .type(formQuestion.get().getType())
                 .build();
@@ -89,6 +92,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                     .builder()
                     .id(formQuestion.getId())
                     .question(formQuestion.getQuestion())
+                    .questionEn(formQuestion.getQuestionEn())
                     .questionNumber(formQuestion.getQuestionNumber())
                     .type(formQuestion.getType())
                     .build();
@@ -106,6 +110,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     public FormQuestionResponseDTO updateFormQuestion(Integer id,FormQuestionRequestDTO formQuestionRequestDTO) {
         FormQuestion formQuestion = getFormQuestionEntityById(id);
         formQuestion.setQuestion(formQuestionRequestDTO.getQuestion());
+        formQuestion.setQuestionEn(formQuestionRequestDTO.getQuestionEn());
 //        formQuestion.setQuestionNumber(formQuestionRequestDTO.getQuestionNumber());
         formQuestion.setType(formQuestionRequestDTO.getType());
         formQuestion = formQuestionRepository.save(formQuestion);
@@ -113,6 +118,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                 .builder()
                 .id(formQuestion.getId())
                 .question(formQuestion.getQuestion())
+                .questionEn(formQuestion.getQuestionEn())
                 .questionNumber(formQuestion.getQuestionNumber())
                 .type(formQuestion.getType())
                 .build();
@@ -127,6 +133,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                 .builder()
                 .id(formQuestion.getId())
                 .question(formQuestion.getQuestion())
+                .questionEn(formQuestion.getQuestionEn())
                 .questionNumber(formQuestion.getQuestionNumber())
                 .type(formQuestion.getType())
                 .build();
@@ -142,6 +149,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                     .builder()
                     .id(formQuestion.getId())
                     .question(formQuestion.getQuestion())
+                    .questionEn(formQuestion.getQuestionEn())
                     .questionNumber(formQuestion.getQuestionNumber())
                     .type(formQuestion.getType())
                     .build();
@@ -158,6 +166,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                 FormMonthlyQuestionDTO formMonthlyResponseDTO = FormMonthlyQuestionDTO
                         .builder()
                         .question(formQuestion.getQuestion())
+                        .questionEn(formQuestion.getQuestionEn())
                         .questionNumber(formQuestion.getQuestionNumber())
                         .build();
                 formMonthlyResponseDTOS.add(formMonthlyResponseDTO);

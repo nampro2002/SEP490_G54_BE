@@ -17,6 +17,7 @@ public class FormQuestion {
     private Integer id;
 
     private String question;
+    private String questionEn;
     @Enumerated(EnumType.STRING)
     private MonthlyRecordType type;
     private int questionNumber;

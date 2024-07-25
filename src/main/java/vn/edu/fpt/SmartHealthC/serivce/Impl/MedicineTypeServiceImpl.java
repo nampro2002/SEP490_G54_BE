@@ -31,6 +31,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     public MedicineTypeResponseDTO createMedicineType(MedicineTypeRequestDTO medicineTypeRequestDTO) {
         MedicineType medicineType =  MedicineType.builder()
                 .title(medicineTypeRequestDTO.getTitle())
+                .titleEn(medicineTypeRequestDTO.getTitleEn())
                 .description(medicineTypeRequestDTO.getDescription())
                 .isDeleted(false)
                 .build();
@@ -38,6 +39,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
         return MedicineTypeResponseDTO.builder()
                 .id(medicineType.getId())
                 .title(medicineType.getTitle())
+                .titleEn(medicineTypeRequestDTO.getTitleEn())
                 .description(medicineType.getDescription())
                 .isDeleted(medicineType.isDeleted())
                 .build();
@@ -54,6 +56,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
         return MedicineTypeResponseDTO.builder()
                 .id(medicineType.get().getId())
                 .title(medicineType.get().getTitle())
+                .titleEn(medicineType.get().getTitleEn())
                 .description(medicineType.get().getDescription())
                 .isDeleted(medicineType.get().isDeleted())
                 .build();
@@ -82,6 +85,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
             medicineTypeResponseDTOList.add(MedicineTypeResponseDTO.builder()
                     .id(medicineType.getId())
                     .title(medicineType.getTitle())
+                            .titleEn(medicineType.getTitleEn())
                     .description(medicineType.getDescription())
                     .isDeleted(medicineType.isDeleted())
                     .build());
@@ -100,10 +104,12 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
         medicineType.setDeleted(medicineTypeRequestDTO.isDeleted());
         medicineType.setDescription(medicineTypeRequestDTO.getDescription());
         medicineType.setTitle(medicineTypeRequestDTO.getTitle());
+        medicineType.setTitleEn(medicineTypeRequestDTO.getTitleEn());
         medicineType = medicineTypeRepository.save(medicineType);
         return MedicineTypeResponseDTO.builder()
                 .id(medicineType.getId())
                 .title(medicineType.getTitle())
+                .titleEn(medicineType.getTitleEn())
                 .description(medicineType.getDescription())
                 .isDeleted(medicineType.isDeleted())
                 .build();
@@ -117,6 +123,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
         return MedicineTypeResponseDTO.builder()
                 .id(medicineType.getId())
                 .title(medicineType.getTitle())
+                .titleEn(medicineType.getTitleEn())
                 .description(medicineType.getDescription())
                 .isDeleted(medicineType.isDeleted())
                 .build();
@@ -130,6 +137,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
             medicineTypeResponseDTOList.add(MedicineTypeResponseDTO.builder()
                     .id(medicineType.getId())
                     .title(medicineType.getTitle())
+                            .titleEn(medicineType.getTitleEn())
                     .description(medicineType.getDescription())
                     .isDeleted(medicineType.isDeleted())
                     .build());

@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class FormMonthlyQuestionDTO {
     private int questionNumber;
     private String question;
+    private String questionEn;
+
 }
