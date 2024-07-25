@@ -17,6 +17,8 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeQuestion;
 public class FormQuestionRequestDTO {
     @NotBlank(message = "missing question")
     private String question;
+    @NotBlank(message = "missing questionEn")
+    private String questionEn;
     @NotNull(message = "missing type")
     private MonthlyRecordType type;
     @NotNull(message = "missing questionNumber")

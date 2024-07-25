@@ -15,6 +15,7 @@ public class MonthlyAnswerResponseDTO {
 
     private Integer questionNumber;
     private String question;
+    private String questionEn;
     private MonthlyRecordType type;
     private Integer answer;
 }

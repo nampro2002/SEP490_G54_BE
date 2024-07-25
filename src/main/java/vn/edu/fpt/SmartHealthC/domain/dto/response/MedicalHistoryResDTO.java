@@ -18,6 +18,7 @@ import java.util.List;
 public class MedicalHistoryResDTO {
     private Integer id;
     private String name;
+    private String nameEn;
     private String imageUrl;
     private TypeMedicalHistory type;
     private boolean isDeleted ;

@@ -59,6 +59,7 @@ import java.util.stream.IntStream;
                     .monthlyRecordType(record.getMonthlyRecordType())
                     .questionNumber(record.getQuestionNumber())
                     .question(record.getQuestion())
+                    .questionEn(record.getQuestionEn())
                     .answer(record.getAnswer())
                     .build();
             monthlyQuestionRepository.save(monthlyRecord);
@@ -106,6 +107,7 @@ import java.util.stream.IntStream;
                 MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                         .questionNumber(record.getQuestionNumber())
                         .question(record.getQuestion())
+                        .questionEn(record.getQuestionEn())
                         .type(record.getMonthlyRecordType())
                         .answer(record.getAnswer())
                         .build();

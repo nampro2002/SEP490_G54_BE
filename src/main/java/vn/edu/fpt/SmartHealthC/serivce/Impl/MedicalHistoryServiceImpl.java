@@ -33,6 +33,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         MedicalHistory medicalHistory = MedicalHistory
                 .builder()
                 .name(medicalHistoryRequestDTO.getName())
+                .nameEn(medicalHistoryRequestDTO.getNameEn())
                 .type(medicalHistoryRequestDTO.getType())
                 .imageUrl(medicalHistoryRequestDTO.getImageUrl())
                 .isDeleted(false)
@@ -42,6 +43,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                 .builder()
                 .id(medicalHistory.getId())
                 .name(medicalHistory.getName())
+                .nameEn(medicalHistoryRequestDTO.getNameEn())
                 .type(medicalHistory.getType())
                 .isDeleted(medicalHistory.isDeleted())
                 .build();
@@ -67,6 +69,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                 .builder()
                 .id(medicalHistory.get().getId())
                 .name(medicalHistory.get().getName())
+                .nameEn(medicalHistory.get().getNameEn())
                 .imageUrl(medicalHistory.get().getImageUrl())
                 .type(medicalHistory.get().getType())
                 .build();
@@ -87,6 +90,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                     .builder()
                     .id(medicalHistory.getId())
                     .name(medicalHistory.getName())
+                    .nameEn(medicalHistory.getNameEn())
                     .imageUrl(medicalHistory.getImageUrl())
                     .type(medicalHistory.getType())
                     .build();
@@ -104,6 +108,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     public MedicalHistoryResDTO updateMedicalHistory(Integer id, MedicalHistoryRequestDTO medicalHistoryRequestDTO) {
         MedicalHistory medicalHistory = getMedicalHistoryEntityById(id);
         medicalHistory.setName(medicalHistoryRequestDTO.getName());
+        medicalHistory.setNameEn(medicalHistoryRequestDTO.getNameEn());
         medicalHistory.setType(medicalHistoryRequestDTO.getType());
         medicalHistory.setImageUrl(medicalHistoryRequestDTO.getImageUrl());
 
@@ -113,6 +118,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                 .builder()
                 .id(medicalHistory.getId())
                 .name(medicalHistory.getName())
+                .nameEn(medicalHistory.getNameEn())
                 .imageUrl(medicalHistory.getImageUrl())
                 .type(medicalHistory.getType())
                 .build();
@@ -128,6 +134,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                 .builder()
                 .id(medicalHistory.getId())
                 .name(medicalHistory.getName())
+                .nameEn(medicalHistory.getNameEn())
                 .type(medicalHistory.getType())
                 .build();
         return medicalHistoryResDTO;
@@ -144,6 +151,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                     .id(medicalHistory.getId())
                     .imageUrl(medicalHistory.getImageUrl())
                     .name(medicalHistory.getName())
+                    .nameEn(medicalHistory.getNameEn())
                     .type(medicalHistory.getType())
                     .build();
             medicalHistoryResDTOList.add(medicalHistoryResDTO);

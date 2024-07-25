@@ -30,6 +30,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
         MentalRule mentalRule = MentalRule
                 .builder()
                 .title(mentalRuleRequestDTO.getTitle())
+                .titleEn(mentalRuleRequestDTO.getTitleEn())
                 .description(mentalRuleRequestDTO.getDescription())
                 .isDeleted(false)
                 .build();
@@ -38,6 +39,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
                 .builder()
                 .id(mentalRule.getId())
                 .title(mentalRule.getTitle())
+                .titleEn(mentalRule.getTitleEn())
                 .description(mentalRule.getDescription())
                 .isDeleted(mentalRule.isDeleted())
                 .build();
@@ -63,6 +65,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
                 .builder()
                 .id(mentalRule.get().getId())
                 .title(mentalRule.get().getTitle())
+                .titleEn(mentalRule.get().getTitleEn())
                 .description(mentalRule.get().getDescription())
                 .isDeleted(mentalRule.get().isDeleted())
                 .build();
@@ -82,6 +85,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
                     .builder()
                     .id(mentalRule.getId())
                     .title(mentalRule.getTitle())
+                    .titleEn(mentalRule.getTitleEn())
                     .description(mentalRule.getDescription())
                     .isDeleted(mentalRule.isDeleted())
                     .build();
@@ -101,12 +105,14 @@ public class MentalRuleServiceImpl implements MentalRuleService {
 //        mentalRule.setDeleted(mentalRuleRequestDTO.getIsDeleted());
         mentalRule.setDescription(mentalRuleRequestDTO.getDescription());
         mentalRule.setTitle(mentalRuleRequestDTO.getTitle());
+        mentalRule.setTitleEn(mentalRuleRequestDTO.getTitleEn());
 
         mentalRule = mentalRuleRepository.save(mentalRule);
         return MentalRuleResponseDTO
                 .builder()
                 .id(mentalRule.getId())
                 .title(mentalRule.getTitle())
+                .titleEn(mentalRule.getTitleEn())
                 .description(mentalRule.getDescription())
                 .isDeleted(mentalRule.isDeleted())
                 .build();
@@ -121,6 +127,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
                 .builder()
                 .id(mentalRule.getId())
                 .title(mentalRule.getTitle())
+                .titleEn(mentalRule.getTitleEn())
                 .description(mentalRule.getDescription())
                 .isDeleted(mentalRule.isDeleted())
                 .build();
@@ -135,6 +142,7 @@ public class MentalRuleServiceImpl implements MentalRuleService {
                     .builder()
                     .id(mentalRule.getId())
                     .title(mentalRule.getTitle())
+                    .titleEn(mentalRule.getTitleEn())
                     .description(mentalRule.getDescription())
                     .isDeleted(mentalRule.isDeleted())
                     .build();

@@ -25,6 +25,8 @@ public class MonthlyQuestionDTO {
     private Integer questionNumber;
     @NotBlank(message = "missing question")
     private String question;
+    @NotBlank(message = "missing questionEn")
+    private String questionEn;
     @NotNull(message = "missing answer")
     private Integer answer = 1;
 

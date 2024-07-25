@@ -20,6 +20,8 @@ import java.util.List;
 public class MedicalHistoryRequestDTO {
     @NotBlank(message = "missing name")
     private String name;
+    @NotBlank(message = "missing nameEn")
+    private String nameEn;
     @NotNull(message = "missing typeMedicalHistory")
     private TypeMedicalHistory type;
     private String imageUrl;
