@@ -7,10 +7,12 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyQuestionPoint;
 import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
+import vn.edu.fpt.SmartHealthC.repository.MonthlyQuestionPointRepository;
 import vn.edu.fpt.SmartHealthC.repository.MonthlyQuestionRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MonthlyQuestionService;
@@ -32,7 +34,8 @@ import java.util.stream.IntStream;
     private AppUserRepository appUserRepository;
     @Autowired
     private AppUserService appUserService;
-
+    @Autowired
+    private MonthlyQuestionPointRepository monthlyQuestionPointRepository;
 
     @Override
     public void createNewMonthMark(int appUserId) {
@@ -60,6 +63,7 @@ import java.util.stream.IntStream;
                     .build();
             monthlyQuestionRepository.save(monthlyRecord);
         }
+        savePoint(monthlyQuestionDTO.get(0).getMonthNumber());
     }
 
     @Override
@@ -110,17 +114,11 @@ import java.util.stream.IntStream;
         }
         return monthlyAnswerResponseDTOList;
     }
-
-
-
-    @Override
-    public MonthlyStatisticResponseDTO getPoint(Integer monthNumber, Integer appUser) {
-//        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
-
-        SatResponseDTO satResponseDTO = new SatResponseDTO();
-        SFResponseDTO sfResponseDTO = new SFResponseDTO();
-
-
+    public void savePoint(Integer monthNumber) {
+        AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
+        MonthlyQuestionPoint monthlyQuestionPoint = new MonthlyQuestionPoint();
+        monthlyQuestionPoint.setAppUserId(appUser);
+        monthlyQuestionPoint.setMonthNumber(monthNumber);
         List<MonthlyAnswerResponseDTO> sat_sf_c_List = new ArrayList<>();
         List<MonthlyAnswerResponseDTO> sat_sf_p_List = new ArrayList<>();
         List<MonthlyAnswerResponseDTO> sat_sf_i_List = new ArrayList<>();
@@ -128,8 +126,7 @@ import java.util.stream.IntStream;
         List<MonthlyAnswerResponseDTO> activityList = new ArrayList<>();
         List<MonthlyAnswerResponseDTO> dietList = new ArrayList<>();
         List<MonthlyAnswerResponseDTO> medicineList = new ArrayList<>();
-        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUser,monthNumber);
-        if(!monthlyNumbers.isEmpty()){
+        List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUser.getId(),monthNumber);
             for (MonthlyRecord record : monthlyNumbers) {
                 if(record.getMonthlyRecordType() == MonthlyRecordType.SAT_SF_C){
                     MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
@@ -291,39 +288,84 @@ import java.util.stream.IntStream;
                     getDataByQuestionNumber(dietList, 4)) / 4) - 1) / 3) * 100;
             float finalSFTotal = (sf_mental_modelPoint+sf_activity_modelPoint+sf_diet_modelPoint+sf_medicine_modelPoint)/4;
 
-            satResponseDTO.setSat_sf_c_activityPoint(sat_sf_c_activityPoint);
-            satResponseDTO.setSat_sf_c_positivityPoint(sat_sf_c_positivityPoint);
-            satResponseDTO.setSat_sf_c_supportPoint(sat_sf_c_supportPoint);
-            satResponseDTO.setSat_sf_c_experiencePoint(sat_sf_c_experiencePoint);
-            satResponseDTO.setSat_sf_p_lifeValue(sat_sf_p_lifeValue);
-            satResponseDTO.setSat_sf_p_targetAndAction(sat_sf_p_targetAndAction);
-            satResponseDTO.setSat_sf_p_decision(sat_sf_p_decision);
-            satResponseDTO.setSat_sf_p_buildPlan(sat_sf_p_buildPlan);
-            satResponseDTO.setSat_sf_p_healthyEnvironment(sat_sf_p_healthyEnvironment);
-            satResponseDTO.setSat_sf_i_e_activityPoint(sat_sf_i_e_activityPoint);
-            satResponseDTO.setSat_sf_i_e_activityStressPoint(sat_sf_i_e_activityStressPoint);
-            satResponseDTO.setSat_sf_i_e_activitySubstantialPoint(sat_sf_i_e_activitySubstantialPoint);
-            satResponseDTO.setSat_sf_i_e_energy(sat_sf_i_e_energy);
-            satResponseDTO.setSat_sf_i_e_motivation(sat_sf_i_e_motivation);
-            satResponseDTO.setSat_sf_i_e_planCheck(sat_sf_i_e_planCheck);
-            satResponseDTO.setSat_sf_c_total(sat_sf_c_total);
-            satResponseDTO.setSat_sf_p_total(sat_sf_p_total);
-            satResponseDTO.setSat_sf_i_total(sat_sf_i_total);
-            satResponseDTO.setTotal(finalSATTotal);
+            monthlyQuestionPoint.setSat_sf_c_activityPoint(sat_sf_c_activityPoint);
+            monthlyQuestionPoint.setSat_sf_c_positivityPoint(sat_sf_c_positivityPoint);
+            monthlyQuestionPoint.setSat_sf_c_supportPoint(sat_sf_c_supportPoint);
+            monthlyQuestionPoint.setSat_sf_c_experiencePoint(sat_sf_c_experiencePoint);
+            monthlyQuestionPoint.setSat_sf_p_lifeValue(sat_sf_p_lifeValue);
+            monthlyQuestionPoint.setSat_sf_p_targetAndAction(sat_sf_p_targetAndAction);
+            monthlyQuestionPoint.setSat_sf_p_decision(sat_sf_p_decision);
+            monthlyQuestionPoint.setSat_sf_p_buildPlan(sat_sf_p_buildPlan);
+            monthlyQuestionPoint.setSat_sf_p_healthyEnvironment(sat_sf_p_healthyEnvironment);
+            monthlyQuestionPoint.setSat_sf_i_e_activityPoint(sat_sf_i_e_activityPoint);
+            monthlyQuestionPoint.setSat_sf_i_e_activityStressPoint(sat_sf_i_e_activityStressPoint);
+            monthlyQuestionPoint.setSat_sf_i_e_activitySubstantialPoint(sat_sf_i_e_activitySubstantialPoint);
+            monthlyQuestionPoint.setSat_sf_i_e_energy(sat_sf_i_e_energy);
+            monthlyQuestionPoint.setSat_sf_i_e_motivation(sat_sf_i_e_motivation);
+            monthlyQuestionPoint.setSat_sf_i_e_planCheck(sat_sf_i_e_planCheck);
+            monthlyQuestionPoint.setSat_sf_c_total(sat_sf_c_total);
+            monthlyQuestionPoint.setSat_sf_p_total(sat_sf_p_total);
+            monthlyQuestionPoint.setSat_sf_i_total(sat_sf_i_total);
+            monthlyQuestionPoint.setTotalSAT(finalSATTotal);
 
-            sfResponseDTO.setSf_mentalPoint(sf_mentalPoint <= 0 ? 0 : sf_mentalPoint );
-            sfResponseDTO.setSf_activity_planPoint(sf_activity_planPoint <= 0 ? 0 : sf_activity_planPoint );
-            sfResponseDTO.setSf_activity_habitPoint(sf_activity_habitPoint <= 0 ? 0 : sf_activity_habitPoint );
-            sfResponseDTO.setSf_diet_healthyPoint(sf_diet_healthyPoint <= 0 ? 0 : sf_diet_healthyPoint );
-            sfResponseDTO.setSf_diet_vegetablePoint(sf_diet_vegetablePoint <= 0 ? 0 : sf_diet_vegetablePoint );
-            sfResponseDTO.setSf_diet_habitPoint(sf_diet_habitPoint <= 0 ? 0 : sf_diet_habitPoint );
-            sfResponseDTO.setSf_medicine_followPlanPoint(sf_medicine_followPlanPoint <= 0 ? 0 : sf_medicine_followPlanPoint );
-            sfResponseDTO.setSf_medicine_habitPoint(sf_medicine_habitPoint <= 0 ? 0 : sf_medicine_habitPoint );
-            sfResponseDTO.setSf_mental_modelPoint(sf_mental_modelPoint <= 0 ? 0 : sf_mental_modelPoint);
-            sfResponseDTO.setSf_activity_modelPoint(sf_activity_modelPoint <= 0 ? 0 : sf_activity_modelPoint);
-            sfResponseDTO.setSf_diet_modelPoint(sf_diet_modelPoint <= 0 ? 0 : sf_diet_modelPoint);
-            sfResponseDTO.setSf_medicine_modelPoint(sf_medicine_modelPoint <= 0 ? 0 : sf_medicine_modelPoint);
-            sfResponseDTO.setTotal(finalSFTotal);
+            monthlyQuestionPoint.setSf_mentalPoint(sf_mentalPoint <= 0 ? 0 : sf_mentalPoint );
+            monthlyQuestionPoint.setSf_activity_planPoint(sf_activity_planPoint <= 0 ? 0 : sf_activity_planPoint );
+            monthlyQuestionPoint.setSf_activity_habitPoint(sf_activity_habitPoint <= 0 ? 0 : sf_activity_habitPoint );
+            monthlyQuestionPoint.setSf_diet_healthyPoint(sf_diet_healthyPoint <= 0 ? 0 : sf_diet_healthyPoint );
+            monthlyQuestionPoint.setSf_diet_vegetablePoint(sf_diet_vegetablePoint <= 0 ? 0 : sf_diet_vegetablePoint );
+            monthlyQuestionPoint.setSf_diet_habitPoint(sf_diet_habitPoint <= 0 ? 0 : sf_diet_habitPoint );
+            monthlyQuestionPoint.setSf_medicine_followPlanPoint(sf_medicine_followPlanPoint <= 0 ? 0 : sf_medicine_followPlanPoint );
+            monthlyQuestionPoint.setSf_medicine_habitPoint(sf_medicine_habitPoint <= 0 ? 0 : sf_medicine_habitPoint );
+            monthlyQuestionPoint.setSf_mental_modelPoint(sf_mental_modelPoint <= 0 ? 0 : sf_mental_modelPoint);
+            monthlyQuestionPoint.setSf_activity_modelPoint(sf_activity_modelPoint <= 0 ? 0 : sf_activity_modelPoint);
+            monthlyQuestionPoint.setSf_diet_modelPoint(sf_diet_modelPoint <= 0 ? 0 : sf_diet_modelPoint);
+            monthlyQuestionPoint.setSf_medicine_modelPoint(sf_medicine_modelPoint <= 0 ? 0 : sf_medicine_modelPoint);
+            monthlyQuestionPoint.setTotalSF(finalSFTotal);
+            monthlyQuestionPointRepository.save(monthlyQuestionPoint);
+    }
+
+
+    @Override
+    public MonthlyStatisticResponseDTO getPoint(Integer monthNumber, Integer appUser) {
+        SatResponseDTO satResponseDTO = new SatResponseDTO();
+        SFResponseDTO sfResponseDTO = new SFResponseDTO();
+
+        Optional<MonthlyQuestionPoint> monthlyPointNumbers = monthlyQuestionPointRepository.findByMonthAndUser(monthNumber,appUser);
+        if(!monthlyPointNumbers.isEmpty()){
+
+            satResponseDTO.setSat_sf_c_activityPoint(monthlyPointNumbers.get().getSat_sf_c_activityPoint());
+            satResponseDTO.setSat_sf_c_positivityPoint(monthlyPointNumbers.get().getSat_sf_c_positivityPoint());
+            satResponseDTO.setSat_sf_c_supportPoint(monthlyPointNumbers.get().getSat_sf_c_supportPoint());
+            satResponseDTO.setSat_sf_c_experiencePoint(monthlyPointNumbers.get().getSat_sf_c_experiencePoint());
+            satResponseDTO.setSat_sf_p_lifeValue(monthlyPointNumbers.get().getSat_sf_p_lifeValue());
+            satResponseDTO.setSat_sf_p_targetAndAction(monthlyPointNumbers.get().getSat_sf_p_targetAndAction());
+            satResponseDTO.setSat_sf_p_decision(monthlyPointNumbers.get().getSat_sf_p_decision());
+            satResponseDTO.setSat_sf_p_buildPlan(monthlyPointNumbers.get().getSat_sf_p_buildPlan());
+            satResponseDTO.setSat_sf_p_healthyEnvironment(monthlyPointNumbers.get().getSat_sf_p_healthyEnvironment());
+            satResponseDTO.setSat_sf_i_e_activityPoint(monthlyPointNumbers.get().getSat_sf_i_e_activityPoint());
+            satResponseDTO.setSat_sf_i_e_activityStressPoint(monthlyPointNumbers.get().getSat_sf_i_e_activityStressPoint());
+            satResponseDTO.setSat_sf_i_e_activitySubstantialPoint(monthlyPointNumbers.get().getSat_sf_i_e_activitySubstantialPoint());
+            satResponseDTO.setSat_sf_i_e_energy(monthlyPointNumbers.get().getSat_sf_i_e_energy());
+            satResponseDTO.setSat_sf_i_e_motivation(monthlyPointNumbers.get().getSat_sf_i_e_motivation());
+            satResponseDTO.setSat_sf_i_e_planCheck(monthlyPointNumbers.get().getSat_sf_i_e_planCheck());
+            satResponseDTO.setSat_sf_c_total(monthlyPointNumbers.get().getSat_sf_c_total());
+            satResponseDTO.setSat_sf_p_total(monthlyPointNumbers.get().getSat_sf_p_total());
+            satResponseDTO.setSat_sf_i_total(monthlyPointNumbers.get().getSat_sf_i_total());
+            satResponseDTO.setTotal(monthlyPointNumbers.get().getTotalSAT());
+
+            sfResponseDTO.setSf_mentalPoint(monthlyPointNumbers.get().getSf_mentalPoint());
+            sfResponseDTO.setSf_activity_planPoint(monthlyPointNumbers.get().getSf_activity_planPoint());
+            sfResponseDTO.setSf_activity_habitPoint(monthlyPointNumbers.get().getSf_activity_habitPoint());
+            sfResponseDTO.setSf_diet_healthyPoint(monthlyPointNumbers.get().getSf_diet_healthyPoint());
+            sfResponseDTO.setSf_diet_vegetablePoint(monthlyPointNumbers.get().getSf_diet_vegetablePoint());
+            sfResponseDTO.setSf_diet_habitPoint(monthlyPointNumbers.get().getSf_diet_habitPoint() );
+            sfResponseDTO.setSf_medicine_followPlanPoint(monthlyPointNumbers.get().getSf_medicine_followPlanPoint() );
+            sfResponseDTO.setSf_medicine_habitPoint(monthlyPointNumbers.get().getSf_medicine_habitPoint());
+            sfResponseDTO.setSf_mental_modelPoint(monthlyPointNumbers.get().getSf_mental_modelPoint());
+            sfResponseDTO.setSf_activity_modelPoint(monthlyPointNumbers.get().getSf_activity_modelPoint());
+            sfResponseDTO.setSf_diet_modelPoint(monthlyPointNumbers.get().getSf_diet_modelPoint());
+            sfResponseDTO.setSf_medicine_modelPoint(monthlyPointNumbers.get().getSf_medicine_modelPoint());
+            sfResponseDTO.setTotal(monthlyPointNumbers.get().getTotalSF());
 
             MonthlyStatisticResponseDTO monthlyStatisticResponseDTO = new MonthlyStatisticResponseDTO()
                     .builder()
