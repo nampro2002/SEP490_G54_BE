@@ -37,7 +37,7 @@ CREATE TABLE smarthealthc.monthly_question_point (
                                                      PRIMARY KEY (`id`),
                                                      CONSTRAINT `app_user_id`
                                                          FOREIGN KEY (`id`)
-                                                             REFERENCES `smarthealthd`.`app_user` (`id`)
+                                                             REFERENCES `smarthealthc`.`app_user` (`id`)
                                                              ON DELETE NO ACTION
                                                              ON UPDATE NO ACTION);
 
