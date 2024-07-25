@@ -136,10 +136,23 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                     .build();
             responseDTOList.add(cardinalRecordResponseDTO);
         }
+        for (CardinalRecordResponseDTO record : responseDTOList) {
+            List<RecordPerDay> recordPerDayList = new ArrayList<>();
+            for(int i=1; i<=6; i++){
+                RecordPerDay recordPerDay = RecordPerDay.builder()
+                        .timeMeasure(TypeTimeMeasure.getByIndex(i))
+                        .Cholesterol("null mg/DL")
+                        .HBA1C("null %")
+                        .BloodSugar("null mg/DL")
+                        .build();
+                recordPerDayList.add(recordPerDay);
+            }
+            record.setRecordPerDayList(recordPerDayList);
+        }
 
         for (CardinalRecordResponseDTO record : responseDTOList) {
             List<CardinalRecord> cardinalRecords = cardinalRecordRepository.findByWeekStart(record.getWeekStart(), userId);
-            List<RecordPerDay> recordPerDayList = new ArrayList<>();
+            List<RecordPerDay> recordPerDayList = record.getRecordPerDayList();
             Float avgCholesterol = 0f;
             Float avgHBA1C = 0f;
             Float avgBloodSugar = 0f;
@@ -147,16 +160,16 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
             int countHBA1C = 0;
             int countBloodSugar = 0;
             for (CardinalRecord cardinalRecord : cardinalRecords) {
-                RecordPerDay recordPerDay = RecordPerDay.builder()
-                        .date(cardinalRecord.getDate())
-                        .timeMeasure(cardinalRecord.getTimeMeasure())
-                        .Cholesterol(cardinalRecord.getCholesterol()+ "mg/DL")
-                        .HBA1C(cardinalRecord.getHBA1C()+"%")
-                        .BloodSugar(cardinalRecord.getBloodSugar()+"mg/DL")
-                        .build();
-                recordPerDayList.add(recordPerDay);
+                for(RecordPerDay recordP: recordPerDayList) {
+                    if (recordP.getTimeMeasure().equals(cardinalRecord.getTimeMeasure())) {
+                        recordP.setDate(cardinalRecord.getDate());
+                        recordP.setCholesterol(cardinalRecord.getCholesterol() + " mg/DL");
+                        recordP.setHBA1C(cardinalRecord.getHBA1C() + " %");
+                        recordP.setBloodSugar(cardinalRecord.getBloodSugar() + " mg/DL");
+                    }
+                }
                 //sortby getTimeMeasure getIndex and Date date;
-                recordPerDayList.sort(Comparator.comparing(RecordPerDay::getDate).thenComparing(RecordPerDay::getTimeMeasure));
+//                recordPerDayList.sort(Comparator.comparing(RecordPerDay::getDate).thenComparing(RecordPerDay::getTimeMeasure));
 
                 if (cardinalRecord.getCholesterol() != null) {
                     avgCholesterol += cardinalRecord.getCholesterol();

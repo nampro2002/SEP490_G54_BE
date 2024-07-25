@@ -117,7 +117,7 @@ public class AppUserServiceImplTest {
 
 
     @Test
-    void testAssignPatientToDoctor() {
+    void testAssignPatientToMs() {
         // Arrange
         AssignRequestDTO assignRequestDTO = new AssignRequestDTO();
         assignRequestDTO.setAppUserId(1);
@@ -141,11 +141,11 @@ public class AppUserServiceImplTest {
         testWebUser.setAppUserList(new ArrayList<>()); // Empty list or mock with desired behavior
 
         // Act and Assert
-        assertDoesNotThrow(() -> appUserService.assignPatientToDoctor(assignRequestDTO));
+        assertDoesNotThrow(() -> appUserService.assignPatientToMs(assignRequestDTO));
     }
 
     @Test
-    void testAssignPatientToDoctor_AppUserNotFound() {
+    void testAssignPatientToMs_AppUserNotFound() {
         // Arrange
         AssignRequestDTO assignRequestDTO = new AssignRequestDTO();
         assignRequestDTO.setAppUserId(1);
@@ -154,6 +154,6 @@ public class AppUserServiceImplTest {
         when(appUserRepository.findByIdActivated(anyInt())).thenReturn(Optional.empty());
 
         // Act and Assert
-        assertThrows(AppException.class, () -> appUserService.assignPatientToDoctor(assignRequestDTO));
+        assertThrows(AppException.class, () -> appUserService.assignPatientToMs(assignRequestDTO));
     }
 }

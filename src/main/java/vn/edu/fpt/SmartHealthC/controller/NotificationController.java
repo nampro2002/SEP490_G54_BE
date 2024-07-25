@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 public class NotificationController {
 
     private final NotificationService notificationService;
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/send-to-device")
     public ApiResponse<?> sendNotification(@RequestBody @Valid DeviceNotificationRequest request) {
         try {
@@ -45,7 +45,7 @@ public class NotificationController {
                             .build()).getBody();
         }
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/send-to-topic")
     public ApiResponse<?> sendNotificationToTopic(@RequestBody @Valid TopicNotificationRequest request) {
         try {
@@ -64,7 +64,8 @@ public class NotificationController {
                             .build()).getBody();
         }
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
+    // not used
     @PostMapping("/send-to-all")
     public ApiResponse<?> sendNotificationToAll(@RequestBody @Valid AllDevicesNotificationRequest request) {
         try {

@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface AppUserService {
     List<AppUser> findAll();
 
-    AppUserAssignResponseDTO assignPatientToDoctor(AssignRequestDTO assignRequestDTO);
+    AppUserAssignResponseDTO assignPatientToMs(AssignRequestDTO assignRequestDTO);
     AppUserDetailResponseDTO getAppUserDetailById(Integer id);
 
     ResponsePaging<List<AppUserResponseDTO>> getListAppUser(Integer pageNo, String search);

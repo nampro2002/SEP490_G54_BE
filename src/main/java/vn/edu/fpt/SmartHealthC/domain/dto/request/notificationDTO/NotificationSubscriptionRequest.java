@@ -7,8 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class NotificationSubscriptionRequest {
-    @NotBlank
+    @NotBlank(message = "Device token is required")
     private String deviceToken;
-    @NotBlank
+    @NotBlank(message = "Topic name is required")
     private String topicName;
 }

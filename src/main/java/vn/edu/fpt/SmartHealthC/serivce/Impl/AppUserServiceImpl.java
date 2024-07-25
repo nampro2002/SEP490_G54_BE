@@ -224,11 +224,11 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUserAssignResponseDTO assignPatientToDoctor(AssignRequestDTO assignRequestDTO) {
+    public AppUserAssignResponseDTO assignPatientToMs(AssignRequestDTO assignRequestDTO) {
         AppUser appUser = appUserRepository.findByIdActivated(assignRequestDTO.getAppUserId()).orElseThrow(
                 () -> new AppException(ErrorCode.APP_USER_NOT_FOUND_OR_NOT_ACTIVATED)
         );
-        WebUser webUser = webUserService.getWebUserById(assignRequestDTO.getWebUserId());
+            WebUser webUser = webUserService.getWebUserById(assignRequestDTO.getWebUserId());
         if (!webUser.getAccountId().getType().equals(TypeAccount.MEDICAL_SPECIALIST)) {
             throw new AppException(ErrorCode.WEB_USER_NOT_VALID);
         }
