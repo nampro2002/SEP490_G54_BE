@@ -51,11 +51,11 @@ public class PatientController {
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/assign")
-    public ApiResponse<AppUserAssignResponseDTO> assignPatientToDoctor (@RequestBody @Valid AssignRequestDTO assignRequestDTO) {
+    public ApiResponse<AppUserAssignResponseDTO> assignPatientToMs (@RequestBody @Valid AssignRequestDTO assignRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AppUserAssignResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(appUserService.assignPatientToDoctor(assignRequestDTO))
+                        .result(appUserService.assignPatientToMs(assignRequestDTO))
                         .build()).getBody();
     }
     @GetMapping("/detail/{id}")
