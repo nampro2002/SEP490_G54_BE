@@ -282,7 +282,8 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
                 .medicineCommitment(userWeek1Information.getMentalCommitment())
                 .roadBlock(userWeek1Information.getRoadBlock())
                 .solution(userWeek1Information.getSolution())
-                .commitment(userWeek1Information.getCommitment()).build();
+                .commitment(userWeek1Information.getCommitment())
+                .diary(userWeek1Information.getDiary()).build();
         return lesson7DTO;
     }
 
@@ -297,6 +298,7 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
         userWeek1Information.setRoadBlock(lesson7DTO.getRoadBlock());
         userWeek1Information.setSolution(lesson7DTO.getSolution());
         userWeek1Information.setCommitment(lesson7DTO.getCommitment());
+        userWeek1Information.setDiary(lesson7DTO.getDiary());
 
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
