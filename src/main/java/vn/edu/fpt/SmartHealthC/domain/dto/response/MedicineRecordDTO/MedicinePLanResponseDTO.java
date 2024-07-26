@@ -16,6 +16,7 @@ import java.util.List;
 public class MedicinePLanResponseDTO {
     private Integer medicineTypeId;
     private String medicineTitle;
+    private String medicineTitleEn;
     private String time;
     private List<String> weekday = new ArrayList<String>();
     private List<Date> weekTime = new ArrayList<Date>();

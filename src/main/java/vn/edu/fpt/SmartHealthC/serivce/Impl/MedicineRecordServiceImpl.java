@@ -277,6 +277,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             medicinePLanResponseDTO2.setMedicineTypeId(Integer.parseInt(type));
             Optional<MedicineType> medicineType = medicineTypeRepository.findById(Integer.parseInt(type));
             medicinePLanResponseDTO2.setMedicineTitle(medicineType.get().getTitle());
+            medicinePLanResponseDTO2.setMedicineTitleEn(medicineType.get().getTitleEn());
             medicinePLanResponseDTO2.setTime(time);
             for (MedicineRecord medicineRecord : medicineRecordsByTimeAndType) {
                 medicinePLanResponseDTO2.getWeekday().add(getDayOfWeek(medicineRecord.getDate()));
@@ -437,6 +438,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
                     .id(record.getId())
                     .medicineName(record.getMedicineType().getTitle())
                     .medicineId(record.getMedicineType().getId())
+                            .medicineNameEn(record.getMedicineType().getTitleEn())
                     .date(record.getDate()).build());
         }
         return medicinePlanPerDayResponseList;
