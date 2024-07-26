@@ -15,6 +15,7 @@ public class MedicinePlanPerDayResponse {
     private int id;
     private int medicineId;
     private String medicineName;
+    private String medicineNameEn;
     private Date date;
 
 }
