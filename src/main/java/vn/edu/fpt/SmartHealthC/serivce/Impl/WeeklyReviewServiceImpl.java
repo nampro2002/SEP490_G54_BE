@@ -137,8 +137,8 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 return d2.compareTo(d1); // Đảo ngược thứ tự để sắp xếp giảm dần
             }
         });
-        List<Date> top5Dates = listWeekStartToNow.subList(0, Math.min(5, listWeekStartToNow.size()));
-        return top5Dates;
+//        List<Date> top5Dates = listWeekStartToNow.subList(0, Math.min(5, listWeekStartToNow.size()));
+        return listWeekStartToNow;
     }
 
     public Date calculateDate(Date sourceDate, int plus) throws ParseException {
