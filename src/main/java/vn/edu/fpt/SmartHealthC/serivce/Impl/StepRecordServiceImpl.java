@@ -312,7 +312,7 @@ public class StepRecordServiceImpl implements StepRecordService {
 
         String dateStr = formatDate.format(stepRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
-        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.get().getId());
+        List<StepRecord> stepPlanExist = stepRecordRepository.findByAccountIdId(appUser.get().getId());
         Optional<StepRecord> stepRecord = stepPlanExist.stream()
                 .filter(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
