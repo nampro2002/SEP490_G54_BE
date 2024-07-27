@@ -1,2 +1,2 @@
-alter table diet_record
-    modify actual_value float null;
+-- alter table diet_record
+--     modify actual_value float null;

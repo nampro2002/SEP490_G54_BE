@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNotification;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AnswerQuestionRequestDTO;
@@ -22,6 +23,7 @@ import vn.edu.fpt.SmartHealthC.serivce.QuestionService;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+
 @Slf4j
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -134,13 +136,20 @@ public class QuestionServiceImpl implements QuestionService {
         Map<String, String> data = new HashMap<>();
         Question finalQuestion = question;
         NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(account.getId(), TypeNotification.QUESTION_NOTIFICATION);
+        String title = "Smart Health C";
+        String body = "The question you sent has been answered.";
         if (notificationSetting.isStatus()) {
-            refreshTokenRepository.findRecordByAccountId(account.getId()).forEach(refreshToken -> {
+            List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordByAccountId(account.getId());
+            for (RefreshToken refreshToken : refreshTokenList) {
+                if (refreshToken.getLanguage().equals(TypeLanguage.KR)) {
+                    title = "스마트 헬싱 C";
+                    body = "보낸 질문에 대한 답변이 도착했습니다.";
+                }
                 try {
                     notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
                             .deviceToken(refreshToken.getDeviceToken())
-                            .title("Question Answered")
-                            .body("Your question about " + finalQuestion.getTitle() + "has been answered")
+                            .title(title)
+                            .body(body)
                             .data(data)
                             .build());
                 } catch (FirebaseMessagingException e) {
@@ -153,7 +162,7 @@ public class QuestionServiceImpl implements QuestionService {
                     log.error("InterruptedException", e);
 //                throw new RuntimeException(e);
                 }
-            });
+            }
         }
         return dto;
     }
@@ -300,7 +309,7 @@ public class QuestionServiceImpl implements QuestionService {
             QuestionResponseDTO dto = new QuestionResponseDTO();
             dto.setId(question.getId());
             dto.setAppUserName(question.getAppUserId().getName());
-            if (question.getAnswer() != null  && !question.getAnswer().isBlank()) {
+            if (question.getAnswer() != null && !question.getAnswer().isBlank()) {
                 dto.setWebUserName(question.getWebUserId().getUserName());
             }
             dto.setTitle(question.getTitle());

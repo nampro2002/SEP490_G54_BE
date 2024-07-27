@@ -1,7 +1,9 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNotification;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.ChangeLanguageNotiRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NotificationSettingRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NotificationStatusRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.AllDevicesNotificationRequest;
@@ -35,5 +37,8 @@ public interface NotificationService {
 
     NotificationSetting findByAccountIdAndType(Integer id, TypeNotification typeNotification);
 
-    void updateStatusNotification(String email, String deviceToken);
+    void updateStatusNotification(String email, String deviceToken, TypeLanguage language);
+
+
+    void changeLanguage(ChangeLanguageNotiRequestDTO request);
 }

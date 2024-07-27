@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNotification;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.DeviceNotificationRequest;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
@@ -32,6 +33,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 @Slf4j
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -68,7 +70,7 @@ public class MonthlyJob implements Job {
 //                .weekStart(weeklyReviewService.findSmallestWeekStart(appUser))
 //                .build();
         for (UserWeekStart userWeekStart : userWeekStarts) {
-            if(userWeekStart.getWeekStart() == null) {
+            if (userWeekStart.getWeekStart() == null) {
                 continue;
             }
             Instant instant = userWeekStart.getWeekStart().toInstant();
@@ -84,13 +86,19 @@ public class MonthlyJob implements Job {
                 monthlyQuestionService.createNewMonthMark(userWeekStart.getAppUser().getId());
                 if (notificationSetting.isStatus()) {
                     List<RefreshToken> refreshToken = refreshTokenRepository.findRecordByAccountId(userWeekStart.getAppUser().getAccountId().getId());
+                    String title ="Smart Healthing C";
+                    String body = "Check your performance over the past month!";
                     for (RefreshToken token : refreshToken) {
+                        if (token.getLanguage().equals(TypeLanguage.KR)) {
+                            title = "스마트 헬싱 C";
+                            body = "지난 한 달 동안의 성과를 확인하세요!";
+                        }
                         HashMap<String, String> data = new HashMap<>();
                         data.put("key1", "value1");
                         DeviceNotificationRequest deviceNotificationRequest = DeviceNotificationRequest.builder()
-                                .title("Monthly")
-                                .body("This is a monthly notification.")
-                                .imageUrl("http://example.com/image.png")
+                                .title(title)
+                                .body(body)
+                                .imageUrl("")
                                 .data(data)
                                 .deviceToken(token.getDeviceToken())
                                 .build();

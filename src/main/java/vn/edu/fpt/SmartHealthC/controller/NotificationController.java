@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.ChangeLanguageNotiRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NotificationSettingRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NotificationStatusRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.AllDevicesNotificationRequest;
@@ -160,7 +162,25 @@ public class NotificationController {
                             .build()).getBody();
         }
     }
-
+    @PreAuthorize("hasAuthority('USER')")
+    @PutMapping("mobile/change-language")
+    public ApiResponse<?> changeLanguage(@RequestBody @Valid ChangeLanguageNotiRequestDTO request) {
+        try {
+            notificationService.changeLanguage(request);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(ApiResponse.builder()
+                            .code(HttpStatus.OK.value())
+                            .message("Change language successfully.")
+                            .build()).getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.<DeviceNotificationRequest>builder()
+                            .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                            .message("Failed to change language.")
+                            .build()).getBody();
+        }
+    }
 
 //    @PutMapping("/sync")
 //    public ApiResponse<?> updateStatusNotification() {
