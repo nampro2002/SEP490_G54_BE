@@ -14,7 +14,11 @@ import lombok.NoArgsConstructor;
 public class FAQRequestDTO {
     @NotBlank(message = "missing question")
     private String question;
+    @NotBlank(message = "missing questionEn")
+    private String questionEn;
     @NotBlank(message = "missing answer")
     private String answer;
+    @NotBlank(message = "missing answerEn")
+    private String answerEn;
 
 }

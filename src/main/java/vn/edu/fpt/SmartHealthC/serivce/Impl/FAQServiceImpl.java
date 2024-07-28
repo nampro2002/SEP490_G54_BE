@@ -25,13 +25,17 @@ public class FAQServiceImpl implements FAQService {
     public FAQResponseDTO createFAQ(FAQRequestDTO faqRequestDTO) {
         FAQ faq = FAQ.builder()
                 .question(faqRequestDTO.getQuestion())
+                .questionEn(faqRequestDTO.getQuestionEn())
                 .answer(faqRequestDTO.getAnswer())
+                .answerEn(faqRequestDTO.getAnswerEn())
                 .build();
         faq = faqRepository.save(faq);
         FAQResponseDTO faqResponseDTO = FAQResponseDTO.builder()
                 .id(faq.getId())
                 .question(faq.getQuestion())
+                .questionEn(faq.getQuestionEn())
                 .answer(faq.getAnswer())
+                .answerEn(faq.getAnswerEn())
                 .build();
         return faqResponseDTO;
     }
@@ -45,7 +49,9 @@ public class FAQServiceImpl implements FAQService {
         FAQResponseDTO faqResponseDTO = FAQResponseDTO.builder()
                 .id(faq.get().getId())
                 .question(faq.get().getQuestion())
+                .questionEn(faq.get().getQuestionEn())
                 .answer(faq.get().getAnswer())
+                .answerEn(faq.get().getAnswerEn())
                 .build();
         return faqResponseDTO;
     }
@@ -67,7 +73,9 @@ public class FAQServiceImpl implements FAQService {
             FAQResponseDTO faqResponseDTO = FAQResponseDTO.builder()
                     .id(faq.getId())
                     .question(faq.getQuestion())
+                    .questionEn(faq.getQuestionEn())
                     .answer(faq.getAnswer())
+                    .answerEn(faq.getAnswerEn())
                     .build();
             responseDTOList.add(faqResponseDTO);
         }
@@ -78,12 +86,16 @@ public class FAQServiceImpl implements FAQService {
     public FAQResponseDTO updateFAQ(Integer id, FAQRequestDTO faq) {
         FAQ faqEntity = getFAQEntityById(id);
         faqEntity.setQuestion(faq.getQuestion());
+        faqEntity.setQuestionEn(faq.getQuestionEn());
         faqEntity.setAnswer(faq.getAnswer());
+        faqEntity.setAnswerEn(faq.getAnswerEn());
         faqEntity = faqRepository.save(faqEntity);
         FAQResponseDTO faqResponseDTO = FAQResponseDTO.builder()
                 .id(faqEntity.getId())
                 .question(faqEntity.getQuestion())
+                .questionEn(faqEntity.getQuestionEn())
                 .answer(faqEntity.getAnswer())
+                .answerEn(faqEntity.getAnswerEn())
                 .build();
         return faqResponseDTO;
     }
@@ -95,7 +107,9 @@ public class FAQServiceImpl implements FAQService {
         FAQResponseDTO faqResponseDTO = FAQResponseDTO.builder()
                 .id(faqEntity.getId())
                 .question(faqEntity.getQuestion())
+                .questionEn(faqEntity.getQuestionEn())
                 .answer(faqEntity.getAnswer())
+                .answerEn(faqEntity.getAnswerEn())
                 .build();
         return faqResponseDTO;
     }
@@ -108,7 +122,9 @@ public class FAQServiceImpl implements FAQService {
             FAQResponseDTO faqResponseDTO = FAQResponseDTO.builder()
                     .id(faq.getId())
                     .question(faq.getQuestion())
+                    .questionEn(faq.getQuestionEn())
                     .answer(faq.getAnswer())
+                    .answerEn(faq.getAnswerEn())
                     .build();
             responseDTOList.add(faqResponseDTO);
         }
