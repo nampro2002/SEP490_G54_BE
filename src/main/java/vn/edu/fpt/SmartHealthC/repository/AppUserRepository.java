@@ -39,4 +39,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
     List<AppUser> findAllActiveAndNotDeleted();
     @Query("SELECT u FROM AppUser u WHERE u.accountId.isActive = true AND u.accountId.isDeleted = false AND LOWER(u.name) LIKE %?1%")
     Page<AppUser> findAllActiveAndNotDeletedPaging(String lowerCase, Pageable paging);
+    @Query("SELECT u FROM AppUser u WHERE u.accountId.Id = ?1 AND u.accountId.isActive = true AND u.accountId.isDeleted = false order by  u.id limit 1")
+    Optional<AppUser> findByAccountIdActivated(Integer accountId);
 }
