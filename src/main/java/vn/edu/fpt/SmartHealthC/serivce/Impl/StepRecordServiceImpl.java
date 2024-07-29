@@ -305,14 +305,14 @@ public class StepRecordServiceImpl implements StepRecordService {
 
     @Override
     public void updateStepRecordNEW(StepRecordUpdateContinuousDTO stepRecordDTO) throws ParseException {
-        Optional<AppUser> appUser = appUserRepository.findByIdActivated(stepRecordDTO.getUserId());
+        Optional<AppUser> appUser = appUserRepository.findByAccountIdActivated(stepRecordDTO.getUserId());
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
         }
 
         String dateStr = formatDate.format(stepRecordDTO.getDate());
         Date date = formatDate.parse(dateStr);
-        List<StepRecord> stepPlanExist = stepRecordRepository.findByAccountIdId(appUser.get().getId());
+        List<StepRecord> stepPlanExist = stepRecordRepository.findByAppUserId(appUser.get().getId());
         Optional<StepRecord> stepRecord = stepPlanExist.stream()
                 .filter(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
