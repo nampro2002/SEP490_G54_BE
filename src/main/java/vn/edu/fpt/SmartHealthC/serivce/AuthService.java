@@ -25,4 +25,6 @@ public interface AuthService {
     void logout(HttpServletRequest request);
 
     Boolean checkRegisterEmail(String email, String code);
+
+    boolean checkRefreshToken(String token, HttpServletRequest request, HttpServletResponse response) throws ParseException;
 }
