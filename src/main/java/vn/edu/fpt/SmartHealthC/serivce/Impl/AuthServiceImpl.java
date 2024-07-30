@@ -220,6 +220,24 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public boolean checkRefreshToken(String token, HttpServletRequest request, HttpServletResponse response) throws ParseException {
+        //Check refresh token
+        Optional<RefreshToken> refreshTokenFilter = refreshTokenRepository.findRecordByReToken(token);
+        if (refreshTokenFilter.isEmpty()) {
+            return true;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String stringFormatedDate = now.format(formatter);
+        //Check expires refresh token
+        if (formatDate.parse(stringFormatedDate).after(formatDate.parse(refreshTokenFilter.get().getRefreshExpiryTime().toString()))) {
+          return true;
+        }
+        return false;
+    }
+
+    @Override
     public String sendEmailCode(String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         if (account.isPresent()) {
