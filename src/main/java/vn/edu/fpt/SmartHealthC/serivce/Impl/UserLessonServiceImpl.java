@@ -88,18 +88,22 @@ public class UserLessonServiceImpl implements UserLessonService {
         Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
         if(userLesson.isEmpty()){
             unlockedLesson.setLesson(1);
+            return unlockedLesson;
+        }else{
+            unlockedLesson.setLesson(userLesson.get().getLesson());
+            Date lastDate = userLesson.get().getLessonDate();
+            Date today = DateUtils.getToday(simpleDateFormat);
+            if(today.after(lastDate)){
+                int lesson= unlockedLesson.getLesson() < 7 ? unlockedLesson.getLesson() +1:
+                        unlockedLesson.getLesson();
+                unlockedLesson.setLesson(lesson);
+            }
+            if(today.equals(lastDate)){
+                unlockedLesson.setStatusCheck(true);
+            }
+            unlockedLesson.setLesson(Math.min(unlockedLesson.getLesson(), 7));
+            return unlockedLesson;
         }
-        Date lastDate = userLesson.get().getLessonDate();
-        Date today = DateUtils.getToday(simpleDateFormat);
-        if(today.after(lastDate)){
-            int lesson= userLesson.get().getLesson() < 7 ? userLesson.get().getLesson() +1:
-                    userLesson.get().getLesson();
-            userLesson.get().setLesson(lesson);
-        }
-        if(today.equals(lastDate)){
-            unlockedLesson.setStatusCheck(true);
-        }
-        unlockedLesson.setLesson(Math.min(userLesson.get().getLesson(), 7));
-        return unlockedLesson;
+
     }
 }
