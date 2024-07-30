@@ -92,11 +92,9 @@ public class UserLessonServiceImpl implements UserLessonService {
         Date lastDate = userLesson.get().getLessonDate();
         Date today = DateUtils.getToday(simpleDateFormat);
         if(today.after(lastDate)){
-
             int lesson= userLesson.get().getLesson() < 7 ? userLesson.get().getLesson() +1:
                     userLesson.get().getLesson();
-            unlockedLesson.setLesson(lesson);
-
+            userLesson.get().setLesson(lesson);
         }
         if(today.equals(lastDate)){
             unlockedLesson.setStatusCheck(true);
