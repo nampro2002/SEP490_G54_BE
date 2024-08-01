@@ -658,15 +658,14 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
 
     private int getAverageWeightPerWeek(AppUser appUser, Date weekStart) {
         List<WeightRecord> weightRecordList = weightRecordRepository.findAppUserAndWeekStart(appUser.getId(),weekStart);
+        if (weightRecordList.isEmpty()) {
+            return 0;
+        }
         double sum = 0;
         for (WeightRecord record : weightRecordList) {
             sum += record.getWeight();
         }
-        int result = (int) (sum / 7);
-        if (weightRecordList.isEmpty()) {
-            result = 0;
-        }
-        return result;
+        return (int) (sum / weightRecordList.size());
     }
 
     private int getMentalPerWeek(AppUser appUser, Date weekStart) {
