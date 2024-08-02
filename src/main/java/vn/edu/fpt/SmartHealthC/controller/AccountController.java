@@ -74,6 +74,21 @@ public class AccountController {
         apiResponse.setMessage("Activation failed");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse).getBody();
     }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("/web/deactivate-account/{id}")
+    public ApiResponse<?> deactivateAccount(@PathVariable Integer id) {
+        if (accountService.deactivateAccount(id)) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(ApiResponse.builder()
+                            .code(HttpStatus.OK.value())
+                            .message("Deactivation successful")
+                            .build()).getBody();
+        }
+        ApiResponse apiResponse = new ApiResponse<>();
+        apiResponse.setCode(HttpStatus.BAD_REQUEST.value());
+        apiResponse.setMessage("Deactivation failed");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse).getBody();
+    }
     // ??
     @GetMapping("/get-by-email/{email}")
     public ApiResponse<?> getAccountByEmail(@PathVariable String email) {

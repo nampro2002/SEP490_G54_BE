@@ -7,14 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FAQRequestDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.FAQResponseDTO;
-import vn.edu.fpt.SmartHealthC.domain.entity.FAQ;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
 import vn.edu.fpt.SmartHealthC.serivce.FAQService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/faq")
@@ -38,6 +34,15 @@ public class FAQController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FAQResponseDTO>builder()
                         .result(faqService.getFAQById(id))
+                        .build()).getBody();
+    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/web/others")
+    public ApiResponse<ResponsePaging<List<FAQResponseDTO>>> getAllFormQuestions(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "") String search) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<ResponsePaging<List<FAQResponseDTO>>>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(faqService.getAllFAQsPaging(pageNo-1, search))
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('ADMIN')")
