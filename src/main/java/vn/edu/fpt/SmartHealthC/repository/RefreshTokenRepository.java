@@ -20,4 +20,6 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Inte
     List<RefreshToken> findRecordByAccountId(Integer accountId);
     @Query("SELECT a FROM RefreshToken a WHERE  a.deviceToken = ?1")
     List<RefreshToken> findRecordBydDeviceToken(String deviceToken);
+    @Query("SELECT a FROM RefreshToken a WHERE a.accountId.Id = ?1 and a.deviceToken = ?2")
+    Optional<RefreshToken> findByAccountIdAndDevice();
 }

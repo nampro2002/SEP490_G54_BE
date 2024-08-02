@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNotification;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.DeviceNotificationRequest;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
@@ -57,13 +58,18 @@ public class MedicalAppointmentJob implements Job {
                     continue;
                 }
                 List<RefreshToken> refreshToken = refreshTokenRepository.findRecordByAccountId(item.getAppUserId().getAccountId().getId());
+                String title = "Smart Healthing C";
+                String body = "You have a health check scheduled" + item.getTypeMedicalAppointment() + "for " + daysBetween + " days later.";
                 for (RefreshToken token : refreshToken) {
+                    if(token.getLanguage().equals(TypeLanguage.KR)){
+                        title = "스마트 헬싱 C";
+                        body = "건강 검진 예약이 있습니다" + item.getTypeMedicalAppointment() + "다음 " + daysBetween + "일 후.";
+                    }
                     HashMap<String, String> data = new HashMap<>();
-                    data.put("key1", "value1");
                     DeviceNotificationRequest deviceNotificationRequest = DeviceNotificationRequest.builder()
-                            .title("Medical Appointment")
-                            .body("You have a medical appointment in " + daysBetween + " days.")
-                            .imageUrl("http://example.com/image.png")
+                            .title(title)
+                            .body(body)
+                            .imageUrl("")
                             .data(data)
                             .deviceToken(token.getDeviceToken())
                             .build();

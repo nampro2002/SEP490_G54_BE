@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.DeviceNotificationRequest;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.TopicNotificationRequest;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
@@ -58,13 +59,18 @@ public class MedicineJob implements Job {
             if (refreshToken.isEmpty()) {
                 return;
             }
+            String title ="Smart Healthing C";
+            String body = "It's time to take your medicine! "+ record.getMedicineType();
             for (RefreshToken token : refreshToken) {
+                if(token.getLanguage().equals(TypeLanguage.KR)){
+                    title = "스마트 헬싱 C";
+                    body = "약을 복용할 시간입니다! "+ record.getMedicineType();
+                }
                 HashMap<String, String> data = new HashMap<>();
-                data.put("key1", "value1");
                 DeviceNotificationRequest deviceNotificationRequest = DeviceNotificationRequest.builder()
-                        .title("Medicine")
-                        .body("It's time to take your medicine!")
-                        .imageUrl("http://example.com/image.png")
+                        .title(title)
+                        .body(body)
+                        .imageUrl("")
                         .data(data)
                         .deviceToken(token.getDeviceToken())
                         .build();

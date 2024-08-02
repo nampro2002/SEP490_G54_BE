@@ -11,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeTopic;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.DoctorRegisterDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.LoginDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.RegisterDto;
@@ -91,11 +93,12 @@ public class AuthServiceImpl implements AuthService {
                 .refreshExpiryTime(formatDate.parse(stringFormatedDate))
                 .accountId(optionalUser.get())
                 .deviceToken(request.getDeviceToken())
+                .language(request.getLanguage())
                 .build();
         cleanRefreshToken(optionalUser.get().getId(), request.getDeviceToken());
         refreshTokenRepository.save(refreshTokenCreate);
         if (optionalUser.get().getType().equals(TypeAccount.USER) && optionalUser.get().isActive()) {
-            notificationService.updateStatusNotification(request.getEmail(), request.getDeviceToken());
+            notificationService.updateStatusNotification(request.getEmail(), request.getDeviceToken(), request.getLanguage());
         }
         return AuthenticationResponseDto.builder()
                 .idUser(optionalUser.get().getId())
@@ -189,11 +192,12 @@ public class AuthServiceImpl implements AuthService {
         if (refreshTokenFilter.isEmpty()) {
             return;
         }
-        refreshTokenRepository.delete(refreshTokenFilter.get());
+        RefreshToken refreshToken = refreshTokenFilter.get();
+        refreshTokenRepository.delete(refreshToken);
         try {
-            unSubTopic(refreshTokenFilter.get().getDeviceToken(), "daily");
-            unSubTopic(refreshTokenFilter.get().getDeviceToken(), "mondayam");
-            unSubTopic(refreshTokenFilter.get().getDeviceToken(), "sundaypm");
+            unSubTopic(refreshToken.getDeviceToken(), refreshToken.getLanguage().equals(TypeLanguage.EN) ? TypeTopic.DAILY_EN.getTopicName() : TypeTopic.DAILY_KR.getTopicName());
+            unSubTopic(refreshToken.getDeviceToken(), refreshToken.getLanguage().equals(TypeLanguage.EN) ? TypeTopic.MONDAY_AM_EN.getTopicName() : TypeTopic.MONDAY_AM_KR.getTopicName());
+            unSubTopic(refreshToken.getDeviceToken(), refreshToken.getLanguage().equals(TypeLanguage.EN) ? TypeTopic.SUNDAY_PM_EN.getTopicName() : TypeTopic.SUNDAY_PM_KR.getTopicName());
         } catch (FirebaseMessagingException e) {
             throw new RuntimeException(e);
         }

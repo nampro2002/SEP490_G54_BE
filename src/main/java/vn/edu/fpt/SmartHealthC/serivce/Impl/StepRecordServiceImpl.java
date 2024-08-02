@@ -333,12 +333,12 @@ public class StepRecordServiceImpl implements StepRecordService {
                     .weekStart(getFirstDayOfWeek(stepRecordDTO.getDate()))
                     .build();
             stepRecordRepository.save(stepRecordNew);
-            System.out.println("Create new record for user " + appUser.get().getId() + " at " + new Date() + "with value " + stepRecordDTO.getActualValue());
+            System.out.println("Create new record for app user id " + appUser.get().getId() + " at " + new Date() + "with value " + stepRecordDTO.getActualValue() +"id from FE: "+ stepRecordDTO.getUserId());
         } else {
             StepRecord stepRecordNew = getStepRecordById(stepRecord.get().getId());
             stepRecordNew.setActualValue(stepRecordNew.getActualValue() + stepRecordDTO.getActualValue());
             stepRecordRepository.save(stepRecordNew);
-            System.out.println("Update new record for user " + appUser.get().getId() + " at " + new Date() + "with value " + stepRecordDTO.getActualValue());
+            System.out.println("Update new record for app user id " + appUser.get().getId() + " at " + new Date() + "with value " + stepRecordDTO.getActualValue() +"id from FE: "+ stepRecordDTO.getUserId());
         }
     }
 

@@ -258,6 +258,18 @@ public class AccountServiceImpl implements AccountService {
                 .toList();
     }
 
+    @Override
+    public boolean deactivateAccount(Integer id) {
+        Account account = accountRepository.findById(id).orElseThrow(() ->
+                new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+        if (account.isActive()) {
+            throw new AppException(ErrorCode.ACCOUNT_DEACTIVATED);
+        }
+        account.setActive(true);
+        accountRepository.save(account);
+        return true;
+    }
+
 //
 //    public List<AccountResponseDTO> getAllAccountAppUser() {
 //        List<Account> accountList =  accountRepository.findAllAccountAppUser(TypeAccount.USER);

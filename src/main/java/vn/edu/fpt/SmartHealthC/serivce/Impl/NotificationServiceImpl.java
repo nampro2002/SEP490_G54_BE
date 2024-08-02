@@ -8,7 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNotification;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeTopic;
+import vn.edu.fpt.SmartHealthC.domain.dto.request.ChangeLanguageNotiRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NotificationSettingRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.NotificationStatusRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.AllDevicesNotificationRequest;
@@ -141,7 +144,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     //call api
-    public void updateStatusNotification(String email, String deviceToken) {
+    public void updateStatusNotification(String email, String deviceToken, TypeLanguage language) {
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
@@ -149,15 +152,15 @@ public class NotificationServiceImpl implements NotificationService {
         List<NotificationSetting> notificationSettingList = notificationSettingRepository.findByAccountId(appUser.get().getAccountId().getId());
         for (NotificationSetting notificationSetting : notificationSettingList) {
             if (notificationSetting.getTypeNotification().equals(TypeNotification.DAILY_NOTIFICATION)) {
-                NotificationSubscriptionRequest notificationSubscriptionRequest = NotificationSubscriptionRequest.builder().deviceToken(deviceToken).topicName("daily").build();
+                NotificationSubscriptionRequest notificationSubscriptionRequest = NotificationSubscriptionRequest.builder().deviceToken(deviceToken).topicName(language.equals(TypeLanguage.EN) ? TypeTopic.DAILY_EN.getTopicName() : TypeTopic.DAILY_KR.getTopicName()).build();
                 changeStatusDeviceToTopic(notificationSetting, notificationSubscriptionRequest);
             }
-            if (notificationSetting.getTypeNotification().equals(TypeNotification.PLAN_NOTIFICATION)) {
-                NotificationSubscriptionRequest notificationSubscriptionRequest = NotificationSubscriptionRequest.builder().deviceToken(deviceToken).topicName("mondayam").build();
+            else if (notificationSetting.getTypeNotification().equals(TypeNotification.PLAN_NOTIFICATION)) {
+                NotificationSubscriptionRequest notificationSubscriptionRequest = NotificationSubscriptionRequest.builder().deviceToken(deviceToken).topicName(language.equals(TypeLanguage.EN) ? TypeTopic.MONDAY_AM_EN.getTopicName() : TypeTopic.MONDAY_AM_KR.getTopicName()).build();
                 changeStatusDeviceToTopic(notificationSetting, notificationSubscriptionRequest);
             }
-            if (notificationSetting.getTypeNotification().equals(TypeNotification.WEEKLY_REPORT_NOTIFICATION)) {
-                NotificationSubscriptionRequest notificationSubscriptionRequest = NotificationSubscriptionRequest.builder().deviceToken(deviceToken).topicName("sundaypm").build();
+            else if (notificationSetting.getTypeNotification().equals(TypeNotification.WEEKLY_REPORT_NOTIFICATION)) {
+                NotificationSubscriptionRequest notificationSubscriptionRequest = NotificationSubscriptionRequest.builder().deviceToken(deviceToken).topicName(language.equals(TypeLanguage.EN) ? TypeTopic.SUNDAY_PM_EN.getTopicName() : TypeTopic.SUNDAY_PM_KR.getTopicName()).build();
                 changeStatusDeviceToTopic(notificationSetting, notificationSubscriptionRequest);
             }
         }
@@ -169,6 +172,20 @@ public class NotificationServiceImpl implements NotificationService {
 //                    return dto;
 //                })
 //                .toList();
+    }
+
+    @Override
+    public void changeLanguage(ChangeLanguageNotiRequestDTO request) {
+        Optional<RefreshToken> refreshTokenOptional  = refreshTokenRepository.findByAccountIdAndDevice();
+        if (refreshTokenOptional.isEmpty()) {
+            throw new AppException(ErrorCode.DEVICE_TOKEN_OR_USER_NOT_FOUND);
+        }
+        RefreshToken refreshToken = refreshTokenOptional.get();
+        refreshToken.setLanguage(request.getLanguage());
+        refreshTokenRepository.save(refreshToken);
+        Account account = refreshToken.getAccountId();
+        updateStatusNotification(account.getEmail(), refreshToken.getDeviceToken(), request.getLanguage());
+
     }
 
     public void settingNotification(NotificationSettingRequestDTO request) {
@@ -184,7 +201,7 @@ public class NotificationServiceImpl implements NotificationService {
             notificationSetting.setStatus(notificationStatus.isStatus());
             notificationSettingRepository.save(notificationSetting);
         }
-        updateStatusNotification(email, request.getDeviceToken());
+        updateStatusNotification(email, request.getDeviceToken(), request.getLanguage());
     }
 
     private void changeStatusDeviceToTopic(NotificationSetting notificationSetting, NotificationSubscriptionRequest notificationSubscriptionRequest) {

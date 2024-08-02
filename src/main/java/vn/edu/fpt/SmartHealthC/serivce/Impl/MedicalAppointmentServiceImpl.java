@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointmentStatus;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeNotification;
@@ -28,6 +30,7 @@ import vn.edu.fpt.SmartHealthC.serivce.*;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
+@Slf4j
 @Service
 public class MedicalAppointmentServiceImpl implements MedicalAppointmentService {
 
@@ -95,26 +98,36 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
                 .note(medicalAppointment.getNote())
                 .build();
-//        NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(appUser.get().getAccountId().getId(), TypeNotification.MEDICAL_APPOINTMENT_NOTIFICATION);
-//        Map<String, String> data = new HashMap<>();
-//        if (notificationSetting.isStatus()) {
-//            refreshTokenRepository.findRecordByAccountId(appUser.get().getAccountId().getId()).forEach(refreshToken -> {
-//                try {
-//                    notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
-//                            .deviceToken(refreshToken.getDeviceToken())
-//                            .title("Medical Appointment" +medicalAppointmentResponseDTO.getTypeMedicalAppointment())
-//                            .body("Your medical appointment has create " + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "for you")
-//                            .data(data)
-//                            .build());
-//                } catch (FirebaseMessagingException e) {
-//                    throw new RuntimeException(e);
-//                } catch (ExecutionException e) {
-//                    throw new RuntimeException(e);
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//        }
+        NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(appUser.get().getAccountId().getId(), TypeNotification.MEDICAL_APPOINTMENT_NOTIFICATION);
+        String title = "Smart Healthing C";
+        String body = "Your medical specialist has create a health check scheduled " + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "for you";
+        Map<String, String> data = new HashMap<>();
+        if (notificationSetting.isStatus()) {
+            List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordByAccountId(appUser.get().getAccountId().getId());
+            for (RefreshToken refreshToken : refreshTokenList) {
+                if(refreshToken.getLanguage().equals(TypeLanguage.KR)){
+                    title = "스마트 헬싱 C";
+                    body = "귀하의 의료 전문가가 예약된 건강 검진을 만들었습니다" + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "당신을 위해";
+                }
+                try {
+                    notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
+                            .deviceToken(refreshToken.getDeviceToken())
+                            .title(title)
+                            .body(body)
+                            .data(data)
+                            .build());
+                } catch (FirebaseMessagingException e) {
+//                throw new RuntimeException(e);
+                    log.error("RuntimeException", e);
+                } catch (ExecutionException e) {
+                    log.error("ExecutionException", e);
+//                throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    log.error("InterruptedException", e);
+//                throw new RuntimeException(e);
+                }
+            }
+        }
         return medicalAppointmentResponseDTO;
     }
 
@@ -197,26 +210,36 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
                 .note(medicalAppointment.getNote())
                 .build();
-//        NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(medicalAppointment.getAppUserId().getAccountId().getId(), TypeNotification.MEDICAL_APPOINTMENT_NOTIFICATION);
-//        Map<String, String> data = new HashMap<>();
-//        if (notificationSetting.isStatus()) {
-//            refreshTokenRepository.findRecordByAccountId(medicalAppointment.getAppUserId().getAccountId().getId()).forEach(refreshToken -> {
-//                try {
-//                    notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
-//                            .deviceToken(refreshToken.getDeviceToken())
-//                            .title("Medical Appointment" +medicalAppointmentResponseDTO.getTypeMedicalAppointment())
-//                            .body("Your medical appointment has updated " + medicalAppointmentResponseDTO.getTypeMedicalAppointment())
-//                            .data(data)
-//                            .build());
-//                } catch (FirebaseMessagingException e) {
-//                    throw new RuntimeException(e);
-//                } catch (ExecutionException e) {
-//                    throw new RuntimeException(e);
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//        }
+        NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(medicalAppointment.getAppUserId().getAccountId().getId(), TypeNotification.MEDICAL_APPOINTMENT_NOTIFICATION);
+        Map<String, String> data = new HashMap<>();
+        if (notificationSetting.isStatus()) {
+            List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordByAccountId(medicalAppointment.getAppUserId().getAccountId().getId());
+            String title = "Smart Healthing C";
+            String body = "Your medical appointment " + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "has updated " + medicalAppointmentResponseDTO.getStatusMedicalAppointment();
+            for (RefreshToken refreshToken : refreshTokenList) {
+                if (refreshToken.getLanguage().equals(TypeLanguage.KR)) {
+                    title = "스마트 헬싱 C";
+                    body = "귀하의 의료 약속 " + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "가 업데이트되었습니다 " + medicalAppointmentResponseDTO.getStatusMedicalAppointment();
+                }
+                try {
+                    notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
+                            .deviceToken(refreshToken.getDeviceToken())
+                            .title(title)
+                            .body(body)
+                            .data(data)
+                            .build());
+                } catch (FirebaseMessagingException e) {
+//                throw new RuntimeException(e);
+                    log.error("RuntimeException", e);
+                } catch (ExecutionException e) {
+                    log.error("ExecutionException", e);
+//                throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    log.error("InterruptedException", e);
+//                throw new RuntimeException(e);
+                }
+            }
+        }
 
         return medicalAppointmentResponseDTO;
     }

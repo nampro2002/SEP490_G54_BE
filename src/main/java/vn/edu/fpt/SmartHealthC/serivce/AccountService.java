@@ -29,4 +29,6 @@ public interface AccountService {
     List<AccountResponseDTO> getListDoctorNotDelete();
 
     List<AccountResponseDTO> getListMsAdminNotDelete();
+
+    boolean deactivateAccount(Integer id);
 }

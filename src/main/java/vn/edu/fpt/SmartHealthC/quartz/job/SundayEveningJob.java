@@ -9,6 +9,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeTopic;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.TopicNotificationRequest;
 import vn.edu.fpt.SmartHealthC.serivce.Impl.NotificationServiceImpl;
 import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
@@ -28,15 +29,23 @@ public class SundayEveningJob  implements Job {
         System.out.println("Executing Sunday Evening Job at: " + new Date());
         HashMap<String, String> data = new HashMap<>();
         data.put("key1", "value1");
-        TopicNotificationRequest topicNotificationRequest = TopicNotificationRequest.builder()
-                .title("Đánh giá tuần")
-                .body("đánh giá kết quả thực hiện hàng tuần.")
-                .imageUrl("http://example.com/image.png")
+        TopicNotificationRequest topicNotificationRequestEn = TopicNotificationRequest.builder()
+                .title("Smart Healthing C")
+                .body("Let's check your weekly performance !")
+                .imageUrl("")
                 .data(data)
-                .topicName("sundaypm")
+                .topicName(TypeTopic.SUNDAY_PM_EN.getTopicName())
+                .build();
+        TopicNotificationRequest topicNotificationRequestKr = TopicNotificationRequest.builder()
+                .title("스마트 헬싱 C")
+                .body("주간 성과를 확인해 보세요!")
+                .imageUrl("")
+                .data(data)
+                .topicName(TypeTopic.SUNDAY_PM_KR.getTopicName())
                 .build();
         try {
-            notificationService.sendPushNotificationToTopic(topicNotificationRequest);
+            notificationService.sendPushNotificationToTopic(topicNotificationRequestEn);
+            notificationService.sendPushNotificationToTopic(topicNotificationRequestKr);
         } catch (FirebaseMessagingException e) {
 //                throw new RuntimeException(e);
             log.error("RuntimeException", e);

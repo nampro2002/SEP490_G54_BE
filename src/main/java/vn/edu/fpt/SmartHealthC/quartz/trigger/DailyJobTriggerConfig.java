@@ -49,7 +49,7 @@ public class DailyJobTriggerConfig {
     public Trigger eveningTrigger(@Qualifier("eveningJobDetail") JobDetail jobDetail) {
         System.out.println("execute evening trigger jobBoot");
         try {
-//            String Rtime = "0/10 * * * * ?";
+//            String time = "0/20 * * * * ?";
             String time = "0 0 20 * * ?";
             return TriggerBuilder.newTrigger().forJob(jobDetail)
                     .withIdentity("daily_evening", "JOB_GROUP")
@@ -65,7 +65,7 @@ public class DailyJobTriggerConfig {
     public Trigger mondayMorningTrigger(@Qualifier("mondayMorningJobDetail") JobDetail jobDetail) {
         System.out.println("execute monday morning trigger jobBoot");
         try {
-//            String time = "0/10 * * * * ?";
+//            String time = "0/30 * * * * ?";
             String time = "0 0 8 ? * MON *";
             return TriggerBuilder.newTrigger().forJob(jobDetail)
                     .withIdentity("daily_monday_am", "JOB_GROUP")
@@ -81,7 +81,7 @@ public class DailyJobTriggerConfig {
     public Trigger sundayEveningTrigger(@Qualifier("sundayEveningJobDetail") JobDetail jobDetail) {
         System.out.println("execute sunday evening trigger jobBoot");
         try {
-//            String time = "0/10 * * * * ?";
+//            String time = "0/40 * * * * ?";
             String time = "0 0 20 ? * SUN *";
             return TriggerBuilder.newTrigger().forJob(jobDetail)
                     .withIdentity("daily_sunday_pm", "JOB_GROUP")

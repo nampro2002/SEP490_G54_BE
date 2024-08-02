@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 
 import java.util.Date;
 
@@ -27,6 +28,8 @@ public class RefreshToken {
     private Date refreshExpiryTime;
 
     private String deviceToken;
+    @Enumerated(EnumType.STRING)
+    private TypeLanguage language;
 
     @ManyToOne
     @JoinColumn(name = "account_id")

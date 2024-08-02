@@ -1,9 +1,14 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FAQRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FAQResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.FAQ;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
@@ -129,5 +134,31 @@ public class FAQServiceImpl implements FAQService {
             responseDTOList.add(faqResponseDTO);
         }
         return responseDTOList;
+    }
+
+    @Override
+    public ResponsePaging<List<FAQResponseDTO>> getAllFAQsPaging(int pageNo, String search) {
+        Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
+        Page<FAQ> pagedResult  = faqRepository.findAll(paging, search.toLowerCase());
+        List<FAQ> faqList = new ArrayList<>();
+        if (pagedResult.hasContent()) {
+            faqList = pagedResult.getContent();
+        }
+        List<FAQResponseDTO> formQuestionResponseDTOS = new ArrayList<>();
+        for (FAQ formQuestion : faqList) {
+            FAQResponseDTO faqResponseDTO = FAQResponseDTO
+                    .builder()
+                    .id(formQuestion.getId())
+                    .question(formQuestion.getQuestion())
+                    .answer(formQuestion.getAnswer())
+                    .build();
+            formQuestionResponseDTOS.add(faqResponseDTO);
+        }
+        return ResponsePaging.<List<FAQResponseDTO>>builder()
+                .totalPages(pagedResult.getTotalPages())
+                .currentPage(pageNo + 1)
+                .totalItems((int) pagedResult.getTotalElements())
+                .dataResponse(formQuestionResponseDTOS)
+                .build();
     }
 }
