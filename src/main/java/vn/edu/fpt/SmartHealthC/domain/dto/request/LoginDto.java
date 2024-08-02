@@ -21,6 +21,7 @@ public class LoginDto {
     private String password;
     @NotBlank(message = "처음 앱을 열기 전에 Wi-Fi를 켜주세요.")
     private String deviceToken;
+    //default = KR
     @NotNull(message = "Please select language")
-    private TypeLanguage language;
+    private TypeLanguage language = TypeLanguage.KR;
 }
