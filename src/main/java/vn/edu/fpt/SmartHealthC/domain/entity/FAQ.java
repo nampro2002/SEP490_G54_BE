@@ -22,8 +22,9 @@ public class FAQ {
 
 
     private String question;
-
+    private String questionEn;
     private String answer;
+    private String answerEn;
 
 
 }

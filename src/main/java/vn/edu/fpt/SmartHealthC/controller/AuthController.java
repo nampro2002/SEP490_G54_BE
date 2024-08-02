@@ -93,6 +93,18 @@ public class AuthController {
                         .build()).getBody();
     }
 
+    @GetMapping("/check-refresh-token/{token}")
+    public ApiResponse<Boolean> checkRefreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @PathVariable String token) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<Boolean>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(authService.checkRefreshToken(token,request,response))
+                        .build()).getBody();
+    }
+
     @GetMapping("/refresh-token/{token}")
     public ApiResponse<RefreshTokenResponseDto> refreshToken(
             HttpServletRequest request,

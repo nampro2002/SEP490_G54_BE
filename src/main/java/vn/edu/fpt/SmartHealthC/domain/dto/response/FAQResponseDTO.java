@@ -13,7 +13,8 @@ public class FAQResponseDTO {
     private Integer id;
 
     private String question;
-
+    private String questionEn;
     private String answer;
+    private String answerEn;
 
 }

@@ -137,8 +137,8 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 return d2.compareTo(d1); // Đảo ngược thứ tự để sắp xếp giảm dần
             }
         });
-        List<Date> top5Dates = listWeekStartToNow.subList(0, Math.min(5, listWeekStartToNow.size()));
-        return top5Dates;
+//        List<Date> top5Dates = listWeekStartToNow.subList(0, Math.min(5, listWeekStartToNow.size()));
+        return listWeekStartToNow;
     }
 
     public Date calculateDate(Date sourceDate, int plus) throws ParseException {
@@ -658,15 +658,14 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
 
     private int getAverageWeightPerWeek(AppUser appUser, Date weekStart) {
         List<WeightRecord> weightRecordList = weightRecordRepository.findAppUserAndWeekStart(appUser.getId(),weekStart);
+        if (weightRecordList.isEmpty()) {
+            return 0;
+        }
         double sum = 0;
         for (WeightRecord record : weightRecordList) {
             sum += record.getWeight();
         }
-        int result = (int) (sum / 7);
-        if (weightRecordList.isEmpty()) {
-            result = 0;
-        }
-        return result;
+        return (int) (sum / weightRecordList.size());
     }
 
     private int getMentalPerWeek(AppUser appUser, Date weekStart) {

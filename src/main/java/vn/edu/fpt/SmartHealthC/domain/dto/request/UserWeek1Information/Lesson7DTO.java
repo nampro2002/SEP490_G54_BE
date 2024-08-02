@@ -33,6 +33,7 @@ public class Lesson7DTO {
     private String solution;
 //    @NotBlank(message = "missing commitment")
     private String commitment;
+    private String diary;
 
 
 }

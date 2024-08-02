@@ -279,10 +279,11 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
                 .activityCommitment(userWeek1Information.getActivityCommitment())
                 .dietCommitment(userWeek1Information.getDietCommitment())
                 .mentalCommitment(userWeek1Information.getMentalCommitment())
-                .medicineCommitment(userWeek1Information.getMentalCommitment())
+                .medicineCommitment(userWeek1Information.getMedicineCommitment())
                 .roadBlock(userWeek1Information.getRoadBlock())
                 .solution(userWeek1Information.getSolution())
-                .commitment(userWeek1Information.getCommitment()).build();
+                .commitment(userWeek1Information.getCommitment())
+                .diary(userWeek1Information.getDiary()).build();
         return lesson7DTO;
     }
 
@@ -293,10 +294,11 @@ public class UserWeek1InformationServiceImpl implements UserWeek1InformationServ
         userWeek1Information.setActivityCommitment(lesson7DTO.getActivityCommitment());
         userWeek1Information.setDietCommitment(lesson7DTO.getDietCommitment());
         userWeek1Information.setMentalCommitment(lesson7DTO.getMentalCommitment());
-        userWeek1Information.setMedicineCommitment(lesson7DTO.getMentalCommitment());
+        userWeek1Information.setMedicineCommitment(lesson7DTO.getMedicineCommitment());
         userWeek1Information.setRoadBlock(lesson7DTO.getRoadBlock());
         userWeek1Information.setSolution(lesson7DTO.getSolution());
         userWeek1Information.setCommitment(lesson7DTO.getCommitment());
+        userWeek1Information.setDiary(lesson7DTO.getDiary());
 
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);

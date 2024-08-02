@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserLessonDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.UnlockedLesson;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 
 import java.text.ParseException;
@@ -13,6 +14,6 @@ public interface UserLessonService {
     List<UserLesson> getAllUserLessons();
     UserLesson updateUserLesson(Integer id,UserLessonDTO userLessonDTO);
     UserLesson deleteUserLesson(Integer id);
-    Integer getUnlockedLessons() throws ParseException;
+    UnlockedLesson getUnlockedLessons() throws ParseException;
 
 }

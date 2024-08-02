@@ -71,7 +71,7 @@ import java.util.stream.IntStream;
     public List<MonthlyNumberResponseDTO> getList3MonthlyNumber() {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         List<MonthlyNumberResponseDTO> monthlyNumberResponseDTOList = new ArrayList<>();
-        List<Integer> monthlyNumbers = monthlyQuestionRepository.find3ByAppUser(appUser.getId());
+        List<Integer> monthlyNumbers = monthlyQuestionRepository.findAllByAppUser(appUser.getId());
         for (Integer monthNumber : monthlyNumbers) {
             boolean isAnswered= monthlyQuestionRepository.countMonthNumberByAppUser(appUser.getId(),monthNumber) > 1;
           MonthlyNumberResponseDTO monthlyNumberResponseDTO = new MonthlyNumberResponseDTO().builder()

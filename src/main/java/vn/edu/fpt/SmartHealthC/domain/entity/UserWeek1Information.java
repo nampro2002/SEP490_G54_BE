@@ -76,6 +76,7 @@ public class UserWeek1Information {
     private String roadBlock;
     private String solution;
     private String commitment;
+    private String diary;
 
 
 }

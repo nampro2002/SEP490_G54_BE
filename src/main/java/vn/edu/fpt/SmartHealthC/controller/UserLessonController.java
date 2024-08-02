@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserLessonDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.UnlockedLesson;
 import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 import vn.edu.fpt.SmartHealthC.serivce.UserLessonService;
@@ -31,9 +32,9 @@ public class UserLessonController {
     }
 
     @GetMapping("/unlocked-lessons")
-    public  ApiResponse<Integer> getUnlockedLessons() throws ParseException {
+    public  ApiResponse<UnlockedLesson> getUnlockedLessons() throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<Integer>builder()
+                .body(ApiResponse.<UnlockedLesson>builder()
                         .code(HttpStatus.OK.value())
                         .result(userLessonService.getUnlockedLessons())
                         .build()).getBody();

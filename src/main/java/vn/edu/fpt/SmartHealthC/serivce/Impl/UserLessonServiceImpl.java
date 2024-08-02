@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UserLessonDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.UnlockedLesson;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.UserLesson;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
@@ -81,19 +82,28 @@ public class UserLessonServiceImpl implements UserLessonService {
     }
 
     @Override
-    public Integer getUnlockedLessons() throws ParseException {
+    public UnlockedLesson getUnlockedLessons() throws ParseException {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
-
+        UnlockedLesson unlockedLesson = new UnlockedLesson();
         Optional<UserLesson> userLesson = userLessonRepository.findByAppUser(appUser);
         if(userLesson.isEmpty()){
-            return 1;
+            unlockedLesson.setLesson(1);
+            return unlockedLesson;
+        }else{
+            unlockedLesson.setLesson(userLesson.get().getLesson());
+            Date lastDate = userLesson.get().getLessonDate();
+            Date today = DateUtils.getToday(simpleDateFormat);
+            if(today.after(lastDate)){
+                int lesson= unlockedLesson.getLesson() < 7 ? unlockedLesson.getLesson() +1:
+                        unlockedLesson.getLesson();
+                unlockedLesson.setLesson(lesson);
+            }
+            if(today.equals(lastDate)){
+                unlockedLesson.setStatusCheck(true);
+            }
+            unlockedLesson.setLesson(Math.min(unlockedLesson.getLesson(), 7));
+            return unlockedLesson;
         }
-        Date lastDate = userLesson.get().getLessonDate();
-        Date today = DateUtils.getToday(simpleDateFormat);
-        if(today.after(lastDate)){
-            return userLesson.get().getLesson() < 7 ?userLesson.get().getLesson() +1:
-                    userLesson.get().getLesson();
-        }
-        return Math.min(userLesson.get().getLesson(), 7);
+
     }
 }
