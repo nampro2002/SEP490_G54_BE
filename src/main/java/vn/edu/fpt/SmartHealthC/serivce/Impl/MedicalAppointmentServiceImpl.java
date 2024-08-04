@@ -199,15 +199,22 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         medicalAppointment.setDate(medicalAppointmentDTO.getDate());
         medicalAppointment.setHospital(medicalAppointmentDTO.getLocation());
         medicalAppointment.setNote(medicalAppointmentDTO.getNote());
-        medicalAppointment.setStatusMedicalAppointment(medicalAppointmentDTO.getStatus());
+        TypeMedicalAppointmentStatus typeSave = TypeMedicalAppointmentStatus.DONE;
+        if(medicalAppointment.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.PENDING)){
+            typeSave = TypeMedicalAppointmentStatus.CONFIRM;
+        }else if(medicalAppointment.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.CONFIRM)){
+            typeSave = TypeMedicalAppointmentStatus.DONE;
+        }
+        medicalAppointment.setStatusMedicalAppointment(typeSave);
         medicalAppointment = medicalAppointmentRepository.save(medicalAppointment);
+
         MedicalAppointmentResponseDTO medicalAppointmentResponseDTO = MedicalAppointmentResponseDTO.builder()
                 .id(medicalAppointment.getId())
                 .appUserName(medicalAppointment.getAppUserId().getName())
                 .date(medicalAppointment.getDate())
                 .hospital(medicalAppointment.getHospital())
                 .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
-                .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
+                .statusMedicalAppointment(typeSave)
                 .note(medicalAppointment.getNote())
                 .build();
         NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(medicalAppointment.getAppUserId().getAccountId().getId(), TypeNotification.MEDICAL_APPOINTMENT_NOTIFICATION);
@@ -266,7 +273,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         String email = authentication.getName();
         WebUser webUser = webUserService.getWebUserByEmail(email);
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllPendingByUserIdAndType(TypeMedicalAppointmentStatus.PENDING, webUser.getId(), type, paging);
+            Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllPendingByUserIdAndType(TypeMedicalAppointmentStatus.PENDING, webUser.getId(), type, paging);
         List<MedicalAppointment> medicalAppointmentList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicalAppointmentList = pagedResult.getContent();

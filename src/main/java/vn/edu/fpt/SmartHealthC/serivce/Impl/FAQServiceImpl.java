@@ -149,8 +149,10 @@ public class FAQServiceImpl implements FAQService {
             FAQResponseDTO faqResponseDTO = FAQResponseDTO
                     .builder()
                     .id(formQuestion.getId())
+                    .questionEn(formQuestion.getQuestionEn())
                     .question(formQuestion.getQuestion())
                     .answer(formQuestion.getAnswer())
+                    .answerEn(formQuestion.getAnswerEn())
                     .build();
             formQuestionResponseDTOS.add(faqResponseDTO);
         }
