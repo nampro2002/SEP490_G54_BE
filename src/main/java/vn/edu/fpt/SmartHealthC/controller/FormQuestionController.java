@@ -79,7 +79,7 @@ public class FormQuestionController {
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ApiResponse<FormQuestionResponseDTO> deleteFormQuestion(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FormQuestionResponseDTO>builder()
