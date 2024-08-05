@@ -16,6 +16,10 @@ public interface FormQuestionRepository extends JpaRepository<FormQuestion, Inte
 
     @Query("SELECT f FROM FormQuestion f WHERE f.questionNumber = ?1 order by f.id limit 1")
     Optional<FormQuestion> findRecordByQuestionNumber(int number);
+
+    @Query("SELECT f FROM FormQuestion f WHERE f.questionNumber = ?1 AND f.type = ?2 order by f.id limit 1")
+    Optional<FormQuestion> findRecordByQuestionNumberAndType(int number, MonthlyRecordType type);
+
     @Query("SELECT f FROM FormQuestion f WHERE f.type = ?1 order by f.questionNumber asc")
     List<FormQuestion> findRecordByType(MonthlyRecordType type);
 }
