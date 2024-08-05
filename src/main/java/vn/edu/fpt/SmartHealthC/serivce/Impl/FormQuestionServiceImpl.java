@@ -29,7 +29,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 
     @Override
     public FormQuestionResponseDTO createFormQuestion(FormQuestionRequestDTO formQuestionRequestDTO) {
-            Optional<FormQuestion> formQuestionDuplicate = formQuestionRepository.findRecordByQuestionNumber(formQuestionRequestDTO.getQuestionNumber());
+            Optional<FormQuestion> formQuestionDuplicate = formQuestionRepository.findRecordByQuestionNumberAndType(formQuestionRequestDTO.getQuestionNumber(), formQuestionRequestDTO.getType());
         if(formQuestionDuplicate.isPresent()){
             throw new AppException(ErrorCode.FORM_QUESTION_NUMBER_DUPLICATE);
         }
