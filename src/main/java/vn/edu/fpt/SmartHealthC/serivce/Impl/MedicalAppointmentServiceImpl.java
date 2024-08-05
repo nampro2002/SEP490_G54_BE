@@ -69,6 +69,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                 .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
                 .note(medicalAppointment.getNote())
+                .result(medicalAppointment.getResult())
                 .build();
         return medicalAppointmentResponseDTO;
     }
@@ -97,6 +98,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                 .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
                 .note(medicalAppointment.getNote())
+                .result(medicalAppointment.getResult())
                 .build();
         NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(appUser.get().getAccountId().getId(), TypeNotification.MEDICAL_APPOINTMENT_NOTIFICATION);
         String title = "Smart Healthing C";
@@ -105,7 +107,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         if (notificationSetting.isStatus()) {
             List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordByAccountId(appUser.get().getAccountId().getId());
             for (RefreshToken refreshToken : refreshTokenList) {
-                if(refreshToken.getLanguage().equals(TypeLanguage.KR)){
+                if (refreshToken.getLanguage().equals(TypeLanguage.KR)) {
                     title = "스마트 헬싱 C";
                     body = "귀하의 의료 전문가가 예약된 건강 검진을 만들었습니다" + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "당신을 위해";
                 }
@@ -155,6 +157,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .typeMedicalAppointment(medicalAppointment.get().getTypeMedicalAppointment())
                 .statusMedicalAppointment(medicalAppointment.get().getStatusMedicalAppointment())
                 .note(medicalAppointment.get().getNote())
+                .result(medicalAppointment.get().getResult())
                 .build();
         return medicalAppointmentResponseDTO;
 
@@ -181,6 +184,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                     .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                     .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
                     .note(medicalAppointment.getNote())
+                    .result(medicalAppointment.getResult())
                     .build();
             responseDTOList.add(medicalAppointmentResponseDTO);
         }
@@ -200,9 +204,9 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         medicalAppointment.setHospital(medicalAppointmentDTO.getLocation());
         medicalAppointment.setNote(medicalAppointmentDTO.getNote());
         TypeMedicalAppointmentStatus typeSave = TypeMedicalAppointmentStatus.DONE;
-        if(medicalAppointment.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.PENDING)){
+        if (medicalAppointment.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.PENDING)) {
             typeSave = TypeMedicalAppointmentStatus.CONFIRM;
-        }else if(medicalAppointment.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.CONFIRM)){
+        } else if (medicalAppointment.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.CONFIRM)) {
             typeSave = TypeMedicalAppointmentStatus.DONE;
         }
         medicalAppointment.setStatusMedicalAppointment(typeSave);
@@ -216,6 +220,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                 .statusMedicalAppointment(typeSave)
                 .note(medicalAppointment.getNote())
+                .result(medicalAppointment.getResult())
                 .build();
         NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(medicalAppointment.getAppUserId().getAccountId().getId(), TypeNotification.MEDICAL_APPOINTMENT_NOTIFICATION);
         Map<String, String> data = new HashMap<>();
@@ -263,6 +268,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                 .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
                 .note(medicalAppointment.getNote())
+                .result(medicalAppointment.getResult())
                 .build();
         return medicalAppointmentResponseDTO;
     }
@@ -273,7 +279,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         String email = authentication.getName();
         WebUser webUser = webUserService.getWebUserByEmail(email);
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-            Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllPendingByUserIdAndType(TypeMedicalAppointmentStatus.PENDING, webUser.getId(), type, paging);
+        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllPendingByUserIdAndType(TypeMedicalAppointmentStatus.PENDING, webUser.getId(), type, paging);
         List<MedicalAppointment> medicalAppointmentList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicalAppointmentList = pagedResult.getContent();
@@ -289,6 +295,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                     dto.setHospital(record.getHospital());
                     dto.setTypeMedicalAppointment(record.getTypeMedicalAppointment());
                     dto.setStatusMedicalAppointment(record.getStatusMedicalAppointment());
+                    dto.setResult(record.getResult());
                     dto.setNote(record.getNote());
                     return dto;
                 })
@@ -319,6 +326,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                     .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                     .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
                     .note(medicalAppointment.getNote())
+                    .result(medicalAppointment.getResult())
                     .build();
             responseDTOList.add(medicalAppointmentResponseDTO);
         }
@@ -343,6 +351,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                     .typeMedicalAppointment(medicalAppointment.getTypeMedicalAppointment())
                     .statusMedicalAppointment(medicalAppointment.getStatusMedicalAppointment())
                     .note(medicalAppointment.getNote())
+                    .result(medicalAppointment.getResult())
                     .build();
             responseDTOList.add(medicalAppointmentResponseDTO);
         }

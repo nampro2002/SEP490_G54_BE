@@ -30,4 +30,6 @@ public class MedicalAppointmentResponseDTO {
     private TypeMedicalAppointmentStatus statusMedicalAppointment;
 
     private String note;
+
+    private String result;
 }
