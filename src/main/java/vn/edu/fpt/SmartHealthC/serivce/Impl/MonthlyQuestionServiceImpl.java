@@ -8,11 +8,13 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.FormQuestion;
 import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyQuestionPoint;
 import vn.edu.fpt.SmartHealthC.domain.entity.MonthlyRecord;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
+import vn.edu.fpt.SmartHealthC.repository.FormQuestionRepository;
 import vn.edu.fpt.SmartHealthC.repository.MonthlyQuestionPointRepository;
 import vn.edu.fpt.SmartHealthC.repository.MonthlyQuestionRepository;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
@@ -37,6 +39,8 @@ import java.util.stream.IntStream;
     private AppUserService appUserService;
     @Autowired
     private MonthlyQuestionPointRepository monthlyQuestionPointRepository;
+    @Autowired
+    private FormQuestionRepository formQuestionRepository;
 
     @Override
     public void createNewMonthMark(int appUserId) {
@@ -54,13 +58,14 @@ import java.util.stream.IntStream;
     public void createAnswers(List<MonthlyQuestionDTO> monthlyQuestionDTO) {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         for (MonthlyQuestionDTO record : monthlyQuestionDTO) {
+            Optional<FormQuestion> formQuestion = formQuestionRepository.findRecordByQuestionNumberAndType(record.getQuestionNumber(),record.getMonthlyRecordType());
             MonthlyRecord monthlyRecord = MonthlyRecord.builder()
                     .appUserId(appUser)
                     .monthNumber(record.getMonthNumber())
                     .monthlyRecordType(record.getMonthlyRecordType())
                     .questionNumber(record.getQuestionNumber())
-                    .question(record.getQuestion())
-                    .questionEn(record.getQuestionEn())
+                    .question(formQuestion.get().getQuestion())
+                    .questionEn(formQuestion.get().getQuestionEn())
                     .answer(record.getAnswer())
                     .build();
             monthlyQuestionRepository.save(monthlyRecord);
