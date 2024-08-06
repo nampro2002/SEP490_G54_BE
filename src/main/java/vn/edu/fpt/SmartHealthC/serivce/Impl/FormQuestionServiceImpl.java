@@ -160,13 +160,13 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public FormMonthlyResponseDTO getFormMonthlyMobile(MonthlyRecordType type) {
+    public FormMonthlyResponseDTO getFormMonthlyMobile(MonthlyRecordType type,TypeLanguage language) {
         List<FormQuestion> formQuestionList = formQuestionRepository.findRecordByType(type);
             List<FormMonthlyQuestionDTO> formMonthlyResponseDTOS = new ArrayList<>();
             for (FormQuestion formQuestion : formQuestionList) {
                 FormMonthlyQuestionDTO formMonthlyResponseDTO = FormMonthlyQuestionDTO
                         .builder()
-                        .question(formQuestion.getQuestion())
+                        .question(language == TypeLanguage.EN ? formQuestion.getQuestionEn() : formQuestion.getQuestion())
                         .questionEn(formQuestion.getQuestionEn())
                         .questionNumber(formQuestion.getQuestionNumber())
                         .build();
