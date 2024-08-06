@@ -1,13 +1,11 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeUserQuestion;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AnswerQuestionRequestDTO;
-import vn.edu.fpt.SmartHealthC.domain.dto.request.QuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.QuestionResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.Question;
@@ -111,7 +109,7 @@ public class QuestionServiceImplTest {
         when(questionRepository.findAll()).thenReturn(questionList);
 
         // Act
-        List<QuestionResponseDTO> result = questionService.getQuestionsByType(typeUserQuestion);
+        List<QuestionResponseDTO> result = questionService.getQuestionsByType(typeUserQuestion, search);
 
         // Assert
         assertNotNull(result);

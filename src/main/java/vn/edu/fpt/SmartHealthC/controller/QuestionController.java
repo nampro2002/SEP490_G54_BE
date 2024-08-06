@@ -70,20 +70,20 @@ public class QuestionController {
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/web/admin/all")
-    public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsAd() {
+    public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsAd(@RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(questionService.getQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN))
+                        .result(questionService.getQuestionsByType(TypeUserQuestion.ASSIGN_ADMIN, search))
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('MEDICAL_SPECIALIST')")
     @GetMapping("/web/ms/all")
-    public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsMs() {
+    public ApiResponse<List<QuestionResponseDTO>> getAllQuestionsMs(@RequestParam(defaultValue = "") String search) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<QuestionResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(questionService.getQuestionsByType(TypeUserQuestion.ASSIGN_MS))
+                        .result(questionService.getQuestionsByType(TypeUserQuestion.ASSIGN_MS, search))
                         .build()).getBody();
     }
     //answer question

@@ -203,6 +203,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         medicalAppointment.setDate(medicalAppointmentDTO.getDate());
         medicalAppointment.setHospital(medicalAppointmentDTO.getLocation());
         medicalAppointment.setNote(medicalAppointmentDTO.getNote());
+        medicalAppointment.setResult(medicalAppointmentDTO.getResult());
         TypeMedicalAppointmentStatus typeSave = TypeMedicalAppointmentStatus.DONE;
         if (medicalAppointment.getStatusMedicalAppointment().equals(TypeMedicalAppointmentStatus.PENDING)) {
             typeSave = TypeMedicalAppointmentStatus.CONFIRM;
