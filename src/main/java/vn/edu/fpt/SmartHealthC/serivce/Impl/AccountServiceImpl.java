@@ -89,6 +89,8 @@ public class AccountServiceImpl implements AccountService {
             throw new AppException(ErrorCode.ACCOUNT_ACTIVATED);
         }
         account.setActive(true);
+        account = accountRepository.save(account);
+        if(account.getType().equals(TypeAccount.USER)){
         Optional<AppUser> appUser = appUserRepository.findByAccount(account);
         if (appUser.isEmpty()) {
             throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
@@ -96,8 +98,6 @@ public class AccountServiceImpl implements AccountService {
         UserWeek1Information userWeek1Information = new UserWeek1Information();
 
         userWeek1Information.setAppUserId(appUser.get());
-        account = accountRepository.save(account);
-        if(account.getType().equals(TypeAccount.USER)){
         userWeek1InformationRepository.save(userWeek1Information);
         notificationService.createRecordForAccount(account);
         }
