@@ -61,12 +61,12 @@ public class FormQuestionController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/mobile/get-form-monthly/{type}")
-    public ApiResponse<FormMonthlyResponseDTO> getFormMonthlyMobile(@PathVariable MonthlyRecordType type) {
+    @GetMapping("/mobile/get-form-monthly/{type}/{language}")
+    public ApiResponse<FormMonthlyResponseDTO> getFormMonthlyMobile(@PathVariable MonthlyRecordType type, @PathVariable TypeLanguage language) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FormMonthlyResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(formQuestionService.getFormMonthlyMobile(type))
+                        .result(formQuestionService.getFormMonthlyMobile(type, language))
                         .build()).getBody();
     }
 

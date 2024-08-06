@@ -20,5 +20,5 @@ public interface FormQuestionService {
 
     List<FormQuestionResponseDTO> getAllFormQuestionsMobile(TypeLanguage language);
 
-    FormMonthlyResponseDTO getFormMonthlyMobile(MonthlyRecordType type);
+    FormMonthlyResponseDTO getFormMonthlyMobile(MonthlyRecordType type,TypeLanguage language);
 }
