@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicinePLanResponseDTO;
@@ -20,11 +21,11 @@ public interface MedicineRecordService {
     List<MedicineRecordListResDTO> getAllMedicineRecords(Integer userId);
     void updateMedicineRecord(MedicineRecordUpdateDTO medicineRecordDTO) throws ParseException;
     MedicineRecordResponseDTO deleteMedicineRecord(Integer id);
-    List<MedicinePLanResponseDTO> getAllMedicinePlans(String weekStart) throws ParseException;
+    List<MedicinePLanResponseDTO> getAllMedicinePlans(String weekStart, TypeLanguage language) throws ParseException;
 
     MedicineResponseChartDTO getDataChart() throws ParseException;
 
-    List<MedicinePlanPerDayResponse> getMedicinePerDay(String weekStart) throws ParseException;
+    List<MedicinePlanPerDayResponse> getMedicinePerDay(String weekStart, TypeLanguage language) throws ParseException;
 
     Boolean checkPlanPerDay(String weekStart) throws ParseException;
 

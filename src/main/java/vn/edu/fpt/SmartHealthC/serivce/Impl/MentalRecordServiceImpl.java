@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponse;
@@ -314,7 +315,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
     }
 
     @Override
-    public List<MentalRule> getListMentalPerWeek(String weekStart) throws ParseException {
+    public List<MentalRule> getListMentalPerWeek(String weekStart, TypeLanguage language) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
@@ -330,7 +331,8 @@ public class MentalRecordServiceImpl implements MentalRecordService {
             Date recordDate = formatDate.parse(recordDateStr);
             if (recordDate.equals(weekStartFind)) {
                 if (!uniqueRule.contains(record.getMentalRule())) {
-                    uniqueRule.add(record.getMentalRule());
+                    record.getMentalRule().setTitle(language == TypeLanguage.EN ? record.getMentalRule().getTitleEn() : record.getMentalRule().getTitle() );
+                    uniqueRule.add( record.getMentalRule());
                 }
             }
         }

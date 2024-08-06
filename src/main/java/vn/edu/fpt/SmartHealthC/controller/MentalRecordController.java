@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -39,12 +40,13 @@ public class MentalRecordController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/mobile/mental-rule/{weekStart}")
-    public ApiResponse<List<MentalRule>> getMentalRuleByWeek(@PathVariable String weekStart) throws ParseException {
+    @GetMapping("/mobile/mental-rule/{weekStart}/{language}")
+    public ApiResponse<List<MentalRule>> getMentalRuleByWeek(@PathVariable String weekStart,
+    @PathVariable TypeLanguage language) throws ParseException {
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MentalRule>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(mentalRecordService.getListMentalPerWeek(weekStart))
+                        .result(mentalRecordService.getListMentalPerWeek(weekStart,language))
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('USER')")

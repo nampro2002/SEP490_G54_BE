@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
@@ -69,21 +70,23 @@ public class MedicineRecordController {
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/mobile/medicine-day/{weekStart}")
-    public ApiResponse<List<MedicinePlanPerDayResponse>> getMedicinePerDay(@PathVariable String weekStart) throws ParseException {
+    @GetMapping("/mobile/medicine-day/{weekStart}/{language}")
+    public ApiResponse<List<MedicinePlanPerDayResponse>> getMedicinePerDay(@PathVariable String weekStart,
+             @PathVariable TypeLanguage language) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MedicinePlanPerDayResponse>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicineRecordService.getMedicinePerDay(weekStart))
+                        .result(medicineRecordService.getMedicinePerDay(weekStart,language))
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/mobile/plan-medicine/{weekStart}")
-    public  ApiResponse<List<MedicinePLanResponseDTO> > getAllMedicinePlanRecord(@PathVariable String weekStart) throws ParseException {
+    @GetMapping("/mobile/plan-medicine/{weekStart}/{language}")
+    public  ApiResponse<List<MedicinePLanResponseDTO> > getAllMedicinePlanRecord(@PathVariable String weekStart,
+                @PathVariable TypeLanguage language) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MedicinePLanResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicineRecordService.getAllMedicinePlans(weekStart))
+                        .result(medicineRecordService.getAllMedicinePlans(weekStart,language))
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('USER')")
