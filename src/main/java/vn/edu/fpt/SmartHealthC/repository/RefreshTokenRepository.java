@@ -1,9 +1,9 @@
 package vn.edu.fpt.SmartHealthC.repository;
 
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
-import vn.edu.fpt.SmartHealthC.domain.entity.ForgetPasswordCode;
 import vn.edu.fpt.SmartHealthC.domain.entity.RefreshToken;
 
 import java.util.List;
@@ -21,5 +21,5 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Inte
     @Query("SELECT a FROM RefreshToken a WHERE  a.deviceToken = ?1")
     List<RefreshToken> findRecordBydDeviceToken(String deviceToken);
     @Query("SELECT a FROM RefreshToken a WHERE a.accountId.Id = ?1 and a.deviceToken = ?2")
-    Optional<RefreshToken> findByAccountIdAndDevice();
+    Optional<RefreshToken> findByAccountIdAndDevice(Integer accountId, String deviceToken);
 }
