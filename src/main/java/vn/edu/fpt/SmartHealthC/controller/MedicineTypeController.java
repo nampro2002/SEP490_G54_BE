@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypeRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineTypeResponseDTO;
@@ -54,12 +55,12 @@ public class MedicineTypeController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/mobile")
-    public ApiResponse<List<MedicineTypeResponseDTO>> getAllMedicineTypesMobile() {
+    @GetMapping("/mobile/{language}")
+    public ApiResponse<List<MedicineTypeResponseDTO>> getAllMedicineTypesMobile(@PathVariable TypeLanguage language) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MedicineTypeResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicineTypeService.getAllMedicineTypesMobile())
+                        .result(medicineTypeService.getAllMedicineTypesMobile(language))
                         .build()).getBody();
     }
 

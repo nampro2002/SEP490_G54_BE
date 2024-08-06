@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRuleRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.LessonResponseDTO;
@@ -54,12 +55,12 @@ public class MentalRuleController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/mobile")
-    public ApiResponse<List<MentalRuleResponseDTO>> getAllMentalRulesMobile() {
+    @GetMapping("/mobile/{language}")
+    public ApiResponse<List<MentalRuleResponseDTO>> getAllMentalRulesMobile(@PathVariable TypeLanguage language) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MentalRuleResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(mentalRuleService.getAllMentalRulesMobile())
+                        .result(mentalRuleService.getAllMentalRulesMobile(language))
                         .build()).getBody();
     }
 

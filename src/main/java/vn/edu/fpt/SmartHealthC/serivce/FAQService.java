@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FAQRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FAQResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
@@ -15,7 +16,7 @@ public interface FAQService {
     FAQResponseDTO updateFAQ(Integer id,FAQRequestDTO faq);
     FAQResponseDTO deleteFAQ(Integer id);
 
-    List<FAQResponseDTO> getAllFAQsMobile();
+    List<FAQResponseDTO> getAllFAQsMobile(TypeLanguage language);
 
     ResponsePaging<List<FAQResponseDTO>> getAllFAQsPaging(int i, String search);
 }

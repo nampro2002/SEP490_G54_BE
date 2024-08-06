@@ -6,12 +6,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypeRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineTypeResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
-import vn.edu.fpt.SmartHealthC.domain.entity.MedicineRecord;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicineType;
-import vn.edu.fpt.SmartHealthC.domain.entity.MentalRule;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.MedicineTypeRepository;
@@ -29,13 +28,13 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
 
     @Override
     public MedicineTypeResponseDTO createMedicineType(MedicineTypeRequestDTO medicineTypeRequestDTO) {
-        MedicineType medicineType =  MedicineType.builder()
+        MedicineType medicineType = MedicineType.builder()
                 .title(medicineTypeRequestDTO.getTitle())
                 .titleEn(medicineTypeRequestDTO.getTitleEn())
                 .description(medicineTypeRequestDTO.getDescription())
                 .isDeleted(false)
                 .build();
-        medicineType =  medicineTypeRepository.save(medicineType);
+        medicineType = medicineTypeRepository.save(medicineType);
         return MedicineTypeResponseDTO.builder()
                 .id(medicineType.getId())
                 .title(medicineType.getTitle())
@@ -49,7 +48,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     public MedicineTypeResponseDTO getMedicineTypeById(Integer id) {
 
         Optional<MedicineType> medicineType = medicineTypeRepository.findById(id);
-        if(medicineType.isEmpty()) {
+        if (medicineType.isEmpty()) {
             throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
         }
 
@@ -61,11 +60,12 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
                 .isDeleted(medicineType.get().isDeleted())
                 .build();
     }
+
     @Override
     public MedicineType getMedicineTypeEntityById(Integer id) {
 
         Optional<MedicineType> medicineType = medicineTypeRepository.findById(id);
-        if(medicineType.isEmpty()) {
+        if (medicineType.isEmpty()) {
             throw new AppException(ErrorCode.MEDICINE_TYPE_NOT_FOUND);
         }
 
@@ -76,16 +76,16 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     public ResponsePaging<List<MedicineTypeResponseDTO>> getAllMedicineTypes(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
         Page<MedicineType> pagedResult = medicineTypeRepository.findAllNotDeleted(paging, search.toLowerCase());
-        List<MedicineType> medicineTypeList= new ArrayList<>();
+        List<MedicineType> medicineTypeList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicineTypeList = pagedResult.getContent();
         }
         List<MedicineTypeResponseDTO> medicineTypeResponseDTOList = new ArrayList<>();
-        for(MedicineType medicineType:medicineTypeList){
+        for (MedicineType medicineType : medicineTypeList) {
             medicineTypeResponseDTOList.add(MedicineTypeResponseDTO.builder()
                     .id(medicineType.getId())
                     .title(medicineType.getTitle())
-                            .titleEn(medicineType.getTitleEn())
+                    .titleEn(medicineType.getTitleEn())
                     .description(medicineType.getDescription())
                     .isDeleted(medicineType.isDeleted())
                     .build());
@@ -99,7 +99,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     }
 
     @Override
-    public MedicineTypeResponseDTO updateMedicineType(Integer id,MedicineTypeRequestDTO medicineTypeRequestDTO) {
+    public MedicineTypeResponseDTO updateMedicineType(Integer id, MedicineTypeRequestDTO medicineTypeRequestDTO) {
         MedicineType medicineType = getMedicineTypeEntityById(id);
         medicineType.setDeleted(medicineTypeRequestDTO.isDeleted());
         medicineType.setDescription(medicineTypeRequestDTO.getDescription());
@@ -119,7 +119,7 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     public MedicineTypeResponseDTO deleteMedicineType(Integer id) {
         MedicineType medicineType = getMedicineTypeEntityById(id);
         medicineType.setDeleted(true);
-        medicineType =  medicineTypeRepository.save(medicineType);
+        medicineType = medicineTypeRepository.save(medicineType);
         return MedicineTypeResponseDTO.builder()
                 .id(medicineType.getId())
                 .title(medicineType.getTitle())
@@ -130,14 +130,14 @@ public class MedicineTypeServiceImpl implements MedicineTypeService {
     }
 
     @Override
-    public List<MedicineTypeResponseDTO> getAllMedicineTypesMobile() {
+    public List<MedicineTypeResponseDTO> getAllMedicineTypesMobile(TypeLanguage language) {
         List<MedicineType> medicineTypeList = medicineTypeRepository.findAllNotDeleted();
         List<MedicineTypeResponseDTO> medicineTypeResponseDTOList = new ArrayList<>();
-        for(MedicineType medicineType:medicineTypeList){
+        for (MedicineType medicineType : medicineTypeList) {
             medicineTypeResponseDTOList.add(MedicineTypeResponseDTO.builder()
                     .id(medicineType.getId())
-                    .title(medicineType.getTitle())
-                            .titleEn(medicineType.getTitleEn())
+                    .title(language == TypeLanguage.EN ? medicineType.getTitleEn() : medicineType.getTitle())
+                    .titleEn(medicineType.getTitleEn())
                     .description(medicineType.getDescription())
                     .isDeleted(medicineType.isDeleted())
                     .build());

@@ -6,10 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FAQRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
 import vn.edu.fpt.SmartHealthC.serivce.FAQService;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 @RestController
@@ -54,11 +56,11 @@ public class FAQController {
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/mobile")
-    public ApiResponse<?> getAllFAQsMobile() {
+    @GetMapping("/mobile/{language}")
+    public ApiResponse<?> getAllFAQsMobile(@PathVariable TypeLanguage language) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<FAQResponseDTO>>builder()
-                        .result(faqService.getAllFAQsMobile())
+                        .result(faqService.getAllFAQsMobile(language))
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('ADMIN')")
