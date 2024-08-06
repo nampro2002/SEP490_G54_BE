@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineRecordDTO.MedicinePLanResponseDTO;
@@ -24,6 +25,7 @@ import vn.edu.fpt.SmartHealthC.serivce.MedicineRecordService;
 import vn.edu.fpt.SmartHealthC.utils.AccountUtils;
 import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -251,7 +253,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     }
 
     @Override
-    public List<MedicinePLanResponseDTO> getAllMedicinePlans(String weekStart) throws ParseException {
+    public List<MedicinePLanResponseDTO> getAllMedicinePlans(String weekStart,TypeLanguage language) throws ParseException {
 
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
 
@@ -276,7 +278,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
             MedicinePLanResponseDTO medicinePLanResponseDTO2 = new MedicinePLanResponseDTO();
             medicinePLanResponseDTO2.setMedicineTypeId(Integer.parseInt(type));
             Optional<MedicineType> medicineType = medicineTypeRepository.findById(Integer.parseInt(type));
-            medicinePLanResponseDTO2.setMedicineTitle(medicineType.get().getTitle());
+            medicinePLanResponseDTO2.setMedicineTitle(language == TypeLanguage.EN ? medicineType.get().getTitleEn() : medicineType.get().getTitle());
             medicinePLanResponseDTO2.setMedicineTitleEn(medicineType.get().getTitleEn());
             medicinePLanResponseDTO2.setTime(time);
             for (MedicineRecord medicineRecord : medicineRecordsByTimeAndType) {
@@ -406,7 +408,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
     }
 
     @Override
-    public List<MedicinePlanPerDayResponse> getMedicinePerDay(String weekStart) throws ParseException {
+    public List<MedicinePlanPerDayResponse> getMedicinePerDay(String weekStart, TypeLanguage language) throws ParseException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Optional<AppUser> appUser = appUserRepository.findByAccountEmail(email);
@@ -436,7 +438,7 @@ public class MedicineRecordServiceImpl implements MedicineRecordService {
         for (MedicineRecord record : medicineRecordDayList) {
             medicinePlanPerDayResponseList.add(new MedicinePlanPerDayResponse().builder()
                     .id(record.getId())
-                    .medicineName(record.getMedicineType().getTitle())
+                    .medicineName(language == TypeLanguage.EN ?record.getMedicineType().getTitleEn() : record.getMedicineType().getTitle())
                     .medicineId(record.getMedicineType().getId())
                             .medicineNameEn(record.getMedicineType().getTitleEn())
                     .date(record.getDate()).build());
