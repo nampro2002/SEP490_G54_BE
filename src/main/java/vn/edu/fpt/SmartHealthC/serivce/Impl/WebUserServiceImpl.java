@@ -65,7 +65,7 @@ public class WebUserServiceImpl implements WebUserService {
     @Override
     public ResponsePaging<List<WebUserResponseDTO>> getListDoctorNotDelete(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedDoctor(TypeAccount.DOCTOR, paging);
+        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedDoctor(TypeAccount.DOCTOR, paging, search.toLowerCase());
         List<WebUser> webUserList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             webUserList = pagedResult.getContent();

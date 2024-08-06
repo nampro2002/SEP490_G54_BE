@@ -24,5 +24,6 @@ public class MedicalAppointmentUpdateDTO {
     private String note;
     private Date date;
     private TypeMedicalAppointmentStatus status;
+    private String result;
 
 }

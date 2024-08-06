@@ -111,17 +111,25 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     public void subscribeDeviceToTopic(NotificationSubscriptionRequest request) throws FirebaseMessagingException {
-        FirebaseMessaging.getInstance().subscribeToTopic(
-                Collections.singletonList(request.getDeviceToken()),
-                request.getTopicName()
-        );
+        try {
+            FirebaseMessaging.getInstance().subscribeToTopic(
+                    Collections.singletonList(request.getDeviceToken()),
+                    request.getTopicName()
+            );
+        } catch (FirebaseMessagingException e) {
+            log.error("subscribeDeviceToTopic error: {}", e.getMessage());
+        }
     }
 
     public void unsubscribeDeviceFromTopic(NotificationSubscriptionRequest request) throws FirebaseMessagingException {
-        FirebaseMessaging.getInstance().unsubscribeFromTopic(
-                Collections.singletonList(request.getDeviceToken()),
-                request.getTopicName()
-        );
+      try {
+          FirebaseMessaging.getInstance().unsubscribeFromTopic(
+                  Collections.singletonList(request.getDeviceToken()),
+                  request.getTopicName()
+          );
+      } catch (FirebaseMessagingException e) {
+          log.error("unsubscribeDeviceFromTopic error: {}", e.getMessage());
+      }
     }
 
     private List<String> getAllDeviceTokens() {
