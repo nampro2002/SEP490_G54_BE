@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRuleRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRuleResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
@@ -16,5 +17,5 @@ public interface MentalRuleService {
     MentalRuleResponseDTO updateMentalRule(Integer id, MentalRuleRequestDTO mentalRule);
     MentalRuleResponseDTO deleteMentalRule(Integer id);
 
-    List<MentalRuleResponseDTO> getAllMentalRulesMobile();
+    List<MentalRuleResponseDTO> getAllMentalRulesMobile(TypeLanguage language);
 }

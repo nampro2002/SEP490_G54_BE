@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.Screen2Month.ScreenTotal.MobileScreen2MonthChartSATResponseDTO;
@@ -67,15 +68,16 @@ public class MonthlyQuestionController {
     }
 
     //Lấy câu trả lời theo tháng
-    @GetMapping("/mobile/get-answer/{monthNumber}/{type}")
+    @GetMapping("/mobile/get-answer/{monthNumber}/{type}/{language}")
     public ApiResponse<List<MonthlyAnswerResponseDTO>> getMobileListAnswer(
             @PathVariable int monthNumber,
-            @PathVariable String type
-    ) {
+            @PathVariable String type,
+            @PathVariable TypeLanguage language
+            ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MonthlyAnswerResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(monthlyQuestionService.getMobileListAnswer(monthNumber,type))
+                        .result(monthlyQuestionService.getMobileListAnswer(monthNumber,type, language))
                         .build()).getBody();
     }
     @GetMapping("/web/get-answer/{userId}/{monthNumber}/{type}")

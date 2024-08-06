@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
 import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResDTO.FormMonthlyResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResponseDTO;
@@ -17,7 +18,7 @@ public interface FormQuestionService {
     FormQuestionResponseDTO updateFormQuestion(Integer id,FormQuestionRequestDTO formQuestion);
     FormQuestionResponseDTO deleteFormQuestion(Integer id);
 
-    List<FormQuestionResponseDTO> getAllFormQuestionsMobile();
+    List<FormQuestionResponseDTO> getAllFormQuestionsMobile(TypeLanguage language);
 
-    FormMonthlyResponseDTO getFormMonthlyMobile(MonthlyRecordType type);
+    FormMonthlyResponseDTO getFormMonthlyMobile(MonthlyRecordType type,TypeLanguage language);
 }

@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FAQRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FAQResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
@@ -120,15 +121,15 @@ public class FAQServiceImpl implements FAQService {
     }
 
     @Override
-    public List<FAQResponseDTO> getAllFAQsMobile() {
+    public List<FAQResponseDTO> getAllFAQsMobile(TypeLanguage language) {
         List<FAQResponseDTO> responseDTOList = new ArrayList<>();
         List<FAQ> faqList = faqRepository.findAll();
         for (FAQ faq : faqList) {
             FAQResponseDTO faqResponseDTO = FAQResponseDTO.builder()
                     .id(faq.getId())
-                    .question(faq.getQuestion())
+                    .question(language != TypeLanguage.EN ? faq.getQuestion() : faq.getQuestionEn())
                     .questionEn(faq.getQuestionEn())
-                    .answer(faq.getAnswer())
+                    .answer(language != TypeLanguage.EN ? faq.getAnswer() : faq.getAnswerEn())
                     .answerEn(faq.getAnswerEn())
                     .build();
             responseDTOList.add(faqResponseDTO);

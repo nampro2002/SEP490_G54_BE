@@ -200,7 +200,6 @@ public class NotificationServiceImpl implements NotificationService {
         refreshTokenRepository.save(refreshToken);
         Account account = refreshToken.getAccountId();
         updateStatusNotification(account.getEmail(), refreshToken.getDeviceToken(), request.getLanguage());
-
     }
 
     public void settingNotification(NotificationSettingRequestDTO request) {

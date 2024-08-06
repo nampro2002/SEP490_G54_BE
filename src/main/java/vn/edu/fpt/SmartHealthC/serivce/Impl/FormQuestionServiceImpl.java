@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResDTO.FormMonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResDTO.FormMonthlyResponseDTO;
@@ -141,14 +142,14 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public List<FormQuestionResponseDTO> getAllFormQuestionsMobile() {
+    public List<FormQuestionResponseDTO> getAllFormQuestionsMobile(TypeLanguage language) {
         List<FormQuestion> formQuestions   = formQuestionRepository.findAll();
         List<FormQuestionResponseDTO> formQuestionResponseDTOS = new ArrayList<>();
         for (FormQuestion formQuestion : formQuestions) {
             FormQuestionResponseDTO formQuestionResponseDTO = FormQuestionResponseDTO
                     .builder()
                     .id(formQuestion.getId())
-                    .question(formQuestion.getQuestion())
+                    .question(language != TypeLanguage.EN ? formQuestion.getQuestion() : formQuestion.getQuestionEn())
                     .questionEn(formQuestion.getQuestionEn())
                     .questionNumber(formQuestion.getQuestionNumber())
                     .type(formQuestion.getType())
@@ -159,13 +160,13 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public FormMonthlyResponseDTO getFormMonthlyMobile(MonthlyRecordType type) {
+    public FormMonthlyResponseDTO getFormMonthlyMobile(MonthlyRecordType type,TypeLanguage language) {
         List<FormQuestion> formQuestionList = formQuestionRepository.findRecordByType(type);
             List<FormMonthlyQuestionDTO> formMonthlyResponseDTOS = new ArrayList<>();
             for (FormQuestion formQuestion : formQuestionList) {
                 FormMonthlyQuestionDTO formMonthlyResponseDTO = FormMonthlyQuestionDTO
                         .builder()
-                        .question(formQuestion.getQuestion())
+                        .question(language == TypeLanguage.EN ? formQuestion.getQuestionEn() : formQuestion.getQuestion())
                         .questionEn(formQuestion.getQuestionEn())
                         .questionNumber(formQuestion.getQuestionNumber())
                         .build();

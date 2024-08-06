@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalDTO.MentalResponseChartDTO;
@@ -21,7 +22,7 @@ public interface MentalRecordService {
 
     MentalResponseChartDTO getDataChart() throws ParseException;
 
-    List<MentalRule> getListMentalPerWeek(String weekStart) throws ParseException;
+    List<MentalRule> getListMentalPerWeek(String weekStart, TypeLanguage language) throws ParseException;
 
     Boolean checkPlanPerDay(String weekStart) throws ParseException;
 

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.FormQuestionRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.FormQuestionResDTO.FormMonthlyQuestionDTO;
@@ -50,22 +51,22 @@ public class FormQuestionController {
                         .build()).getBody();
     }
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/mobile")
-    public ApiResponse<List<FormQuestionResponseDTO>> getAllFormQuestionsMobile() {
+    @GetMapping("/mobile/{language}")
+    public ApiResponse<List<FormQuestionResponseDTO>> getAllFormQuestionsMobile(@PathVariable TypeLanguage language) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<FormQuestionResponseDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(formQuestionService.getAllFormQuestionsMobile())
+                        .result(formQuestionService.getAllFormQuestionsMobile(language))
                         .build()).getBody();
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/mobile/get-form-monthly/{type}")
-    public ApiResponse<FormMonthlyResponseDTO> getFormMonthlyMobile(@PathVariable MonthlyRecordType type) {
+    @GetMapping("/mobile/get-form-monthly/{type}/{language}")
+    public ApiResponse<FormMonthlyResponseDTO> getFormMonthlyMobile(@PathVariable MonthlyRecordType type, @PathVariable TypeLanguage language) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<FormMonthlyResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(formQuestionService.getFormMonthlyMobile(type))
+                        .result(formQuestionService.getFormMonthlyMobile(type, language))
                         .build()).getBody();
     }
 

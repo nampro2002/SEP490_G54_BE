@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineTypeRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicineTypeResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
@@ -16,5 +17,5 @@ public interface MedicineTypeService {
     MedicineTypeResponseDTO updateMedicineType(Integer id,MedicineTypeRequestDTO medicineType);
     MedicineTypeResponseDTO deleteMedicineType(Integer id);
 
-    List<MedicineTypeResponseDTO> getAllMedicineTypesMobile();
+    List<MedicineTypeResponseDTO> getAllMedicineTypesMobile(TypeLanguage language);
 }

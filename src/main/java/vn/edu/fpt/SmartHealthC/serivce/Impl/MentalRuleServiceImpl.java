@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MentalRuleRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MentalRuleResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
@@ -134,14 +135,14 @@ public class MentalRuleServiceImpl implements MentalRuleService {
     }
 
     @Override
-    public List<MentalRuleResponseDTO> getAllMentalRulesMobile() {
+    public List<MentalRuleResponseDTO> getAllMentalRulesMobile(TypeLanguage language) {
         List<MentalRule> mentalRuleList = mentalRuleRepository.findAllNotDeleted();
         List<MentalRuleResponseDTO> mentalRuleResponseDTOList = new ArrayList<>();
         for (MentalRule mentalRule : mentalRuleList) {
             MentalRuleResponseDTO mentalRuleResponseDTO = MentalRuleResponseDTO
                     .builder()
                     .id(mentalRule.getId())
-                    .title(mentalRule.getTitle())
+                    .title(language != TypeLanguage.EN ? mentalRule.getTitle() : mentalRule.getTitleEn())
                     .titleEn(mentalRule.getTitleEn())
                     .description(mentalRule.getDescription())
                     .isDeleted(mentalRule.isDeleted())

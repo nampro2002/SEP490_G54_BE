@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalHistoryRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalHistoryResDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
@@ -16,5 +17,5 @@ public interface MedicalHistoryService {
     MedicalHistoryResDTO updateMedicalHistory(Integer id, MedicalHistoryRequestDTO medicalHistory);
     MedicalHistoryResDTO deleteMedicalHistory(Integer id);
 
-    List<MedicalHistoryResDTO> getAllMedicalHistoryMobile();
+    List<MedicalHistoryResDTO> getAllMedicalHistoryMobile(TypeLanguage language);
 }

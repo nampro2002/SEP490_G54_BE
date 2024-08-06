@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalHistoryRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ApiResponse;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalHistoryResDTO;
@@ -51,12 +52,12 @@ public class MedicalHistoryController {
                         .result(medicalHistoryService.getAllMedicalHistory(pageNo - 1, search))
                         .build()).getBody();
     }
-    @GetMapping("/mobile")
-    public ApiResponse<List<MedicalHistoryResDTO>> getAllMedicalHistoryMobile() {
+    @GetMapping("/mobile/{language}")
+    public ApiResponse<List<MedicalHistoryResDTO>> getAllMedicalHistoryMobile(@PathVariable TypeLanguage language) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<List<MedicalHistoryResDTO>>builder()
                         .code(HttpStatus.OK.value())
-                        .result(medicalHistoryService.getAllMedicalHistoryMobile())
+                        .result(medicalHistoryService.getAllMedicalHistoryMobile(language))
                         .build()).getBody();
     }
 
