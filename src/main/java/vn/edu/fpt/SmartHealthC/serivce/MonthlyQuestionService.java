@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MobileGeneralChartResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.MonthlyAnswerResponseDTO;
@@ -20,7 +21,7 @@ public interface MonthlyQuestionService {
 
     List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber,String type);
 
-    List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber,String type);
+    List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber, String type, TypeLanguage language);
 
 
     MonthlyStatisticResponseDTO getPoint(Integer monthNumber, Integer appUser);

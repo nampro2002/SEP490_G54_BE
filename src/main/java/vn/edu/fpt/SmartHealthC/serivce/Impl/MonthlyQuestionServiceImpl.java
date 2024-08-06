@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.MonthlyRecordType;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MonthlyQuestionDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MonthlyQuestionDTO.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
@@ -85,15 +86,15 @@ import java.util.stream.IntStream;
 
     @Override
     public List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber,String type) {
-        return getAnswerByMonthNumberAndAppUser(monthNumber , type , userId);
+        return getAnswerByMonthNumberAndAppUser(monthNumber, type, userId, TypeLanguage.EN);
     }
 
     @Override
-    public List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber, String type) {
+    public List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber, String type, TypeLanguage language) {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
-        return getAnswerByMonthNumberAndAppUser(monthNumber , type , appUser.getId());
+        return getAnswerByMonthNumberAndAppUser(monthNumber, type, appUser.getId(), language);
     }
-    public List<MonthlyAnswerResponseDTO> getAnswerByMonthNumberAndAppUser(int monthNumber, String type , int appUserId) {
+    public List<MonthlyAnswerResponseDTO> getAnswerByMonthNumberAndAppUser(int monthNumber, String type , int appUserId, TypeLanguage language) {
         List<MonthlyAnswerResponseDTO> monthlyAnswerResponseDTOList = new ArrayList<>();
         List<MonthlyRecord> monthlyNumbers = monthlyQuestionRepository.findAllByAppUserAndMonthNumber(appUserId,monthNumber);
         MonthlyRecordType monthlyRecordType;
@@ -106,7 +107,7 @@ import java.util.stream.IntStream;
             if(record.getMonthlyRecordType().equals(monthlyRecordType)){
                 MonthlyAnswerResponseDTO monthlyNumberResponseDTO = new MonthlyAnswerResponseDTO().builder()
                         .questionNumber(record.getQuestionNumber())
-                        .question(record.getQuestion())
+                        .question(language != TypeLanguage.EN ? record.getQuestion() : record.getQuestionEn())
                         .questionEn(record.getQuestionEn())
                         .type(record.getMonthlyRecordType())
                         .answer(record.getAnswer())

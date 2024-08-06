@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointmentStatus;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalHistoryRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO;
@@ -141,7 +142,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     }
 
     @Override
-    public List<MedicalHistoryResDTO> getAllMedicalHistoryMobile() {
+    public List<MedicalHistoryResDTO> getAllMedicalHistoryMobile(TypeLanguage language) {
         List<MedicalHistory> medicalHistories = medicalHistoryRepository.findAllNotDeleted();
 
         List<MedicalHistoryResDTO> medicalHistoryResDTOList = new ArrayList<>();
@@ -150,7 +151,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
                     .builder()
                     .id(medicalHistory.getId())
                     .imageUrl(medicalHistory.getImageUrl())
-                    .name(medicalHistory.getName())
+                    .name(language != TypeLanguage.EN ? medicalHistory.getName() : medicalHistory.getNameEn())
                     .nameEn(medicalHistory.getNameEn())
                     .type(medicalHistory.getType())
                     .build();
