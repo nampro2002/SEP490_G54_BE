@@ -247,8 +247,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionResponseDTO> getQuestionsByType(TypeUserQuestion typeUserQuestion) {
-        List<Question> questionList = getAllQuestions();
+    public List<QuestionResponseDTO> getQuestionsByType(TypeUserQuestion typeUserQuestion, String search) {
+        List<Question> questionList = getAllQuestionsWithSearch(search);
         List<QuestionResponseDTO> responseDTOList = questionList.stream()
                 .filter(question ->
                         question.getTypeUserQuestion() == typeUserQuestion)
@@ -273,6 +273,10 @@ public class QuestionServiceImpl implements QuestionService {
                 })
                 .toList();
         return responseDTOList;
+    }
+
+    private List<Question> getAllQuestionsWithSearch(String search) {
+      return questionRepository.findAllWithSearch(search.toLowerCase());
     }
 
     @Override

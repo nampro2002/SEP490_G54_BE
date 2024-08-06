@@ -17,7 +17,7 @@ public interface QuestionService {
     QuestionResponseDTO deleteQuestion(Integer id);
     List<QuestionResponseDTO> getAllPendingQuestionsByType(TypeUserQuestion typeUserQuestion);
     List<QuestionResponseDTO> getAllQuestionsByType(TypeUserQuestion typeUserQuestion);
-    List<QuestionResponseDTO> getQuestionsByType(TypeUserQuestion typeUserQuestion);
+    List<QuestionResponseDTO> getQuestionsByType(TypeUserQuestion typeUserQuestion, String search);
 
     QuestionResponseDTO removeAnswer(Integer id);
 

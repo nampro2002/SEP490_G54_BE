@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +40,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Transactional
 public class AuthServiceImpl implements AuthService {
+    private static final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
@@ -98,6 +101,7 @@ public class AuthServiceImpl implements AuthService {
         cleanRefreshToken(optionalUser.get().getId(), request.getDeviceToken());
         refreshTokenRepository.save(refreshTokenCreate);
         if (optionalUser.get().getType().equals(TypeAccount.USER) && optionalUser.get().isActive()) {
+            unSubAll(refreshTokenCreate);
             notificationService.updateStatusNotification(request.getEmail(), request.getDeviceToken(), request.getLanguage());
         }
         return AuthenticationResponseDto.builder()
@@ -111,7 +115,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public void cleanRefreshToken(Integer accountId, String deviceToken) throws ParseException {
-        List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordBydDeviceToken( deviceToken);
+        List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordBydDeviceToken(deviceToken);
         for (RefreshToken refreshToken : refreshTokenList) {
             refreshTokenRepository.delete(refreshToken);
         }
@@ -194,16 +198,29 @@ public class AuthServiceImpl implements AuthService {
         }
         RefreshToken refreshToken = refreshTokenFilter.get();
         refreshTokenRepository.delete(refreshToken);
-        try {
-            unSubTopic(refreshToken.getDeviceToken(), refreshToken.getLanguage().equals(TypeLanguage.EN) ? TypeTopic.DAILY_EN.getTopicName() : TypeTopic.DAILY_KR.getTopicName());
-            unSubTopic(refreshToken.getDeviceToken(), refreshToken.getLanguage().equals(TypeLanguage.EN) ? TypeTopic.MONDAY_AM_EN.getTopicName() : TypeTopic.MONDAY_AM_KR.getTopicName());
-            unSubTopic(refreshToken.getDeviceToken(), refreshToken.getLanguage().equals(TypeLanguage.EN) ? TypeTopic.SUNDAY_PM_EN.getTopicName() : TypeTopic.SUNDAY_PM_KR.getTopicName());
-        } catch (FirebaseMessagingException e) {
-            throw new RuntimeException(e);
-        }
-
+        unSubAll(refreshToken);
 
     }
+
+    public void unSubAll(RefreshToken refreshToken) {
+        try {
+//            unSubTopic(refreshToken.getDeviceToken(), refreshToken.getLanguage().equals(TypeLanguage.EN) ? TypeTopic.DAILY_EN.getTopicName() : TypeTopic.DAILY_KR.getTopicName());
+//            unSubTopic(refreshToken.getDeviceToken(), refreshToken.getLanguage().equals(TypeLanguage.EN) ? TypeTopic.MONDAY_AM_EN.getTopicName() : TypeTopic.MONDAY_AM_KR.getTopicName());
+//            unSubTopic(refreshToken.getDeviceToken(), refreshToken.getLanguage().equals(TypeLanguage.EN) ? TypeTopic.SUNDAY_PM_EN.getTopicName() : TypeTopic.SUNDAY_PM_KR.getTopicName());
+            unSubTopic(refreshToken.getDeviceToken(), TypeTopic.DAILY_EN.getTopicName());
+            unSubTopic(refreshToken.getDeviceToken(), TypeTopic.MONDAY_AM_EN.getTopicName());
+            unSubTopic(refreshToken.getDeviceToken(), TypeTopic.SUNDAY_PM_EN.getTopicName());
+            unSubTopic(refreshToken.getDeviceToken(), TypeTopic.DAILY_KR.getTopicName());
+            unSubTopic(refreshToken.getDeviceToken(), TypeTopic.MONDAY_AM_KR.getTopicName());
+            unSubTopic(refreshToken.getDeviceToken(), TypeTopic.SUNDAY_PM_KR.getTopicName());
+        } catch (FirebaseMessagingException e) {
+            log.error("FirebaseMessagingException", e);
+        } catch (Exception e) {
+            log.error("Exception", e);
+        }
+    }
+
+
     public void unSubTopic(String deviceToken, String topicName) throws FirebaseMessagingException {
         NotificationSubscriptionRequest notificationSubscriptionRequest = NotificationSubscriptionRequest.builder().deviceToken(deviceToken).topicName(topicName).build();
         notificationService.unsubscribeDeviceFromTopic(notificationSubscriptionRequest);
@@ -218,7 +235,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<Code> codeRegister = codeRepository.findByEmailAndCode(email, code);
         if (codeRegister.isEmpty()) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -236,7 +253,7 @@ public class AuthServiceImpl implements AuthService {
         String stringFormatedDate = now.format(formatter);
         //Check expires refresh token
         if (formatDate.parse(stringFormatedDate).after(formatDate.parse(refreshTokenFilter.get().getRefreshExpiryTime().toString()))) {
-          return true;
+            return true;
         }
         return false;
     }
@@ -280,18 +297,18 @@ public class AuthServiceImpl implements AuthService {
             throw new AppException(ErrorCode.REFRESH_TOKEN_EXPIRED);
         }
         Optional<Account> optionalUser = accountRepository.findById(refreshTokenFilter.get().getAccountId().getId());
-        if(optionalUser.isEmpty()) {
+        if (optionalUser.isEmpty()) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
 
         //Check token request và refresh có là cùng thuộc 1 người
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshTokenHeader;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         refreshTokenHeader = authHeader.substring(7);
-        if(!refreshTokenHeader.equals(refreshTokenFilter.get().getAccessToken())){
+        if (!refreshTokenHeader.equals(refreshTokenFilter.get().getAccessToken())) {
             throw new AppException(ErrorCode.TOKEN_NOT_OWNED);
         }
 
@@ -318,7 +335,6 @@ public class AuthServiceImpl implements AuthService {
                 .refreshToken(refreshTokenNewString)
                 .build();
     }
-
 
 
 }
