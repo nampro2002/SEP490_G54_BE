@@ -60,11 +60,11 @@ public class MedicineJob implements Job {
                 return;
             }
             String title ="Smart Healthing C";
-            String body = "It's time to take your medicine! "+ record.getMedicineType();
+            String body = "It's time to take your medicine! "+ record.getMedicineType().getTitleEn();
             for (RefreshToken token : refreshToken) {
                 if(token.getLanguage().equals(TypeLanguage.KR)){
                     title = "스마트 헬싱 C";
-                    body = "약을 복용할 시간입니다! "+ record.getMedicineType();
+                    body = "약을 복용할 시간입니다! "+ record.getMedicineType().getTitle();
                 }
                 HashMap<String, String> data = new HashMap<>();
                 DeviceNotificationRequest deviceNotificationRequest = DeviceNotificationRequest.builder()
