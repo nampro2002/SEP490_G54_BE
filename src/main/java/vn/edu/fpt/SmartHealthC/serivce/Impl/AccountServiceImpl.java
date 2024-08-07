@@ -262,10 +262,10 @@ public class AccountServiceImpl implements AccountService {
     public boolean deactivateAccount(Integer id) {
         Account account = accountRepository.findById(id).orElseThrow(() ->
                 new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
-        if (account.isActive()) {
+        if (!account.isActive()) {
             throw new AppException(ErrorCode.ACCOUNT_DEACTIVATED);
         }
-        account.setActive(true);
+        account.setActive(false);
         accountRepository.save(account);
         return true;
     }
