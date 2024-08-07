@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests( req ->
                         req.requestMatchers("/api/auth/login").permitAll()
                                 .requestMatchers("/api/auth/register").permitAll()
+                                .requestMatchers("/api/medical-history/mobile/**").permitAll()
                                 .requestMatchers("/api/auth/verify-mail/**").permitAll()
                                 .requestMatchers("/api/forget-password/**").permitAll()
                                 .requestMatchers("/api/medical-history/mobile").permitAll()
