@@ -54,7 +54,7 @@ public class AppUserController {
                         .build()).getBody();
     }
 
-    @GetMapping("/mobile/get-height-weight/")
+    @GetMapping("/mobile/get-height-weight")
     public ApiResponse<AppUserNameHeightWeightResponseDTO> getAppUserNameHeightWeightKr () {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AppUserNameHeightWeightResponseDTO>builder()
