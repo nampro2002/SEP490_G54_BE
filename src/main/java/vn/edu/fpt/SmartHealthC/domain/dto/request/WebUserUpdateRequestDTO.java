@@ -2,6 +2,7 @@ package vn.edu.fpt.SmartHealthC.domain.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,9 @@ public class WebUserUpdateRequestDTO {
     private Date dob;
     @NotNull(message = "missing gender")
     private Boolean gender;
-    @NotBlank(message = "missing phoneNumber")
+    @Pattern(
+            regexp = "^0\\d{8,10}$",
+            message = "Phone number must start with 0 and has 8-10 digits following"
+    )
     private String phoneNumber;
 }
