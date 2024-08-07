@@ -25,6 +25,5 @@ public class WebUserUpdateRequestDTO {
             regexp = "^0\\d{8,10}$",
             message = "Phone number must start with 0 and has 8-10 digits following"
     )
-    @NotBlank(message = "missing phoneNumber")
     private String phoneNumber;
 }
