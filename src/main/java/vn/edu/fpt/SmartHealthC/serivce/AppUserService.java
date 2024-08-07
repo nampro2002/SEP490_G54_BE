@@ -1,5 +1,6 @@
 package vn.edu.fpt.SmartHealthC.serivce;
 
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AppUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
@@ -24,5 +25,5 @@ public interface AppUserService {
 
     List<AppUser> findAllByWebUserId(Integer id);
 
-    AppUserNameHeightWeightResponseDTO getAppUserNameHeightWeight();
+    AppUserNameHeightWeightResponseDTO getAppUserNameHeightWeight(TypeLanguage language);
 }

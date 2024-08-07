@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalHistory;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AppUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
@@ -209,7 +210,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUserNameHeightWeightResponseDTO getAppUserNameHeightWeight() {
+    public AppUserNameHeightWeightResponseDTO getAppUserNameHeightWeight(TypeLanguage language) {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         Optional<UserMedicalHistory> userMedicalHistory = userMedicalHistoryRepository.findByAppUser(appUser.getId());
         return  new AppUserNameHeightWeightResponseDTO()
@@ -219,7 +220,7 @@ public class AppUserServiceImpl implements AppUserService {
                 .weight(appUser.getWeight())
                 .medicalUser(new MedicalHistoryAppUserResponseDTO().builder()
                         .id(userMedicalHistory.get().getConditionId().getId())
-                        .name(userMedicalHistory.get().getConditionId().getName()).build())
+                        .name(language != TypeLanguage.EN ? userMedicalHistory.get().getConditionId().getName() : userMedicalHistory.get().getConditionId().getNameEn()).build())
                 .build();
     }
 
