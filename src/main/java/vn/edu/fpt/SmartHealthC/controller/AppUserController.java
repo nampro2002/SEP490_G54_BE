@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AppUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.AssignRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
@@ -44,12 +45,21 @@ public class AppUserController {
                         .build()).getBody();
     }
 
-    @GetMapping("/mobile/get-height-weight")
-    public ApiResponse<AppUserNameHeightWeightResponseDTO> getAppUserNameHeightWeight () {
+    @GetMapping("/mobile/get-height-weight/{language}")
+    public ApiResponse<AppUserNameHeightWeightResponseDTO> getAppUserNameHeightWeight (@PathVariable TypeLanguage language) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<AppUserNameHeightWeightResponseDTO>builder()
                         .code(HttpStatus.OK.value())
-                        .result(appUserService.getAppUserNameHeightWeight())
+                        .result(appUserService.getAppUserNameHeightWeight(language))
+                        .build()).getBody();
+    }
+
+    @GetMapping("/mobile/get-height-weight")
+    public ApiResponse<AppUserNameHeightWeightResponseDTO> getAppUserNameHeightWeightKr () {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<AppUserNameHeightWeightResponseDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .result(appUserService.getAppUserNameHeightWeight(TypeLanguage.KR))
                         .build()).getBody();
     }
 //    @GetMapping("mobile/detail")

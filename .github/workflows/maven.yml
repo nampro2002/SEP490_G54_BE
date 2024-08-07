@@ -28,4 +28,4 @@ jobs:
     - name: Build with Maven
       run: mvn install -DskipTests=true
     - name: Execute Jar file
-      run: sudo kill -9 $(sudo lsof -t -i:8080) & sudo java -jar /home/ubuntu/actions-runner/_work/SEP490_G54_BE/SEP490_G54_BE/target/SmartHealthC-0.0.1-SNAPSHOT.jar > /home/ubuntu/smarthealth.log 2>&1 &
+      run: sudo kill -9 $(sudo lsof -t -i:80) & sudo java -jar /home/ubuntu/actions-runner/_work/SEP490_G54_BE/SEP490_G54_BE/target/SmartHealthC-0.0.1-SNAPSHOT.jar > /home/ubuntu/smarthealth.log 2>&1 &
