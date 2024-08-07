@@ -343,7 +343,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
 
     // Phương thức tính BMI
     public static Boolean checkBMI(double bmi) {
-        return (bmi >= 15 && bmi <= 25);
+        return (bmi >= 18.5 && bmi <= 25);
     }
     public boolean CheckSundayAfter8PM() {
         LocalDateTime now = LocalDateTime.now();
