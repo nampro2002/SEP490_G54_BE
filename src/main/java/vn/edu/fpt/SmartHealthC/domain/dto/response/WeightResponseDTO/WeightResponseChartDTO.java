@@ -16,6 +16,8 @@ public class WeightResponseChartDTO {
 
     private Integer avgValue;
     private Float valueToday;
+    private Float minSafeWeight = 0f;
+    private Float maxSafeWeight = 0f;
     private List<WeightResponse> weightResponseList = new ArrayList<>();
 
 
