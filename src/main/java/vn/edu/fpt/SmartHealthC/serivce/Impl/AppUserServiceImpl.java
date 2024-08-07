@@ -213,14 +213,25 @@ public class AppUserServiceImpl implements AppUserService {
     public AppUserNameHeightWeightResponseDTO getAppUserNameHeightWeight(TypeLanguage language) {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         Optional<UserMedicalHistory> userMedicalHistory = userMedicalHistoryRepository.findByAppUser(appUser.getId());
+        if(userMedicalHistory.isPresent()) {
+            return  new AppUserNameHeightWeightResponseDTO()
+                    .builder()
+                    .name(appUser.getName())
+                    .height(appUser.getHeight())
+                    .weight(appUser.getWeight())
+                    .medicalUser(new MedicalHistoryAppUserResponseDTO().builder()
+                            .id(userMedicalHistory.get().getConditionId().getId())
+                            .name((language != TypeLanguage.EN) ? userMedicalHistory.get().getConditionId().getName() : userMedicalHistory.get().getConditionId().getNameEn()).build())
+                    .build();
+        }
         return  new AppUserNameHeightWeightResponseDTO()
                 .builder()
                 .name(appUser.getName())
                 .height(appUser.getHeight())
                 .weight(appUser.getWeight())
                 .medicalUser(new MedicalHistoryAppUserResponseDTO().builder()
-                        .id(userMedicalHistory.get().getConditionId().getId())
-                        .name(language != TypeLanguage.EN ? userMedicalHistory.get().getConditionId().getName() : userMedicalHistory.get().getConditionId().getNameEn()).build())
+                        .id(0)
+                        .name("Not found").build())
                 .build();
     }
 
