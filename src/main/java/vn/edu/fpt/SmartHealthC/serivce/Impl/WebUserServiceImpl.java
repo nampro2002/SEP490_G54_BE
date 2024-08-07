@@ -65,7 +65,7 @@ public class WebUserServiceImpl implements WebUserService {
     @Override
     public ResponsePaging<List<WebUserResponseDTO>> getListDoctorNotDelete(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedDoctor(TypeAccount.DOCTOR, paging, search.toLowerCase());
+        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedDoctor(TypeAccount.DOCTOR, search.toLowerCase(), paging);
         List<WebUser> webUserList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             webUserList = pagedResult.getContent();
@@ -92,7 +92,7 @@ public class WebUserServiceImpl implements WebUserService {
     @Override
     public ResponsePaging<List<WebUserResponseDTO>> getListMsAdminNotDelete(Integer pageNo, String search) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedNotDoctor(TypeAccount.DOCTOR, paging);
+        Page<WebUser> pagedResult = webUserRepository.findAllUnDeletedNotDoctor(TypeAccount.DOCTOR,search.toLowerCase(), paging);
         List<WebUser> webUserList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             webUserList = pagedResult.getContent();
