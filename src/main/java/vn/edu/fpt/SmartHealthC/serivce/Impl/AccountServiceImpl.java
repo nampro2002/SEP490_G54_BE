@@ -14,16 +14,10 @@ import vn.edu.fpt.SmartHealthC.domain.Enum.TypeAccount;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.UpdatePasswordRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.WebUserRequestDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
-import vn.edu.fpt.SmartHealthC.domain.entity.Account;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
-import vn.edu.fpt.SmartHealthC.domain.entity.UserWeek1Information;
-import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
-import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
-import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
-import vn.edu.fpt.SmartHealthC.repository.UserWeek1InformationRepository;
-import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
+import vn.edu.fpt.SmartHealthC.repository.*;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AccountService;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
@@ -55,6 +49,8 @@ public class AccountServiceImpl implements AccountService {
     private NotificationService notificationService;
     @Autowired
     private UserWeek1InformationRepository userWeek1InformationRepository;
+    @Autowired
+    private NotificationSettingRepository notiRepo;
 //    @Override
 //    public AuthenticationResponseDto loginStaff(LoginDto request) {
 //        Optional<Account> optionalUser = accountRepository.findByEmail(request.getEmail());
@@ -90,21 +86,24 @@ public class AccountServiceImpl implements AccountService {
         }
         account.setActive(true);
         account = accountRepository.save(account);
-        if(account.getType().equals(TypeAccount.USER)){
-        Optional<AppUser> appUser = appUserRepository.findByAccount(account);
-        if (appUser.isEmpty()) {
-            throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+        if (account.getType().equals(TypeAccount.USER)) {
+            Optional<AppUser> appUser = appUserRepository.findByAccount(account);
+            if (appUser.isEmpty()) {
+                throw new AppException(ErrorCode.APP_USER_NOT_FOUND);
+            }
+            Optional<UserWeek1Information> userWeek1Information = userWeek1InformationRepository.findByAppUser(appUser.get());
+            if (userWeek1Information.isEmpty()) {
+                UserWeek1Information newLessonInfo = new UserWeek1Information();
+                newLessonInfo.setAppUserId(appUser.get());
+                userWeek1InformationRepository.save(newLessonInfo);
+            }
+            List<NotificationSetting> notis = notiRepo.findByAccountId(id);
+            if(notis.isEmpty()){
+                notificationService.createRecordForAccount(account);
+            }
         }
-        UserWeek1Information userWeek1Information = new UserWeek1Information();
-
-        userWeek1Information.setAppUserId(appUser.get());
-        userWeek1InformationRepository.save(userWeek1Information);
-        notificationService.createRecordForAccount(account);
-        }
-
         return true;
     }
-
 
 
     @Override
@@ -137,6 +136,7 @@ public class AccountServiceImpl implements AccountService {
                 .dataResponse(listResponse)
                 .build();
     }
+
     @Override
     public ResponsePaging<List<WebUserResponseDTO>> getPendingAccountDoctor(Integer pageNo, TypeAccount type) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));

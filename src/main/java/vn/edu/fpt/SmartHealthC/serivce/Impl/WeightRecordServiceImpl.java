@@ -138,7 +138,6 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         AppUser appUser = AccountUtils.getAccountAuthen(appUserRepository);
         Date date = DateUtils.getToday(formatDate);
         List<WeightRecord> weightRecordList = weightRecordRepository.find5RecordByIdUser(appUser.getId());
-
         double sumValue = 0;
         WeightResponseChartDTO weightResponseChartDTO = new WeightResponseChartDTO();
         List<WeightResponse> weightResponseList = new ArrayList<>();
@@ -167,6 +166,8 @@ public class WeightRecordServiceImpl implements WeightRecordService {
         });
         weightResponseChartDTO.setWeightResponseList(weightResponseList);
         weightResponseChartDTO.setAvgValue((int) (sumValue/weightResponseChartDTO.getWeightResponseList().stream().count()));
+        weightResponseChartDTO.setMinSafeWeight((appUser.getHeight()/100f) * (appUser.getHeight()/100f) * 18.5f);
+        weightResponseChartDTO.setMaxSafeWeight((appUser.getHeight()/100f) * (appUser.getHeight()/100f) * 24.9f);
         return  weightResponseChartDTO;
     }
 
