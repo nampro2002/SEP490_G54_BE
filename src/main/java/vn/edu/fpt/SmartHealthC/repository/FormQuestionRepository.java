@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FormQuestionRepository extends JpaRepository<FormQuestion, Integer> {
-    @Query("SELECT f FROM FormQuestion f WHERE LOWER(f.question) LIKE %?1% ")
+    @Query("SELECT f FROM FormQuestion f WHERE LOWER(f.question) LIKE %?1% or  LOWER(f.questionEn) LIKE %?1% ")
     Page<FormQuestion> findAll(Pageable paging, String search);
 
     @Query("SELECT f FROM FormQuestion f WHERE f.questionNumber = ?1 order by f.id limit 1")

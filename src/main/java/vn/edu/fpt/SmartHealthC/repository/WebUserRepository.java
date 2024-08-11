@@ -22,10 +22,10 @@ public interface WebUserRepository extends JpaRepository<WebUser, Integer> {
     Page<WebUser> findAllInactiveAccountUser(TypeAccount type, Pageable paging);
 
 
-    @Query("SELECT w FROM WebUser w WHERE w.accountId.type = ?1  AND LOWER(w.userName) LIKE %?2% ")
+    @Query("SELECT w FROM WebUser w WHERE w.accountId.type = ?1  AND LOWER(w.userName) LIKE %?2% AND w.accountId.isDeleted = false AND w.accountId.isActive= true")
     Page<WebUser> findAllUnDeletedDoctor(TypeAccount typeAccount, String lowerCase, Pageable paging);
 
-    @Query("SELECT w FROM WebUser w WHERE w.accountId.type <> ?1  AND LOWER(w.userName) LIKE %?2% ")
+    @Query("SELECT w FROM WebUser w WHERE w.accountId.type <> ?1  AND LOWER(w.userName) LIKE %?2%  AND w.accountId.isDeleted = false AND w.accountId.isActive= true")
     Page<WebUser> findAllUnDeletedNotDoctor(TypeAccount typeAccount,String lowerCase, Pageable paging);
     @Query("SELECT w FROM WebUser w WHERE w.accountId.type = ?1")
     List<WebUser> findAllByType(TypeAccount typeAccount);

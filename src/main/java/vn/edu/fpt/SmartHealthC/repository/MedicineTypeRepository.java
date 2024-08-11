@@ -9,7 +9,7 @@ import vn.edu.fpt.SmartHealthC.domain.entity.MedicineType;
 import java.util.List;
 
 public interface MedicineTypeRepository extends JpaRepository<MedicineType, Integer> {
-    @Query("SELECT m FROM MedicineType m WHERE m.isDeleted = false AND LOWER(m.title) LIKE %?1% ")
+    @Query("SELECT m FROM MedicineType m WHERE m.isDeleted = false AND ( LOWER(m.title) LIKE %?1% or  LOWER(m.titleEn) LIKE %?1%)")
     Page<MedicineType> findAllNotDeleted(Pageable paging, String search);
 
     @Query("SELECT m FROM MedicineType m WHERE m.isDeleted = false")
