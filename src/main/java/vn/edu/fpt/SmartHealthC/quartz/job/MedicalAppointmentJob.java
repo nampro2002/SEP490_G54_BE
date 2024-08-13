@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 @Slf4j
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -54,16 +55,19 @@ public class MedicalAppointmentJob implements Job {
             //if daysBetween = 1, 3, 7
             if (daysBetween == 1 || daysBetween == 3 || daysBetween == 7) {
                 NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(item.getAppUserId().getAccountId().getId(), TypeNotification.MEDICAL_APPOINTMENT_NOTIFICATION);
-                if(notificationSetting == null || !notificationSetting.isStatus()){
+                if (notificationSetting == null || !notificationSetting.isStatus()) {
                     continue;
                 }
                 List<RefreshToken> refreshToken = refreshTokenRepository.findRecordByAccountId(item.getAppUserId().getAccountId().getId());
-                String title = "Smart Healthing C";
-                String body = "You have a health check scheduled" + item.getTypeMedicalAppointment() + "for " + daysBetween + " days later.";
+                String title;
+                String body;
                 for (RefreshToken token : refreshToken) {
-                    if(token.getLanguage().equals(TypeLanguage.KR)){
+                    if (token.getLanguage().equals(TypeLanguage.KR)) {
                         title = "스마트 헬싱 C";
                         body = "건강 검진 예약이 있습니다" + item.getTypeMedicalAppointment() + "다음 " + daysBetween + "일 후.";
+                    } else {
+                        title = "Smart Healthing C";
+                        body = "You have a health check scheduled" + item.getTypeMedicalAppointment() + "for " + daysBetween + " days later.";
                     }
                     HashMap<String, String> data = new HashMap<>();
                     DeviceNotificationRequest deviceNotificationRequest = DeviceNotificationRequest.builder()
