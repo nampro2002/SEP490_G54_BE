@@ -110,7 +110,7 @@ public class QuestionServiceImpl implements QuestionService {
         if (answer == null || answer.getAnswer().isEmpty()) {
             throw new AppException(ErrorCode.NULL_ANSWER);
         }
-        Optional<WebUser> webUser = webUserRepository.findById(answer.getWebUserId());
+        Optional<WebUser> webUser = webUserRepository.findByAccountId(answer.getWebUserId());
         if (webUser.isEmpty()) {
             throw new AppException(ErrorCode.WEB_USER_NOT_FOUND);
         }
@@ -136,14 +136,17 @@ public class QuestionServiceImpl implements QuestionService {
         Map<String, String> data = new HashMap<>();
         Question finalQuestion = question;
         NotificationSetting notificationSetting = notificationService.findByAccountIdAndType(account.getId(), TypeNotification.QUESTION_NOTIFICATION);
-        String title = "Smart Health C";
-        String body = "The question you sent has been answered.";
+        String title;
+        String body;
         if (notificationSetting.isStatus()) {
             List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordByAccountId(account.getId());
             for (RefreshToken refreshToken : refreshTokenList) {
                 if (refreshToken.getLanguage().equals(TypeLanguage.KR)) {
                     title = "스마트 헬싱 C";
                     body = "보낸 질문에 대한 답변이 도착했습니다.";
+                } else {
+                    title = "Smart Health C";
+                    body = "The question you sent has been answered.";
                 }
                 try {
                     notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
@@ -276,7 +279,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     private List<Question> getAllQuestionsWithSearch(String search) {
-      return questionRepository.findAllWithSearch(search.toLowerCase());
+        return questionRepository.findAllWithSearch(search.toLowerCase());
     }
 
     @Override

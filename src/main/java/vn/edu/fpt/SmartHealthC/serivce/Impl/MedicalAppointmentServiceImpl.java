@@ -18,14 +18,18 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentByWebUserDTO
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.notificationDTO.DeviceNotificationRequest;
-import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ListPatientResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO;
+import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.*;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
-import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 import vn.edu.fpt.SmartHealthC.repository.MedicalAppointmentRepository;
 import vn.edu.fpt.SmartHealthC.repository.RefreshTokenRepository;
-import vn.edu.fpt.SmartHealthC.serivce.*;
+import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
+import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
+import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
+import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -227,12 +231,15 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         Map<String, String> data = new HashMap<>();
         if (notificationSetting.isStatus()) {
             List<RefreshToken> refreshTokenList = refreshTokenRepository.findRecordByAccountId(medicalAppointment.getAppUserId().getAccountId().getId());
-            String title = "Smart Healthing C";
-            String body = "Your medical appointment " + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "has updated " + medicalAppointmentResponseDTO.getStatusMedicalAppointment();
+            String title;
+            String body;
             for (RefreshToken refreshToken : refreshTokenList) {
                 if (refreshToken.getLanguage().equals(TypeLanguage.KR)) {
                     title = "스마트 헬싱 C";
                     body = "귀하의 의료 약속 " + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "가 업데이트되었습니다 " + medicalAppointmentResponseDTO.getStatusMedicalAppointment();
+                } else {
+                    title = "Smart Healthing C";
+                    body = "Your medical appointment " + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "has updated " + medicalAppointmentResponseDTO.getStatusMedicalAppointment();
                 }
                 try {
                     notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()

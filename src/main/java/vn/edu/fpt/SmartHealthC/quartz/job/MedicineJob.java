@@ -27,11 +27,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 @Slf4j
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class MedicineJob implements Job {
-    @Autowired  
+    @Autowired
     private NotificationService notificationService;
     @Autowired
     private TriggerExecutionService triggerExecutionService;
@@ -59,12 +60,15 @@ public class MedicineJob implements Job {
             if (refreshToken.isEmpty()) {
                 return;
             }
-            String title ="Smart Healthing C";
-            String body = "It's time to take your medicine! "+ record.getMedicineType().getTitleEn();
+            String title;
+            String body;
             for (RefreshToken token : refreshToken) {
-                if(token.getLanguage().equals(TypeLanguage.KR)){
+                if (token.getLanguage().equals(TypeLanguage.KR)) {
                     title = "스마트 헬싱 C";
-                    body = "약을 복용할 시간입니다! "+ record.getMedicineType().getTitle();
+                    body = "약을 복용할 시간입니다! " + record.getMedicineType().getTitle();
+                } else {
+                    title = "Smart Healthing C";
+                    body = "It's time to take your medicine! " + record.getMedicineType().getTitleEn();
                 }
                 HashMap<String, String> data = new HashMap<>();
                 DeviceNotificationRequest deviceNotificationRequest = DeviceNotificationRequest.builder()
