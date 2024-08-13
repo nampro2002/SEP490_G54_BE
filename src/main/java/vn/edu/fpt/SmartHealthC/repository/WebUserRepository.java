@@ -29,4 +29,7 @@ public interface WebUserRepository extends JpaRepository<WebUser, Integer> {
     Page<WebUser> findAllUnDeletedNotDoctor(TypeAccount typeAccount,String lowerCase, Pageable paging);
     @Query("SELECT w FROM WebUser w WHERE w.accountId.type = ?1")
     List<WebUser> findAllByType(TypeAccount typeAccount);
+    @Query("SELECT w FROM WebUser w WHERE w.accountId.Id = ?1")
+    Optional<WebUser> findByAccountId(Integer webUserId);
+
 }

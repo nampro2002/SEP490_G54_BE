@@ -86,12 +86,15 @@ public class MonthlyJob implements Job {
                 monthlyQuestionService.createNewMonthMark(userWeekStart.getAppUser().getId());
                 if (notificationSetting.isStatus()) {
                     List<RefreshToken> refreshToken = refreshTokenRepository.findRecordByAccountId(userWeekStart.getAppUser().getAccountId().getId());
-                    String title ="Smart Healthing C";
-                    String body = "Check your performance over the past month!";
+                    String title;
+                    String body;
                     for (RefreshToken token : refreshToken) {
                         if (token.getLanguage().equals(TypeLanguage.KR)) {
                             title = "스마트 헬싱 C";
                             body = "지난 한 달 동안의 성과를 확인하세요!";
+                        } else {
+                            title = "Smart Healthing C";
+                            body = "Check your performance over the past month!";
                         }
                         HashMap<String, String> data = new HashMap<>();
                         data.put("key1", "value1");
