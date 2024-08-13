@@ -67,13 +67,16 @@ public class ActivityRecordServiceImpl implements ActivityRecordService {
 
         Date dateCalculate;
         Map<Integer, String> dayIndexMap = new HashMap<>();
-        dayIndexMap.put(0, "MONDAY");
-        dayIndexMap.put(1, "TUESDAY");
-        dayIndexMap.put(2, "WEDNESDAY");
-        dayIndexMap.put(3, "THURSDAY");
-        dayIndexMap.put(4, "FRIDAY");
-        dayIndexMap.put(5, "SATURDAY");
-        dayIndexMap.put(6, "SUNDAY");
+        dayIndexMap.put(0, "Monday");
+        dayIndexMap.put(1, "Tuesday");
+        dayIndexMap.put(2, "Wednesday");
+        dayIndexMap.put(3, "Thursday");
+        dayIndexMap.put(4, "Friday");
+        dayIndexMap.put(5, "Saturday");
+        dayIndexMap.put(6, "Sunday");
+//        for (String data : activityRecordDTO.getSchedule()) {
+//            data = data.toUpperCase();
+//        }
         int count = 0;
         //Check schedule
         while(true){
