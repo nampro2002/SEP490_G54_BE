@@ -370,7 +370,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
         planResponseDTO.setHba1cList(hba1CResponseDTOList);
         planResponseDTO.setCholesterolList(cholesterolResponseDTOList);
         planResponseDTO.setBloodSugarList(bloodSugarResponseDTOList);
-        Optional<CardinalRecord> cardinalRecord = cardinalRecordList.stream()
+        List<CardinalRecord> cardinalRecord = cardinalRecordList.stream()
                 .filter(record -> {
                     String recordDateStr = formatDate.format(record.getDate());
                     try {
@@ -382,10 +382,16 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                         e.printStackTrace();
                         return false;
                     }
-                }).findFirst();
+                }).toList();
 
-       planResponseDTO.setHba1cDataToday(cardinalRecord.map(CardinalRecord::getHBA1C).orElse((float) 0));
-       planResponseDTO.setCholesterolDataToday(cardinalRecord.map(CardinalRecord::getCholesterol).orElse((float) 0));
+       planResponseDTO.setHba1cDataToday(cardinalRecord.stream()
+               .map(CardinalRecord::getHBA1C)
+               .max(Float::compare)
+               .orElse(0f));
+       planResponseDTO.setCholesterolDataToday(cardinalRecord.stream()
+               .map(CardinalRecord::getCholesterol)
+               .max(Float::compare)
+               .orElse(0f));
 
         //Thông số chi tiết của blood sugar
         List<DetailBloodSugarResponseDTO> listDetailBloodSugarMorningResponseDTOList = new ArrayList<>();
