@@ -236,10 +236,10 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
             for (RefreshToken refreshToken : refreshTokenList) {
                 if (refreshToken.getLanguage().equals(TypeLanguage.KR)) {
                     title = "스마트 헬싱 C";
-                    body = "귀하의 의료 약속 " + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "가 업데이트되었습니다 " + medicalAppointmentResponseDTO.getStatusMedicalAppointment();
+                    body = medicalAppointmentResponseDTO.getDate() +  "진료 예약, " + medicalAppointmentDTO.getLocation() + "가 승인되었습니다.";
                 } else {
                     title = "Smart Healthing C";
-                    body = "Your medical appointment " + medicalAppointmentResponseDTO.getTypeMedicalAppointment() + "has updated " + medicalAppointmentResponseDTO.getStatusMedicalAppointment();
+                    body = "Your medical appointment for " + medicalAppointmentResponseDTO.getDate() + ", " + medicalAppointmentDTO.getLocation() + "has been approved!";
                 }
                 try {
                     notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
@@ -344,7 +344,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     @Override
     public ResponsePaging<List<MedicalAppointmentResponseDTO>> getMedicalAppointmentByUserId(Integer userId, Integer pageNo) {
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllByAppUserId(userId, paging);
+        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllByAppUserId(userId, TypeMedicalAppointmentStatus.DONE, paging);
         List<MedicalAppointment> medicalAppointmentList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicalAppointmentList = pagedResult.getContent();
