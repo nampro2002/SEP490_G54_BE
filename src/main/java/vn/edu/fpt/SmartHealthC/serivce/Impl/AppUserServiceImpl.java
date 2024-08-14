@@ -159,7 +159,7 @@ public class AppUserServiceImpl implements AppUserService {
                     dto.setDob(record.getDob());
                     dto.setGender(record.isGender());
                     dto.setPhoneNumber(record.getPhoneNumber());
-                    dto.setMsId(record.getWebUser().getId());
+                    dto.setMsId(record.getWebUser() != null ? record.getWebUser().getId() : 0);
                     return dto;
                 })
                 .toList();
