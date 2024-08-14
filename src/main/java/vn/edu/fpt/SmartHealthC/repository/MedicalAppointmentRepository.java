@@ -4,12 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointment;
 import vn.edu.fpt.SmartHealthC.domain.Enum.TypeMedicalAppointmentStatus;
-import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
-import vn.edu.fpt.SmartHealthC.domain.entity.StepRecord;
 
 import java.util.List;
 
@@ -25,8 +22,8 @@ public interface MedicalAppointmentRepository extends JpaRepository<MedicalAppoi
     List<MedicalAppointment> findAllByUserIdAndType(TypeMedicalAppointmentStatus type, Integer userId);
     @Query("SELECT m FROM MedicalAppointment m WHERE m.appUserId.webUser.id = ?1 AND LOWER(m.appUserId.name) LIKE  %?2% ")
     Page<MedicalAppointment> findAllByWebUserId(Integer id, Pageable paging, String search);
-    @Query("SELECT m FROM MedicalAppointment m WHERE m.appUserId.id = ?1")
-    Page<MedicalAppointment> findAllByAppUserId(Integer userId, Pageable paging);
+    @Query("SELECT m FROM MedicalAppointment m WHERE m.appUserId.id = ?1 AND m.statusMedicalAppointment = ?2")
+    Page<MedicalAppointment> findAllByAppUserId(Integer userId, TypeMedicalAppointmentStatus type, Pageable paging);
     @Query("SELECT m FROM MedicalAppointment m WHERE m.statusMedicalAppointment = ?1")
     List<MedicalAppointment> findAllByType(TypeMedicalAppointmentStatus typeMedicalAppointmentStatus);
 
