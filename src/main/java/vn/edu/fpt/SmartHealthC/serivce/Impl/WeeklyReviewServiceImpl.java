@@ -215,54 +215,13 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 .heavyActivity(weekReviewExist.get().getHeavyActivity())
                 .mediumActivity(weekReviewExist.get().getMediumActivity())
                 .lightActivity(weekReviewExist.get().getLightActivity())
+                .medicineDateDone(weekReviewExist.get().getMedicineRecordDone())
+                .medicineDateTotal(weekReviewExist.get().getMedicineRecordTotal())
                 .averageDietRecordPerWeek(weekReviewExist.get().getAverageDietRecordPerWeek())
                 .averageStepRecordPerWeek(weekReviewExist.get().getAverageStepRecordPerWeek())
                 .totalPoint(weekReviewExist.get().getTotalPoint())
                 .build();
 
-        //Tìm danh sách thuốc theo tuần
-        List<MedicineRecord> medicineRecordListByWeekStart = medicineRecordRepository.findByAppUserAndWeekStart(appUser.getId(),weekStartFilter);
-        if (medicineRecordListByWeekStart.isEmpty()) {
-            responseDTO.setMedicineDateDone(0);
-            responseDTO.setMedicineDateTotal(0);
-
-        } else {
-            //Lấy ra date unique
-            Set<Date> uniqueDates = new HashSet<>();
-            for (MedicineRecord record : medicineRecordListByWeekStart) {
-                String itemDateStr = formatDate.format(record.getDate());
-                Date itemDate = formatDate.parse(itemDateStr);
-                if (!uniqueDates.contains(itemDate)) {
-                    uniqueDates.add(itemDate);
-                }
-            }
-
-            //Sắp xếp date tăng dần
-            Set<Date> sortedDates = new TreeSet<>(uniqueDates);
-            //Đếm từng ngày xem có uống đủ thuốc không
-            int countDone = 0;
-            for (Date date : sortedDates) {
-
-                boolean dataNullExists = medicineRecordListByWeekStart.stream()
-                        .anyMatch(item -> {
-                            String itemDateStr = formatDate.format(item.getDate());
-                            try {
-                                Date itemDate = formatDate.parse(itemDateStr);
-                                return itemDate.equals(date)
-                                        && (item.getStatus() == null || item.getStatus() == false);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                                return false;
-                            }
-                        });
-                // ngày hôm đấy uống đủ
-                if (dataNullExists == false) {
-                    countDone++;
-                }
-            }
-            responseDTO.setMedicineDateDone(countDone);
-            responseDTO.setMedicineDateTotal(uniqueDates.size());
-        }
 
 
         int hba1cPoint = (int) ((double) weekReviewExist.get().getHba1cSafeRecord() / weekReviewExist.get().getHba1cTotalRecord() * 100);
@@ -745,6 +704,7 @@ public class WeeklyReviewServiceImpl implements WeeklyReviewService {
                 }
             }
             responseDTO.setMedicineRecordDone(count);
+            responseDTO.setMedicineRecordTotal(medicineRecordList.size());
         }
         return responseDTO;
     }
