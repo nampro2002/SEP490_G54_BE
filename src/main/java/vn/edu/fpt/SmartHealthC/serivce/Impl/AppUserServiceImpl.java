@@ -67,7 +67,7 @@ public class AppUserServiceImpl implements AppUserService {
         StringBuilder chronicDiseases = new StringBuilder();
         appUser.getUserMedicalHistoryList().forEach(userMedicalHistory -> {
             if (!userMedicalHistory.getConditionId().getType().equals(TypeMedicalHistory.OTHERS)
-                    || !userMedicalHistory.getConditionId().getType().equals(TypeMedicalHistory.HABIT)) {
+                    && !userMedicalHistory.getConditionId().getType().equals(TypeMedicalHistory.HABIT)) {
                 if (!chronicDiseases.isEmpty()) {
                     chronicDiseases.append("/");
                 }
@@ -87,14 +87,14 @@ public class AppUserServiceImpl implements AppUserService {
         dto.setOthersDiseases(String.valueOf(otherDiseases));
         Boolean smoke = false;
         for (int i = 0; i < appUser.getUserMedicalHistoryList().size(); i++) {
-            if (appUser.getUserMedicalHistoryList().get(i).getConditionId().getName().equalsIgnoreCase("Hút thuốc")) {
+            if (appUser.getUserMedicalHistoryList().get(i).getConditionId().getName().equalsIgnoreCase("Smoking")) {
                 smoke = true;
             }
         }
         dto.setSmoke(smoke);
         Boolean alcohol = false;
         for (int i = 0; i < appUser.getUserMedicalHistoryList().size(); i++) {
-            if (appUser.getUserMedicalHistoryList().get(i).getConditionId().getName().equalsIgnoreCase("Uống rượu")) {
+            if (appUser.getUserMedicalHistoryList().get(i).getConditionId().getName().equalsIgnoreCase("Drinking")) {
                 smoke = true;
             }
         }
