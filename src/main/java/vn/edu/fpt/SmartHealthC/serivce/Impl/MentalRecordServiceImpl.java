@@ -151,7 +151,7 @@ public class MentalRecordServiceImpl implements MentalRecordService {
                     continue;
                 }
                 if (mentalRecord.getStatus()) {
-                    record.getMentalRuleTitle().add(mentalRecord.getMentalRule().getTitle());
+                    record.getMentalRuleTitle().add(mentalRecord.getMentalRule().getTitleEn());
                     count++;
                 }
             }
