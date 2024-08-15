@@ -71,7 +71,7 @@ public class AppUserServiceImpl implements AppUserService {
                 if (!chronicDiseases.isEmpty()) {
                     chronicDiseases.append("/");
                 }
-                chronicDiseases.append(userMedicalHistory.getConditionId().getName());
+                chronicDiseases.append(userMedicalHistory.getConditionId().getNameEn());
             }
         });
         dto.setChronicDiseases(String.valueOf(chronicDiseases));
@@ -81,7 +81,7 @@ public class AppUserServiceImpl implements AppUserService {
                 if (!otherDiseases.isEmpty()) {
                     otherDiseases.append("/");
                 }
-                otherDiseases.append(userMedicalHistory.getConditionId().getName());
+                otherDiseases.append(userMedicalHistory.getConditionId().getNameEn());
             }
         });
         dto.setOthersDiseases(String.valueOf(otherDiseases));
