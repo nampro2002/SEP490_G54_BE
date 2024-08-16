@@ -19,10 +19,7 @@ import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.*;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
-import vn.edu.fpt.SmartHealthC.serivce.AccountService;
-import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
-import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
-import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
+import vn.edu.fpt.SmartHealthC.serivce.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +48,10 @@ public class AccountServiceImpl implements AccountService {
     private UserWeek1InformationRepository userWeek1InformationRepository;
     @Autowired
     private NotificationSettingRepository notiRepo;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private CodeRepository codeRepository;
 //    @Override
 //    public AuthenticationResponseDto loginStaff(LoginDto request) {
 //        Optional<Account> optionalUser = accountRepository.findByEmail(request.getEmail());
@@ -102,9 +103,25 @@ public class AccountServiceImpl implements AccountService {
                 notificationService.createRecordForAccount(account);
             }
         }
+        sendEmailActivateSuccess(account.getEmail());
         return true;
     }
 
+    public void sendEmailActivateSuccess(String email) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+        if (!account.isPresent()) {
+            throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
+        }
+        String message = "Your account has been activated. Login and start using our services";
+        boolean result = emailService.sendMail(
+                email,
+                "Account has been activated",
+                message
+        );
+        if (result == false) {
+            throw new AppException(ErrorCode.SEND_EMAIL_FAIL);
+        }
+    }
 
     @Override
     public ResponsePaging<List<AppUserResponseDTO>> getPendingAccount(Integer pageNo, TypeAccount type) {
