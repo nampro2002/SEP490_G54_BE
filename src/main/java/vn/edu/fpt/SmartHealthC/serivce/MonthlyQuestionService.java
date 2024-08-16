@@ -18,17 +18,19 @@ public interface MonthlyQuestionService {
 
     List<MonthlyNumberResponseDTO> getList3MonthlyNumber();
 
-
-    List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber,String type);
+    List<Integer> getList3MonthlyNumberWeb(Integer appUserId);
 
     List<MonthlyAnswerResponseDTO> getMobileListAnswer(int monthNumber, String type, TypeLanguage language);
 
 
-    MonthlyStatisticResponseDTO getPoint(Integer monthNumber, Integer appUser);
+    List<MonthlyAnswerResponseDTO> getWebListAnswer(int userId, int monthNumber,String type);
 
     MobileGeneralChartResponseDTO getPoint3MonthMobile();
 
-    List<Integer> getList3MonthlyNumberWeb(Integer appUserId);
+    MonthlyStatisticResponseDTO getPoint(Integer monthNumber, Integer appUser);
+
+
+
 
 
     List<MonthlyStatisticResponseDTO> getPoint2MonthMobile(Integer monthNumber);
