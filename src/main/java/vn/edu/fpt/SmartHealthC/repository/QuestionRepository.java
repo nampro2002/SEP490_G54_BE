@@ -14,6 +14,6 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     Page<Question> findAll(Pageable pageable);
     @Query("SELECT q FROM Question q WHERE q.appUserId.id = ?1")
     List<Question> findByUserId(Integer userId);
-    @Query("SELECT q FROM Question q WHERE LOWER(q.title) LIKE %?1% ")
+    @Query("SELECT q FROM Question q WHERE LOWER(q.body) LIKE %?1% ")
     List<Question> findAllWithSearch(String search);
 }
