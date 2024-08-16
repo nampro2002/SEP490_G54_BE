@@ -21,11 +21,13 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.AuthenticationResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.RefreshTokenResponseDto;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.Code;
 import vn.edu.fpt.SmartHealthC.domain.entity.RefreshToken;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
+import vn.edu.fpt.SmartHealthC.repository.CodeRepository;
 import vn.edu.fpt.SmartHealthC.repository.RefreshTokenRepository;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.EmailService;
@@ -36,6 +38,8 @@ import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -68,6 +72,9 @@ public class AuthServiceImplTest {
 
     @Mock
     private RefreshTokenRepository refreshTokenRepository;
+
+    @Mock
+    private  CodeRepository codeRepository;
 
     @InjectMocks
     private AuthServiceImpl authService;
@@ -144,9 +151,15 @@ public class AuthServiceImplTest {
         // Arrange
         RegisterDto registerDto = new RegisterDto();
         registerDto.setEmail("newuser@example.com");
+        registerDto.setDob(new Date());
+        registerDto.setHeight(12.0f);
+        registerDto.setWeight(12.0f);
+        registerDto.setCic("something");
+        registerDto.setPhoneNumber("0123456789");
         registerDto.setPassword("password");
         registerDto.setName("New User");
         registerDto.setGender(true);
+        registerDto.setListMedicalHistory(new ArrayList<>());
 
         when(accountRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(anyString())).thenReturn("hashedPassword");
@@ -186,16 +199,21 @@ public class AuthServiceImplTest {
         Account existingAccount = new Account();
         existingAccount.setEmail(email);
 
+        Code mockCode = new Code(); // Create a mock or real instance of Code
+        mockCode.setCode("123456");
+
         when(accountRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(emailService.generateRandomCode(anyInt())).thenReturn("123456");
+        when(codeRepository.save(any())).thenReturn(mockCode);
+        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(emailService.sendMail(anyString(), anyString(), anyString())).thenReturn(true);
 
         // Act
-        String code = authService.sendEmailCode(email);
+        String message = authService.sendEmailCode(email);
 
         // Assert
-        assertNotNull(code);
-        assertEquals("123456", code);
+        assertNotNull(message);
+        assertEquals(message ,"Gửi mã xác thực email thành công");
         verify(emailService, times(1)).sendMail(email, "MÃ XÁC THỰC EMAIL", "Code xác thực email đăng ký của bạn là : 123456");
     }
 

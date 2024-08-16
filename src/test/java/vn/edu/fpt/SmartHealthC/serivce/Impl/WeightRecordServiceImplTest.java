@@ -1,6 +1,7 @@
 package vn.edu.fpt.SmartHealthC.serivce.Impl;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,14 +17,14 @@ import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class WeightRecordServiceImplTest {
@@ -37,6 +38,9 @@ public class WeightRecordServiceImplTest {
 
     @Mock
     private AppUserRepository appUserRepository;
+
+    @Mock
+    private SimpleDateFormat simpleDateFormat;
 
 
     // No need to @InjectMocks here as we aren't injecting mocks into it
@@ -72,22 +76,28 @@ public class WeightRecordServiceImplTest {
 
 
     @Test
-    void createWeightRecord_appUserID_Notfound() {
+    void createWeightRecord_appUserID_Notfound() throws ParseException {
 
-        Authentication mockAuthentication = Mockito.mock(Authentication.class);
-        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+        // Arrange
+        Authentication mockAuthentication = mock(Authentication.class);
+        SecurityContext mockSecurityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(mockSecurityContext);
-
         when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-        when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
+        String dateInString = "2024-08-15";
+        WeightRecordDTO weightRecordDTO = new WeightRecordDTO().builder()
+                .weight(12.0f)
+                .date(simpleDateFormat.parse(dateInString))
+                .weekStart(simpleDateFormat.parse(dateInString))
+                .build();
+        when(appUserRepository.findByAccountEmail("Test@gmail.com"))
+                .thenThrow(new AppException(ErrorCode.APP_USER_NOT_FOUND));
 
-        // Mock empty user retrieval (Optional.empty())
-        when(appUserRepository.findByAccountEmail("Test@gmail.com")).thenReturn(Optional.empty());
+        AppException exception = assertThrows(AppException.class,
+                () ->WeightRecordService.createWeightRecord(weightRecordDTO));
 
-        // Assert the expected exception with specific error code
-        AppException exception = assertThrows(AppException.class, () -> WeightRecordService.createWeightRecord(new WeightRecordDTO()));
+        // Act and Assert
+        assertEquals(ErrorCode.APP_USER_NOT_FOUND ,exception.getErrorCode());
 
-        assertEquals(ErrorCode.APP_USER_NOT_FOUND, exception.getErrorCode());
 
     }
 

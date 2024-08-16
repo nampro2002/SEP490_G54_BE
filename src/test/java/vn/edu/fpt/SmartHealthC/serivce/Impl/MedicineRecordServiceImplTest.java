@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import vn.edu.fpt.SmartHealthC.domain.Enum.TypeLanguage;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordCreateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicineRecordUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
@@ -227,22 +228,22 @@ public class MedicineRecordServiceImplTest {
     @Test
     void getMedicinePerDay_appUserID_Notfound() {
 
-//        MedicineRecordCreateDTO MedicineRecord = new MedicineRecordCreateDTO();
-//
-//        Authentication mockAuthentication = Mockito.mock(Authentication.class);
-//        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
-//        SecurityContextHolder.setContext(mockSecurityContext);
-//
-//        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-//        when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
-//
-//        // Mock empty user retrieval (Optional.empty())
-//        when(appUserRepository.findByAccountEmail("Test@gmail.com")).thenReturn(Optional.empty());
-//
-//        // Assert the expected exception with specific error code
-//        AppException exception = assertThrows(AppException.class, () -> MedicineRecordService.getMedicinePerDay("2024/17/08"));
-//
-//        assertEquals(ErrorCode.APP_USER_NOT_FOUND, exception.getErrorCode());
+        MedicineRecordCreateDTO MedicineRecord = new MedicineRecordCreateDTO();
+
+        Authentication mockAuthentication = Mockito.mock(Authentication.class);
+        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(mockSecurityContext);
+
+        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+        when(mockAuthentication.getName()).thenReturn("Test@gmail.com");
+
+        // Mock empty user retrieval (Optional.empty())
+        when(appUserRepository.findByAccountEmail("Test@gmail.com")).thenReturn(Optional.empty());
+
+        // Assert the expected exception with specific error code
+        AppException exception = assertThrows(AppException.class, () -> MedicineRecordService.getMedicinePerDay("2024/17/08", TypeLanguage.EN));
+
+        assertEquals(ErrorCode.APP_USER_NOT_FOUND, exception.getErrorCode());
 
     }
 

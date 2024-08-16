@@ -14,6 +14,7 @@ import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -37,11 +38,13 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.AvailableMSResponseDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.domain.entity.Account;
 import vn.edu.fpt.SmartHealthC.domain.entity.AppUser;
+import vn.edu.fpt.SmartHealthC.domain.entity.UserWeek1Information;
 import vn.edu.fpt.SmartHealthC.domain.entity.WebUser;
 import vn.edu.fpt.SmartHealthC.exception.AppException;
 import vn.edu.fpt.SmartHealthC.exception.ErrorCode;
 import vn.edu.fpt.SmartHealthC.repository.AccountRepository;
 import vn.edu.fpt.SmartHealthC.repository.AppUserRepository;
+import vn.edu.fpt.SmartHealthC.repository.UserWeek1InformationRepository;
 import vn.edu.fpt.SmartHealthC.repository.WebUserRepository;
 import vn.edu.fpt.SmartHealthC.security.JwtProvider;
 import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
@@ -73,9 +76,13 @@ public class AccountServiceImplTest {
     @MockBean
     private AppUserRepository appUserRepository;
 
+    @Mock
+    private UserWeek1InformationRepository userWeek1InformationRepository;
+
     private AppUser appUser;
     private Account account;
     private UpdatePasswordRequestDTO updatePasswordRequestDTO;
+    private UserWeek1Information userWeek1Information;
 
     @BeforeEach
     void initData() {
@@ -102,6 +109,50 @@ public class AccountServiceImplTest {
                 .oldPassword("old_password")
                 .newPassword("New@1234")
                 .build();
+        userWeek1Information = new UserWeek1Information(
+                1,
+                appUser,
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                1,
+                2,
+                3,
+                4,
+                5,
+                "123",
+                "123",
+                "123",
+                "123",
+                true,
+                "123",
+                "123",
+                true,
+                true,
+                true,
+                true,
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123",
+                "123"
+                // ... các giá trị khác
+        );
     }
 
     @Test
@@ -114,11 +165,11 @@ public class AccountServiceImplTest {
                 .build();
 
         account.setActive(false);
-
-        when(appUserRepository.findById(1)).thenReturn(Optional.of(appUser));
         when(accountRepository.findById(account.getId())).thenReturn(Optional.of(account));
         when(accountRepository.save(any(Account.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
+        when(appUserRepository.findByAccount(account)).thenReturn(Optional.of(appUser));
+        when(userWeek1InformationRepository.findByAppUser(appUser)).thenReturn(Optional.ofNullable(userWeek1Information));
+        when(userWeek1InformationRepository.save(userWeek1Information)).thenReturn(userWeek1Information);
         // WHEN
         boolean result = accountService.activateAccount(1);
 
@@ -136,7 +187,11 @@ public class AccountServiceImplTest {
                 .accountId(account)
                 .webUser(WebUser.builder().build())
                 .build();
-        when(appUserRepository.findById(1)).thenReturn(Optional.of(appUser));
+        when(accountRepository.findById(account.getId())).thenReturn(Optional.of(account));
+        when(accountRepository.save(any(Account.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(appUserRepository.findByAccount(account)).thenReturn(Optional.of(appUser));
+        when(userWeek1InformationRepository.findByAppUser(appUser)).thenReturn(Optional.ofNullable(userWeek1Information));
+        when(userWeek1InformationRepository.save(userWeek1Information)).thenReturn(userWeek1Information);
 
         // WHEN
         var exception = assertThrows(AppException.class, () -> accountService.activateAccount(1));

@@ -24,13 +24,13 @@
 //@SpringBootTest
 //public class LessonServiceImplTest {
 //
-//    @Mock
-//    private LessonRepository lessonRepository;
-//
-//    @InjectMocks
-//    private LessonServiceImpl lessonService;
-//
-//    private Lesson testLesson;
+////    @Mock
+////    private LessonRepository lessonRepository;
+////
+////    @InjectMocks
+////    private LessonServiceImpl lessonService;
+////
+////    private Lesson testLesson;
 //
 //    @BeforeEach
 //    void setUp() {
