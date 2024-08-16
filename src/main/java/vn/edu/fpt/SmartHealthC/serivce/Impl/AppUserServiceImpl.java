@@ -67,11 +67,11 @@ public class AppUserServiceImpl implements AppUserService {
         StringBuilder chronicDiseases = new StringBuilder();
         appUser.getUserMedicalHistoryList().forEach(userMedicalHistory -> {
             if (!userMedicalHistory.getConditionId().getType().equals(TypeMedicalHistory.OTHERS)
-                    || !userMedicalHistory.getConditionId().getType().equals(TypeMedicalHistory.HABIT)) {
+                    && !userMedicalHistory.getConditionId().getType().equals(TypeMedicalHistory.HABIT)) {
                 if (!chronicDiseases.isEmpty()) {
                     chronicDiseases.append("/");
                 }
-                chronicDiseases.append(userMedicalHistory.getConditionId().getName());
+                chronicDiseases.append(userMedicalHistory.getConditionId().getNameEn());
             }
         });
         dto.setChronicDiseases(String.valueOf(chronicDiseases));
@@ -81,20 +81,20 @@ public class AppUserServiceImpl implements AppUserService {
                 if (!otherDiseases.isEmpty()) {
                     otherDiseases.append("/");
                 }
-                otherDiseases.append(userMedicalHistory.getConditionId().getName());
+                otherDiseases.append(userMedicalHistory.getConditionId().getNameEn());
             }
         });
         dto.setOthersDiseases(String.valueOf(otherDiseases));
         Boolean smoke = false;
         for (int i = 0; i < appUser.getUserMedicalHistoryList().size(); i++) {
-            if (appUser.getUserMedicalHistoryList().get(i).getConditionId().getName().equalsIgnoreCase("Hút thuốc")) {
+            if (appUser.getUserMedicalHistoryList().get(i).getConditionId().getName().equalsIgnoreCase("Smoking")) {
                 smoke = true;
             }
         }
         dto.setSmoke(smoke);
         Boolean alcohol = false;
         for (int i = 0; i < appUser.getUserMedicalHistoryList().size(); i++) {
-            if (appUser.getUserMedicalHistoryList().get(i).getConditionId().getName().equalsIgnoreCase("Uống rượu")) {
+            if (appUser.getUserMedicalHistoryList().get(i).getConditionId().getName().equalsIgnoreCase("Drinking")) {
                 smoke = true;
             }
         }
@@ -159,6 +159,7 @@ public class AppUserServiceImpl implements AppUserService {
                     dto.setDob(record.getDob());
                     dto.setGender(record.isGender());
                     dto.setPhoneNumber(record.getPhoneNumber());
+                    dto.setMsId(record.getWebUser() != null ? record.getWebUser().getId() : 0);
                     return dto;
                 })
                 .toList();

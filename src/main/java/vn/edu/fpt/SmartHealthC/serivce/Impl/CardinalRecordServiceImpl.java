@@ -192,7 +192,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                 avgBloodSugar = avgBloodSugar / countBloodSugar;
                 avgBloodSugar = (float) (Math.round(avgBloodSugar * 100) / 100);
             }
-            record.setAvgValue("주간평균:  " + avgHBA1C + "% / " + avgCholesterol + " mg/DL /  " + avgBloodSugar + "mg/DL");
+            record.setAvgValue(avgHBA1C + "% / " + avgCholesterol + " mg/DL /  " + avgBloodSugar + "mg/DL");
             record.setRecordPerDayList(recordPerDayList);
         }
 

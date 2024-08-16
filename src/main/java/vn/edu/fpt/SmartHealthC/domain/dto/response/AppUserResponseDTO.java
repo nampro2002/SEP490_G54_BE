@@ -30,4 +30,6 @@ public class AppUserResponseDTO {
 
     private String  phoneNumber;
 
+    private int msId;
+
 }
