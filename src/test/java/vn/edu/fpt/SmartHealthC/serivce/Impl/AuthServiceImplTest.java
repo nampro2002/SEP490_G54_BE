@@ -213,8 +213,8 @@ public class AuthServiceImplTest {
 
         // Assert
         assertNotNull(message);
-        assertEquals(message ,"Gửi mã xác thực email thành công");
-        verify(emailService, times(1)).sendMail(email, "MÃ XÁC THỰC EMAIL", "Code xác thực email đăng ký của bạn là : 123456");
+        assertEquals(message ,"Send code success");
+        verify(emailService, times(1)).sendMail(email, "Verify code for your email", "Verify code for your email is : 123456");
     }
 
     @Test
@@ -244,7 +244,7 @@ public class AuthServiceImplTest {
 
         // Act and Assert
         assertThrows(AppException.class, () -> authService.sendEmailCode(email));
-        verify(emailService, times(1)).sendMail(email, "MÃ XÁC THỰC EMAIL", "Code xác thực email đăng ký của bạn là : 123456");
+        verify(emailService, times(1)).sendMail(email, "Verify code for your email", "Verify code for your email is : 123456");
     }
 
 

@@ -531,7 +531,7 @@ public class MedicalAppointmentServiceImplTest {
         String search = "";
         List<MedicalAppointment> medicalAppointments = new ArrayList<>(); // Empty list
         Page<MedicalAppointment> pagedResult = new PageImpl<>(medicalAppointments);
-        when(medicalAppointmentRepository.findAllByWebUserId(anyInt(), any(Pageable.class), anyString()))
+        when(medicalAppointmentRepository.findAllByWebUserId(anyInt(), anyString(), any(Pageable.class)))
                 .thenReturn(pagedResult);
 
         // Call service method
@@ -570,7 +570,7 @@ public class MedicalAppointmentServiceImplTest {
 
         Page<MedicalAppointment> page = new PageImpl<>(medicalAppointments);
 
-        when(medicalAppointmentRepository.findAllByWebUserId(anyInt(), any(), anyString())).thenReturn(page);
+        when(medicalAppointmentRepository.findAllByWebUserId(anyInt(), anyString(), any())).thenReturn(page);
 
         // Call service method
         ResponsePaging<List<MedicalAppointmentResponseDTO>> response = medicalAppointmentService.getAllMedicalAppointments(pageNo, search);

@@ -173,7 +173,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         String email = authentication.getName();
         WebUser webUser = webUserService.getWebUserByEmail(email);
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllByWebUserId(webUser.getId(), paging, search.toLowerCase());
+        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllByWebUserId(webUser.getId(), search.toLowerCase(), paging);
         List<MedicalAppointment> medicalAppointmentList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicalAppointmentList = pagedResult.getContent();
@@ -236,7 +236,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
             for (RefreshToken refreshToken : refreshTokenList) {
                 if (refreshToken.getLanguage().equals(TypeLanguage.KR)) {
                     title = "스마트 헬싱 C";
-                    body = medicalAppointmentResponseDTO.getDate() +  "진료 예약, " + medicalAppointmentDTO.getLocation() + "가 승인되었습니다.";
+                    body = medicalAppointmentResponseDTO.getDate() + "진료 예약, " + medicalAppointmentDTO.getLocation() + "가 승인되었습니다.";
                 } else {
                     title = "Smart Healthing C";
                     body = "Your medical appointment for " + medicalAppointmentResponseDTO.getDate() + ", " + medicalAppointmentDTO.getLocation() + "has been approved!";
