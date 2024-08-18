@@ -447,6 +447,9 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                 );
             }
         }
+        listDetailBloodSugarMorningResponseDTOList.removeIf(item -> item.getData() == null);
+        listDetailBloodSugarLucnResponseDTOList.removeIf(item -> item.getData() == null);
+        listDetailBloodSugarDinnerResponseDTOList.removeIf(item -> item.getData() == null);
         planResponseDTO.getDetailDataBloodSugar().put("MORNING",listDetailBloodSugarMorningResponseDTOList);
         planResponseDTO.getDetailDataBloodSugar().put("LUNCH",listDetailBloodSugarLucnResponseDTOList);
         planResponseDTO.getDetailDataBloodSugar().put("DINNER",listDetailBloodSugarDinnerResponseDTOList);
