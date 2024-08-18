@@ -240,21 +240,25 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
             Date recordDate = formatDate.parse(recordDateStr);
             if(recordDate.before(date) || recordDate.equals(date)) {
                 boolean dataNullExists = cardinalRecordList.stream()
-                        .anyMatch(item -> {
-                            String itemDateStr = formatDate.format(item.getDate());
+                        .allMatch(item -> {
                             try {
+                                // Lấy và định dạng ngày từ `item`
+                                String itemDateStr = formatDate.format(item.getDate());
                                 Date itemDate = formatDate.parse(itemDateStr);
+
+                                // Lấy và định dạng ngày từ `record`
                                 String sortedDateStr = formatDate.format(record.getDate());
                                 Date parsedSortedDate = formatDate.parse(sortedDateStr);
+
+                                // Kiểm tra ngày và các giá trị null
                                 return itemDate.equals(parsedSortedDate)
-                                        &&
-                                        (item.getCholesterol() == null
-                                                || item.getBloodSugar() == null
-                                        || item.getHBA1C() == null)
-                                        ;
+                                        && item.getCholesterol() == null
+                                        && item.getBloodSugar() == null
+                                        && item.getHBA1C() == null;
+
                             } catch (ParseException e) {
                                 e.printStackTrace();
-                                return false;
+                                return false; // Trả về `false` nếu có lỗi trong khi phân tích ngày
                             }
                         });
                 // ko có value nào bị null
@@ -293,9 +297,11 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                     .collect(Collectors.toList());
             Optional<Float> hba1cByDate = listByDate.stream()
                     .map(CardinalRecord::getHBA1C)
+                    .filter(Objects::nonNull)
                     .max(Comparator.naturalOrder());
             Optional<Float> cholesterolByDate = listByDate.stream()
                     .map(CardinalRecord::getCholesterol)
+                    .filter(Objects::nonNull)
                     .max(Comparator.naturalOrder());
 
             hba1cByDate.ifPresent(aFloat -> hba1CResponseDTOList.add(
@@ -332,6 +338,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
             }else{
                 Optional<Float> bloodSugarByDate = listByDateAfter.stream()
                         .map(CardinalRecord::getBloodSugar)
+                        .filter(Objects::nonNull)
                         .max(Comparator.naturalOrder());
                 dataBloodSugarAfter = bloodSugarByDate.orElse(0.f);
             }
@@ -357,6 +364,7 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
             }else{
                 Optional<Float> bloodSugarByDate = listByDateBefore.stream()
                         .map(CardinalRecord::getBloodSugar)
+                        .filter(Objects::nonNull)
                         .max(Comparator.naturalOrder());
                 dataBloodSugarBefore = bloodSugarByDate.orElse(0.f);
             }
@@ -383,13 +391,16 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                         return false;
                     }
                 }).toList();
-
-       planResponseDTO.setHba1cDataToday(cardinalRecord.stream()
-               .map(CardinalRecord::getHBA1C)
-               .max(Float::compare)
-               .orElse(0f));
+        planResponseDTO.setHba1cDataToday(
+                cardinalRecord.stream()
+                        .map(CardinalRecord::getHBA1C)
+                        .filter(Objects::nonNull) // Lọc bỏ các giá trị null
+                        .max(Float::compare)
+                        .orElse(0f)
+        );
        planResponseDTO.setCholesterolDataToday(cardinalRecord.stream()
                .map(CardinalRecord::getCholesterol)
+               .filter(Objects::nonNull)
                .max(Float::compare)
                .orElse(0f));
 
@@ -436,6 +447,9 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                 );
             }
         }
+        listDetailBloodSugarMorningResponseDTOList.removeIf(item -> item.getData() == null);
+        listDetailBloodSugarLucnResponseDTOList.removeIf(item -> item.getData() == null);
+        listDetailBloodSugarDinnerResponseDTOList.removeIf(item -> item.getData() == null);
         planResponseDTO.getDetailDataBloodSugar().put("MORNING",listDetailBloodSugarMorningResponseDTOList);
         planResponseDTO.getDetailDataBloodSugar().put("LUNCH",listDetailBloodSugarLucnResponseDTOList);
         planResponseDTO.getDetailDataBloodSugar().put("DINNER",listDetailBloodSugarDinnerResponseDTOList);

@@ -8,6 +8,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.request.MedicalAppointmentUpdateDTO;
 import vn.edu.fpt.SmartHealthC.domain.dto.response.*;
 import vn.edu.fpt.SmartHealthC.domain.entity.MedicalAppointment;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface MedicalAppointmentService {
@@ -15,7 +16,7 @@ public interface MedicalAppointmentService {
     MedicalAppointment getMedicalAppointmentEntityById(Integer id);
     MedicalAppointmentResponseDTO getMedicalAppointmentById(Integer id);
     ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointments(Integer pageNo, String search);
-    MedicalAppointmentResponseDTO updateMedicalAppointment(Integer id, MedicalAppointmentUpdateDTO medicalAppointmentDTO);
+    MedicalAppointmentResponseDTO updateMedicalAppointment(Integer id, MedicalAppointmentUpdateDTO medicalAppointmentDTO) throws ParseException;
     MedicalAppointmentResponseDTO deleteMedicalAppointment(Integer id);
 
     ResponsePaging<List<MedicalAppointmentResponseDTO>> getAllMedicalAppointmentsPending(Integer pageNo, TypeMedicalAppointment diagnosis);
