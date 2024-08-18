@@ -168,6 +168,7 @@ public class AccountServiceImplTest {
         when(accountRepository.findById(account.getId())).thenReturn(Optional.of(account));
         when(accountRepository.save(any(Account.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(appUserRepository.findByAccount(account)).thenReturn(Optional.of(appUser));
+        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.of(account));
         when(userWeek1InformationRepository.findByAppUser(appUser)).thenReturn(Optional.ofNullable(userWeek1Information));
         when(userWeek1InformationRepository.save(userWeek1Information)).thenReturn(userWeek1Information);
         // WHEN

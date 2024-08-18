@@ -44,11 +44,12 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
             throw new AppException(ErrorCode.EMAIL_NOT_EXISTED);
         }
         String codeVerify = emailService.generateRandomCode(6);
-        String message = "Code xác thực quên mật khẩu của bạn là : " +codeVerify;
+//        String message = "Code xác thực quên mật khẩu của bạn là : " +codeVerify;
+        String message = "Verify code to reset password is : " + codeVerify;
 
        boolean result =  emailService.sendMail(
                email,
-                "Mã xác thực ",
+                "Verify code",
                 message
         );
        if(result == false){
@@ -67,7 +68,7 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
                 .accountId(account.get())
                 .expiredDate(formatDate.parse(stringFormatedDate)).build();
         forgetPasswordCodeRepository.save(forgetPasswordCode);
-        return "Gửi mã xác thức quên mật khẩu thành công";
+        return "Send code success";
     }
 
     @Override
@@ -89,11 +90,11 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         }
         String newPassword = generateRandomPassword(8);
         String encodedPassword = passwordEncoder.encode(newPassword);
-        String message = "Mật khâu mới của bạn là  : " +newPassword;
+        String message = "Your new password is : " + newPassword;
 
         boolean result =  emailService.sendMail(
                 email,
-                "Mật khẩu mới",
+                "New password",
                 message
         );
         if(result == false){
@@ -101,7 +102,7 @@ public class ForgetPasswordCodeServiceImpl implements ForgetPasswordCodeService 
         }
         account.get().setPassword(encodedPassword);
         accountRepository.save(account.get());
-        return "Cập nhật mật khẩu mới thành công";
+        return "Update password success";
     }
 
     @Override

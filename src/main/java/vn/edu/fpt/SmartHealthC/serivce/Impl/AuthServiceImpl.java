@@ -269,16 +269,16 @@ public class AuthServiceImpl implements AuthService {
         Code code = new Code().builder()
                 .email(email).code(codeVerify).build();
         codeRepository.save(code);
-        String message = "Code xác thực email đăng ký của bạn là : " + codeVerify;
+        String message = "Verify code for your email is : " + codeVerify;
         boolean result = emailService.sendMail(
                 email,
-                "MÃ XÁC THỰC EMAIL",
+                "Verify code for your email",
                 message
         );
         if (result == false) {
             throw new AppException(ErrorCode.SEND_EMAIL_FAIL);
         }
-        return "Gửi mã xác thực email thành công";
+        return "Send code success";
     }
 
     @Override

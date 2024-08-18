@@ -82,7 +82,7 @@ public class ForgetPasswordCodeServiceImplTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals("Gửi mã xác thức quên mật khẩu thành công", result);
+        assertEquals("Send code success", result);
         verify(forgetPasswordCodeRepository, times(1)).save(any(ForgetPasswordCode.class));
     }
 
