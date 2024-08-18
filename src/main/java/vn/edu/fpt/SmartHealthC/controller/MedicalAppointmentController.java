@@ -15,6 +15,7 @@ import vn.edu.fpt.SmartHealthC.domain.dto.response.MedicalAppointmentResponseDTO
 import vn.edu.fpt.SmartHealthC.domain.dto.response.ResponsePaging;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -85,7 +86,7 @@ public class MedicalAppointmentController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<MedicalAppointmentResponseDTO> updateMedicalAppointment(@PathVariable Integer id, @RequestBody @Valid MedicalAppointmentUpdateDTO medicalAppointmentDTO) {
+    public ApiResponse<MedicalAppointmentResponseDTO> updateMedicalAppointment(@PathVariable Integer id, @RequestBody @Valid MedicalAppointmentUpdateDTO medicalAppointmentDTO) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.<MedicalAppointmentResponseDTO>builder()
                         .code(HttpStatus.OK.value())

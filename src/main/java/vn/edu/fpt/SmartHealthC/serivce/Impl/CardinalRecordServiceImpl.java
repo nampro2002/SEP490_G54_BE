@@ -383,13 +383,16 @@ public class CardinalRecordServiceImpl implements CardinalRecordService {
                         return false;
                     }
                 }).toList();
-
-       planResponseDTO.setHba1cDataToday(cardinalRecord.stream()
-               .map(CardinalRecord::getHBA1C)
-               .max(Float::compare)
-               .orElse(0f));
+        planResponseDTO.setHba1cDataToday(
+                cardinalRecord.stream()
+                        .map(CardinalRecord::getHBA1C)
+                        .filter(Objects::nonNull) // Lọc bỏ các giá trị null
+                        .max(Float::compare)
+                        .orElse(0f)
+        );
        planResponseDTO.setCholesterolDataToday(cardinalRecord.stream()
                .map(CardinalRecord::getCholesterol)
+               .filter(Objects::nonNull)
                .max(Float::compare)
                .orElse(0f));
 
