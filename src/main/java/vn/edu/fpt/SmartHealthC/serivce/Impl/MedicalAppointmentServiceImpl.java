@@ -30,7 +30,10 @@ import vn.edu.fpt.SmartHealthC.serivce.AppUserService;
 import vn.edu.fpt.SmartHealthC.serivce.MedicalAppointmentService;
 import vn.edu.fpt.SmartHealthC.serivce.NotificationService;
 import vn.edu.fpt.SmartHealthC.serivce.WebUserService;
+import vn.edu.fpt.SmartHealthC.utils.DateUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -48,6 +51,8 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     private NotificationService notificationService;
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
+    @Autowired
+    private SimpleDateFormat formatDate;
 
     @Override
     public MedicalAppointmentResponseDTO createMedicalAppointment(MedicalAppointmentDTO medicalAppointmentDTO) {
@@ -201,7 +206,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
     }
 
     @Override
-    public MedicalAppointmentResponseDTO updateMedicalAppointment(Integer id, MedicalAppointmentUpdateDTO medicalAppointmentDTO) {
+    public MedicalAppointmentResponseDTO updateMedicalAppointment(Integer id, MedicalAppointmentUpdateDTO medicalAppointmentDTO) throws ParseException {
         MedicalAppointment medicalAppointment = getMedicalAppointmentEntityById(id);
         medicalAppointment.setTypeMedicalAppointment(medicalAppointmentDTO.getType());
         medicalAppointment.setDate(medicalAppointmentDTO.getDate());
@@ -234,12 +239,13 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
             String title;
             String body;
             for (RefreshToken refreshToken : refreshTokenList) {
+                String date = formatDate.format(medicalAppointmentResponseDTO.getDate());
                 if (refreshToken.getLanguage().equals(TypeLanguage.KR)) {
                     title = "스마트 헬싱 C";
-                    body = medicalAppointmentResponseDTO.getDate() +  "진료 예약, " + medicalAppointmentDTO.getLocation() + "가 승인되었습니다.";
+                    body = DateUtils.normalizeDate(formatDate, date) +  "진료 예약, " + medicalAppointmentDTO.getLocation() + "가 승인되었습니다.";
                 } else {
                     title = "Smart Healthing C";
-                    body = "Your medical appointment for " + medicalAppointmentResponseDTO.getDate() + ", " + medicalAppointmentDTO.getLocation() + "has been approved!";
+                    body = "Your medical appointment for " + DateUtils.normalizeDate(formatDate, date) + ", " + medicalAppointmentDTO.getLocation() + "has been approved!";
                 }
                 try {
                     notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
