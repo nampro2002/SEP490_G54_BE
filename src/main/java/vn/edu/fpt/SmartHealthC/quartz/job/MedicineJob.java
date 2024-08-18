@@ -43,7 +43,7 @@ public class MedicineJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        System.out.println("Medicine Job is running");
+//        System.out.println("Medicine Job is running");
         Date date = null;
         try {
             date = DateUtils.getTime();
@@ -51,7 +51,7 @@ public class MedicineJob implements Job {
             throw new RuntimeException(e);
         }
         List<MedicineRecord> medicineRecordList = medicineRecordRepository.findByTime(date);
-        System.out.println("Medicine Job find " + medicineRecordList.size() + " records");
+//        System.out.println("Medicine Job find " + medicineRecordList.size() + " records");
         if (medicineRecordList.isEmpty()) {
             return;
         }

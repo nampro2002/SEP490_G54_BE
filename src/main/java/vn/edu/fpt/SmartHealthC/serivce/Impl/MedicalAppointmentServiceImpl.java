@@ -178,7 +178,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
         String email = authentication.getName();
         WebUser webUser = webUserService.getWebUserByEmail(email);
         Pageable paging = PageRequest.of(pageNo, 5, Sort.by("id"));
-        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllByWebUserId(webUser.getId(), paging, search.toLowerCase());
+        Page<MedicalAppointment> pagedResult = medicalAppointmentRepository.findAllByWebUserId(webUser.getId(),  search.toLowerCase(), paging);
         List<MedicalAppointment> medicalAppointmentList = new ArrayList<>();
         if (pagedResult.hasContent()) {
             medicalAppointmentList = pagedResult.getContent();
