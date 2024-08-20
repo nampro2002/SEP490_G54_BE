@@ -101,8 +101,7 @@ public class AppUserServiceImpl implements AppUserService {
         dto.setSmoke(smoke);
         dto.setAlcohol(alcohol);
 
-        //calculate BMI
-        Float bmi = appUser.getWeight() / (appUser.getHeight() * appUser.getHeight());
+        Float bmi = appUser.getWeight() / (appUser.getHeight() / 100 * appUser.getHeight() / 100);
         dto.setBmi(bmi);
         return dto;
     }
