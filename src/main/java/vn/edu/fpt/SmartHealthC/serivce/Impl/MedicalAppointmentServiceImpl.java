@@ -242,10 +242,10 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                 String date = formatDate.format(medicalAppointmentResponseDTO.getDate());
                 if (refreshToken.getLanguage().equals(TypeLanguage.KR)) {
                     title = "스마트 헬싱 C";
-                    body = DateUtils.normalizeDate(formatDate, date) +  "진료 예약, " + medicalAppointmentDTO.getLocation() + "가 승인되었습니다.";
+                    body = date +  " 진료 예약, " + medicalAppointmentDTO.getLocation() + "가 승인되었습니다.";
                 } else {
                     title = "Smart Healthing C";
-                    body = "Your medical appointment for " + DateUtils.normalizeDate(formatDate, date) + ", " + medicalAppointmentDTO.getLocation() + "has been approved!";
+                    body = "Your medical appointment for " + date + ", " + medicalAppointmentDTO.getLocation() + " has been updated!";
                 }
                 try {
                     notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
