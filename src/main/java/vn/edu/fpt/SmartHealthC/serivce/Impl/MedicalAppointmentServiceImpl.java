@@ -245,7 +245,7 @@ public class MedicalAppointmentServiceImpl implements MedicalAppointmentService 
                     body = date +  " 진료 예약, " + medicalAppointmentDTO.getLocation() + "가 승인되었습니다.";
                 } else {
                     title = "Smart Healthing C";
-                    body = "Your medical appointment for " + date + ", " + medicalAppointmentDTO.getLocation() + " has been scheduled!";
+                    body = "Your medical appointment for " + date + ", " + medicalAppointmentDTO.getLocation() + " has been updated!";
                 }
                 try {
                     notificationService.sendNotificationToDevice(DeviceNotificationRequest.builder()
